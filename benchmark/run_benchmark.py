@@ -164,6 +164,52 @@ def git_value(root: Path, *args: str) -> str:
     return proc.stdout.strip()
 
 
+def load_history_entries(history_path: Path) -> list[dict[str, object]]:
+    if not history_path.exists():
+        return []
+    return [json.loads(line) for line in history_path.read_text(encoding="utf-8").splitlines() if line.strip()]
+
+
+def history_identity(item: dict[str, object]) -> tuple[object, ...]:
+    return (
+        item["repo"],
+        item["git_branch"],
+        item["git_sha"],
+        item["profile"],
+        item["variant"],
+        item["score"],
+        item["max_score"],
+        item["threshold_score"],
+        item["passed"],
+        item["release_blocking"],
+        item["output_dir"],
+    )
+
+
+def collapse_history_entries(entries: list[dict[str, object]]) -> list[dict[str, object]]:
+    latest_by_identity: dict[tuple[object, ...], dict[str, object]] = {}
+    for item in sorted(entries, key=lambda candidate: candidate["timestamp"]):
+        latest_by_identity[history_identity(item)] = item
+    return sorted(latest_by_identity.values(), key=lambda item: item["timestamp"], reverse=True)
+
+
+def render_history_markdown(entries: list[dict[str, object]]) -> str:
+    md_lines = [
+        "# Cursor Benchmark History",
+        "",
+        "| Timestamp | Branch | SHA | Profile | Variant | Score | Threshold | Gate | Output |",
+        "| --- | --- | --- | --- | --- | ---: | ---: | --- | --- |",
+    ]
+    for item in entries:
+        md_lines.append(
+            f"| `{item['timestamp']}` | `{item['git_branch']}` | `{item['git_sha']}` | "
+            f"`{item['profile']}` | `{item['variant']}` | {item['score']}/{item['max_score']} | "
+            f"{item['threshold_score']}/{item['max_score']} | "
+            f"{'PASS' if item['passed'] else 'FAIL'} | `{item['output_dir']}` |"
+        )
+    return "\n".join(md_lines) + "\n"
+
+
 def record_history(root: Path, outdir: Path, evaluation: EvaluationContract) -> None:
     history_dir = (root / "benchmark" / "results").resolve()
     history_dir.mkdir(parents=True, exist_ok=True)
@@ -185,26 +231,12 @@ def record_history(root: Path, outdir: Path, evaluation: EvaluationContract) -> 
         output_dir=os.path.relpath(outdir, root),
     )
 
-    with history_path.open("a", encoding="utf-8") as fh:
-        fh.write(json.dumps(asdict(entry), ensure_ascii=False) + "\n")
-
-    entries = [json.loads(line) for line in history_path.read_text(encoding="utf-8").splitlines() if line.strip()]
-    entries = sorted(entries, key=lambda item: item["timestamp"], reverse=True)
-
-    md_lines = [
-        "# Cursor Benchmark History",
-        "",
-        "| Timestamp | Branch | SHA | Profile | Variant | Score | Threshold | Gate | Output |",
-        "| --- | --- | --- | --- | --- | ---: | ---: | --- | --- |",
-    ]
-    for item in entries:
-        md_lines.append(
-            f"| `{item['timestamp']}` | `{item['git_branch']}` | `{item['git_sha']}` | "
-            f"`{item['profile']}` | `{item['variant']}` | {item['score']}/{item['max_score']} | "
-            f"{item['threshold_score']}/{item['max_score']} | "
-            f"{'PASS' if item['passed'] else 'FAIL'} | `{item['output_dir']}` |"
-        )
-    history_md.write_text("\n".join(md_lines) + "\n", encoding="utf-8")
+    entries = collapse_history_entries([*load_history_entries(history_path), asdict(entry)])
+    history_path.write_text(
+        "".join(json.dumps(item, ensure_ascii=False) + "\n" for item in entries),
+        encoding="utf-8",
+    )
+    history_md.write_text(render_history_markdown(entries), encoding="utf-8")
 
 
 def build_evaluation(profile: str, variant: str, results: list[CheckResult]) -> EvaluationContract:
