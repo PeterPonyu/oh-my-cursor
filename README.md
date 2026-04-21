@@ -21,7 +21,13 @@ clearly documented today:
 | Confirmed Cursor-native surfaces | [`docs/confirmed-surfaces.md`](./docs/confirmed-surfaces.md) |
 | Hard fallback boundaries | [`docs/fallback-policy.md`](./docs/fallback-policy.md) |
 | Source links and access dates | [`docs/references.md`](./docs/references.md) |
+| State contract | [`docs/state-contract.md`](./docs/state-contract.md) |
+| Local state contract | [`scripts/validate-state-contract.sh`](./scripts/validate-state-contract.sh) |
+| Surface visibility check | [`scripts/validate-surface-visibility.sh`](./scripts/validate-surface-visibility.sh) |
+| Default auth check | [`scripts/check-default-auth.sh`](./scripts/check-default-auth.sh) |
+| Optional `auto`-model smoke | [`scripts/smoke-cursor-agent.sh`](./scripts/smoke-cursor-agent.sh) |
 | Local backbone verification | [`scripts/verify-backbone.sh`](./scripts/verify-backbone.sh) |
+| Benchmark notes | [`benchmark/README.md`](./benchmark/README.md) |
 
 ## What this repo includes
 
@@ -59,4 +65,20 @@ Run from the repository root:
 
 ```bash
 ./scripts/verify-backbone.sh
+./scripts/validate-surface-visibility.sh
+./scripts/validate-state-contract.sh
+./scripts/check-default-auth.sh
+```
+
+For the optional model-backed smoke, use the budget-aware `auto` model:
+
+```bash
+RUN_CURSOR_AGENT_SMOKE=1 ./scripts/smoke-cursor-agent.sh --run-agent-prompt
+```
+
+For the architecture-specific backbone benchmark:
+
+```bash
+./benchmark/quick_test.sh --variant baseline
+RUN_CURSOR_AGENT_SMOKE=1 ./benchmark/quick_test.sh --variant enhanced --run-agent-smoke
 ```
