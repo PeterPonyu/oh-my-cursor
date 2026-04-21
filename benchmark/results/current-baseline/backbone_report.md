@@ -8,7 +8,7 @@ Variant: `baseline`
 
 | Check | Result | Duration (s) | Markers |
 | --- | --- | ---: | --- |
-| `default_auth` | PASS | 4.29 | `CURSOR_AUTH_OK`, `CURSOR_MODEL_AUTO_OK` |
+| `default_auth` | PASS | 15.43 | `CURSOR_AUTH_OK`, `CURSOR_MODEL_AUTO_OK` |
 | `surface_visibility` | PASS | 0.03 | — |
 | `state_contract` | PASS | 0.02 | — |
 | `backbone_verify` | PASS | 0.03 | — |

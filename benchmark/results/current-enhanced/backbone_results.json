@@ -3,7 +3,7 @@
     "name": "default_auth",
     "command": "./scripts/check-default-auth.sh",
     "success": true,
-    "duration_sec": 28.69,
+    "duration_sec": 14.91,
     "output_tail": "\u2713 Logged in as fuzeyu09@gmail.com\nCURSOR_AUTH_OK\nok: default Cursor auth is available\nCURSOR_MODEL_AUTO_OK\nok: cursor-agent exposes the auto model\nok: cursor config auth user is fuzeyu09@gmail.com\nok: cursor config default model is default",
     "markers": [
       "CURSOR_AUTH_OK",
@@ -14,7 +14,7 @@
     "name": "surface_visibility",
     "command": "./scripts/validate-surface-visibility.sh",
     "success": true,
-    "duration_sec": 0.03,
+    "duration_sec": 0.04,
     "output_tail": "ok: docs/references.md\nok: docs/state-contract.md\nok: scripts/check-default-auth.sh\nok: scripts/validate-state-contract.sh\nok: scripts/smoke-cursor-agent.sh\nok: scripts/verify-backbone.sh\nok: current repo intentionally has 0 checked-in custom agents\nok: current repo intentionally has 0 checked-in prompt files\nok: current repo intentionally has 0 checked-in skill bundles\nok: current repo intentionally has 0 checked-in hook manifests\nok: positive overclaim scan stayed clean for README/AGENTS/docs/benchmark notes\nok: surface visibility validation complete",
     "markers": []
   },
@@ -38,7 +38,7 @@
     "name": "smoke_cursor",
     "command": "RUN_CURSOR_AGENT_SMOKE=1 CURSOR_SMOKE_SKIP_AUTH_CHECK=1 ./scripts/smoke-cursor-agent.sh --run-agent-prompt",
     "success": true,
-    "duration_sec": 11.28,
+    "duration_sec": 36.59,
     "output_tail": "ok: reusing upstream default auth/model proof (environment-gated)\nok: cursor-agent prompt smoke returned CURSOR_AGENT_OK (environment-gated runtime proof)\nok: Cursor CLI smoke validation complete",
     "markers": [
       "CURSOR_AGENT_OK"
