@@ -3,7 +3,7 @@
     "name": "default_auth",
     "command": "./scripts/check-default-auth.sh",
     "success": true,
-    "duration_sec": 2.49,
+    "duration_sec": 2.39,
     "output_tail": "\u2713 Logged in as fuzeyu09@gmail.com\nCURSOR_AUTH_OK\nok: default Cursor auth is available\nCURSOR_MODEL_AUTO_OK\nok: cursor-agent exposes the auto model\nok: cursor config auth user is fuzeyu09@gmail.com\nok: cursor config default model is default",
     "markers": [
       "CURSOR_AUTH_OK",

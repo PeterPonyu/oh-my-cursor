@@ -12,7 +12,7 @@ Variant: `enhanced`
 | `surface_visibility` | PASS | 0.03 | — |
 | `state_contract` | PASS | 0.02 | — |
 | `backbone_verify` | PASS | 0.03 | — |
-| `smoke_cursor` | PASS | 5.89 | `CURSOR_AGENT_OK` |
+| `smoke_cursor` | PASS | 6.32 | `CURSOR_AGENT_OK` |
 
 ## Evaluation contract
 

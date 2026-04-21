@@ -38,7 +38,7 @@
     "name": "smoke_cursor",
     "command": "RUN_CURSOR_AGENT_SMOKE=1 CURSOR_SMOKE_SKIP_AUTH_CHECK=1 ./scripts/smoke-cursor-agent.sh --run-agent-prompt",
     "success": true,
-    "duration_sec": 5.89,
+    "duration_sec": 6.32,
     "output_tail": "ok: reusing upstream default auth/model proof (environment-gated)\nok: cursor-agent prompt smoke returned CURSOR_AGENT_OK (environment-gated runtime proof)\nok: Cursor CLI smoke validation complete",
     "markers": [
       "CURSOR_AGENT_OK"
