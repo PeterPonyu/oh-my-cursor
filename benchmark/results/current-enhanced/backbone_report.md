@@ -2,24 +2,28 @@
 
 Root: `/home/zeyufu/Desktop/oh-my-cursor`
 
+Invocation root: `/home/zeyufu/Desktop/oh-my-cursor`
+
 Variant: `enhanced`
 
 | Check | Result | Duration (s) | Markers |
 | --- | --- | ---: | --- |
-| `default_auth` | PASS | 2.31 | `CURSOR_AUTH_OK`, `CURSOR_MODEL_AUTO_OK` |
-| `surface_visibility` | PASS | 0.01 | — |
+| `default_auth` | PASS | 2.27 | `CURSOR_AUTH_OK`, `CURSOR_MODEL_AUTO_OK` |
+| `surface_visibility` | PASS | 0.03 | — |
 | `state_contract` | PASS | 0.02 | — |
-| `backbone_verify` | PASS | 0.0 | — |
-| `smoke_cursor` | PASS | 12.83 | `CURSOR_AGENT_OK` |
+| `backbone_verify` | PASS | 0.03 | — |
+| `smoke_cursor` | PASS | 5.89 | `CURSOR_AGENT_OK` |
 
 ## Evaluation contract
 
 - Score: **120/120**
 - Threshold: **120/120**
-- Release gate: **PASS**
+- Benchmark gate: **PASS**
 - Baseline floor: **100/120**
 - Actual delta vs baseline floor: **20**
 - Required delta vs baseline floor: **20**
+- This report is environment-gated runtime proof layered on top of the always-required static validators.
+- Cross-host comparability class: **reporting-comparable**, not architectural parity with `oh-my-copilot`.
 
 | Dimension | Required | Passed | Weight | Description |
 | --- | --- | --- | ---: | --- |

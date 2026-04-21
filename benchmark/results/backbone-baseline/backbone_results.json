@@ -3,7 +3,7 @@
     "name": "default_auth",
     "command": "./scripts/check-default-auth.sh",
     "success": true,
-    "duration_sec": 2.49,
+    "duration_sec": 2.45,
     "output_tail": "\u2713 Logged in as fuzeyu09@gmail.com\nCURSOR_AUTH_OK\nok: default Cursor auth is available\nCURSOR_MODEL_AUTO_OK\nok: cursor-agent exposes the auto model\nok: cursor config auth user is fuzeyu09@gmail.com\nok: cursor config default model is default",
     "markers": [
       "CURSOR_AUTH_OK",
@@ -14,8 +14,8 @@
     "name": "surface_visibility",
     "command": "./scripts/validate-surface-visibility.sh",
     "success": true,
-    "duration_sec": 0.01,
-    "output_tail": "ok: docs/confirmed-surfaces.md\nok: docs/fallback-policy.md\nok: docs/references.md\nok: scripts/check-default-auth.sh\nok: scripts/validate-state-contract.sh\nok: scripts/smoke-cursor-agent.sh\nok: scripts/verify-backbone.sh\nok: current repo intentionally has 0 checked-in custom agents\nok: current repo intentionally has 0 checked-in prompt files\nok: current repo intentionally has 0 checked-in skill bundles\nok: current repo intentionally has 0 checked-in hook manifests\nok: surface visibility validation complete",
+    "duration_sec": 0.03,
+    "output_tail": "ok: docs/references.md\nok: docs/state-contract.md\nok: scripts/check-default-auth.sh\nok: scripts/validate-state-contract.sh\nok: scripts/smoke-cursor-agent.sh\nok: scripts/verify-backbone.sh\nok: current repo intentionally has 0 checked-in custom agents\nok: current repo intentionally has 0 checked-in prompt files\nok: current repo intentionally has 0 checked-in skill bundles\nok: current repo intentionally has 0 checked-in hook manifests\nok: positive overclaim scan stayed clean for README/AGENTS/docs/benchmark notes\nok: surface visibility validation complete",
     "markers": []
   },
   {
@@ -23,23 +23,23 @@
     "command": "./scripts/validate-state-contract.sh",
     "success": true,
     "duration_sec": 0.02,
-    "output_tail": "ok: user-level Cursor auth is stored outside the repo: /home/zeyufu/.cursor/cli-config.json\nok: cursor auth user is fuzeyu09@gmail.com\nok: cursor default model is default\nok: .gitignore blocks speculative Cursor state files\nok: Cursor state contract validation complete",
+    "output_tail": "ok: .gitignore blocks speculative Cursor state files\nok: user-level Cursor auth/model state is stored outside the repo: /home/zeyufu/.cursor/cli-config.json\nok: cursor auth user is fuzeyu09@gmail.com\nok: cursor default model is default\nok: Cursor state contract validation complete",
     "markers": []
   },
   {
     "name": "backbone_verify",
     "command": "./scripts/verify-backbone.sh",
     "success": true,
-    "duration_sec": 0.0,
-    "output_tail": "ok: AGENTS.md\nok: README.md\nok: .cursor/rules/00-repo-scope.mdc\nok: .cursor/rules/10-docs-claims.mdc\nok: docs/confirmed-surfaces.md\nok: docs/fallback-policy.md\nok: docs/references.md\nverification: repository backbone files and fallback language present",
+    "duration_sec": 0.03,
+    "output_tail": "ok: AGENTS.md\nok: README.md\nok: benchmark/README.md\nok: .cursor/rules/00-repo-scope.mdc\nok: .cursor/rules/10-docs-claims.mdc\nok: docs/confirmed-surfaces.md\nok: docs/fallback-policy.md\nok: docs/references.md\nok: docs/state-contract.md\nok: positive overclaim scan stayed clean for README/AGENTS/docs/benchmark notes\nverification: repository backbone files, claim vocabulary, and positive overclaim protections are present",
     "markers": []
   },
   {
     "name": "smoke_cursor",
-    "command": "./scripts/smoke-cursor-agent.sh",
+    "command": "RUN_CURSOR_AGENT_SMOKE=0 CURSOR_SMOKE_SKIP_AUTH_CHECK=1 ./scripts/smoke-cursor-agent.sh",
     "success": true,
-    "duration_sec": 2.3,
-    "output_tail": "ok: cursor-agent default auth check passes\nok: model-backed Cursor smoke skipped (set RUN_CURSOR_AGENT_SMOKE=1 to enable)\nok: Cursor CLI smoke validation complete",
+    "duration_sec": 0.0,
+    "output_tail": "ok: reusing upstream default auth/model proof (environment-gated)\nok: model-backed Cursor smoke skipped; runtime claim remains bounded until enhanced prompt proof is requested\nok: Cursor CLI smoke validation complete",
     "markers": []
   }
 ]

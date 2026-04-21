@@ -12,6 +12,10 @@ state. `oh-my-cursor` currently scores a different, smaller contract:
 - repo state-contract discipline; and
 - optional `cursor-agent` smoke using `--model auto`.
 
+The shared report shape is only **reporting-comparable** with
+`oh-my-copilot`. It is **not** an architectural-parity claim: this benchmark
+measures truthful Cursor-native proof for a smaller backbone contract.
+
 ## Run
 
 ```bash
@@ -21,6 +25,16 @@ state. `oh-my-cursor` currently scores a different, smaller contract:
 # enhanced, includes constrained agent smoke with --model auto
 RUN_CURSOR_AGENT_SMOKE=1 ./benchmark/quick_test.sh --variant enhanced --run-agent-smoke
 ```
+
+Always-required checked-in proof still lives in:
+
+- `./scripts/verify-backbone.sh`
+- `./scripts/validate-surface-visibility.sh`
+- `./scripts/validate-state-contract.sh`
+
+The benchmark runs above are **environment-gated runtime proof**. They only
+strengthen public wording when local Cursor auth/model access is available and
+successful.
 
 ## Why the score differs from oh-my-copilot
 
@@ -35,9 +49,24 @@ The benchmark here therefore treats the current Cursor-native backbone as:
 3. explicit fallback/state discipline; and
 4. optional model-backed proof with `auto`.
 
+It also reuses the `default_auth` result when the harness reaches
+`smoke_cursor`, so the benchmark does not spend extra time rerunning the same
+local auth/model verification inside the smoke step.
+
+Baseline therefore proves the auth + `auto` backbone when the environment can
+support it. Enhanced adds `CURSOR_AGENT_OK` as extra runtime proof instead of
+silently upgrading the repo's checked-in claims.
 
 ## History
 
+By default, baseline and enhanced runs write their latest artifacts to separate
+variant-specific directories:
+
+- `benchmark/results/current-baseline/`
+- `benchmark/results/current-enhanced/`
+
 Each run appends to `benchmark/results/history.jsonl` and regenerates
 `benchmark/results/history.md` so baseline/enhanced scores can be tracked over
-time by branch and git SHA.
+time by branch and git SHA. The benchmark wrapper also normalizes transient
+`/.omx/team/.../worktrees/...` invocation paths back to the canonical repo root
+before it records checked-in proof evidence.

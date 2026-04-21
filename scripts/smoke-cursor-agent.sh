@@ -3,20 +3,26 @@ set -euo pipefail
 
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 RUN_AGENT_SMOKE="${RUN_CURSOR_AGENT_SMOKE:-0}"
+SKIP_AUTH_CHECK="${CURSOR_SMOKE_SKIP_AUTH_CHECK:-0}"
 TIMEOUT_SECONDS="${CURSOR_SMOKE_TIMEOUT:-120}"
 
 usage() {
   cat <<'USAGE'
-Usage: scripts/smoke-cursor-agent.sh [--root PATH] [--run-agent-prompt]
+Usage: scripts/smoke-cursor-agent.sh [--root PATH] [--run-agent-prompt] [--skip-auth-check]
 
 Runs direct, CLI-first Cursor smoke checks:
   - cursor-agent presence
-  - default auth availability
-  - auto-model availability
+  - default auth availability (environment-gated runtime proof)
+  - auto-model availability (environment-gated runtime proof)
   - optional constrained model-backed prompt smoke using `--model auto`
 
 Set RUN_CURSOR_AGENT_SMOKE=1 or pass --run-agent-prompt to run the model-backed
-agent smoke. The default mode avoids a network/model request.
+agent smoke. The default mode avoids a network/model request and keeps the
+runtime claim bounded.
+
+Set CURSOR_SMOKE_SKIP_AUTH_CHECK=1 or pass --skip-auth-check when a previous
+step already verified default auth/model availability and you want to avoid
+duplicating that local check.
 USAGE
 }
 
@@ -29,6 +35,10 @@ while (($#)); do
       ;;
     --run-agent-prompt)
       RUN_AGENT_SMOKE=1
+      shift
+      ;;
+    --skip-auth-check)
+      SKIP_AUTH_CHECK=1
       shift
       ;;
     -h|--help)
@@ -44,8 +54,12 @@ done
 
 command -v cursor-agent >/dev/null 2>&1 || { echo "FAIL: cursor-agent not found" >&2; exit 1; }
 
-"$ROOT/scripts/check-default-auth.sh" >/dev/null
-printf 'ok: cursor-agent default auth check passes\n'
+if [[ "$SKIP_AUTH_CHECK" == "1" ]]; then
+  printf 'ok: reusing upstream default auth/model proof (environment-gated)\n'
+else
+  "$ROOT/scripts/check-default-auth.sh" >/dev/null
+  printf 'ok: cursor-agent default auth/model proof passes\n'
+fi
 
 if [[ "$RUN_AGENT_SMOKE" == "1" ]]; then
   output="$(
@@ -67,9 +81,9 @@ if [[ "$RUN_AGENT_SMOKE" == "1" ]]; then
     echo "FAIL: cursor-agent prompt smoke missing CURSOR_AGENT_OK" >&2
     exit 1
   }
-  printf 'ok: cursor-agent prompt smoke returned CURSOR_AGENT_OK\n'
+  printf 'ok: cursor-agent prompt smoke returned CURSOR_AGENT_OK (environment-gated runtime proof)\n'
 else
-  printf 'ok: model-backed Cursor smoke skipped (set RUN_CURSOR_AGENT_SMOKE=1 to enable)\n'
+  printf 'ok: model-backed Cursor smoke skipped; runtime claim remains bounded until enhanced prompt proof is requested\n'
 fi
 
 printf 'ok: Cursor CLI smoke validation complete\n'

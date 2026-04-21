@@ -18,6 +18,61 @@ EVIDENCE_MARKERS = (
 )
 
 
+def looks_like_repo_root(path: Path) -> bool:
+    return (
+        (path / "AGENTS.md").is_file()
+        and (path / ".cursor" / "rules").is_dir()
+        and (path / "benchmark").is_dir()
+    )
+
+
+def collapse_omx_team_worktree(path: Path) -> Path | None:
+    parts = path.resolve().parts
+    for index, part in enumerate(parts):
+        if part != ".omx":
+            continue
+        if index + 3 >= len(parts):
+            continue
+        if parts[index + 1] != "team":
+            continue
+        if "worktrees" not in parts[index + 2 :]:
+            continue
+        candidate = Path(*parts[:index]) if index > 0 else Path(parts[0])
+        if looks_like_repo_root(candidate):
+            return candidate
+    return None
+
+
+def git_toplevel(path: Path) -> Path | None:
+    try:
+        proc = subprocess.run(
+            ["git", "rev-parse", "--show-toplevel"],
+            cwd=str(path),
+            text=True,
+            capture_output=True,
+            check=True,
+        )
+    except Exception:
+        return None
+    value = proc.stdout.strip()
+    return Path(value).resolve() if value else None
+
+
+def resolve_canonical_root(path: Path) -> Path:
+    candidate = path.resolve()
+    collapsed = collapse_omx_team_worktree(candidate)
+    if collapsed is not None:
+        return collapsed
+
+    current = candidate if candidate.is_dir() else candidate.parent
+    for probe in [current, *current.parents]:
+        if looks_like_repo_root(probe):
+            return probe
+
+    git_root = git_toplevel(current)
+    return git_root if git_root is not None else current
+
+
 @dataclass
 class CheckResult:
     name: str
@@ -233,20 +288,21 @@ def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--profile", choices=["backbone"], default="backbone")
     parser.add_argument("--root", default=".")
-    parser.add_argument("--output-dir", default="benchmark/results")
+    parser.add_argument("--output-dir")
     parser.add_argument("--run-agent-smoke", action="store_true")
     parser.add_argument("--variant", choices=["auto", "baseline", "enhanced"], default="auto")
     args = parser.parse_args()
 
-    root = Path(args.root).resolve()
-    outdir = (root / args.output_dir).resolve()
+    invocation_root = Path(args.root).resolve()
+    root = resolve_canonical_root(invocation_root)
+    variant = determine_variant(args.run_agent_smoke, args.variant)
+    output_dir = args.output_dir or f"benchmark/results/current-{variant}"
+    outdir = (root / output_dir).resolve()
     outdir.mkdir(parents=True, exist_ok=True)
 
     env = os.environ.copy()
     if args.run_agent_smoke:
         env["RUN_CURSOR_AGENT_SMOKE"] = "1"
-
-    variant = determine_variant(args.run_agent_smoke, args.variant)
 
     checks: list[tuple[str, str]] = [
         ("default_auth", "./scripts/check-default-auth.sh"),
@@ -255,10 +311,10 @@ def main() -> int:
         ("backbone_verify", "./scripts/verify-backbone.sh"),
     ]
 
+    smoke_cmd = "RUN_CURSOR_AGENT_SMOKE=0 CURSOR_SMOKE_SKIP_AUTH_CHECK=1 ./scripts/smoke-cursor-agent.sh"
     if args.run_agent_smoke:
-        checks.append(("smoke_cursor", "./scripts/smoke-cursor-agent.sh --run-agent-prompt"))
-    else:
-        checks.append(("smoke_cursor", "./scripts/smoke-cursor-agent.sh"))
+        smoke_cmd = "RUN_CURSOR_AGENT_SMOKE=1 CURSOR_SMOKE_SKIP_AUTH_CHECK=1 ./scripts/smoke-cursor-agent.sh --run-agent-prompt"
+    checks.append(("smoke_cursor", smoke_cmd))
 
     results: list[CheckResult] = []
     for name, cmd in checks:
@@ -280,6 +336,8 @@ def main() -> int:
         "",
         f"Root: `{root}`",
         "",
+        f"Invocation root: `{invocation_root}`",
+        "",
         f"Variant: `{evaluation.variant}`",
         "",
         "| Check | Result | Duration (s) | Markers |",
@@ -295,10 +353,12 @@ def main() -> int:
             "",
             f"- Score: **{evaluation.score}/{evaluation.max_score}**",
             f"- Threshold: **{evaluation.threshold_score}/{evaluation.max_score}**",
-            f"- Release gate: **{'PASS' if evaluation.passed else 'FAIL'}**",
+            f"- Benchmark gate: **{'PASS' if evaluation.passed else 'FAIL'}**",
             f"- Baseline floor: **{evaluation.expected_baseline_score}/{evaluation.max_score}**",
             f"- Actual delta vs baseline floor: **{evaluation.actual_delta_vs_baseline}**",
             f"- Required delta vs baseline floor: **{evaluation.required_delta_vs_baseline}**",
+            "- This report is environment-gated runtime proof layered on top of the always-required static validators.",
+            "- Cross-host comparability class: **reporting-comparable**, not architectural parity with `oh-my-copilot`.",
             "",
             "| Dimension | Required | Passed | Weight | Description |",
             "| --- | --- | --- | ---: | --- |",

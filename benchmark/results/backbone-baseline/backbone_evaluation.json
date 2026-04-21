@@ -32,7 +32,7 @@
       "weight": 20,
       "required": true,
       "passed": true,
-      "evidence": "ok: docs/confirmed-surfaces.md\nok: docs/fallback-policy.md\nok: docs/references.md\nok: scripts/check-default-auth.sh\nok: scripts/validate-state-contract.sh\nok: scripts/smoke-cursor-agent.sh\nok: scripts/verify-backbone.sh\nok: current repo intentionally has 0 checked-in custom agents\nok: current repo intentionally has 0 checked-in prompt files\nok: current repo intentionally has 0 checked-in skill bundles\nok: current repo intentionally has 0 checked-in hook manifests\nok: surface visibility validation complete"
+      "evidence": "ok: docs/references.md\nok: docs/state-contract.md\nok: scripts/check-default-auth.sh\nok: scripts/validate-state-contract.sh\nok: scripts/smoke-cursor-agent.sh\nok: scripts/verify-backbone.sh\nok: current repo intentionally has 0 checked-in custom agents\nok: current repo intentionally has 0 checked-in prompt files\nok: current repo intentionally has 0 checked-in skill bundles\nok: current repo intentionally has 0 checked-in hook manifests\nok: positive overclaim scan stayed clean for README/AGENTS/docs/benchmark notes\nok: surface visibility validation complete"
     },
     {
       "name": "state_contract",
@@ -40,7 +40,7 @@
       "weight": 20,
       "required": true,
       "passed": true,
-      "evidence": "ok: user-level Cursor auth is stored outside the repo: /home/zeyufu/.cursor/cli-config.json\nok: cursor auth user is fuzeyu09@gmail.com\nok: cursor default model is default\nok: .gitignore blocks speculative Cursor state files\nok: Cursor state contract validation complete"
+      "evidence": "ok: .gitignore blocks speculative Cursor state files\nok: user-level Cursor auth/model state is stored outside the repo: /home/zeyufu/.cursor/cli-config.json\nok: cursor auth user is fuzeyu09@gmail.com\nok: cursor default model is default\nok: Cursor state contract validation complete"
     },
     {
       "name": "backbone_verify",
@@ -48,7 +48,7 @@
       "weight": 25,
       "required": true,
       "passed": true,
-      "evidence": "ok: AGENTS.md\nok: README.md\nok: .cursor/rules/00-repo-scope.mdc\nok: .cursor/rules/10-docs-claims.mdc\nok: docs/confirmed-surfaces.md\nok: docs/fallback-policy.md\nok: docs/references.md\nverification: repository backbone files and fallback language present"
+      "evidence": "ok: AGENTS.md\nok: README.md\nok: benchmark/README.md\nok: .cursor/rules/00-repo-scope.mdc\nok: .cursor/rules/10-docs-claims.mdc\nok: docs/confirmed-surfaces.md\nok: docs/fallback-policy.md\nok: docs/references.md\nok: docs/state-contract.md\nok: positive overclaim scan stayed clean for README/AGENTS/docs/benchmark notes\nverification: repository backbone files, claim vocabulary, and positive overclaim protections are present"
     },
     {
       "name": "CURSOR_AGENT_OK",
@@ -56,7 +56,7 @@
       "weight": 20,
       "required": false,
       "passed": false,
-      "evidence": "ok: cursor-agent default auth check passes\nok: model-backed Cursor smoke skipped (set RUN_CURSOR_AGENT_SMOKE=1 to enable)\nok: Cursor CLI smoke validation complete"
+      "evidence": "ok: reusing upstream default auth/model proof (environment-gated)\nok: model-backed Cursor smoke skipped; runtime claim remains bounded until enhanced prompt proof is requested\nok: Cursor CLI smoke validation complete"
     }
   ]
 }
