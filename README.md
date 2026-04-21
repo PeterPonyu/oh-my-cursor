@@ -1,27 +1,44 @@
 # oh-my-cursor
 
-`oh-my-cursor` is a small, docs-first repository backbone for building a
-Cursor-native workspace without overclaiming unsupported packaging or runtime
-surfaces.
+`oh-my-cursor` is a small, docs-first Cursor-native backbone for building a
+truthful repository surface without overclaiming unsupported packaging or
+runtime behavior.
 
-The current backbone deliberately starts from the official surfaces that are
-clearly documented today:
+This repository follows a shared **claim/proof discipline**:
 
-- root `AGENTS.md` instructions;
+- **repo-owned** — checked-in surfaces this repo actually ships;
+- **host-product-only** — Cursor capabilities the product supports, but this
+  repo does not provision as checked-in artifacts; and
+- **unsupported-or-out-of-scope** — surfaces this repo intentionally does not
+  ship or claim today.
+
+Public wording also stays inside an explicit proof ceiling:
+
+- **official-doc** when a claim is supported by current primary Cursor docs;
+- **checked-in-artifact** when this repo ships the surface and local validators
+  prove it is present; and
+- **runtime-smoke** only when optional authenticated/model-available smoke runs
+  succeed.
+
+The current backbone deliberately starts from the strongest truthful
+repo-owned surfaces documented and checked in today:
+
+- root `AGENTS.md` guidance;
 - project rules in `.cursor/rules/`;
-- optional MCP support when you have a concrete server to wire up;
-- product capabilities such as custom modes and background agents, documented as
-  capabilities rather than assumed file formats.
+- bounded documentation that separates confirmed support from inference;
+- local verification scripts; and
+- benchmark artifacts that record checked-in evidence against the canonical repo
+  root.
 
 ## Start here
 
 | Need | Read |
 | --- | --- |
 | Repository policy | [`AGENTS.md`](./AGENTS.md) |
-| Confirmed Cursor-native surfaces | [`docs/confirmed-surfaces.md`](./docs/confirmed-surfaces.md) |
-| Hard fallback boundaries | [`docs/fallback-policy.md`](./docs/fallback-policy.md) |
+| Confirmed ownership and proof boundaries | [`docs/confirmed-surfaces.md`](./docs/confirmed-surfaces.md) |
+| Hard fallback and non-claim rules | [`docs/fallback-policy.md`](./docs/fallback-policy.md) |
 | Source links and access dates | [`docs/references.md`](./docs/references.md) |
-| State contract | [`docs/state-contract.md`](./docs/state-contract.md) |
+| State ownership contract | [`docs/state-contract.md`](./docs/state-contract.md) |
 | Local state contract | [`scripts/validate-state-contract.sh`](./scripts/validate-state-contract.sh) |
 | Surface visibility check | [`scripts/validate-surface-visibility.sh`](./scripts/validate-surface-visibility.sh) |
 | Default auth check | [`scripts/check-default-auth.sh`](./scripts/check-default-auth.sh) |
@@ -29,22 +46,37 @@ clearly documented today:
 | Local backbone verification | [`scripts/verify-backbone.sh`](./scripts/verify-backbone.sh) |
 | Benchmark notes | [`benchmark/README.md`](./benchmark/README.md) |
 
+## Ownership map
+
+| Outcome family | Ownership class | Strongest default proof here | What that means in this repo |
+| --- | --- | --- | --- |
+| Root instructions and rules | `repo-owned` | `checked-in-artifact` | This repo ships `AGENTS.md` and `.cursor/rules/`. |
+| Verification and benchmark reporting | `repo-owned` | `checked-in-artifact` | This repo ships local validators, smoke wrappers, and checked-in benchmark artifacts. |
+| MCP support | `host-product-only` | `official-doc` | Cursor supports MCP, but this repo leaves it opt-in until a concrete server, auth model, and ownership decision are chosen. |
+| Modes and background agents | `host-product-only` | `official-doc` | Cursor exposes these capabilities as product surfaces; this repo does not package them as checked-in workflow files. |
+| Plugin / skill / hook / custom-agent packaging | `unsupported-or-out-of-scope` | `official-doc` for product awareness, negative repo claim here | This repo does **not** ship checked-in Cursor plugin bundles, skill bundles, hook manifests, or custom-agent packaging. |
+
 ## What this repo includes
 
 - a root `AGENTS.md` for always-on project guidance;
 - scoped Cursor project rules in `.cursor/rules/*.mdc`;
-- documentation that separates confirmed behavior from inference; and
-- a lightweight verification script for the checked-in backbone.
+- documentation that labels confirmed behavior, inference, and explicit
+  non-claims;
+- local verification scripts for surface visibility and state hygiene; and
+- benchmark evidence under `benchmark/results/` that stays tied to the
+  canonical repo root.
 
-## What this repo does not claim
+## What this repo does **not** claim
 
 This backbone intentionally does **not** claim any of the following unless they
-are directly proven later with current official docs and a checked-in proof log:
+are later promoted with current official documentation, an approved plan, and
+appropriate proof artifacts:
 
-- CLI-native plugin/package loading as a stable repository packaging surface;
-- file-based custom mode configuration checked into the repo;
-- file-based background-agent provisioning from inside the repo; or
-- parity with `oh-my-codex`, `oh-my-claudecode`, or any tmux-style worker runtime.
+- checked-in Cursor plugin/package loading as a shipped repo surface;
+- checked-in custom-agent, prompt, skill, or hook packaging;
+- repo-file custom mode configuration;
+- repo-file background-agent provisioning; or
+- a default repo-owned `.cursor/mcp.json`.
 
 ## Design rule
 
@@ -52,16 +84,19 @@ Prefer the smallest confirmed Cursor-native surface first:
 
 1. root `AGENTS.md`;
 2. `.cursor/rules/` project rules;
-3. opt-in MCP only after choosing a real server;
-4. product features like custom modes or background agents only when their
-   configuration surface is actually documented and verified.
+3. bounded docs and validators that explain what is repo-owned vs
+   host-product-only;
+4. opt-in MCP only after choosing a real server and ownership model; and
+5. runtime-smoke wording only after optional authenticated checks succeed.
 
 That keeps the repo useful today while preventing unsupported packaging claims
 from turning into hidden maintenance debt.
 
 ## Verification
 
-Run from the repository root:
+Run from the repository root.
+
+Always-required checks:
 
 ```bash
 ./scripts/verify-backbone.sh
@@ -70,7 +105,8 @@ Run from the repository root:
 ./scripts/check-default-auth.sh
 ```
 
-For the optional model-backed smoke, use the budget-aware `auto` model:
+Optional environment-gated smoke that can strengthen bounded wording to
+`runtime-smoke` when available:
 
 ```bash
 RUN_CURSOR_AGENT_SMOKE=1 ./scripts/smoke-cursor-agent.sh --run-agent-prompt
@@ -82,3 +118,9 @@ For the architecture-specific backbone benchmark:
 ./benchmark/quick_test.sh --variant baseline
 RUN_CURSOR_AGENT_SMOKE=1 ./benchmark/quick_test.sh --variant enhanced --run-agent-smoke
 ```
+
+Those runs refresh `benchmark/results/current-baseline/` and
+`benchmark/results/current-enhanced/` respectively, while appending a summary
+row to `benchmark/results/history.md`. The benchmark wrapper also normalizes
+transient `/.omx/team/.../worktrees/...` invocation paths back to the canonical
+repo root before it records checked-in evidence.

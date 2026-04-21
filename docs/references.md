@@ -1,23 +1,32 @@
 # References
 
-Accessed on **April 21, 2026**.
+Access date for web sources: **2026-04-21**.
 
-## Official Cursor documentation
+This page is the citation index for public `oh-my-cursor` claims. It separates
+repo-owned proof from host-product documentation so repo wording does not drift
+past its evidence.
 
-- Cursor CLI overview — <https://docs.cursor.com/en/cli>
-- Using Agent in Cursor CLI — <https://docs.cursor.com/en/cli/using>
-- Cursor rules / project rules / `AGENTS.md` — <https://docs.cursor.com/en/context>
-- Cursor modes (Agent / Ask / Manual / Custom) — <https://docs.cursor.com/en/chat/agent>
-- Cursor MCP docs — <https://docs.cursor.com/en/context/mcp>
-- Cursor background agents — <https://docs.cursor.com/en/background-agent>
+## Primary official Cursor sources
+
+| Source | Supports which claim family here | Ownership / proof ceiling used by this repo |
+| --- | --- | --- |
+| [Cursor rules / `AGENTS.md`](https://docs.cursor.com/en/context) | Root `AGENTS.md` and `.cursor/rules` as official instruction surfaces. | Supports `repo-owned` instruction wording at `official-doc`, which this repo strengthens to `checked-in-artifact` only because the files are present and validated locally. |
+| [Using Agent in Cursor CLI](https://docs.cursor.com/en/cli/using) | Cursor CLI reads root `AGENTS.md` / `.cursor/rules`, supports MCP, and behaves as a CLI workspace consumer of repo guidance. | Supports `host-product-only` CLI-behavior wording and repo guidance consumption at `official-doc`. |
+| [Model Context Protocol (MCP) for CLI](https://docs.cursor.com/cli/mcp) | Cursor/CLI MCP support, configuration sources, and CLI MCP commands. | Supports `host-product-only` MCP wording at `official-doc`; this repo still does not claim a default repo-owned `.cursor/mcp.json`. |
+| [Modes](https://docs.cursor.com/chat/custom-modes) | Agent/Ask/Manual/Custom modes as product capabilities and product-managed configuration. | Supports `host-product-only` mode wording at `official-doc`; this repo does not claim repo-file custom-mode packaging. |
+| [Background Agents](https://docs.cursor.com/background-agents) | Background agents as asynchronous remote product capability. | Supports `host-product-only` background-agent wording at `official-doc`; this repo does not claim repo-file provisioning. |
+| [Plugins, Sandbox Access Controls, and Async Subagents](https://cursor.com/changelog/2-5) | Current product support for plugins and async subagents. | Used only for product-awareness and negative boundary wording: this repo remains `unsupported-or-out-of-scope` for checked-in plugin, skill, hook, or custom-agent packaging. |
 
 ## Claim mapping used by this repo
 
-- `AGENTS.md` and `.cursor/rules/` are the strongest confirmed repository-native
-  customization surfaces.
-- MCP is officially supported, but this repo leaves it opt-in until a concrete
-  integration is chosen.
-- Custom modes and background agents are documented product capabilities, but
-  this repo does not assume a checked-in packaging format for them.
-- CLI-native plugin/package loading remains intentionally unclaimed here until
-  it is directly proven from current official docs.
+- Root `AGENTS.md`, `.cursor/rules`, local validators, and checked-in benchmark
+  artifacts are the strongest current **repo-owned** surfaces.
+- Cursor CLI, MCP, modes, and background agents are real Cursor capabilities,
+  but they remain **host-product-only** unless this repo deliberately ships and
+  validates a corresponding checked-in surface.
+- Checked-in Cursor plugin bundles, skill bundles, hook manifests,
+  custom-agent packaging, repo-file custom-mode packaging, and repo-file
+  background-agent provisioning remain **unsupported-or-out-of-scope** in this
+  repo today.
+- Any stronger public wording must be backed by the matching proof class:
+  `official-doc`, `checked-in-artifact`, or `runtime-smoke`.
