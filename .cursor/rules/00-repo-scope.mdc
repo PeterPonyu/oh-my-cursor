@@ -1,0 +1,10 @@
+---
+description: Core repository policy for this Cursor-native backbone
+alwaysApply: true
+---
+
+- Keep this repository docs-first and source-backed.
+- Prefer root `AGENTS.md` and project rules before adding speculative runtime or packaging layers.
+- Treat custom modes and background agents as product capabilities, not checked-in file formats, unless current official docs prove a local config surface.
+- If MCP is added later, document the chosen server, auth model, and validation path first.
+- Preserve the hard fallback: no CLI-native plugin/package loading claims without direct proof.
