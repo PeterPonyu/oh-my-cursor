@@ -1,0 +1,11 @@
+---
+description: Documentation claim hygiene
+globs:
+  - README.md
+  - docs/**/*.md
+---
+
+- Separate confirmed behavior, inference, and future work.
+- When capability claims change, update `docs/references.md` in the same edit.
+- Use exact, low-drama wording for unproven areas: "not yet proven", "not documented here", or "left opt-in".
+- Avoid importing parity language from other repositories unless a specific Cursor surface truly matches.
