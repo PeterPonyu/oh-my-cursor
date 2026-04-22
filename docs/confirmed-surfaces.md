@@ -14,6 +14,7 @@ of truth:
 | Outcome family | Ownership class | Strongest proof class used here | Current repo position |
 | --- | --- | --- | --- |
 | Root instructions and policy | `repo-owned` | `checked-in-artifact` | This repo ships one root `AGENTS.md` and `.cursor/rules/` guidance. |
+| Pages landing surface and workflow (when checked in) | `repo-owned` only after app + workflow + exported-output proof land together | `checked-in-artifact` once local validators confirm the checked-in app, workflow, and required landing links | A future `apps/cursor-backbone-site/` surface must prove itself as a checked-in artifact before public copy can describe it as repo-owned. |
 | CLI consumption of repo guidance | `host-product-only` consuming repo-owned files | `official-doc` | Cursor CLI is documented to read root `AGENTS.md` / `.cursor/rules`; this repo relies on that documented behavior without inventing extra packaging. |
 | MCP support | `host-product-only` | `official-doc` | Cursor supports MCP, but this repo keeps MCP opt-in until a concrete server and ownership model are chosen. |
 | Custom modes | `host-product-only` | `official-doc` | Cursor documents custom modes as product settings/configuration; this repo does not claim a checked-in repo file format for them. |
@@ -43,7 +44,22 @@ MCP and resume behavior.
 - keep repo guidance at the root so CLI sessions can pick it up; and
 - avoid claiming more than documented CLI behavior.
 
-## 3. MCP is documented, but remains host-product-only here
+## 3. A repo-owned landing site only counts after checked-in proof exists
+
+If this repo adds `apps/cursor-backbone-site/`, the site and its GitHub Pages
+workflow only become **repo-owned** after all of the following are true:
+
+- the app files are checked in;
+- the deploy workflow is checked in;
+- local validators can inspect the exported HTML; and
+- the landing surface visibly links to `Docs`, `State Contract`, `References`,
+  and `Benchmark Notes` without blurring ownership classes.
+
+Until that proof exists, public wording should describe the landing surface as a
+planned or in-progress checked-in artifact, not as a shipped repo-owned
+capability.
+
+## 4. MCP is documented, but remains host-product-only here
 
 Official Cursor documentation covers MCP for Cursor and the CLI. That proves
 MCP is a real Cursor capability, but it does **not** automatically make MCP a
@@ -54,7 +70,7 @@ repo-owned surface in this repository.
 - do not check in a default `.cursor/mcp.json` until a specific server,
   authentication model, and ownership decision are chosen.
 
-## 4. Custom modes are a product capability, not a repo-file claim here
+## 5. Custom modes are a product capability, not a repo-file claim here
 
 Official Cursor documentation describes Agent, Ask, Manual, and Custom modes,
 with custom modes configured through the product.
@@ -64,7 +80,7 @@ with custom modes configured through the product.
 - do not claim a checked-in repository file format for custom-mode packaging
   unless that format is explicitly documented and adopted by plan.
 
-## 5. Background agents are product capability, not repo provisioning
+## 6. Background agents are product capability, not repo provisioning
 
 Official Cursor documentation describes background agents as a product feature.
 
@@ -72,7 +88,7 @@ Official Cursor documentation describes background agents as a product feature.
 - recognize background agents as part of the Cursor ecosystem; but
 - avoid inventing a local repo provisioning story for them.
 
-## 6. Richer packaging surfaces stay unsupported-or-out-of-scope here
+## 7. Richer packaging surfaces stay unsupported-or-out-of-scope here
 
 Cursor's current product direction includes richer surfaces such as plugins and
 subagent-oriented packaging, but this repository's backbone still ships **zero**
@@ -91,5 +107,7 @@ Given the ownership and proof boundaries above, the safest starting point for an
 1. root `AGENTS.md`;
 2. `.cursor/rules/*.mdc`;
 3. documentation that records `repo-owned`, `host-product-only`, and
-   `unsupported-or-out-of-scope` clearly; and
-4. opt-in MCP only after a specific integration is selected.
+   `unsupported-or-out-of-scope` clearly;
+4. any repo-owned landing site only after checked-in artifact proof is present;
+   and
+5. opt-in MCP only after a specific integration is selected.

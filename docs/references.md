@@ -1,6 +1,6 @@
 # References
 
-Access date for web sources: **2026-04-21**.
+Access date for web sources: **2026-04-22**.
 
 This page is the citation index for public `oh-my-cursor` claims. It separates
 repo-owned proof from host-product documentation so repo wording does not drift
@@ -17,6 +17,13 @@ past its evidence.
 | [Background Agents](https://docs.cursor.com/background-agents) | Background agents as asynchronous remote product capability. | Supports `host-product-only` background-agent wording at `official-doc`; this repo does not claim repo-file provisioning. |
 | [Plugins, Sandbox Access Controls, and Async Subagents](https://cursor.com/changelog/2-5) | Current product support for plugins and async subagents. | Used only for product-awareness and negative boundary wording: this repo remains `unsupported-or-out-of-scope` for checked-in plugin, skill, hook, or custom-agent packaging. |
 
+## Landing-surface deployment references
+
+| Source | Supports which claim family here | Ownership / proof ceiling used by this repo |
+| --- | --- | --- |
+| [Next.js static exports](https://nextjs.org/docs/app/building-your-application/deploying/static-exports) | `output: 'export'` builds static assets into `out/` for App Router projects. | Supports the deployment mechanics for a future checked-in `apps/cursor-backbone-site/`; repo-owned wording still requires the files and exported output to exist locally. |
+| [GitHub Pages custom workflows](https://docs.github.com/en/pages/getting-started-with-github-pages/using-custom-workflows-with-github-pages) | Official `configure-pages`, `upload-pages-artifact`, and `deploy-pages` workflow path for Pages deployments. | Supports workflow-shape checks for a future repo-owned landing site; it does not by itself prove the repo already ships that workflow. |
+
 ## Claim mapping used by this repo
 
 - Root `AGENTS.md`, `.cursor/rules`, local validators, and checked-in benchmark
@@ -28,5 +35,8 @@ past its evidence.
   custom-agent packaging, repo-file custom-mode packaging, and repo-file
   background-agent provisioning remain **unsupported-or-out-of-scope** in this
   repo today.
+- A future checked-in Pages landing site can only be described as
+  **repo-owned** after the app files, deploy workflow, and exported-output
+  validators all exist in this repo.
 - Any stronger public wording must be backed by the matching proof class:
   `official-doc`, `checked-in-artifact`, or `runtime-smoke`.

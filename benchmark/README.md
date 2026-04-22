@@ -30,6 +30,7 @@ Always-required checked-in proof still lives in:
 
 - `./scripts/verify-backbone.sh`
 - `./scripts/validate-surface-visibility.sh`
+- `./scripts/validate-pages-surface.sh`
 - `./scripts/validate-state-contract.sh`
 
 The benchmark runs above are **environment-gated runtime proof**. They only
@@ -41,6 +42,10 @@ successful.
 This repo does not currently ship hooks, prompt files, skill bundles, or
 namespaced plugin packaging. Scoring it like `oh-my-copilot` would be fake
 parity.
+
+If this repo later ships a checked-in Pages landing surface, that site still has
+to expose `Benchmark Notes` as a visible proof entry point. The landing page may
+improve presentation, but it does not get to hide the benchmark contract.
 
 The benchmark here therefore treats the current Cursor-native backbone as:
 
