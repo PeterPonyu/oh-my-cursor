@@ -60,6 +60,7 @@ python3 - "$ROOT" "$BASELINE_RESULTS" "$BASELINE_EVAL" "$ENHANCED_RESULTS" "$ENH
 from __future__ import annotations
 import json
 import pathlib
+import subprocess
 import sys
 
 root = pathlib.Path(sys.argv[1])
@@ -142,6 +143,19 @@ for snippet in (
     if snippet not in history_md:
         fail(f"benchmark history is missing current score snippet {snippet}")
 ok("history.md records the current baseline/enhanced benchmark scores")
+
+history_lines = [
+    line.strip()
+    for line in (root / "benchmark" / "results" / "history.jsonl").read_text(encoding="utf-8").splitlines()
+    if line.strip()
+]
+if not history_lines:
+    fail("benchmark/results/history.jsonl is empty")
+latest_entry = json.loads(history_lines[0])
+latest_sha = latest_entry.get("git_sha")
+if not latest_sha:
+    fail("latest benchmark history entry is missing git_sha")
+print(f"ok: latest benchmark history entry records git_sha {latest_sha}")
 PY
 
 log "Cursor benchmark evidence validation complete"

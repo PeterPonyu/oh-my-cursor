@@ -134,13 +134,13 @@ if [[ "$RUN_AGENT_SMOKE" == "1" ]]; then
       --mode ask \
       --trust \
       --workspace "$ROOT" \
-      "Without editing files or running write commands, an enhanced-only task smoke changed and you want to refresh only the enhanced benchmark proof. Reply with exactly: CURSOR_TASK_COMMAND_OK ./benchmark/quick_test.sh --variant enhanced --run-agent-smoke ./scripts/validate-benchmark-evidence.sh" 2>&1
+      "Without editing files or running write commands, choose the correct rerun path after an enhanced-only task-smoke change. Option A: ./benchmark/quick_test.sh --variant enhanced --run-agent-smoke && ./scripts/validate-benchmark-evidence.sh. Option B: ./benchmark/quick_test.sh --variant baseline && ./scripts/validate-state-contract.sh. Reply with exactly: CURSOR_TASK_COMMAND_OK A" 2>&1
   )" || {
     printf '%s\n' "$task_command_output" >&2
     echo "FAIL: cursor-agent task command smoke failed" >&2
     exit 1
   }
-  printf '%s\n' "$task_command_output" | grep -Fxq 'CURSOR_TASK_COMMAND_OK ./benchmark/quick_test.sh --variant enhanced --run-agent-smoke ./scripts/validate-benchmark-evidence.sh' || {
+  printf '%s\n' "$task_command_output" | grep -Fxq 'CURSOR_TASK_COMMAND_OK A' || {
     printf '%s\n' "$task_command_output" >&2
     echo "FAIL: cursor-agent task command smoke missing CURSOR_TASK_COMMAND_OK" >&2
     exit 1
