@@ -30,6 +30,7 @@ Always-required checked-in proof still lives in:
 
 - `./scripts/verify-backbone.sh`
 - `./scripts/validate-surface-visibility.sh`
+- `./scripts/validate-benchmark-evidence.sh`
 - `./scripts/validate-pages-surface.sh`
 - `./scripts/validate-state-contract.sh`
 

@@ -43,6 +43,7 @@ repo-owned surfaces documented and checked in today:
 | State ownership contract | [`docs/state-contract.md`](./docs/state-contract.md) |
 | Local state contract | [`scripts/validate-state-contract.sh`](./scripts/validate-state-contract.sh) |
 | Surface visibility check | [`scripts/validate-surface-visibility.sh`](./scripts/validate-surface-visibility.sh) |
+| Benchmark evidence check | [`scripts/validate-benchmark-evidence.sh`](./scripts/validate-benchmark-evidence.sh) |
 | Landing-surface contract | [`scripts/validate-pages-surface.sh`](./scripts/validate-pages-surface.sh) |
 | Default auth check | [`scripts/check-default-auth.sh`](./scripts/check-default-auth.sh) |
 | Optional `auto`-model smoke | [`scripts/smoke-cursor-agent.sh`](./scripts/smoke-cursor-agent.sh) |
