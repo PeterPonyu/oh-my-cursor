@@ -1,0 +1,25 @@
+# Context Snapshot — oh-my-cursor plugin promotion
+
+- task statement: Implement the approved ralplan to make `oh-my-cursor` a ready-to-use Cursor plugin.
+- desired outcome: Repo-root Cursor plugin with checked-in `.cursor-plugin/plugin.json`, minimal shipped plugin components, truthful docs, updated validators, and documented local-load verification.
+- known facts/evidence:
+  - Current repo docs/validators still describe plugin packaging as unsupported or deferred.
+  - Repo-local initial consensus plan exists at `.omx/plans/consensus-plan-cursor-plugin-initial.md`.
+  - Official Cursor docs support plugins rooted at `.cursor-plugin/plugin.json` and local testing via `~/.cursor/plugins/local` plus Cursor reload.
+  - No official CLI-only plugin smoke runner was found in current official docs.
+- constraints:
+  - Keep ownership/proof claims truthful.
+  - Prefer minimal initial plugin payload over shipping every optional primitive.
+  - Do not promote MCP/hooks/agents/commands unless they land with concrete artifacts and proof.
+  - Keep diffs reviewable.
+- unknowns/open questions:
+  - Best minimal first payload beyond rules + skills.
+  - Whether root `.cursor/rules` should stay distinct from plugin `rules/` or partially align.
+- likely codebase touchpoints:
+  - `.cursor-plugin/`, `rules/`, `skills/`
+  - `README.md`, `docs/*.md`
+  - `scripts/verify-backbone.sh`
+  - `scripts/validate-surface-visibility.sh`
+  - `scripts/validate-state-contract.sh`
+  - `scripts/validate-benchmark-evidence.sh`
+  - `benchmark/README.md`
