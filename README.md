@@ -41,6 +41,7 @@ repo-owned surfaces documented and checked in today:
 | State ownership contract | [`docs/state-contract.md`](./docs/state-contract.md) |
 | Local state contract | [`scripts/validate-state-contract.sh`](./scripts/validate-state-contract.sh) |
 | Surface visibility check | [`scripts/validate-surface-visibility.sh`](./scripts/validate-surface-visibility.sh) |
+| Landing-surface contract | [`scripts/validate-pages-surface.sh`](./scripts/validate-pages-surface.sh) |
 | Default auth check | [`scripts/check-default-auth.sh`](./scripts/check-default-auth.sh) |
 | Optional `auto`-model smoke | [`scripts/smoke-cursor-agent.sh`](./scripts/smoke-cursor-agent.sh) |
 | Local backbone verification | [`scripts/verify-backbone.sh`](./scripts/verify-backbone.sh) |
@@ -52,6 +53,7 @@ repo-owned surfaces documented and checked in today:
 | --- | --- | --- | --- |
 | Root instructions and rules | `repo-owned` | `checked-in-artifact` | This repo ships `AGENTS.md` and `.cursor/rules/`. |
 | Verification and benchmark reporting | `repo-owned` | `checked-in-artifact` | This repo ships local validators, smoke wrappers, and checked-in benchmark artifacts. |
+| Landing Pages site and deploy workflow | `repo-owned` only when checked in | `checked-in-artifact` once app files, workflow, and exported-output validation all exist | A future `apps/cursor-backbone-site/` surface counts as repo-owned only after the site, workflow, and visible-proof checks all land together. |
 | MCP support | `host-product-only` | `official-doc` | Cursor supports MCP, but this repo leaves it opt-in until a concrete server, auth model, and ownership decision are chosen. |
 | Modes and background agents | `host-product-only` | `official-doc` | Cursor exposes these capabilities as product surfaces; this repo does not package them as checked-in workflow files. |
 | Plugin / skill / hook / custom-agent packaging | `unsupported-or-out-of-scope` | `official-doc` for product awareness, negative repo claim here | This repo does **not** ship checked-in Cursor plugin bundles, skill bundles, hook manifests, or custom-agent packaging. |
@@ -62,6 +64,8 @@ repo-owned surfaces documented and checked in today:
 - scoped Cursor project rules in `.cursor/rules/*.mdc`;
 - documentation that labels confirmed behavior, inference, and explicit
   non-claims;
+- a landing-surface validator that keeps any future repo-owned Pages site
+  docs-first, evidence-linked, and boundary-truthful;
 - local verification scripts for surface visibility and state hygiene; and
 - benchmark evidence under `benchmark/results/` that stays tied to the
   canonical repo root.
@@ -92,6 +96,24 @@ Prefer the smallest confirmed Cursor-native surface first:
 That keeps the repo useful today while preventing unsupported packaging claims
 from turning into hidden maintenance debt.
 
+## Landing-surface contract
+
+If this repo later checks in `apps/cursor-backbone-site/` as a GitHub Pages
+surface, that landing page must remain a **repo-owned** checked-in artifact
+rather than a vague marketing layer. In practice that means:
+
+- the title, primary heading, and metadata lead with `oh-my-cursor`;
+- the landing surface keeps `Docs`, `State Contract`, `References`, and
+  `Benchmark Notes` visibly reachable;
+- any visible sibling link to `oh-my-copilot` stays comparison/context scoped,
+  not canonical or ownership-scoped; and
+- rendered copy must not rewrite `host-product-only` or
+  `unsupported-or-out-of-scope` surfaces as repo-owned capability claims.
+
+The validator at
+[`scripts/validate-pages-surface.sh`](./scripts/validate-pages-surface.sh)
+exists to keep that contract explicit once the Pages app is checked in.
+
 ## Verification
 
 Run from the repository root.
@@ -101,6 +123,7 @@ Always-required checks:
 ```bash
 ./scripts/verify-backbone.sh
 ./scripts/validate-surface-visibility.sh
+./scripts/validate-pages-surface.sh
 ./scripts/validate-state-contract.sh
 ./scripts/check-default-auth.sh
 ```

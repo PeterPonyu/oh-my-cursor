@@ -18,6 +18,7 @@ required=(
   docs/references.md
   docs/state-contract.md
   scripts/check-default-auth.sh
+  scripts/validate-pages-surface.sh
   scripts/validate-state-contract.sh
   scripts/smoke-cursor-agent.sh
   scripts/verify-backbone.sh
@@ -106,7 +107,10 @@ PY
 
 grep -q 'AGENTS.md' docs/confirmed-surfaces.md || fail "confirmed surfaces doc must mention AGENTS.md"
 grep -q '\.cursor/rules' docs/confirmed-surfaces.md || fail "confirmed surfaces doc must mention .cursor/rules"
+grep -q 'cursor-backbone-site' docs/confirmed-surfaces.md || fail "confirmed surfaces doc must mention the landing-site proof rule"
 grep -Eq 'different, smaller contract' benchmark/README.md || fail "benchmark README must describe the smaller Cursor benchmark contract"
 grep -Eq 'reporting-comparable' benchmark/README.md || fail "benchmark README must keep reporting-comparable wording"
+
+./scripts/validate-pages-surface.sh
 
 log "surface visibility validation complete"

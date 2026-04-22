@@ -30,6 +30,8 @@ The repository currently owns only these checked-in state-like surfaces:
 - `.cursor/rules/*.mdc`
 - bounded documentation
 - local verification/benchmark scripts
+- `apps/cursor-backbone-site/` and `.github/workflows/deploy-pages.yml` only
+  when they are actually checked in and locally validated
 - benchmark artifacts under `benchmark/results/current-baseline/` and
   `benchmark/results/current-enhanced/`, with the benchmark wrapper normalizing
   transient `/.omx/team/.../worktrees/...` invocation paths back to the
@@ -37,6 +39,9 @@ The repository currently owns only these checked-in state-like surfaces:
 
 Those are the only surfaces this repo should describe as `repo-owned`
 state/proof artifacts today.
+
+If the Pages app/workflow is absent, it remains a planned or missing checked-in
+artifact rather than a current state guarantee.
 
 ## Host-product-only state
 
@@ -72,6 +77,10 @@ The safest Cursor-native backbone is one that separates:
 
 That prevents hidden product-state assumptions from turning into fake
 repository guarantees.
+
+The same rule applies to any future landing site: a repo-owned Pages surface is
+real only when the checked-in app, workflow, and exported-output validation all
+exist together.
 
 ## Local validation
 

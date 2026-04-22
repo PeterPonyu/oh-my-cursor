@@ -17,6 +17,7 @@ required=(
   docs/fallback-policy.md
   docs/references.md
   docs/state-contract.md
+  scripts/validate-pages-surface.sh
 )
 
 for path in "${required[@]}"; do
@@ -29,9 +30,12 @@ grep -q 'host-product-only' README.md || fail "README must keep host-product-onl
 grep -q 'unsupported-or-out-of-scope' README.md || fail "README must keep unsupported-or-out-of-scope vocabulary"
 grep -q 'AGENTS.md' docs/confirmed-surfaces.md || fail "confirmed surfaces doc must mention AGENTS.md"
 grep -q '\.cursor/rules' docs/confirmed-surfaces.md || fail "confirmed surfaces doc must mention .cursor/rules"
+grep -q 'cursor-backbone-site' docs/confirmed-surfaces.md || fail "confirmed surfaces doc must describe the landing-site proof rule"
 grep -q 'unsupported-or-out-of-scope' docs/fallback-policy.md || fail "fallback policy must keep unsupported-or-out-of-scope wording"
 grep -q 'host-product-only' docs/fallback-policy.md || fail "fallback policy must keep host-product-only wording"
 grep -q 'docs.cursor.com/en/cli/using' docs/references.md || fail "references doc must keep Cursor CLI source link"
+grep -q 'nextjs.org/docs/app/building-your-application/deploying/static-exports' docs/references.md || fail "references doc must keep Next.js static export source link"
+grep -q 'docs.github.com/en/pages/getting-started-with-github-pages/using-custom-workflows-with-github-pages' docs/references.md || fail "references doc must keep GitHub Pages workflow source link"
 grep -Eq 'different, smaller contract' benchmark/README.md || fail "benchmark README must describe the smaller Cursor benchmark contract"
 grep -Eq 'reporting-comparable' benchmark/README.md || fail "benchmark README must keep reporting-comparable wording"
 
@@ -95,5 +99,7 @@ if violations:
 
 print("ok: positive overclaim scan stayed clean for README/AGENTS/docs/benchmark notes")
 PY
+
+./scripts/validate-pages-surface.sh
 
 echo 'verification: repository backbone files, claim vocabulary, and positive overclaim protections are present'
