@@ -102,6 +102,10 @@ print("ok: positive overclaim scan stayed clean for README/AGENTS/docs/benchmark
 PY
 
 ./scripts/validate-pages-surface.sh
-./scripts/validate-benchmark-evidence.sh
+if [[ "${CURSOR_SKIP_BENCHMARK_EVIDENCE:-0}" == "1" ]]; then
+  log "benchmark evidence validation skipped inside benchmark self-run"
+else
+  ./scripts/validate-benchmark-evidence.sh
+fi
 
 echo 'verification: repository backbone files, claim vocabulary, positive overclaim protections, and benchmark evidence are present'

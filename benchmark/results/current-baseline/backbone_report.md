@@ -8,20 +8,20 @@ Variant: `baseline`
 
 | Check | Result | Duration (s) | Markers |
 | --- | --- | ---: | --- |
-| `default_auth` | PASS | 2.22 | `CURSOR_AUTH_OK`, `CURSOR_MODEL_AUTO_OK` |
-| `surface_visibility` | PASS | 0.17 | `REFINEMENT_MAP_OK`, `PLUGIN_BOUNDARY_OK`, `DISCOVERABILITY_OK` |
+| `default_auth` | PASS | 2.31 | `CURSOR_AUTH_OK`, `CURSOR_MODEL_AUTO_OK` |
+| `surface_visibility` | PASS | 0.16 | `REFINEMENT_MAP_OK`, `PLUGIN_BOUNDARY_OK`, `DISCOVERABILITY_OK` |
 | `state_contract` | PASS | 0.02 | — |
-| `backbone_verify` | PASS | 0.06 | — |
+| `backbone_verify` | PASS | 0.04 | — |
 | `smoke_cursor` | PASS | 0.0 | — |
 
 ## Evaluation contract
 
-- Score: **130/150**
-- Threshold: **130/150**
+- Score: **130/160**
+- Threshold: **130/160**
 - Benchmark gate: **PASS**
-- Baseline floor: **130/150**
+- Baseline floor: **130/160**
 - Actual delta vs baseline floor: **0**
-- Required delta vs baseline floor: **20**
+- Required delta vs baseline floor: **30**
 - Improvement summary: Baseline reference run establishes the comparison floor; use an enhanced run to measure Cursor smoke uplift.
 - Investigation required: **no**
 - This report is environment-gated runtime proof layered on top of the always-required static validators.
@@ -38,3 +38,4 @@ Variant: `baseline`
 | `state_contract` | yes | PASS | 20 | repo/user state contract stays bounded and explicit |
 | `backbone_verify` | yes | PASS | 25 | backbone verification passes |
 | `CURSOR_AGENT_OK` | no | FAIL | 20 | model-backed cursor smoke returns CURSOR_AGENT_OK |
+| `CURSOR_TASK_SCENARIO_OK` | no | FAIL | 10 | agent can answer a constrained practical repo-task question |

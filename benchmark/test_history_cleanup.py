@@ -197,15 +197,15 @@ class CursorHistoryCleanupTests(unittest.TestCase):
                 command="./scripts/smoke-cursor-agent.sh",
                 success=True,
                 duration_sec=0.1,
-                output_tail="CURSOR_AGENT_OK\nok: Cursor CLI smoke validation complete",
-                markers=["CURSOR_AGENT_OK"],
+                output_tail="CURSOR_AGENT_OK\nCURSOR_TASK_SCENARIO_OK docs/refinement-priority-map.md docs/plugin-boundary-review.md scripts/validate-benchmark-evidence.sh\nok: Cursor CLI smoke validation complete",
+                markers=["CURSOR_AGENT_OK", "CURSOR_TASK_SCENARIO_OK"],
             ),
         ]
 
         evaluation = MODULE.build_evaluation("backbone", "enhanced", results)
 
         self.assertTrue(evaluation.passed)
-        self.assertEqual(evaluation.actual_delta_vs_baseline, 20)
+        self.assertEqual(evaluation.actual_delta_vs_baseline, 30)
         self.assertFalse(evaluation.investigation_required)
         self.assertIn("benchmark-backed uplift observed", evaluation.improvement_summary)
 

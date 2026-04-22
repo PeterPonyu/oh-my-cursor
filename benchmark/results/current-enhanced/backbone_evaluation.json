@@ -1,16 +1,16 @@
 {
   "profile": "backbone",
   "variant": "enhanced",
-  "score": 150,
-  "max_score": 150,
-  "threshold_score": 150,
+  "score": 160,
+  "max_score": 160,
+  "threshold_score": 160,
   "passed": true,
   "release_blocking": false,
   "expected_baseline_score": 130,
-  "required_delta_vs_baseline": 20,
-  "actual_delta_vs_baseline": 20,
+  "required_delta_vs_baseline": 30,
+  "actual_delta_vs_baseline": 30,
   "investigation_required": false,
-  "improvement_summary": "Enhanced evidence improved by 20 over the baseline floor; benchmark-backed uplift observed.",
+  "improvement_summary": "Enhanced evidence improved by 30 over the baseline floor; benchmark-backed uplift observed.",
   "dimensions": [
     {
       "name": "default_auth",
@@ -42,7 +42,7 @@
       "weight": 10,
       "required": true,
       "passed": true,
-      "evidence": "ok: reusing upstream default auth/model proof (environment-gated)\nok: cursor-agent prompt smoke returned CURSOR_AGENT_OK (environment-gated runtime proof)\nok: Cursor CLI smoke validation complete"
+      "evidence": "ok: reusing upstream default auth/model proof (environment-gated)\nok: cursor-agent prompt smoke returned CURSOR_AGENT_OK (environment-gated runtime proof)\nok: cursor-agent task scenario smoke returned CURSOR_TASK_SCENARIO_OK (environment-gated runtime proof)\nok: Cursor CLI smoke validation complete"
     },
     {
       "name": "PLUGIN_BOUNDARY_OK",
@@ -50,7 +50,7 @@
       "weight": 10,
       "required": true,
       "passed": true,
-      "evidence": "ok: reusing upstream default auth/model proof (environment-gated)\nok: cursor-agent prompt smoke returned CURSOR_AGENT_OK (environment-gated runtime proof)\nok: Cursor CLI smoke validation complete"
+      "evidence": "ok: reusing upstream default auth/model proof (environment-gated)\nok: cursor-agent prompt smoke returned CURSOR_AGENT_OK (environment-gated runtime proof)\nok: cursor-agent task scenario smoke returned CURSOR_TASK_SCENARIO_OK (environment-gated runtime proof)\nok: Cursor CLI smoke validation complete"
     },
     {
       "name": "DISCOVERABILITY_OK",
@@ -58,7 +58,7 @@
       "weight": 10,
       "required": true,
       "passed": true,
-      "evidence": "ok: reusing upstream default auth/model proof (environment-gated)\nok: cursor-agent prompt smoke returned CURSOR_AGENT_OK (environment-gated runtime proof)\nok: Cursor CLI smoke validation complete"
+      "evidence": "ok: reusing upstream default auth/model proof (environment-gated)\nok: cursor-agent prompt smoke returned CURSOR_AGENT_OK (environment-gated runtime proof)\nok: cursor-agent task scenario smoke returned CURSOR_TASK_SCENARIO_OK (environment-gated runtime proof)\nok: Cursor CLI smoke validation complete"
     },
     {
       "name": "state_contract",
@@ -74,7 +74,7 @@
       "weight": 25,
       "required": true,
       "passed": true,
-      "evidence": "ok: exported landing HTML preserves required naming, proof links, sibling link, and ownership terms\nok: benchmark README describes the current smaller contract and its new proof docs\nok: baseline benchmark results all passed\nok: enhanced benchmark results all passed\nok: baseline evaluation passed at 130/150\nok: enhanced evaluation passed at 140/140\nok: baseline proof now measures the README-visible refinement and boundary-review docs\nok: enhanced proof includes model-backed Cursor smoke evidence\nok: current baseline/enhanced runs do not raise investigation-required flags\nok: history.md records the current baseline/enhanced benchmark scores\nok: Cursor benchmark evidence validation complete\nverification: repository backbone files, claim vocabulary, positive overclaim protections, and benchmark evidence are present"
+      "evidence": "ok: apps/cursor-backbone-site/tsconfig.json\nok: apps/cursor-backbone-site/next-env.d.ts\nok: apps/cursor-backbone-site/next.config.ts\nok: apps/cursor-backbone-site/app/layout.tsx\nok: apps/cursor-backbone-site/app/page.tsx\nok: .github/workflows/deploy-pages.yml\nok: next.config.ts keeps static export output\nok: deploy workflow uses official Pages artifact/deploy actions\nok: apps/cursor-backbone-site/out/index.html\nok: exported landing HTML preserves required naming, proof links, sibling link, and ownership terms\nok: benchmark evidence validation skipped inside benchmark self-run\nverification: repository backbone files, claim vocabulary, positive overclaim protections, and benchmark evidence are present"
     },
     {
       "name": "CURSOR_AGENT_OK",
@@ -82,7 +82,15 @@
       "weight": 20,
       "required": true,
       "passed": true,
-      "evidence": "ok: reusing upstream default auth/model proof (environment-gated)\nok: cursor-agent prompt smoke returned CURSOR_AGENT_OK (environment-gated runtime proof)\nok: Cursor CLI smoke validation complete"
+      "evidence": "ok: reusing upstream default auth/model proof (environment-gated)\nok: cursor-agent prompt smoke returned CURSOR_AGENT_OK (environment-gated runtime proof)\nok: cursor-agent task scenario smoke returned CURSOR_TASK_SCENARIO_OK (environment-gated runtime proof)\nok: Cursor CLI smoke validation complete"
+    },
+    {
+      "name": "CURSOR_TASK_SCENARIO_OK",
+      "description": "agent can answer a constrained practical repo-task question",
+      "weight": 10,
+      "required": true,
+      "passed": true,
+      "evidence": "ok: reusing upstream default auth/model proof (environment-gated)\nok: cursor-agent prompt smoke returned CURSOR_AGENT_OK (environment-gated runtime proof)\nok: cursor-agent task scenario smoke returned CURSOR_TASK_SCENARIO_OK (environment-gated runtime proof)\nok: Cursor CLI smoke validation complete"
     }
   ]
 }
