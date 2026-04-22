@@ -50,7 +50,9 @@ repo-owned surfaces checked in today:
 | Default auth check | [`scripts/check-default-auth.sh`](./scripts/check-default-auth.sh) |
 | Optional `auto`-model smoke | [`scripts/smoke-cursor-agent.sh`](./scripts/smoke-cursor-agent.sh) |
 | Local backbone verification | [`scripts/verify-backbone.sh`](./scripts/verify-backbone.sh) |
+| CI-safe local plugin install check | [`scripts/check-local-plugin-install.sh`](./scripts/check-local-plugin-install.sh) |
 | Benchmark notes | [`benchmark/README.md`](./benchmark/README.md) |
+| Change history | [`CHANGELOG.md`](./CHANGELOG.md) |
 
 ## Ownership map
 
@@ -104,6 +106,8 @@ local plugin path:
 
 The detailed manual checklist lives in
 [`docs/local-plugin-verification.md`](./docs/local-plugin-verification.md).
+For a bounded non-UI verification of the helper itself, run
+[`scripts/check-local-plugin-install.sh`](./scripts/check-local-plugin-install.sh).
 
 ## Design rule
 
@@ -154,6 +158,7 @@ Always-required checks:
 ./scripts/validate-surface-visibility.sh
 ./scripts/validate-pages-surface.sh
 ./scripts/validate-state-contract.sh
+./scripts/check-local-plugin-install.sh
 ./scripts/check-default-auth.sh
 ```
 

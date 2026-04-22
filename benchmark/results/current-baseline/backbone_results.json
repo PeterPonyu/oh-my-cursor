@@ -3,7 +3,7 @@
     "name": "default_auth",
     "command": "./scripts/check-default-auth.sh",
     "success": true,
-    "duration_sec": 2.61,
+    "duration_sec": 2.19,
     "output_tail": "\u2713 Logged in as fuzeyu09@gmail.com\nCURSOR_AUTH_OK\nok: default Cursor auth is available\nCURSOR_MODEL_AUTO_OK\nok: cursor-agent exposes the auto model\nok: cursor config auth user is fuzeyu09@gmail.com\nok: cursor config default model is default",
     "markers": [
       "CURSOR_AUTH_OK",
@@ -34,7 +34,7 @@
     "name": "backbone_verify",
     "command": "./scripts/verify-backbone.sh",
     "success": true,
-    "duration_sec": 0.18,
+    "duration_sec": 0.66,
     "output_tail": "ok: apps/cursor-backbone-site/tsconfig.json\nok: apps/cursor-backbone-site/next-env.d.ts\nok: apps/cursor-backbone-site/next.config.ts\nok: apps/cursor-backbone-site/app/layout.tsx\nok: apps/cursor-backbone-site/app/page.tsx\nok: .github/workflows/deploy-pages.yml\nok: next.config.ts keeps static export output\nok: deploy workflow uses official Pages artifact/deploy actions\nok: apps/cursor-backbone-site/out/index.html\nok: exported landing HTML preserves required naming, proof links, sibling link, and ownership terms\nok: benchmark evidence validation skipped inside benchmark self-run\nverification: repository backbone files, claim vocabulary, positive overclaim protections, and benchmark evidence are present",
     "markers": []
   },

@@ -2,6 +2,8 @@
 
 | Timestamp | Branch | SHA | Profile | Variant | Score | Threshold | Gate | Output |
 | --- | --- | --- | --- | --- | ---: | ---: | --- | --- |
+| `2026-04-22T09:59:07Z` | `codex/cursor-release-readiness` | `667a674` | `backbone` | `enhanced` | 180/180 | 180/180 | PASS | `benchmark/results/current-enhanced` |
+| `2026-04-22T09:58:24Z` | `codex/cursor-release-readiness` | `667a674` | `backbone` | `baseline` | 130/130 | 130/130 | PASS | `benchmark/results/current-baseline` |
 | `2026-04-22T08:51:24Z` | `codex/cursor-plugin-hardening` | `1838e4a` | `backbone` | `baseline` | 130/130 | 130/130 | PASS | `benchmark/results/current-baseline` |
 | `2026-04-22T08:50:52Z` | `codex/cursor-plugin-hardening` | `7bd6ea3` | `backbone` | `enhanced` | 180/180 | 180/180 | PASS | `benchmark/results/current-enhanced` |
 | `2026-04-22T08:47:24Z` | `codex/cursor-plugin-hardening` | `7bd6ea3` | `backbone` | `baseline` | 130/130 | 130/130 | PASS | `benchmark/results/current-baseline` |

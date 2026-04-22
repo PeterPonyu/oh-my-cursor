@@ -8,11 +8,11 @@ Variant: `enhanced`
 
 | Check | Result | Duration (s) | Markers |
 | --- | --- | ---: | --- |
-| `default_auth` | PASS | 3.59 | `CURSOR_AUTH_OK`, `CURSOR_MODEL_AUTO_OK` |
-| `surface_visibility` | PASS | 0.39 | `REFINEMENT_MAP_OK`, `PLUGIN_BOUNDARY_OK`, `DISCOVERABILITY_OK` |
+| `default_auth` | PASS | 2.64 | `CURSOR_AUTH_OK`, `CURSOR_MODEL_AUTO_OK` |
+| `surface_visibility` | PASS | 0.4 | `REFINEMENT_MAP_OK`, `PLUGIN_BOUNDARY_OK`, `DISCOVERABILITY_OK` |
 | `state_contract` | PASS | 0.02 | — |
-| `backbone_verify` | PASS | 0.18 | — |
-| `smoke_cursor` | PASS | 203.03 | `CURSOR_AGENT_OK`, `CURSOR_TASK_SCENARIO_OK`, `CURSOR_TASK_PLAN_OK`, `CURSOR_TASK_COMMAND_OK` |
+| `backbone_verify` | PASS | 0.64 | — |
+| `smoke_cursor` | PASS | 39.29 | `CURSOR_AGENT_OK`, `CURSOR_TASK_SCENARIO_OK`, `CURSOR_TASK_PLAN_OK`, `CURSOR_TASK_COMMAND_OK` |
 
 ## Evaluation contract
 
