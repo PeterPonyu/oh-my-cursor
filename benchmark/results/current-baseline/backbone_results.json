@@ -3,7 +3,7 @@
     "name": "default_auth",
     "command": "./scripts/check-default-auth.sh",
     "success": true,
-    "duration_sec": 8.94,
+    "duration_sec": 2.31,
     "output_tail": "\u2713 Logged in as fuzeyu09@gmail.com\nCURSOR_AUTH_OK\nok: default Cursor auth is available\nCURSOR_MODEL_AUTO_OK\nok: cursor-agent exposes the auto model\nok: cursor config auth user is fuzeyu09@gmail.com\nok: cursor config default model is default",
     "markers": [
       "CURSOR_AUTH_OK",
@@ -14,9 +14,13 @@
     "name": "surface_visibility",
     "command": "./scripts/validate-surface-visibility.sh",
     "success": true,
-    "duration_sec": 0.03,
-    "output_tail": "ok: docs/references.md\nok: docs/state-contract.md\nok: scripts/check-default-auth.sh\nok: scripts/validate-state-contract.sh\nok: scripts/smoke-cursor-agent.sh\nok: scripts/verify-backbone.sh\nok: current repo intentionally has 0 checked-in custom agents\nok: current repo intentionally has 0 checked-in prompt files\nok: current repo intentionally has 0 checked-in skill bundles\nok: current repo intentionally has 0 checked-in hook manifests\nok: positive overclaim scan stayed clean for README/AGENTS/docs/benchmark notes\nok: surface visibility validation complete",
-    "markers": []
+    "duration_sec": 0.16,
+    "output_tail": "ok: apps/cursor-backbone-site/eslint.config.mjs\nok: apps/cursor-backbone-site/tsconfig.json\nok: apps/cursor-backbone-site/next-env.d.ts\nok: apps/cursor-backbone-site/next.config.ts\nok: apps/cursor-backbone-site/app/layout.tsx\nok: apps/cursor-backbone-site/app/page.tsx\nok: .github/workflows/deploy-pages.yml\nok: next.config.ts keeps static export output\nok: deploy workflow uses official Pages artifact/deploy actions\nok: apps/cursor-backbone-site/out/index.html\nok: exported landing HTML preserves required naming, proof links, sibling link, and ownership terms\nok: surface visibility validation complete",
+    "markers": [
+      "REFINEMENT_MAP_OK",
+      "PLUGIN_BOUNDARY_OK",
+      "DISCOVERABILITY_OK"
+    ]
   },
   {
     "name": "state_contract",
@@ -30,8 +34,8 @@
     "name": "backbone_verify",
     "command": "./scripts/verify-backbone.sh",
     "success": true,
-    "duration_sec": 0.03,
-    "output_tail": "ok: AGENTS.md\nok: README.md\nok: benchmark/README.md\nok: .cursor/rules/00-repo-scope.mdc\nok: .cursor/rules/10-docs-claims.mdc\nok: docs/confirmed-surfaces.md\nok: docs/fallback-policy.md\nok: docs/references.md\nok: docs/state-contract.md\nok: positive overclaim scan stayed clean for README/AGENTS/docs/benchmark notes\nverification: repository backbone files, claim vocabulary, and positive overclaim protections are present",
+    "duration_sec": 0.04,
+    "output_tail": "ok: apps/cursor-backbone-site/tsconfig.json\nok: apps/cursor-backbone-site/next-env.d.ts\nok: apps/cursor-backbone-site/next.config.ts\nok: apps/cursor-backbone-site/app/layout.tsx\nok: apps/cursor-backbone-site/app/page.tsx\nok: .github/workflows/deploy-pages.yml\nok: next.config.ts keeps static export output\nok: deploy workflow uses official Pages artifact/deploy actions\nok: apps/cursor-backbone-site/out/index.html\nok: exported landing HTML preserves required naming, proof links, sibling link, and ownership terms\nok: benchmark evidence validation skipped inside benchmark self-run\nverification: repository backbone files, claim vocabulary, positive overclaim protections, and benchmark evidence are present",
     "markers": []
   },
   {

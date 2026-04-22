@@ -1,0 +1,8 @@
+{
+  "name": "oh-my-cursor",
+  "description": "A small, truthful Cursor-native plugin rooted at the repository root.",
+  "version": "0.1.0",
+  "author": {
+    "name": "Zeyu Fu"
+  }
+}

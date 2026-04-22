@@ -6,10 +6,12 @@ with documented Cursor behavior and with the shared claim/proof discipline.
 ## Default fallback
 
 If a Cursor surface is ambiguous, newly released, or not clearly documented,
-fall back to the smallest `repo-owned` surface:
+fall back to the smallest proven `repo-owned` surface:
 
 - root `AGENTS.md` guidance;
-- `.cursor/rules/` project rules; and
+- `.cursor/rules/` project rules;
+- the checked-in repo-root plugin manifest plus its minimal rule/skill payload;
+  and
 - ordinary repository documentation and validators.
 
 ## Ownership fallback rules
@@ -35,11 +37,24 @@ This means:
 Until they are directly proven and deliberately adopted, this repository does
 **not** claim:
 
-- checked-in Cursor plugin/package loading as a shipped repo surface;
-- checked-in custom-agent, prompt, skill, or hook packaging;
+- checked-in hook manifests or custom-agent surfaces;
 - repo-file provisioning for custom modes;
-- repo-file provisioning for background agents; or
-- a default repo-owned MCP configuration.
+- repo-file provisioning for background agents;
+- a default repo-owned MCP configuration; or
+- marketplace publication as the proof story for local plugin use.
+
+## Local plugin rule
+
+The repo-root plugin is intentionally small. If a future edit proposes extra
+plugin-owned surfaces, keep the same proof discipline:
+
+1. concrete checked-in artifact;
+2. validator coverage;
+3. truthful docs; and
+4. reproducible local verification notes.
+
+If one of those is missing, keep the surface deferred instead of broadening the
+repo-owned contract by wording alone.
 
 ## MCP policy
 

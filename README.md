@@ -1,8 +1,8 @@
 # oh-my-cursor
 
-`oh-my-cursor` is a small, docs-first Cursor-native backbone for building a
-truthful repository surface without overclaiming unsupported packaging or
-runtime behavior.
+`oh-my-cursor` is a small, truthful Cursor-native repository that now promotes
+its repo root into a ready-to-use Cursor plugin while keeping ownership and
+proof boundaries explicit.
 
 This repository follows a shared **claim/proof discipline**:
 
@@ -21,13 +21,14 @@ Public wording also stays inside an explicit proof ceiling:
   succeed.
 
 The current backbone deliberately starts from the strongest truthful
-repo-owned surfaces documented and checked in today:
+repo-owned surfaces checked in today:
 
 - root `AGENTS.md` guidance;
 - project rules in `.cursor/rules/`;
-- bounded documentation that separates confirmed support from inference;
-- local verification scripts; and
-- benchmark artifacts that record checked-in evidence against the canonical repo
+- the repo-root Cursor plugin manifest at `.cursor-plugin/plugin.json`;
+- plugin-owned rules plus at least one plugin-owned skill;
+- bounded documentation that separates confirmed support from inference; and
+- local verification scripts and benchmark artifacts tied to the canonical repo
   root.
 
 ## Start here
@@ -36,11 +37,15 @@ repo-owned surfaces documented and checked in today:
 | --- | --- |
 | Repository policy | [`AGENTS.md`](./AGENTS.md) |
 | Confirmed ownership and proof boundaries | [`docs/confirmed-surfaces.md`](./docs/confirmed-surfaces.md) |
+| Local plugin load + reload walkthrough | [`docs/local-plugin-verification.md`](./docs/local-plugin-verification.md) |
+| Learning-driven refinement priorities | [`docs/refinement-priority-map.md`](./docs/refinement-priority-map.md) |
+| Plugin boundary + support-tooling review | [`docs/plugin-boundary-review.md`](./docs/plugin-boundary-review.md) |
 | Hard fallback and non-claim rules | [`docs/fallback-policy.md`](./docs/fallback-policy.md) |
 | Source links and access dates | [`docs/references.md`](./docs/references.md) |
 | State ownership contract | [`docs/state-contract.md`](./docs/state-contract.md) |
 | Local state contract | [`scripts/validate-state-contract.sh`](./scripts/validate-state-contract.sh) |
 | Surface visibility check | [`scripts/validate-surface-visibility.sh`](./scripts/validate-surface-visibility.sh) |
+| Benchmark evidence check | [`scripts/validate-benchmark-evidence.sh`](./scripts/validate-benchmark-evidence.sh) |
 | Landing-surface contract | [`scripts/validate-pages-surface.sh`](./scripts/validate-pages-surface.sh) |
 | Default auth check | [`scripts/check-default-auth.sh`](./scripts/check-default-auth.sh) |
 | Optional `auto`-model smoke | [`scripts/smoke-cursor-agent.sh`](./scripts/smoke-cursor-agent.sh) |
@@ -52,21 +57,25 @@ repo-owned surfaces documented and checked in today:
 | Outcome family | Ownership class | Strongest default proof here | What that means in this repo |
 | --- | --- | --- | --- |
 | Root instructions and rules | `repo-owned` | `checked-in-artifact` | This repo ships `AGENTS.md` and `.cursor/rules/`. |
+| Repo-root Cursor plugin manifest + bundled plugin rules/skills | `repo-owned` | `checked-in-artifact` | This repo treats `.cursor-plugin/plugin.json` plus its shipped rule/skill payload as a checked-in plugin surface. |
+| Local plugin install walkthrough | `repo-owned` docs + manual user-environment verification | `checked-in-artifact` for the walkthrough, `runtime-smoke` only if a future authenticated smoke exists | The repo documents local plugin loading via `~/.cursor/plugins/local` and Cursor reload, but the actual loaded session remains user-environment proof. |
 | Verification and benchmark reporting | `repo-owned` | `checked-in-artifact` | This repo ships local validators, smoke wrappers, and checked-in benchmark artifacts. |
 | Landing Pages site and deploy workflow | `repo-owned` only when checked in | `checked-in-artifact` once app files, workflow, and exported-output validation all exist | A future `apps/cursor-backbone-site/` surface counts as repo-owned only after the site, workflow, and visible-proof checks all land together. |
 | MCP support | `host-product-only` | `official-doc` | Cursor supports MCP, but this repo leaves it opt-in until a concrete server, auth model, and ownership decision are chosen. |
 | Modes and background agents | `host-product-only` | `official-doc` | Cursor exposes these capabilities as product surfaces; this repo does not package them as checked-in workflow files. |
-| Plugin / skill / hook / custom-agent packaging | `unsupported-or-out-of-scope` | `official-doc` for product awareness, negative repo claim here | This repo does **not** ship checked-in Cursor plugin bundles, skill bundles, hook manifests, or custom-agent packaging. |
+| Hooks, custom agents, repo-file custom modes, repo-file background-agent provisioning | `unsupported-or-out-of-scope` | `official-doc` for product awareness, negative repo claim here | This repo intentionally keeps these richer surfaces deferred until matching artifacts and proof land. |
 
 ## What this repo includes
 
 - a root `AGENTS.md` for always-on project guidance;
 - scoped Cursor project rules in `.cursor/rules/*.mdc`;
+- a repo-root plugin manifest under `.cursor-plugin/plugin.json`;
+- a minimal shipped plugin payload with plugin-owned rules and at least one
+  plugin-owned skill;
 - documentation that labels confirmed behavior, inference, and explicit
   non-claims;
 - a landing-surface validator that keeps any future repo-owned Pages site
-  docs-first, evidence-linked, and boundary-truthful;
-- local verification scripts for surface visibility and state hygiene; and
+  docs-first, evidence-linked, and boundary-truthful; and
 - benchmark evidence under `benchmark/results/` that stays tied to the
   canonical repo root.
 
@@ -76,11 +85,24 @@ This backbone intentionally does **not** claim any of the following unless they
 are later promoted with current official documentation, an approved plan, and
 appropriate proof artifacts:
 
-- checked-in Cursor plugin/package loading as a shipped repo surface;
-- checked-in custom-agent, prompt, skill, or hook packaging;
+- checked-in hook manifests or custom-agent packaging;
 - repo-file custom mode configuration;
-- repo-file background-agent provisioning; or
-- a default repo-owned `.cursor/mcp.json`.
+- repo-file background-agent provisioning;
+- a default repo-owned `.cursor/mcp.json`; or
+- marketplace publication as a completion gate for local plugin use.
+
+## Local plugin loading
+
+The repo-owned plugin files are intended to be tested locally through Cursor's
+local plugin path:
+
+1. symlink or copy this repository into `~/.cursor/plugins/local/oh-my-cursor`;
+2. confirm `.cursor-plugin/plugin.json` exists at the plugin root;
+3. restart Cursor or run **Developer: Reload Window**; and
+4. verify the shipped plugin components load as expected.
+
+The detailed manual checklist lives in
+[`docs/local-plugin-verification.md`](./docs/local-plugin-verification.md).
 
 ## Design rule
 
@@ -88,13 +110,13 @@ Prefer the smallest confirmed Cursor-native surface first:
 
 1. root `AGENTS.md`;
 2. `.cursor/rules/` project rules;
-3. bounded docs and validators that explain what is repo-owned vs
-   host-product-only;
-4. opt-in MCP only after choosing a real server and ownership model; and
-5. runtime-smoke wording only after optional authenticated checks succeed.
+3. the repo-root plugin manifest with a minimal shipped rule/skill payload;
+4. bounded docs and validators that explain what is repo-owned vs
+   host-product-only; and
+5. opt-in MCP only after choosing a real server and ownership model.
 
-That keeps the repo useful today while preventing unsupported packaging claims
-from turning into hidden maintenance debt.
+That keeps the repo useful today while preventing richer deferred surfaces from
+turning into hidden maintenance debt.
 
 The flagship landing rhythm is intentionally still repo-local. The visual system
 now aligns with the sibling `oh-my-copilot` surface, but we are **not**

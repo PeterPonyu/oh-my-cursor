@@ -4,11 +4,12 @@ This benchmark surface is intentionally **not the same** as
 `oh-my-copilot`'s benchmark harness.
 
 `oh-my-copilot` scores root/plugin/hook discoverability and installed-plugin
-state. `oh-my-cursor` currently scores a different, smaller contract:
+state. `oh-my-cursor` still scores a different, smaller contract:
 
 - default Cursor auth availability;
 - `auto` model availability;
-- visible repo-native surfaces (`AGENTS.md`, `.cursor/rules`, docs);
+- visible repo-native surfaces (`AGENTS.md`, `.cursor/rules`, the repo-root
+  plugin manifest, and docs);
 - repo state-contract discipline; and
 - optional `cursor-agent` smoke using `--model auto`.
 
@@ -30,6 +31,7 @@ Always-required checked-in proof still lives in:
 
 - `./scripts/verify-backbone.sh`
 - `./scripts/validate-surface-visibility.sh`
+- `./scripts/validate-benchmark-evidence.sh`
 - `./scripts/validate-pages-surface.sh`
 - `./scripts/validate-state-contract.sh`
 
@@ -39,9 +41,25 @@ successful.
 
 ## Why the score differs from oh-my-copilot
 
-This repo does not currently ship hooks, prompt files, skill bundles, or
-namespaced plugin packaging. Scoring it like `oh-my-copilot` would be fake
-parity.
+This repo now ships a small repo-root plugin manifest and at least one plugin
+skill, but it still does **not** ship hooks, prompt files, custom agents, or
+namespaced multi-plugin packaging. Scoring it like `oh-my-copilot` would still
+be fake parity.
+
+The benchmark now also requires the README-visible
+`refinement-priority-map.md` and `plugin-boundary-review.md` links, because
+those documents are part of the current repo-owned proof surface.
+It now treats their placement in the main **Start here** path as part of the
+contract as well, so discoverability is measured instead of implied. Enhanced
+runs also require a constrained practical repo-task answer
+(`CURSOR_TASK_SCENARIO_OK`) so the score reflects more than basic smoke
+availability. Baseline scores now report only the baseline contract ceiling,
+while enhanced carries the extra runtime/task uplift slots.
+Enhanced now also requires a second deterministic repo-work answer
+(`CURSOR_TASK_PLAN_OK`) that chooses the right validator and ownership class
+for a packaging-claim scenario. It now also requires a third deterministic
+command-selection answer (`CURSOR_TASK_COMMAND_OK`) so the task layer covers
+what enhanced benchmark path to rerun.
 
 If this repo later ships a checked-in Pages landing surface, that site still has
 to expose `Benchmark Notes` as a visible proof entry point. The landing page may

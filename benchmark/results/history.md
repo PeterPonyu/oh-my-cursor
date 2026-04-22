@@ -2,6 +2,21 @@
 
 | Timestamp | Branch | SHA | Profile | Variant | Score | Threshold | Gate | Output |
 | --- | --- | --- | --- | --- | ---: | ---: | --- | --- |
+| `2026-04-22T04:21:56Z` | `codex/cursor-benchmark-practical-task-smoke` | `d621b9e` | `backbone` | `enhanced` | 180/180 | 180/180 | PASS | `benchmark/results/current-enhanced` |
+| `2026-04-22T04:04:40Z` | `main` | `6be1119` | `backbone` | `enhanced` | 180/180 | 180/180 | PASS | `benchmark/results/current-enhanced` |
+| `2026-04-22T03:59:04Z` | `main` | `f3f9677` | `backbone` | `enhanced` | 170/170 | 170/170 | PASS | `benchmark/results/current-enhanced` |
+| `2026-04-22T03:52:19Z` | `main` | `f076917` | `backbone` | `enhanced` | 160/160 | 160/160 | PASS | `benchmark/results/current-enhanced` |
+| `2026-04-22T03:52:03Z` | `main` | `f076917` | `backbone` | `baseline` | 130/130 | 130/130 | PASS | `benchmark/results/current-baseline` |
+| `2026-04-22T03:50:16Z` | `main` | `f076917` | `backbone` | `baseline` | 130/160 | 130/160 | PASS | `benchmark/results/current-baseline` |
+| `2026-04-22T03:36:34Z` | `main` | `ff87cb4` | `backbone` | `enhanced` | 160/160 | 160/160 | PASS | `benchmark/results/current-enhanced` |
+| `2026-04-22T03:36:09Z` | `main` | `ff87cb4` | `backbone` | `baseline` | 130/160 | 130/160 | PASS | `benchmark/results/current-baseline` |
+| `2026-04-22T03:35:44Z` | `main` | `ff87cb4` | `backbone` | `baseline` | 115/160 | 130/160 | FAIL | `benchmark/results/current-baseline` |
+| `2026-04-22T03:14:57Z` | `main` | `4f4680c` | `backbone` | `enhanced` | 150/150 | 150/150 | PASS | `benchmark/results/current-enhanced` |
+| `2026-04-22T03:14:43Z` | `main` | `4f4680c` | `backbone` | `baseline` | 130/150 | 130/150 | PASS | `benchmark/results/current-baseline` |
+| `2026-04-22T02:42:54Z` | `main` | `21179c8` | `backbone` | `enhanced` | 140/140 | 140/140 | PASS | `benchmark/results/current-enhanced` |
+| `2026-04-22T02:42:41Z` | `main` | `21179c8` | `backbone` | `baseline` | 120/140 | 120/140 | PASS | `benchmark/results/current-baseline` |
+| `2026-04-22T02:30:29Z` | `main` | `eeb5b8e` | `backbone` | `enhanced` | 120/120 | 120/120 | PASS | `benchmark/results/current-enhanced` |
+| `2026-04-22T02:30:14Z` | `main` | `eeb5b8e` | `backbone` | `baseline` | 100/120 | 100/120 | PASS | `benchmark/results/current-baseline` |
 | `2026-04-21T15:24:26Z` | `main` | `ce0db00` | `backbone` | `enhanced` | 120/120 | 120/120 | PASS | `benchmark/results/current-enhanced` |
 | `2026-04-21T15:24:04Z` | `main` | `ce0db00` | `backbone` | `baseline` | 100/120 | 100/120 | PASS | `benchmark/results/current-baseline` |
 | `2026-04-21T15:06:55Z` | `main` | `9170ddc` | `backbone` | `enhanced` | 120/120 | 120/120 | PASS | `benchmark/results/current-enhanced` |

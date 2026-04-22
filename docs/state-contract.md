@@ -8,8 +8,8 @@ aligned with the claim/proof discipline.
 | State family | Ownership class | Current rule |
 | --- | --- | --- |
 | User auth and default model selection | `host-product-only` user environment | Cursor CLI auth/model state lives outside the repo. |
-| Repo guidance, rules, validators, and benchmark evidence | `repo-owned` | This repo checks in the files that define its backbone and proof surface. |
-| Default MCP config, repo memories, custom-mode files, background-agent files | `unsupported-or-out-of-scope` until deliberately adopted | These are not checked in by the current backbone. |
+| Repo guidance, root rules, repo-root plugin files, validators, and benchmark evidence | `repo-owned` | This repo checks in the files that define its backbone and proof surface. |
+| Default MCP config, repo memories, repo-file custom modes, repo-file background-agent files | `unsupported-or-out-of-scope` until deliberately adopted | These are not checked in by the current backbone. |
 
 ## User-level state
 
@@ -17,6 +17,7 @@ The authenticated Cursor CLI state belongs to the user environment, not the
 repository:
 
 - `~/.cursor/cli-config.json`
+- `~/.cursor/plugins/local/` for local plugin loading during manual validation
 - other Cursor caches and agent state under `~/.cursor/`
 
 That is why this repo validates **default auth availability** rather than
@@ -28,6 +29,8 @@ The repository currently owns only these checked-in state-like surfaces:
 
 - `AGENTS.md`
 - `.cursor/rules/*.mdc`
+- `.cursor-plugin/plugin.json`
+- the shipped plugin rule/skill payload that accompanies the manifest
 - bounded documentation
 - local verification/benchmark scripts
 - `apps/cursor-backbone-site/` and `.github/workflows/deploy-pages.yml` only
@@ -64,15 +67,15 @@ does **not** check in:
 - `.cursor/memories/`
 - repo-file custom mode packaging
 - repo-file background-agent provisioning
-- plugin/package loading claims
-- checked-in custom-agent, prompt, skill, or hook packaging
+- checked-in custom-agent surfaces
+- checked-in hook manifests
 
 ## Why this matters
 
 The safest Cursor-native backbone is one that separates:
 
 1. **user auth + model availability**
-2. **repo guidance, rules, and checked-in proof artifacts**
+2. **repo guidance, root rules, repo-root plugin files, and checked-in proof artifacts**
 3. **future optional integrations**
 
 That prevents hidden product-state assumptions from turning into fake

@@ -15,6 +15,7 @@ Runs direct, CLI-first Cursor smoke checks:
   - default auth availability (environment-gated runtime proof)
   - auto-model availability (environment-gated runtime proof)
   - optional constrained model-backed prompt smoke using `--model auto`
+  - optional constrained repo task smoke using `--model auto`
 
 Set RUN_CURSOR_AGENT_SMOKE=1 or pass --run-agent-prompt to run the model-backed
 agent smoke. The default mode avoids a network/model request and keeps the
@@ -82,6 +83,69 @@ if [[ "$RUN_AGENT_SMOKE" == "1" ]]; then
     exit 1
   }
   printf 'ok: cursor-agent prompt smoke returned CURSOR_AGENT_OK (environment-gated runtime proof)\n'
+
+  task_output="$(
+    timeout "$TIMEOUT_SECONDS" cursor-agent \
+      -p \
+      --output-format text \
+      --model auto \
+      --mode ask \
+      --trust \
+      --workspace "$ROOT" \
+      "Without editing files or running write commands, identify the repo's refinement priority map doc, plugin boundary review doc, and benchmark evidence validator script. Reply with exactly: CURSOR_TASK_SCENARIO_OK docs/refinement-priority-map.md docs/plugin-boundary-review.md scripts/validate-benchmark-evidence.sh" 2>&1
+  )" || {
+    printf '%s\n' "$task_output" >&2
+    echo "FAIL: cursor-agent task scenario smoke failed" >&2
+    exit 1
+  }
+  printf '%s\n' "$task_output" | grep -Fxq 'CURSOR_TASK_SCENARIO_OK docs/refinement-priority-map.md docs/plugin-boundary-review.md scripts/validate-benchmark-evidence.sh' || {
+    printf '%s\n' "$task_output" >&2
+    echo "FAIL: cursor-agent task scenario smoke missing CURSOR_TASK_SCENARIO_OK" >&2
+    exit 1
+  }
+  printf 'ok: cursor-agent task scenario smoke returned CURSOR_TASK_SCENARIO_OK (environment-gated runtime proof)\n'
+
+  task_plan_output="$(
+    timeout "$TIMEOUT_SECONDS" cursor-agent \
+      -p \
+      --output-format text \
+      --model auto \
+      --mode ask \
+      --trust \
+      --workspace "$ROOT" \
+      "Without editing files or running write commands, a richer plugin claim is proposed. Which validator should be rerun first, and what ownership class must the checked-in repo-root plugin packaging currently keep? Reply with exactly: CURSOR_TASK_PLAN_OK scripts/validate-plugin-structure.sh repo-owned" 2>&1
+  )" || {
+    printf '%s\n' "$task_plan_output" >&2
+    echo "FAIL: cursor-agent task plan smoke failed" >&2
+    exit 1
+  }
+  printf '%s\n' "$task_plan_output" | grep -Fxq 'CURSOR_TASK_PLAN_OK scripts/validate-plugin-structure.sh repo-owned' || {
+    printf '%s\n' "$task_plan_output" >&2
+    echo "FAIL: cursor-agent task plan smoke missing CURSOR_TASK_PLAN_OK" >&2
+    exit 1
+  }
+  printf 'ok: cursor-agent task plan smoke returned CURSOR_TASK_PLAN_OK (environment-gated runtime proof)\n'
+
+  task_command_output="$(
+    timeout "$TIMEOUT_SECONDS" cursor-agent \
+      -p \
+      --output-format text \
+      --model auto \
+      --mode ask \
+      --trust \
+      --workspace "$ROOT" \
+      "Without editing files or running write commands, choose the correct rerun path after an enhanced-only task-smoke change. Option A: ./benchmark/quick_test.sh --variant enhanced --run-agent-smoke && ./scripts/validate-benchmark-evidence.sh. Option B: ./benchmark/quick_test.sh --variant baseline && ./scripts/validate-state-contract.sh. Reply with exactly: CURSOR_TASK_COMMAND_OK A" 2>&1
+  )" || {
+    printf '%s\n' "$task_command_output" >&2
+    echo "FAIL: cursor-agent task command smoke failed" >&2
+    exit 1
+  }
+  printf '%s\n' "$task_command_output" | grep -Fxq 'CURSOR_TASK_COMMAND_OK A' || {
+    printf '%s\n' "$task_command_output" >&2
+    echo "FAIL: cursor-agent task command smoke missing CURSOR_TASK_COMMAND_OK" >&2
+    exit 1
+  }
+  printf 'ok: cursor-agent task command smoke returned CURSOR_TASK_COMMAND_OK (environment-gated runtime proof)\n'
 else
   printf 'ok: model-backed Cursor smoke skipped; runtime claim remains bounded until enhanced prompt proof is requested\n'
 fi
