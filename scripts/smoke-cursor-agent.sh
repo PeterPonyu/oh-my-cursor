@@ -113,13 +113,13 @@ if [[ "$RUN_AGENT_SMOKE" == "1" ]]; then
       --mode ask \
       --trust \
       --workspace "$ROOT" \
-      "Without editing files or running write commands, a richer packaging claim is proposed. Which validator should be rerun first, and what ownership class must checked-in plugin packaging currently keep? Reply with exactly: CURSOR_TASK_PLAN_OK scripts/validate-benchmark-evidence.sh unsupported-or-out-of-scope" 2>&1
+      "Without editing files or running write commands, a richer plugin claim is proposed. Which validator should be rerun first, and what ownership class must the checked-in repo-root plugin packaging currently keep? Reply with exactly: CURSOR_TASK_PLAN_OK scripts/validate-plugin-structure.sh repo-owned" 2>&1
   )" || {
     printf '%s\n' "$task_plan_output" >&2
     echo "FAIL: cursor-agent task plan smoke failed" >&2
     exit 1
   }
-  printf '%s\n' "$task_plan_output" | grep -Fxq 'CURSOR_TASK_PLAN_OK scripts/validate-benchmark-evidence.sh unsupported-or-out-of-scope' || {
+  printf '%s\n' "$task_plan_output" | grep -Fxq 'CURSOR_TASK_PLAN_OK scripts/validate-plugin-structure.sh repo-owned' || {
     printf '%s\n' "$task_plan_output" >&2
     echo "FAIL: cursor-agent task plan smoke missing CURSOR_TASK_PLAN_OK" >&2
     exit 1

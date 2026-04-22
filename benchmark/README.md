@@ -4,11 +4,12 @@ This benchmark surface is intentionally **not the same** as
 `oh-my-copilot`'s benchmark harness.
 
 `oh-my-copilot` scores root/plugin/hook discoverability and installed-plugin
-state. `oh-my-cursor` currently scores a different, smaller contract:
+state. `oh-my-cursor` still scores a different, smaller contract:
 
 - default Cursor auth availability;
 - `auto` model availability;
-- visible repo-native surfaces (`AGENTS.md`, `.cursor/rules`, docs);
+- visible repo-native surfaces (`AGENTS.md`, `.cursor/rules`, the repo-root
+  plugin manifest, and docs);
 - repo state-contract discipline; and
 - optional `cursor-agent` smoke using `--model auto`.
 
@@ -40,9 +41,10 @@ successful.
 
 ## Why the score differs from oh-my-copilot
 
-This repo does not currently ship hooks, prompt files, skill bundles, or
-namespaced plugin packaging. Scoring it like `oh-my-copilot` would be fake
-parity.
+This repo now ships a small repo-root plugin manifest and at least one plugin
+skill, but it still does **not** ship hooks, prompt files, custom agents, or
+namespaced multi-plugin packaging. Scoring it like `oh-my-copilot` would still
+be fake parity.
 
 The benchmark now also requires the README-visible
 `refinement-priority-map.md` and `plugin-boundary-review.md` links, because

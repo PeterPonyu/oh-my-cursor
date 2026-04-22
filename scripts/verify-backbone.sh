@@ -11,12 +11,17 @@ required=(
   AGENTS.md
   README.md
   benchmark/README.md
+  .cursor-plugin/plugin.json
+  rules/repo-owned-plugin-boundary.mdc
+  skills/local-plugin-check/SKILL.md
   .cursor/rules/00-repo-scope.mdc
   .cursor/rules/10-docs-claims.mdc
   docs/confirmed-surfaces.md
   docs/fallback-policy.md
+  docs/local-plugin-verification.md
   docs/references.md
   docs/state-contract.md
+  scripts/validate-plugin-structure.sh
   scripts/validate-benchmark-evidence.sh
   scripts/validate-pages-surface.sh
 )
@@ -58,11 +63,9 @@ files = [
 subject = r"(?:oh-my-cursor|this repo|this repository|the repo|this backbone|the backbone|repository|repo)"
 verb = r"(?:ships?|provides?|includes?|owns?|supports?|provisions?|configures?)"
 patterns = {
-    "plugin/package loading": rf"\b{subject}\b.{{0,80}}\b{verb}\b.{{0,80}}\b(?:plugin/package(?: loading| support| packaging)?|plugin loading|package loading|plugin packaging)\b",
     "repo-file custom modes": rf"\b{subject}\b.{{0,80}}\b{verb}\b.{{0,80}}\brepo[- ](?:file|native)\b.{{0,60}}\bcustom modes?\b",
     "repo-file background agents": rf"\b{subject}\b.{{0,80}}\b{verb}\b.{{0,80}}\brepo[- ](?:file|native)\b.{{0,60}}\bbackground[- ]agents?\b",
     "default checked-in mcp config": rf"\b{subject}\b.{{0,80}}\b{verb}\b.{{0,80}}\b(?:default|checked[- ]in|repo[- ]owned)\b.{{0,40}}(?:\.cursor/mcp\.json|mcp config)\b",
-    "repo-native skill bundles": rf"\b{subject}\b.{{0,80}}\b{verb}\b.{{0,80}}\brepo[- ]native\b.{{0,40}}\bskill bundles?\b",
     "checked-in custom-agent packaging": rf"\b{subject}\b.{{0,80}}\b{verb}\b.{{0,80}}\b(?:checked[- ]in\s+)?custom[- ]agent packaging\b",
     "checked-in hook packaging": rf"\b{subject}\b.{{0,80}}\b{verb}\b.{{0,80}}\b(?:checked[- ]in\s+)?hook(?: manifests?| packaging surface|s)\b",
 }
@@ -101,6 +104,7 @@ if violations:
 print("ok: positive overclaim scan stayed clean for README/AGENTS/docs/benchmark notes")
 PY
 
+./scripts/validate-plugin-structure.sh
 ./scripts/validate-pages-surface.sh
 if [[ "${CURSOR_SKIP_BENCHMARK_EVIDENCE:-0}" == "1" ]]; then
   log "benchmark evidence validation skipped inside benchmark self-run"
