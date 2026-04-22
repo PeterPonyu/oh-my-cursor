@@ -8,10 +8,10 @@ Variant: `baseline`
 
 | Check | Result | Duration (s) | Markers |
 | --- | --- | ---: | --- |
-| `default_auth` | PASS | 2.31 | `CURSOR_AUTH_OK`, `CURSOR_MODEL_AUTO_OK` |
-| `surface_visibility` | PASS | 0.16 | `REFINEMENT_MAP_OK`, `PLUGIN_BOUNDARY_OK`, `DISCOVERABILITY_OK` |
+| `default_auth` | PASS | 2.61 | `CURSOR_AUTH_OK`, `CURSOR_MODEL_AUTO_OK` |
+| `surface_visibility` | PASS | 0.4 | `REFINEMENT_MAP_OK`, `PLUGIN_BOUNDARY_OK`, `DISCOVERABILITY_OK` |
 | `state_contract` | PASS | 0.02 | — |
-| `backbone_verify` | PASS | 0.04 | — |
+| `backbone_verify` | PASS | 0.18 | — |
 | `smoke_cursor` | PASS | 0.0 | — |
 
 ## Evaluation contract
@@ -21,7 +21,7 @@ Variant: `baseline`
 - Benchmark gate: **PASS**
 - Baseline floor reference: **130**
 - Actual delta vs baseline floor: **0**
-- Enhanced-only uplift budget: **30**
+- Enhanced-only uplift budget: **50**
 - Improvement summary: Baseline reference run establishes the comparison floor; use an enhanced run to measure Cursor smoke uplift.
 - Investigation required: **no**
 - This report is environment-gated runtime proof layered on top of the always-required static validators.

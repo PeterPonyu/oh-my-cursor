@@ -90,6 +90,7 @@ exist together.
 Run:
 
 ```bash
+./scripts/install-local-plugin.sh
 ./scripts/check-default-auth.sh
 ./scripts/validate-state-contract.sh
 ```

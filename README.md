@@ -96,10 +96,11 @@ appropriate proof artifacts:
 The repo-owned plugin files are intended to be tested locally through Cursor's
 local plugin path:
 
-1. symlink or copy this repository into `~/.cursor/plugins/local/oh-my-cursor`;
-2. confirm `.cursor-plugin/plugin.json` exists at the plugin root;
-3. restart Cursor or run **Developer: Reload Window**; and
-4. verify the shipped plugin components load as expected.
+1. run `./scripts/install-local-plugin.sh`;
+2. confirm the local plugin path now exists at `~/.cursor/plugins/local/oh-my-cursor`;
+3. confirm `.cursor-plugin/plugin.json` exists at the plugin root;
+4. restart Cursor or run **Developer: Reload Window**; and
+5. verify the shipped plugin components load as expected.
 
 The detailed manual checklist lives in
 [`docs/local-plugin-verification.md`](./docs/local-plugin-verification.md).

@@ -7,7 +7,7 @@
   "passed": true,
   "release_blocking": false,
   "expected_baseline_score": 130,
-  "required_delta_vs_baseline": 30,
+  "required_delta_vs_baseline": 50,
   "actual_delta_vs_baseline": 0,
   "investigation_required": false,
   "improvement_summary": "Baseline reference run establishes the comparison floor; use an enhanced run to measure Cursor smoke uplift.",

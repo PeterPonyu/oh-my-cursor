@@ -22,6 +22,7 @@ required=(
   docs/references.md
   docs/state-contract.md
   scripts/check-default-auth.sh
+  scripts/install-local-plugin.sh
   scripts/validate-plugin-structure.sh
   scripts/validate-pages-surface.sh
   scripts/validate-state-contract.sh
