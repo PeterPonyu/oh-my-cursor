@@ -105,6 +105,8 @@ class EvaluationContract:
     expected_baseline_score: int
     required_delta_vs_baseline: int
     actual_delta_vs_baseline: int
+    investigation_required: bool
+    improvement_summary: str
     dimensions: list[EvaluationDimension]
 
 
@@ -239,6 +241,31 @@ def record_history(root: Path, outdir: Path, evaluation: EvaluationContract) -> 
     history_md.write_text(render_history_markdown(entries), encoding="utf-8")
 
 
+def summarize_improvement(
+    variant: str,
+    actual_delta_vs_baseline: int,
+) -> tuple[bool, str]:
+    if variant != "enhanced":
+        return (
+            False,
+            "Baseline reference run establishes the comparison floor; use an enhanced run to measure Cursor smoke uplift.",
+        )
+    if actual_delta_vs_baseline > 0:
+        return (
+            False,
+            f"Enhanced evidence improved by {actual_delta_vs_baseline} over the baseline floor; benchmark-backed uplift observed.",
+        )
+    if actual_delta_vs_baseline == 0:
+        return (
+            True,
+            "Enhanced evidence did not improve over the baseline floor; investigate missing Cursor smoke markers before treating the refinement as effective.",
+        )
+    return (
+        True,
+        f"Enhanced evidence regressed by {-actual_delta_vs_baseline} below the baseline floor; investigate failing checks or markers before treating the refinement as effective.",
+    )
+
+
 def build_evaluation(profile: str, variant: str, results: list[CheckResult]) -> EvaluationContract:
     results_by_name = {result.name: result for result in results}
     auth_result = results_by_name.get("default_auth")
@@ -300,6 +327,10 @@ def build_evaluation(profile: str, variant: str, results: list[CheckResult]) -> 
     actual_delta_vs_baseline = score - expected_baseline_score
     required_delta_vs_baseline = max_score - expected_baseline_score
     passed = score >= threshold_score and all(d.passed for d in dimensions if d.required)
+    investigation_required, improvement_summary = summarize_improvement(
+        variant=variant,
+        actual_delta_vs_baseline=actual_delta_vs_baseline,
+    )
 
     return EvaluationContract(
         profile=profile,
@@ -312,6 +343,8 @@ def build_evaluation(profile: str, variant: str, results: list[CheckResult]) -> 
         expected_baseline_score=expected_baseline_score,
         required_delta_vs_baseline=required_delta_vs_baseline,
         actual_delta_vs_baseline=actual_delta_vs_baseline,
+        investigation_required=investigation_required,
+        improvement_summary=improvement_summary,
         dimensions=dimensions,
     )
 
@@ -389,6 +422,8 @@ def main() -> int:
             f"- Baseline floor: **{evaluation.expected_baseline_score}/{evaluation.max_score}**",
             f"- Actual delta vs baseline floor: **{evaluation.actual_delta_vs_baseline}**",
             f"- Required delta vs baseline floor: **{evaluation.required_delta_vs_baseline}**",
+            f"- Improvement summary: {evaluation.improvement_summary}",
+            f"- Investigation required: **{'yes' if evaluation.investigation_required else 'no'}**",
             "- This report is environment-gated runtime proof layered on top of the always-required static validators.",
             "- Cross-host comparability class: **reporting-comparable**, not architectural parity with `oh-my-copilot`.",
             "",

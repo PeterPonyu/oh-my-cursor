@@ -107,6 +107,108 @@ class CursorHistoryCleanupTests(unittest.TestCase):
         self.assertIn("`2026-04-21T14:41:38Z`", markdown)
         self.assertNotIn("`2026-04-21T14:41:32Z`", markdown)
 
+    def test_build_evaluation_flags_non_improving_enhanced_run_for_investigation(self) -> None:
+        results = [
+            MODULE.CheckResult(
+                name="default_auth",
+                command="./scripts/check-default-auth.sh",
+                success=True,
+                duration_sec=0.1,
+                output_tail="CURSOR_AUTH_OK\nCURSOR_MODEL_AUTO_OK\nok: auth available",
+                markers=["CURSOR_AUTH_OK", "CURSOR_MODEL_AUTO_OK"],
+            ),
+            MODULE.CheckResult(
+                name="surface_visibility",
+                command="./scripts/validate-surface-visibility.sh",
+                success=True,
+                duration_sec=0.1,
+                output_tail="ok: surface visibility validation complete",
+                markers=[],
+            ),
+            MODULE.CheckResult(
+                name="state_contract",
+                command="./scripts/validate-state-contract.sh",
+                success=True,
+                duration_sec=0.1,
+                output_tail="ok: state contract validation complete",
+                markers=[],
+            ),
+            MODULE.CheckResult(
+                name="backbone_verify",
+                command="./scripts/verify-backbone.sh",
+                success=True,
+                duration_sec=0.1,
+                output_tail="ok: backbone verification complete",
+                markers=[],
+            ),
+            MODULE.CheckResult(
+                name="smoke_cursor",
+                command="./scripts/smoke-cursor-agent.sh",
+                success=True,
+                duration_sec=0.1,
+                output_tail="ok: Cursor CLI smoke validation complete",
+                markers=[],
+            ),
+        ]
+
+        evaluation = MODULE.build_evaluation("backbone", "enhanced", results)
+
+        self.assertFalse(evaluation.passed)
+        self.assertEqual(evaluation.actual_delta_vs_baseline, 0)
+        self.assertTrue(evaluation.investigation_required)
+        self.assertIn("did not improve over the baseline floor", evaluation.improvement_summary)
+
+    def test_build_evaluation_reports_positive_enhanced_uplift(self) -> None:
+        results = [
+            MODULE.CheckResult(
+                name="default_auth",
+                command="./scripts/check-default-auth.sh",
+                success=True,
+                duration_sec=0.1,
+                output_tail="CURSOR_AUTH_OK\nCURSOR_MODEL_AUTO_OK\nok: auth available",
+                markers=["CURSOR_AUTH_OK", "CURSOR_MODEL_AUTO_OK"],
+            ),
+            MODULE.CheckResult(
+                name="surface_visibility",
+                command="./scripts/validate-surface-visibility.sh",
+                success=True,
+                duration_sec=0.1,
+                output_tail="ok: surface visibility validation complete",
+                markers=[],
+            ),
+            MODULE.CheckResult(
+                name="state_contract",
+                command="./scripts/validate-state-contract.sh",
+                success=True,
+                duration_sec=0.1,
+                output_tail="ok: state contract validation complete",
+                markers=[],
+            ),
+            MODULE.CheckResult(
+                name="backbone_verify",
+                command="./scripts/verify-backbone.sh",
+                success=True,
+                duration_sec=0.1,
+                output_tail="ok: backbone verification complete",
+                markers=[],
+            ),
+            MODULE.CheckResult(
+                name="smoke_cursor",
+                command="./scripts/smoke-cursor-agent.sh",
+                success=True,
+                duration_sec=0.1,
+                output_tail="CURSOR_AGENT_OK\nok: Cursor CLI smoke validation complete",
+                markers=["CURSOR_AGENT_OK"],
+            ),
+        ]
+
+        evaluation = MODULE.build_evaluation("backbone", "enhanced", results)
+
+        self.assertTrue(evaluation.passed)
+        self.assertEqual(evaluation.actual_delta_vs_baseline, 20)
+        self.assertFalse(evaluation.investigation_required)
+        self.assertIn("benchmark-backed uplift observed", evaluation.improvement_summary)
+
 
 if __name__ == "__main__":
     unittest.main()

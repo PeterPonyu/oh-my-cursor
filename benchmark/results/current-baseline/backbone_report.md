@@ -8,10 +8,10 @@ Variant: `baseline`
 
 | Check | Result | Duration (s) | Markers |
 | --- | --- | ---: | --- |
-| `default_auth` | PASS | 8.94 | `CURSOR_AUTH_OK`, `CURSOR_MODEL_AUTO_OK` |
-| `surface_visibility` | PASS | 0.03 | — |
+| `default_auth` | PASS | 2.34 | `CURSOR_AUTH_OK`, `CURSOR_MODEL_AUTO_OK` |
+| `surface_visibility` | PASS | 0.15 | — |
 | `state_contract` | PASS | 0.02 | — |
-| `backbone_verify` | PASS | 0.03 | — |
+| `backbone_verify` | PASS | 0.04 | — |
 | `smoke_cursor` | PASS | 0.0 | — |
 
 ## Evaluation contract
@@ -22,6 +22,8 @@ Variant: `baseline`
 - Baseline floor: **100/120**
 - Actual delta vs baseline floor: **0**
 - Required delta vs baseline floor: **20**
+- Improvement summary: Baseline reference run establishes the comparison floor; use an enhanced run to measure Cursor smoke uplift.
+- Investigation required: **no**
 - This report is environment-gated runtime proof layered on top of the always-required static validators.
 - Cross-host comparability class: **reporting-comparable**, not architectural parity with `oh-my-copilot`.
 
