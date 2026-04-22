@@ -8,10 +8,10 @@ Variant: `baseline`
 
 | Check | Result | Duration (s) | Markers |
 | --- | --- | ---: | --- |
-| `default_auth` | PASS | 2.61 | `CURSOR_AUTH_OK`, `CURSOR_MODEL_AUTO_OK` |
+| `default_auth` | PASS | 2.19 | `CURSOR_AUTH_OK`, `CURSOR_MODEL_AUTO_OK` |
 | `surface_visibility` | PASS | 0.4 | `REFINEMENT_MAP_OK`, `PLUGIN_BOUNDARY_OK`, `DISCOVERABILITY_OK` |
 | `state_contract` | PASS | 0.02 | — |
-| `backbone_verify` | PASS | 0.18 | — |
+| `backbone_verify` | PASS | 0.66 | — |
 | `smoke_cursor` | PASS | 0.0 | — |
 
 ## Evaluation contract
