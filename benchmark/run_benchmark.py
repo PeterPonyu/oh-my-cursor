@@ -17,6 +17,7 @@ EVIDENCE_MARKERS = (
     "CURSOR_AGENT_OK",
     "REFINEMENT_MAP_OK",
     "PLUGIN_BOUNDARY_OK",
+    "DISCOVERABILITY_OK",
 )
 
 
@@ -284,6 +285,7 @@ def build_evaluation(profile: str, variant: str, results: list[CheckResult]) -> 
         "surface_visibility": ("check", "visible repo-native surfaces match the intended backbone", 20),
         "REFINEMENT_MAP_OK": ("marker", "README exposes the refinement-priority map", 10),
         "PLUGIN_BOUNDARY_OK": ("marker", "README exposes the plugin-boundary review", 10),
+        "DISCOVERABILITY_OK": ("marker", "README Start here path exposes the key proof docs together", 10),
         "state_contract": ("check", "repo/user state contract stays bounded and explicit", 20),
         "backbone_verify": ("check", "backbone verification passes", 25),
         "CURSOR_AGENT_OK": ("marker", "model-backed cursor smoke returns CURSOR_AGENT_OK", 20),
@@ -295,6 +297,7 @@ def build_evaluation(profile: str, variant: str, results: list[CheckResult]) -> 
         "surface_visibility",
         "REFINEMENT_MAP_OK",
         "PLUGIN_BOUNDARY_OK",
+        "DISCOVERABILITY_OK",
         "state_contract",
         "backbone_verify",
     )

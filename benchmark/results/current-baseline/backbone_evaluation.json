@@ -1,12 +1,12 @@
 {
   "profile": "backbone",
   "variant": "baseline",
-  "score": 120,
-  "max_score": 140,
-  "threshold_score": 120,
+  "score": 130,
+  "max_score": 150,
+  "threshold_score": 130,
   "passed": true,
   "release_blocking": false,
-  "expected_baseline_score": 120,
+  "expected_baseline_score": 130,
   "required_delta_vs_baseline": 20,
   "actual_delta_vs_baseline": 0,
   "investigation_required": false,
@@ -53,6 +53,14 @@
       "evidence": "ok: reusing upstream default auth/model proof (environment-gated)\nok: model-backed Cursor smoke skipped; runtime claim remains bounded until enhanced prompt proof is requested\nok: Cursor CLI smoke validation complete"
     },
     {
+      "name": "DISCOVERABILITY_OK",
+      "description": "README Start here path exposes the key proof docs together",
+      "weight": 10,
+      "required": true,
+      "passed": true,
+      "evidence": "ok: reusing upstream default auth/model proof (environment-gated)\nok: model-backed Cursor smoke skipped; runtime claim remains bounded until enhanced prompt proof is requested\nok: Cursor CLI smoke validation complete"
+    },
+    {
       "name": "state_contract",
       "description": "repo/user state contract stays bounded and explicit",
       "weight": 20,
@@ -66,7 +74,7 @@
       "weight": 25,
       "required": true,
       "passed": true,
-      "evidence": "ok: apps/cursor-backbone-site/eslint.config.mjs\nok: apps/cursor-backbone-site/tsconfig.json\nok: apps/cursor-backbone-site/next-env.d.ts\nok: apps/cursor-backbone-site/next.config.ts\nok: apps/cursor-backbone-site/app/layout.tsx\nok: apps/cursor-backbone-site/app/page.tsx\nok: .github/workflows/deploy-pages.yml\nok: next.config.ts keeps static export output\nok: deploy workflow uses official Pages artifact/deploy actions\nok: apps/cursor-backbone-site/out/index.html\nok: exported landing HTML preserves required naming, proof links, sibling link, and ownership terms\nverification: repository backbone files, claim vocabulary, and positive overclaim protections are present"
+      "evidence": "ok: exported landing HTML preserves required naming, proof links, sibling link, and ownership terms\nok: benchmark README describes the current smaller contract and its new proof docs\nok: baseline benchmark results all passed\nok: enhanced benchmark results all passed\nok: baseline evaluation passed at 120/140\nok: enhanced evaluation passed at 140/140\nok: baseline proof now measures the README-visible refinement and boundary-review docs\nok: enhanced proof includes model-backed Cursor smoke evidence\nok: current baseline/enhanced runs do not raise investigation-required flags\nok: history.md records the current baseline/enhanced benchmark scores\nok: Cursor benchmark evidence validation complete\nverification: repository backbone files, claim vocabulary, positive overclaim protections, and benchmark evidence are present"
     },
     {
       "name": "CURSOR_AGENT_OK",

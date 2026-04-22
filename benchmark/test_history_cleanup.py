@@ -122,8 +122,8 @@ class CursorHistoryCleanupTests(unittest.TestCase):
                 command="./scripts/validate-surface-visibility.sh",
                 success=True,
                 duration_sec=0.1,
-                output_tail="REFINEMENT_MAP_OK\nPLUGIN_BOUNDARY_OK\nok: surface visibility validation complete",
-                markers=["REFINEMENT_MAP_OK", "PLUGIN_BOUNDARY_OK"],
+                output_tail="REFINEMENT_MAP_OK\nPLUGIN_BOUNDARY_OK\nDISCOVERABILITY_OK\nok: surface visibility validation complete",
+                markers=["REFINEMENT_MAP_OK", "PLUGIN_BOUNDARY_OK", "DISCOVERABILITY_OK"],
             ),
             MODULE.CheckResult(
                 name="state_contract",
@@ -173,8 +173,8 @@ class CursorHistoryCleanupTests(unittest.TestCase):
                 command="./scripts/validate-surface-visibility.sh",
                 success=True,
                 duration_sec=0.1,
-                output_tail="REFINEMENT_MAP_OK\nPLUGIN_BOUNDARY_OK\nok: surface visibility validation complete",
-                markers=["REFINEMENT_MAP_OK", "PLUGIN_BOUNDARY_OK"],
+                output_tail="REFINEMENT_MAP_OK\nPLUGIN_BOUNDARY_OK\nDISCOVERABILITY_OK\nok: surface visibility validation complete",
+                markers=["REFINEMENT_MAP_OK", "PLUGIN_BOUNDARY_OK", "DISCOVERABILITY_OK"],
             ),
             MODULE.CheckResult(
                 name="state_contract",

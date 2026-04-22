@@ -110,10 +110,29 @@ grep -q '\.cursor/rules' docs/confirmed-surfaces.md || fail "confirmed surfaces 
 grep -q 'cursor-backbone-site' docs/confirmed-surfaces.md || fail "confirmed surfaces doc must mention the landing-site proof rule"
 grep -Eq 'different, smaller contract' benchmark/README.md || fail "benchmark README must describe the smaller Cursor benchmark contract"
 grep -Eq 'reporting-comparable' benchmark/README.md || fail "benchmark README must keep reporting-comparable wording"
-grep -q 'docs/refinement-priority-map.md' README.md || fail "README must expose the refinement-priority map"
-grep -q 'docs/plugin-boundary-review.md' README.md || fail "README must expose the plugin-boundary review"
+python3 - <<'PY'
+from __future__ import annotations
+import pathlib
+
+text = pathlib.Path("README.md").read_text(encoding="utf-8")
+start = text.find("## Start here")
+end = text.find("## Ownership map", start)
+if start == -1 or end == -1:
+    raise SystemExit("FAIL: README is missing the Start here -> Ownership map structure")
+segment = text[start:end]
+required = [
+    "docs/refinement-priority-map.md",
+    "docs/plugin-boundary-review.md",
+    "scripts/validate-benchmark-evidence.sh",
+]
+missing = [item for item in required if item not in segment]
+if missing:
+    raise SystemExit(f"FAIL: README Start here section is missing required discoverability links: {missing}")
+print("ok: README Start here section exposes refinement-priority, plugin-boundary, and benchmark-evidence links")
+PY
 log "REFINEMENT_MAP_OK"
 log "PLUGIN_BOUNDARY_OK"
+log "DISCOVERABILITY_OK"
 
 ./scripts/validate-pages-surface.sh
 

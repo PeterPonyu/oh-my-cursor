@@ -3,7 +3,7 @@
     "name": "default_auth",
     "command": "./scripts/check-default-auth.sh",
     "success": true,
-    "duration_sec": 2.22,
+    "duration_sec": 2.19,
     "output_tail": "\u2713 Logged in as fuzeyu09@gmail.com\nCURSOR_AUTH_OK\nok: default Cursor auth is available\nCURSOR_MODEL_AUTO_OK\nok: cursor-agent exposes the auto model\nok: cursor config auth user is fuzeyu09@gmail.com\nok: cursor config default model is default",
     "markers": [
       "CURSOR_AUTH_OK",
@@ -14,11 +14,12 @@
     "name": "surface_visibility",
     "command": "./scripts/validate-surface-visibility.sh",
     "success": true,
-    "duration_sec": 0.15,
+    "duration_sec": 0.17,
     "output_tail": "ok: apps/cursor-backbone-site/eslint.config.mjs\nok: apps/cursor-backbone-site/tsconfig.json\nok: apps/cursor-backbone-site/next-env.d.ts\nok: apps/cursor-backbone-site/next.config.ts\nok: apps/cursor-backbone-site/app/layout.tsx\nok: apps/cursor-backbone-site/app/page.tsx\nok: .github/workflows/deploy-pages.yml\nok: next.config.ts keeps static export output\nok: deploy workflow uses official Pages artifact/deploy actions\nok: apps/cursor-backbone-site/out/index.html\nok: exported landing HTML preserves required naming, proof links, sibling link, and ownership terms\nok: surface visibility validation complete",
     "markers": [
       "REFINEMENT_MAP_OK",
-      "PLUGIN_BOUNDARY_OK"
+      "PLUGIN_BOUNDARY_OK",
+      "DISCOVERABILITY_OK"
     ]
   },
   {
@@ -33,15 +34,15 @@
     "name": "backbone_verify",
     "command": "./scripts/verify-backbone.sh",
     "success": true,
-    "duration_sec": 0.04,
-    "output_tail": "ok: apps/cursor-backbone-site/eslint.config.mjs\nok: apps/cursor-backbone-site/tsconfig.json\nok: apps/cursor-backbone-site/next-env.d.ts\nok: apps/cursor-backbone-site/next.config.ts\nok: apps/cursor-backbone-site/app/layout.tsx\nok: apps/cursor-backbone-site/app/page.tsx\nok: .github/workflows/deploy-pages.yml\nok: next.config.ts keeps static export output\nok: deploy workflow uses official Pages artifact/deploy actions\nok: apps/cursor-backbone-site/out/index.html\nok: exported landing HTML preserves required naming, proof links, sibling link, and ownership terms\nverification: repository backbone files, claim vocabulary, and positive overclaim protections are present",
+    "duration_sec": 0.06,
+    "output_tail": "ok: exported landing HTML preserves required naming, proof links, sibling link, and ownership terms\nok: benchmark README describes the current smaller contract and its new proof docs\nok: baseline benchmark results all passed\nok: enhanced benchmark results all passed\nok: baseline evaluation passed at 130/150\nok: enhanced evaluation passed at 140/140\nok: baseline proof now measures the README-visible refinement and boundary-review docs\nok: enhanced proof includes model-backed Cursor smoke evidence\nok: current baseline/enhanced runs do not raise investigation-required flags\nok: history.md records the current baseline/enhanced benchmark scores\nok: Cursor benchmark evidence validation complete\nverification: repository backbone files, claim vocabulary, positive overclaim protections, and benchmark evidence are present",
     "markers": []
   },
   {
     "name": "smoke_cursor",
     "command": "RUN_CURSOR_AGENT_SMOKE=1 CURSOR_SMOKE_SKIP_AUTH_CHECK=1 ./scripts/smoke-cursor-agent.sh --run-agent-prompt",
     "success": true,
-    "duration_sec": 10.56,
+    "duration_sec": 10.93,
     "output_tail": "ok: reusing upstream default auth/model proof (environment-gated)\nok: cursor-agent prompt smoke returned CURSOR_AGENT_OK (environment-gated runtime proof)\nok: Cursor CLI smoke validation complete",
     "markers": [
       "CURSOR_AGENT_OK"

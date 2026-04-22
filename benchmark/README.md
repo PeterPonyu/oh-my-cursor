@@ -47,6 +47,8 @@ parity.
 The benchmark now also requires the README-visible
 `refinement-priority-map.md` and `plugin-boundary-review.md` links, because
 those documents are part of the current repo-owned proof surface.
+It now treats their placement in the main **Start here** path as part of the
+contract as well, so discoverability is measured instead of implied.
 
 If this repo later ships a checked-in Pages landing surface, that site still has
 to expose `Benchmark Notes` as a visible proof entry point. The landing page may

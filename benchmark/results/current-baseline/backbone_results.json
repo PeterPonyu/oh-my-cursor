@@ -14,11 +14,12 @@
     "name": "surface_visibility",
     "command": "./scripts/validate-surface-visibility.sh",
     "success": true,
-    "duration_sec": 0.15,
+    "duration_sec": 0.17,
     "output_tail": "ok: apps/cursor-backbone-site/eslint.config.mjs\nok: apps/cursor-backbone-site/tsconfig.json\nok: apps/cursor-backbone-site/next-env.d.ts\nok: apps/cursor-backbone-site/next.config.ts\nok: apps/cursor-backbone-site/app/layout.tsx\nok: apps/cursor-backbone-site/app/page.tsx\nok: .github/workflows/deploy-pages.yml\nok: next.config.ts keeps static export output\nok: deploy workflow uses official Pages artifact/deploy actions\nok: apps/cursor-backbone-site/out/index.html\nok: exported landing HTML preserves required naming, proof links, sibling link, and ownership terms\nok: surface visibility validation complete",
     "markers": [
       "REFINEMENT_MAP_OK",
-      "PLUGIN_BOUNDARY_OK"
+      "PLUGIN_BOUNDARY_OK",
+      "DISCOVERABILITY_OK"
     ]
   },
   {
@@ -33,8 +34,8 @@
     "name": "backbone_verify",
     "command": "./scripts/verify-backbone.sh",
     "success": true,
-    "duration_sec": 0.04,
-    "output_tail": "ok: apps/cursor-backbone-site/eslint.config.mjs\nok: apps/cursor-backbone-site/tsconfig.json\nok: apps/cursor-backbone-site/next-env.d.ts\nok: apps/cursor-backbone-site/next.config.ts\nok: apps/cursor-backbone-site/app/layout.tsx\nok: apps/cursor-backbone-site/app/page.tsx\nok: .github/workflows/deploy-pages.yml\nok: next.config.ts keeps static export output\nok: deploy workflow uses official Pages artifact/deploy actions\nok: apps/cursor-backbone-site/out/index.html\nok: exported landing HTML preserves required naming, proof links, sibling link, and ownership terms\nverification: repository backbone files, claim vocabulary, and positive overclaim protections are present",
+    "duration_sec": 0.06,
+    "output_tail": "ok: exported landing HTML preserves required naming, proof links, sibling link, and ownership terms\nok: benchmark README describes the current smaller contract and its new proof docs\nok: baseline benchmark results all passed\nok: enhanced benchmark results all passed\nok: baseline evaluation passed at 120/140\nok: enhanced evaluation passed at 140/140\nok: baseline proof now measures the README-visible refinement and boundary-review docs\nok: enhanced proof includes model-backed Cursor smoke evidence\nok: current baseline/enhanced runs do not raise investigation-required flags\nok: history.md records the current baseline/enhanced benchmark scores\nok: Cursor benchmark evidence validation complete\nverification: repository backbone files, claim vocabulary, positive overclaim protections, and benchmark evidence are present",
     "markers": []
   },
   {
