@@ -12,7 +12,9 @@ required=(
   rules/repo-owned-plugin-boundary.mdc
   skills/local-plugin-check/SKILL.md
   docs/local-plugin-verification.md
+  CHANGELOG.md
   scripts/install-local-plugin.sh
+  scripts/check-local-plugin-install.sh
 )
 
 for path in "${required[@]}"; do
@@ -72,8 +74,10 @@ log "custom agents remain deferred"
 grep -q '\.cursor-plugin/plugin.json' README.md || fail "README must mention the repo-root plugin manifest"
 grep -q '~/.cursor/plugins/local/oh-my-cursor' README.md || fail "README must mention the local plugin path"
 grep -q 'scripts/install-local-plugin.sh' README.md || fail "README must mention the local plugin install helper"
+grep -q 'scripts/check-local-plugin-install.sh' README.md || fail "README must mention the CI-safe install check"
 grep -q '\.cursor-plugin/plugin.json' docs/local-plugin-verification.md || fail "local plugin verification doc must mention the manifest"
 grep -q '~/.cursor/plugins/local/oh-my-cursor' docs/local-plugin-verification.md || fail "local plugin verification doc must mention the local plugin path"
 grep -q 'scripts/install-local-plugin.sh' docs/local-plugin-verification.md || fail "local plugin verification doc must mention the install helper"
+grep -q 'scripts/check-local-plugin-install.sh' docs/local-plugin-verification.md || fail "local plugin verification doc must mention the CI-safe install check"
 
 log "plugin docs mention the manifest and local plugin load path"

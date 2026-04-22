@@ -91,6 +91,7 @@ Run:
 
 ```bash
 ./scripts/install-local-plugin.sh
+./scripts/check-local-plugin-install.sh
 ./scripts/check-default-auth.sh
 ./scripts/validate-state-contract.sh
 ```

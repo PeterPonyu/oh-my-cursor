@@ -9,6 +9,7 @@ fail() { printf 'FAIL: %s\n' "$*" >&2; exit 1; }
 
 required=(
   AGENTS.md
+  CHANGELOG.md
   README.md
   benchmark/README.md
   .cursor-plugin/plugin.json
@@ -21,6 +22,7 @@ required=(
   docs/local-plugin-verification.md
   docs/references.md
   docs/state-contract.md
+  scripts/check-local-plugin-install.sh
   scripts/install-local-plugin.sh
   scripts/validate-plugin-structure.sh
   scripts/validate-benchmark-evidence.sh
@@ -106,6 +108,7 @@ print("ok: positive overclaim scan stayed clean for README/AGENTS/docs/benchmark
 PY
 
 ./scripts/validate-plugin-structure.sh
+./scripts/check-local-plugin-install.sh
 ./scripts/validate-pages-surface.sh
 if [[ "${CURSOR_SKIP_BENCHMARK_EVIDENCE:-0}" == "1" ]]; then
   log "benchmark evidence validation skipped inside benchmark self-run"

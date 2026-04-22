@@ -58,3 +58,15 @@ When running the manual workflow, record at least:
 - whether Cursor required a full restart or only **Developer: Reload Window**;
 - which plugin files were present; and
 - any mismatch between the docs and the actual visible plugin surface.
+
+## CI-safe companion check
+
+If you only need to verify the helper behavior without touching the live Cursor
+UI flow, run:
+
+```bash
+./scripts/check-local-plugin-install.sh
+```
+
+That installs the plugin into bounded temporary directories in both symlink and
+copy modes and verifies the resulting manifest/rule/skill payload.
