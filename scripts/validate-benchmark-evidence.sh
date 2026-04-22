@@ -125,6 +125,8 @@ if "CURSOR_TASK_SCENARIO_OK" not in smoke_tail:
     fail("enhanced smoke is missing CURSOR_TASK_SCENARIO_OK")
 if "CURSOR_TASK_PLAN_OK" not in smoke_tail:
     fail("enhanced smoke is missing CURSOR_TASK_PLAN_OK")
+if "CURSOR_TASK_COMMAND_OK" not in smoke_tail:
+    fail("enhanced smoke is missing CURSOR_TASK_COMMAND_OK")
 ok("enhanced proof includes model-backed Cursor smoke evidence and constrained repo-task answers")
 
 if baseline_eval.get("investigation_required"):

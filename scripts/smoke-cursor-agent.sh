@@ -125,6 +125,27 @@ if [[ "$RUN_AGENT_SMOKE" == "1" ]]; then
     exit 1
   }
   printf 'ok: cursor-agent task plan smoke returned CURSOR_TASK_PLAN_OK (environment-gated runtime proof)\n'
+
+  task_command_output="$(
+    timeout "$TIMEOUT_SECONDS" cursor-agent \
+      -p \
+      --output-format text \
+      --model auto \
+      --mode ask \
+      --trust \
+      --workspace "$ROOT" \
+      "Without editing files or running write commands, an enhanced-only task smoke changed and you want to refresh only the enhanced benchmark proof. Reply with exactly: CURSOR_TASK_COMMAND_OK ./benchmark/quick_test.sh --variant enhanced --run-agent-smoke ./scripts/validate-benchmark-evidence.sh" 2>&1
+  )" || {
+    printf '%s\n' "$task_command_output" >&2
+    echo "FAIL: cursor-agent task command smoke failed" >&2
+    exit 1
+  }
+  printf '%s\n' "$task_command_output" | grep -Fxq 'CURSOR_TASK_COMMAND_OK ./benchmark/quick_test.sh --variant enhanced --run-agent-smoke ./scripts/validate-benchmark-evidence.sh' || {
+    printf '%s\n' "$task_command_output" >&2
+    echo "FAIL: cursor-agent task command smoke missing CURSOR_TASK_COMMAND_OK" >&2
+    exit 1
+  }
+  printf 'ok: cursor-agent task command smoke returned CURSOR_TASK_COMMAND_OK (environment-gated runtime proof)\n'
 else
   printf 'ok: model-backed Cursor smoke skipped; runtime claim remains bounded until enhanced prompt proof is requested\n'
 fi

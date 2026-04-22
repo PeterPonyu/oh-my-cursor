@@ -55,7 +55,9 @@ availability. Baseline scores now report only the baseline contract ceiling,
 while enhanced carries the extra runtime/task uplift slots.
 Enhanced now also requires a second deterministic repo-work answer
 (`CURSOR_TASK_PLAN_OK`) that chooses the right validator and ownership class
-for a packaging-claim scenario.
+for a packaging-claim scenario. It now also requires a third deterministic
+command-selection answer (`CURSOR_TASK_COMMAND_OK`) so the task layer covers
+what enhanced benchmark path to rerun.
 
 If this repo later ships a checked-in Pages landing surface, that site still has
 to expose `Benchmark Notes` as a visible proof entry point. The landing page may
