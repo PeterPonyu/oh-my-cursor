@@ -15,7 +15,7 @@ past its evidence.
 | [Model Context Protocol (MCP) for CLI](https://docs.cursor.com/cli/mcp) | Cursor/CLI MCP support, configuration sources, and CLI MCP commands. | Supports `host-product-only` MCP wording at `official-doc`; this repo still does not claim a default repo-owned `.cursor/mcp.json`. |
 | [Modes](https://docs.cursor.com/chat/custom-modes) | Agent/Ask/Manual/Custom modes as product capabilities and product-managed configuration. | Supports `host-product-only` mode wording at `official-doc`; this repo does not claim repo-file custom-mode packaging. |
 | [Background Agents](https://docs.cursor.com/background-agents) | Background agents as asynchronous remote product capability. | Supports `host-product-only` background-agent wording at `official-doc`; this repo does not claim repo-file provisioning. |
-| [Plugins, Sandbox Access Controls, and Async Subagents](https://cursor.com/changelog/2-5) | Current product support for plugins and async subagents. | Used only for product-awareness and negative boundary wording: this repo remains `unsupported-or-out-of-scope` for checked-in plugin, skill, hook, or custom-agent packaging. |
+| [Plugins, Sandbox Access Controls, and Async Subagents](https://cursor.com/changelog/2-5) | Product awareness for plugins and async subagents, including the surrounding feature family that informs this repo's minimal plugin promotion. | Used for product-awareness and proof ceilings only: this repo treats its repo-root plugin as `repo-owned` only when local checked-in artifacts and validators back the claim. |
 
 ## Landing-surface deployment references
 
@@ -26,15 +26,15 @@ past its evidence.
 
 ## Claim mapping used by this repo
 
-- Root `AGENTS.md`, `.cursor/rules`, local validators, and checked-in benchmark
-  artifacts are the strongest current **repo-owned** surfaces.
+- Root `AGENTS.md`, `.cursor/rules`, the repo-root plugin manifest, shipped
+  plugin rules/skills, local validators, and checked-in benchmark artifacts are
+  the strongest current **repo-owned** surfaces.
 - Cursor CLI, MCP, modes, and background agents are real Cursor capabilities,
   but they remain **host-product-only** unless this repo deliberately ships and
   validates a corresponding checked-in surface.
-- Checked-in Cursor plugin bundles, skill bundles, hook manifests,
-  custom-agent packaging, repo-file custom-mode packaging, and repo-file
-  background-agent provisioning remain **unsupported-or-out-of-scope** in this
-  repo today.
+- Hook manifests, custom-agent surfaces, repo-file custom-mode packaging, and
+  repo-file background-agent provisioning remain
+  **unsupported-or-out-of-scope** in this repo today.
 - A future checked-in Pages landing site can only be described as
   **repo-owned** after the app files, deploy workflow, and exported-output
   validators all exist in this repo.
