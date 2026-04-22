@@ -15,6 +15,8 @@ EVIDENCE_MARKERS = (
     "CURSOR_AUTH_OK",
     "CURSOR_MODEL_AUTO_OK",
     "CURSOR_AGENT_OK",
+    "REFINEMENT_MAP_OK",
+    "PLUGIN_BOUNDARY_OK",
 )
 
 
@@ -274,11 +276,14 @@ def build_evaluation(profile: str, variant: str, results: list[CheckResult]) -> 
     smoke_result = results_by_name.get("smoke_cursor")
     smoke_evidence = smoke_result.output_tail if smoke_result else "(smoke result missing)"
     smoke_markers = set(smoke_result.markers if smoke_result else [])
+    all_markers = {marker for result in results for marker in result.markers}
 
     weight_map = {
         "default_auth": ("check", "default Cursor auth is available", 20),
         "CURSOR_MODEL_AUTO_OK": ("marker", "cursor-agent exposes the auto model", 15),
         "surface_visibility": ("check", "visible repo-native surfaces match the intended backbone", 20),
+        "REFINEMENT_MAP_OK": ("marker", "README exposes the refinement-priority map", 10),
+        "PLUGIN_BOUNDARY_OK": ("marker", "README exposes the plugin-boundary review", 10),
         "state_contract": ("check", "repo/user state contract stays bounded and explicit", 20),
         "backbone_verify": ("check", "backbone verification passes", 25),
         "CURSOR_AGENT_OK": ("marker", "model-backed cursor smoke returns CURSOR_AGENT_OK", 20),
@@ -288,6 +293,8 @@ def build_evaluation(profile: str, variant: str, results: list[CheckResult]) -> 
         "default_auth",
         "CURSOR_MODEL_AUTO_OK",
         "surface_visibility",
+        "REFINEMENT_MAP_OK",
+        "PLUGIN_BOUNDARY_OK",
         "state_contract",
         "backbone_verify",
     )
@@ -304,7 +311,7 @@ def build_evaluation(profile: str, variant: str, results: list[CheckResult]) -> 
             passed = name in auth_markers
             evidence = auth_evidence
         else:
-            passed = name in smoke_markers
+            passed = name in all_markers
             evidence = smoke_evidence
 
         dimensions.append(

@@ -110,6 +110,10 @@ grep -q '\.cursor/rules' docs/confirmed-surfaces.md || fail "confirmed surfaces 
 grep -q 'cursor-backbone-site' docs/confirmed-surfaces.md || fail "confirmed surfaces doc must mention the landing-site proof rule"
 grep -Eq 'different, smaller contract' benchmark/README.md || fail "benchmark README must describe the smaller Cursor benchmark contract"
 grep -Eq 'reporting-comparable' benchmark/README.md || fail "benchmark README must keep reporting-comparable wording"
+grep -q 'docs/refinement-priority-map.md' README.md || fail "README must expose the refinement-priority map"
+grep -q 'docs/plugin-boundary-review.md' README.md || fail "README must expose the plugin-boundary review"
+log "REFINEMENT_MAP_OK"
+log "PLUGIN_BOUNDARY_OK"
 
 ./scripts/validate-pages-surface.sh
 

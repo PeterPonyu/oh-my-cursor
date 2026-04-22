@@ -43,6 +43,10 @@ This repo does not currently ship hooks, prompt files, skill bundles, or
 namespaced plugin packaging. Scoring it like `oh-my-copilot` would be fake
 parity.
 
+The benchmark now also requires the README-visible
+`refinement-priority-map.md` and `plugin-boundary-review.md` links, because
+those documents are part of the current repo-owned proof surface.
+
 If this repo later ships a checked-in Pages landing surface, that site still has
 to expose `Benchmark Notes` as a visible proof entry point. The landing page may
 improve presentation, but it does not get to hide the benchmark contract.

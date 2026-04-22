@@ -37,6 +37,7 @@ repo-owned surfaces documented and checked in today:
 | Repository policy | [`AGENTS.md`](./AGENTS.md) |
 | Confirmed ownership and proof boundaries | [`docs/confirmed-surfaces.md`](./docs/confirmed-surfaces.md) |
 | Learning-driven refinement priorities | [`docs/refinement-priority-map.md`](./docs/refinement-priority-map.md) |
+| Plugin-native vs support-tooling review | [`docs/plugin-boundary-review.md`](./docs/plugin-boundary-review.md) |
 | Hard fallback and non-claim rules | [`docs/fallback-policy.md`](./docs/fallback-policy.md) |
 | Source links and access dates | [`docs/references.md`](./docs/references.md) |
 | State ownership contract | [`docs/state-contract.md`](./docs/state-contract.md) |
