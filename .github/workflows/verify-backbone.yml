@@ -1,0 +1,19 @@
+name: Verify Cursor Backbone
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  verify-backbone:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Verify backbone contract
+        run: bash scripts/verify-backbone.sh
+
+      - name: Validate surface visibility
+        run: bash scripts/validate-surface-visibility.sh

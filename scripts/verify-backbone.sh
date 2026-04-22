@@ -17,6 +17,7 @@ required=(
   docs/fallback-policy.md
   docs/references.md
   docs/state-contract.md
+  scripts/validate-benchmark-evidence.sh
   scripts/validate-pages-surface.sh
 )
 
@@ -101,5 +102,6 @@ print("ok: positive overclaim scan stayed clean for README/AGENTS/docs/benchmark
 PY
 
 ./scripts/validate-pages-surface.sh
+./scripts/validate-benchmark-evidence.sh
 
-echo 'verification: repository backbone files, claim vocabulary, and positive overclaim protections are present'
+echo 'verification: repository backbone files, claim vocabulary, positive overclaim protections, and benchmark evidence are present'
