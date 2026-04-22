@@ -293,21 +293,14 @@ def build_evaluation(profile: str, variant: str, results: list[CheckResult]) -> 
         "CURSOR_TASK_SCENARIO_OK": ("marker", "agent can answer a constrained practical repo-task question", 10),
     }
 
-    required_names = (
-        "default_auth",
-        "CURSOR_MODEL_AUTO_OK",
-        "surface_visibility",
-        "REFINEMENT_MAP_OK",
-        "PLUGIN_BOUNDARY_OK",
-        "DISCOVERABILITY_OK",
-        "state_contract",
-        "backbone_verify",
-    )
-    if variant == "enhanced":
-        required_names = tuple(weight_map.keys())
+    enhanced_only_names = {"CURSOR_AGENT_OK", "CURSOR_TASK_SCENARIO_OK"}
+    baseline_names = tuple(name for name in weight_map.keys() if name not in enhanced_only_names)
+    active_names = tuple(weight_map.keys()) if variant == "enhanced" else baseline_names
+    required_names = active_names
 
     dimensions: list[EvaluationDimension] = []
-    for name, (kind, description, weight) in weight_map.items():
+    for name in active_names:
+        kind, description, weight = weight_map[name]
         if kind == "check":
             result = results_by_name.get(name)
             passed = bool(result and result.success)
@@ -336,8 +329,9 @@ def build_evaluation(profile: str, variant: str, results: list[CheckResult]) -> 
     expected_baseline_score = sum(
         weight for name, (_, _, weight) in weight_map.items() if name not in {"CURSOR_AGENT_OK", "CURSOR_TASK_SCENARIO_OK"}
     )
-    actual_delta_vs_baseline = score - expected_baseline_score
-    required_delta_vs_baseline = max_score - expected_baseline_score
+    enhanced_max_score = sum(weight for _, _, weight in weight_map.values())
+    actual_delta_vs_baseline = score - expected_baseline_score if variant == "enhanced" else 0
+    required_delta_vs_baseline = enhanced_max_score - expected_baseline_score
     passed = score >= threshold_score and all(d.passed for d in dimensions if d.required)
     investigation_required, improvement_summary = summarize_improvement(
         variant=variant,
@@ -429,12 +423,12 @@ def main() -> int:
             "",
             "## Evaluation contract",
             "",
-            f"- Score: **{evaluation.score}/{evaluation.max_score}**",
-            f"- Threshold: **{evaluation.threshold_score}/{evaluation.max_score}**",
+            f"- Contract score: **{evaluation.score}/{evaluation.max_score}**",
+            f"- Contract threshold: **{evaluation.threshold_score}/{evaluation.max_score}**",
             f"- Benchmark gate: **{'PASS' if evaluation.passed else 'FAIL'}**",
-            f"- Baseline floor: **{evaluation.expected_baseline_score}/{evaluation.max_score}**",
+            f"- Baseline floor reference: **{evaluation.expected_baseline_score}**",
             f"- Actual delta vs baseline floor: **{evaluation.actual_delta_vs_baseline}**",
-            f"- Required delta vs baseline floor: **{evaluation.required_delta_vs_baseline}**",
+            f"- Enhanced-only uplift budget: **{evaluation.required_delta_vs_baseline}**",
             f"- Improvement summary: {evaluation.improvement_summary}",
             f"- Investigation required: **{'yes' if evaluation.investigation_required else 'no'}**",
             "- This report is environment-gated runtime proof layered on top of the always-required static validators.",

@@ -2,6 +2,9 @@
 
 | Timestamp | Branch | SHA | Profile | Variant | Score | Threshold | Gate | Output |
 | --- | --- | --- | --- | --- | ---: | ---: | --- | --- |
+| `2026-04-22T03:52:19Z` | `main` | `f076917` | `backbone` | `enhanced` | 160/160 | 160/160 | PASS | `benchmark/results/current-enhanced` |
+| `2026-04-22T03:52:03Z` | `main` | `f076917` | `backbone` | `baseline` | 130/130 | 130/130 | PASS | `benchmark/results/current-baseline` |
+| `2026-04-22T03:50:16Z` | `main` | `f076917` | `backbone` | `baseline` | 130/160 | 130/160 | PASS | `benchmark/results/current-baseline` |
 | `2026-04-22T03:36:34Z` | `main` | `ff87cb4` | `backbone` | `enhanced` | 160/160 | 160/160 | PASS | `benchmark/results/current-enhanced` |
 | `2026-04-22T03:36:09Z` | `main` | `ff87cb4` | `backbone` | `baseline` | 130/160 | 130/160 | PASS | `benchmark/results/current-baseline` |
 | `2026-04-22T03:35:44Z` | `main` | `ff87cb4` | `backbone` | `baseline` | 115/160 | 130/160 | FAIL | `benchmark/results/current-baseline` |

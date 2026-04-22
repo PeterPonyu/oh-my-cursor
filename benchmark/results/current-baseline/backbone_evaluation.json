@@ -2,7 +2,7 @@
   "profile": "backbone",
   "variant": "baseline",
   "score": 130,
-  "max_score": 160,
+  "max_score": 130,
   "threshold_score": 130,
   "passed": true,
   "release_blocking": false,
@@ -75,22 +75,6 @@
       "required": true,
       "passed": true,
       "evidence": "ok: apps/cursor-backbone-site/tsconfig.json\nok: apps/cursor-backbone-site/next-env.d.ts\nok: apps/cursor-backbone-site/next.config.ts\nok: apps/cursor-backbone-site/app/layout.tsx\nok: apps/cursor-backbone-site/app/page.tsx\nok: .github/workflows/deploy-pages.yml\nok: next.config.ts keeps static export output\nok: deploy workflow uses official Pages artifact/deploy actions\nok: apps/cursor-backbone-site/out/index.html\nok: exported landing HTML preserves required naming, proof links, sibling link, and ownership terms\nok: benchmark evidence validation skipped inside benchmark self-run\nverification: repository backbone files, claim vocabulary, positive overclaim protections, and benchmark evidence are present"
-    },
-    {
-      "name": "CURSOR_AGENT_OK",
-      "description": "model-backed cursor smoke returns CURSOR_AGENT_OK",
-      "weight": 20,
-      "required": false,
-      "passed": false,
-      "evidence": "ok: reusing upstream default auth/model proof (environment-gated)\nok: model-backed Cursor smoke skipped; runtime claim remains bounded until enhanced prompt proof is requested\nok: Cursor CLI smoke validation complete"
-    },
-    {
-      "name": "CURSOR_TASK_SCENARIO_OK",
-      "description": "agent can answer a constrained practical repo-task question",
-      "weight": 10,
-      "required": false,
-      "passed": false,
-      "evidence": "ok: reusing upstream default auth/model proof (environment-gated)\nok: model-backed Cursor smoke skipped; runtime claim remains bounded until enhanced prompt proof is requested\nok: Cursor CLI smoke validation complete"
     }
   ]
 }

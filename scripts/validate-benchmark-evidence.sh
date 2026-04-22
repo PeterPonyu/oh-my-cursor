@@ -102,7 +102,7 @@ for label, data in (("baseline", baseline_results), ("enhanced", enhanced_result
 for label, evaluation in (("baseline", baseline_eval), ("enhanced", enhanced_eval)):
     if not evaluation.get("passed"):
         fail(f"{label} evaluation is not passing")
-    ok(f"{label} evaluation passed at {evaluation['score']}/{evaluation['max_score']}")
+    ok(f"{label} contract evaluation passed at {evaluation['score']}/{evaluation['max_score']}")
 
 surface_visibility_markers = set(
     next(

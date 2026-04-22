@@ -16,12 +16,12 @@ Variant: `baseline`
 
 ## Evaluation contract
 
-- Score: **130/160**
-- Threshold: **130/160**
+- Contract score: **130/130**
+- Contract threshold: **130/130**
 - Benchmark gate: **PASS**
-- Baseline floor: **130/160**
+- Baseline floor reference: **130**
 - Actual delta vs baseline floor: **0**
-- Required delta vs baseline floor: **30**
+- Enhanced-only uplift budget: **30**
 - Improvement summary: Baseline reference run establishes the comparison floor; use an enhanced run to measure Cursor smoke uplift.
 - Investigation required: **no**
 - This report is environment-gated runtime proof layered on top of the always-required static validators.
@@ -37,5 +37,3 @@ Variant: `baseline`
 | `DISCOVERABILITY_OK` | yes | PASS | 10 | README Start here path exposes the key proof docs together |
 | `state_contract` | yes | PASS | 20 | repo/user state contract stays bounded and explicit |
 | `backbone_verify` | yes | PASS | 25 | backbone verification passes |
-| `CURSOR_AGENT_OK` | no | FAIL | 20 | model-backed cursor smoke returns CURSOR_AGENT_OK |
-| `CURSOR_TASK_SCENARIO_OK` | no | FAIL | 10 | agent can answer a constrained practical repo-task question |

@@ -8,20 +8,20 @@ Variant: `enhanced`
 
 | Check | Result | Duration (s) | Markers |
 | --- | --- | ---: | --- |
-| `default_auth` | PASS | 2.28 | `CURSOR_AUTH_OK`, `CURSOR_MODEL_AUTO_OK` |
+| `default_auth` | PASS | 2.34 | `CURSOR_AUTH_OK`, `CURSOR_MODEL_AUTO_OK` |
 | `surface_visibility` | PASS | 0.16 | `REFINEMENT_MAP_OK`, `PLUGIN_BOUNDARY_OK`, `DISCOVERABILITY_OK` |
 | `state_contract` | PASS | 0.02 | — |
 | `backbone_verify` | PASS | 0.04 | — |
-| `smoke_cursor` | PASS | 22.51 | `CURSOR_AGENT_OK`, `CURSOR_TASK_SCENARIO_OK` |
+| `smoke_cursor` | PASS | 13.31 | `CURSOR_AGENT_OK`, `CURSOR_TASK_SCENARIO_OK` |
 
 ## Evaluation contract
 
-- Score: **160/160**
-- Threshold: **160/160**
+- Contract score: **160/160**
+- Contract threshold: **160/160**
 - Benchmark gate: **PASS**
-- Baseline floor: **130/160**
+- Baseline floor reference: **130**
 - Actual delta vs baseline floor: **30**
-- Required delta vs baseline floor: **30**
+- Enhanced-only uplift budget: **30**
 - Improvement summary: Enhanced evidence improved by 30 over the baseline floor; benchmark-backed uplift observed.
 - Investigation required: **no**
 - This report is environment-gated runtime proof layered on top of the always-required static validators.

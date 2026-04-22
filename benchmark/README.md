@@ -51,7 +51,8 @@ It now treats their placement in the main **Start here** path as part of the
 contract as well, so discoverability is measured instead of implied. Enhanced
 runs also require a constrained practical repo-task answer
 (`CURSOR_TASK_SCENARIO_OK`) so the score reflects more than basic smoke
-availability.
+availability. Baseline scores now report only the baseline contract ceiling,
+while enhanced carries the extra runtime/task uplift slots.
 
 If this repo later ships a checked-in Pages landing surface, that site still has
 to expose `Benchmark Notes` as a visible proof entry point. The landing page may
