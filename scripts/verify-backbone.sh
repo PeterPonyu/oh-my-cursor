@@ -21,6 +21,7 @@ required=(
   docs/local-plugin-verification.md
   docs/references.md
   docs/state-contract.md
+  scripts/install-local-plugin.sh
   scripts/validate-plugin-structure.sh
   scripts/validate-benchmark-evidence.sh
   scripts/validate-pages-surface.sh

@@ -10,8 +10,14 @@ plugin directory without claiming more automation than the repo actually owns.
 
 ## Manual verification steps
 
-1. Copy or symlink this repository to:
-   `~/.cursor/plugins/local/oh-my-cursor`
+1. Install the local plugin path with:
+
+   ```bash
+   ./scripts/install-local-plugin.sh
+   ```
+
+   This creates a symlink by default at `~/.cursor/plugins/local/oh-my-cursor`.
+   Use `--copy` if you need a copied plugin tree instead of a symlink.
 2. Confirm the plugin root contains:
    - `.cursor-plugin/plugin.json`
    - the shipped plugin rules
@@ -25,6 +31,8 @@ plugin directory without claiming more automation than the repo actually owns.
 ## Verification boundaries
 
 - The walkthrough itself is a **repo-owned** checked-in document.
+- The install helper is a **repo-owned** checked-in script that only manages the
+  local plugin path.
 - The local install path under `~/.cursor/plugins/local` belongs to the **user
   environment**, not the repo.
 - Reloading Cursor is a **manual product action**, not repo-owned automation.
@@ -46,7 +54,7 @@ The local plugin walkthrough does **not** by itself prove or imply:
 When running the manual workflow, record at least:
 
 - the absolute local plugin path used;
-- whether the load used a copy or a symlink;
+- whether `scripts/install-local-plugin.sh` used a copy or a symlink;
 - whether Cursor required a full restart or only **Developer: Reload Window**;
 - which plugin files were present; and
 - any mismatch between the docs and the actual visible plugin surface.

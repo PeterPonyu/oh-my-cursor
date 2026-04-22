@@ -55,6 +55,48 @@ done
 
 command -v cursor-agent >/dev/null 2>&1 || { echo "FAIL: cursor-agent not found" >&2; exit 1; }
 
+run_cursor_prompt() {
+  local label="$1"
+  local expected="$2"
+  local prompt="$3"
+  local max_attempts="${CURSOR_SMOKE_RETRY_ATTEMPTS:-3}"
+  local attempt output status transient
+
+  for ((attempt = 1; attempt <= max_attempts; attempt++)); do
+    output="$(
+      timeout "$TIMEOUT_SECONDS" cursor-agent \
+        -p \
+        --output-format text \
+        --model auto \
+        --mode ask \
+        --trust \
+        --workspace "$ROOT" \
+        "$prompt" 2>&1
+    )"
+    status=$?
+
+    if [[ "$status" -eq 0 ]] && printf '%s\n' "$output" | grep -Fxq "$expected"; then
+      printf '%s\n' "$output"
+      return 0
+    fi
+
+    transient=0
+    if printf '%s\n' "$output" | grep -Eiq 'Connection lost|Retry attempt|tls handshake eof|stream disconnected|reconnecting|temporarily unavailable'; then
+      transient=1
+    fi
+
+    if [[ "$attempt" -lt "$max_attempts" && "$transient" -eq 1 ]]; then
+      printf 'bounded: transient cursor-agent failure during %s (attempt %s/%s), retrying\n' "$label" "$attempt" "$max_attempts" >&2
+      sleep "$attempt"
+      continue
+    fi
+
+    printf '%s\n' "$output" >&2
+    echo "FAIL: cursor-agent ${label} failed" >&2
+    exit 1
+  done
+}
+
 if [[ "$SKIP_AUTH_CHECK" == "1" ]]; then
   printf 'ok: reusing upstream default auth/model proof (environment-gated)\n'
 else
@@ -63,20 +105,7 @@ else
 fi
 
 if [[ "$RUN_AGENT_SMOKE" == "1" ]]; then
-  output="$(
-    timeout "$TIMEOUT_SECONDS" cursor-agent \
-      -p \
-      --output-format text \
-      --model auto \
-      --mode ask \
-      --trust \
-      --workspace "$ROOT" \
-      "Do not edit files or run shell commands. Reply with exactly: CURSOR_AGENT_OK" 2>&1
-  )" || {
-    printf '%s\n' "$output" >&2
-    echo "FAIL: cursor-agent prompt smoke failed" >&2
-    exit 1
-  }
+  output="$(run_cursor_prompt "prompt smoke" "CURSOR_AGENT_OK" "Do not edit files or run shell commands. Reply with exactly: CURSOR_AGENT_OK")"
   printf '%s\n' "$output" | grep -Fxq 'CURSOR_AGENT_OK' || {
     printf '%s\n' "$output" >&2
     echo "FAIL: cursor-agent prompt smoke missing CURSOR_AGENT_OK" >&2
@@ -84,20 +113,7 @@ if [[ "$RUN_AGENT_SMOKE" == "1" ]]; then
   }
   printf 'ok: cursor-agent prompt smoke returned CURSOR_AGENT_OK (environment-gated runtime proof)\n'
 
-  task_output="$(
-    timeout "$TIMEOUT_SECONDS" cursor-agent \
-      -p \
-      --output-format text \
-      --model auto \
-      --mode ask \
-      --trust \
-      --workspace "$ROOT" \
-      "Without editing files or running write commands, identify the repo's refinement priority map doc, plugin boundary review doc, and benchmark evidence validator script. Reply with exactly: CURSOR_TASK_SCENARIO_OK docs/refinement-priority-map.md docs/plugin-boundary-review.md scripts/validate-benchmark-evidence.sh" 2>&1
-  )" || {
-    printf '%s\n' "$task_output" >&2
-    echo "FAIL: cursor-agent task scenario smoke failed" >&2
-    exit 1
-  }
+  task_output="$(run_cursor_prompt "task scenario smoke" "CURSOR_TASK_SCENARIO_OK docs/refinement-priority-map.md docs/plugin-boundary-review.md scripts/validate-benchmark-evidence.sh" "Without editing files or running write commands, identify the repo's refinement priority map doc, plugin boundary review doc, and benchmark evidence validator script. Reply with exactly: CURSOR_TASK_SCENARIO_OK docs/refinement-priority-map.md docs/plugin-boundary-review.md scripts/validate-benchmark-evidence.sh")"
   printf '%s\n' "$task_output" | grep -Fxq 'CURSOR_TASK_SCENARIO_OK docs/refinement-priority-map.md docs/plugin-boundary-review.md scripts/validate-benchmark-evidence.sh' || {
     printf '%s\n' "$task_output" >&2
     echo "FAIL: cursor-agent task scenario smoke missing CURSOR_TASK_SCENARIO_OK" >&2
@@ -105,20 +121,7 @@ if [[ "$RUN_AGENT_SMOKE" == "1" ]]; then
   }
   printf 'ok: cursor-agent task scenario smoke returned CURSOR_TASK_SCENARIO_OK (environment-gated runtime proof)\n'
 
-  task_plan_output="$(
-    timeout "$TIMEOUT_SECONDS" cursor-agent \
-      -p \
-      --output-format text \
-      --model auto \
-      --mode ask \
-      --trust \
-      --workspace "$ROOT" \
-      "Without editing files or running write commands, a richer plugin claim is proposed. Which validator should be rerun first, and what ownership class must the checked-in repo-root plugin packaging currently keep? Reply with exactly: CURSOR_TASK_PLAN_OK scripts/validate-plugin-structure.sh repo-owned" 2>&1
-  )" || {
-    printf '%s\n' "$task_plan_output" >&2
-    echo "FAIL: cursor-agent task plan smoke failed" >&2
-    exit 1
-  }
+  task_plan_output="$(run_cursor_prompt "task plan smoke" "CURSOR_TASK_PLAN_OK scripts/validate-plugin-structure.sh repo-owned" "Without editing files or running write commands, a richer plugin claim is proposed. Which validator should be rerun first, and what ownership class must the checked-in repo-root plugin packaging currently keep? Reply with exactly: CURSOR_TASK_PLAN_OK scripts/validate-plugin-structure.sh repo-owned")"
   printf '%s\n' "$task_plan_output" | grep -Fxq 'CURSOR_TASK_PLAN_OK scripts/validate-plugin-structure.sh repo-owned' || {
     printf '%s\n' "$task_plan_output" >&2
     echo "FAIL: cursor-agent task plan smoke missing CURSOR_TASK_PLAN_OK" >&2
@@ -126,20 +129,7 @@ if [[ "$RUN_AGENT_SMOKE" == "1" ]]; then
   }
   printf 'ok: cursor-agent task plan smoke returned CURSOR_TASK_PLAN_OK (environment-gated runtime proof)\n'
 
-  task_command_output="$(
-    timeout "$TIMEOUT_SECONDS" cursor-agent \
-      -p \
-      --output-format text \
-      --model auto \
-      --mode ask \
-      --trust \
-      --workspace "$ROOT" \
-      "Without editing files or running write commands, choose the correct rerun path after an enhanced-only task-smoke change. Option A: ./benchmark/quick_test.sh --variant enhanced --run-agent-smoke && ./scripts/validate-benchmark-evidence.sh. Option B: ./benchmark/quick_test.sh --variant baseline && ./scripts/validate-state-contract.sh. Reply with exactly: CURSOR_TASK_COMMAND_OK A" 2>&1
-  )" || {
-    printf '%s\n' "$task_command_output" >&2
-    echo "FAIL: cursor-agent task command smoke failed" >&2
-    exit 1
-  }
+  task_command_output="$(run_cursor_prompt "task command smoke" "CURSOR_TASK_COMMAND_OK A" "Without editing files or running write commands, choose the correct rerun path after an enhanced-only task-smoke change. Option A: ./benchmark/quick_test.sh --variant enhanced --run-agent-smoke && ./scripts/validate-benchmark-evidence.sh. Option B: ./benchmark/quick_test.sh --variant baseline && ./scripts/validate-state-contract.sh. Reply with exactly: CURSOR_TASK_COMMAND_OK A")"
   printf '%s\n' "$task_command_output" | grep -Fxq 'CURSOR_TASK_COMMAND_OK A' || {
     printf '%s\n' "$task_command_output" >&2
     echo "FAIL: cursor-agent task command smoke missing CURSOR_TASK_COMMAND_OK" >&2
