@@ -96,6 +96,12 @@ Prefer the smallest confirmed Cursor-native surface first:
 That keeps the repo useful today while preventing unsupported packaging claims
 from turning into hidden maintenance debt.
 
+The flagship landing rhythm is intentionally still repo-local. The visual system
+now aligns with the sibling `oh-my-copilot` surface, but we are **not**
+extracting a shared cross-repo design-system package yet. That stays deferred
+until repeated patterns justify the maintenance cost and can be proven without
+weakening this repo's ownership/proof boundaries.
+
 ## Landing-surface contract
 
 If this repo later checks in `apps/cursor-backbone-site/` as a GitHub Pages
