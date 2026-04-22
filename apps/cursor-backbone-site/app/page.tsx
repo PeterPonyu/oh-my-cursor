@@ -1,4 +1,5 @@
 const repoRoot = 'https://github.com/PeterPonyu/oh-my-cursor/blob/main'
+const siblingSiteUrl = 'https://peterponyu.github.io/oh-my-copilot/'
 
 const evidenceLinks = [
   {
@@ -90,55 +91,84 @@ const validatorLinks = [
   },
 ]
 
+const landingChecks = [
+  'The hero, metadata, and primary heading all lead with oh-my-cursor.',
+  'Docs, State Contract, References, and Benchmark Notes stay visible from the landing surface.',
+  'Sibling navigation points to oh-my-copilot as comparison context rather than canonical ownership.',
+  'repo-owned, host-product-only, and unsupported-or-out-of-scope stay visibly distinct.',
+]
+
 export default function HomePage() {
   return (
     <div className="panel-stack">
-      <section className="panel hero-panel">
+      <section className="panel hero-panel hero-grid">
         <div className="hero-copy">
-          <p className="eyebrow">canonical public root</p>
-          <h2>oh-my-cursor keeps the landing surface truthful, local, and reviewable.</h2>
+          <p className="eyebrow">landing overview</p>
+          <h2>Truthful flagship styling without broadening the contract.</h2>
           <p>
-            This homepage is a repo-owned evidence rail for the Cursor backbone. It makes
-            checked-in proof visible, links directly to the docs that define the contract, and
-            keeps host-product-only behavior distinct from what this repository actually ships.
+            <strong>oh-my-cursor</strong> uses this landing surface as its canonical public root.
+            The visual system is intentionally sibling-consistent with oh-my-copilot, but the
+            content remains Cursor-native, docs-first, and explicit about what this repository
+            actually owns.
           </p>
+          <p>
+            Checked-in proof stays visible, host-product-only behavior stays bounded, and
+            unsupported-or-out-of-scope packaging remains negative rather than implied support.
+          </p>
+          <div className="action-row">
+            <a className="button button-primary" href={`${repoRoot}/README.md`} target="_blank" rel="noreferrer">
+              Open repo docs
+            </a>
+            <a className="button button-secondary" href={`${repoRoot}/docs/state-contract.md`} target="_blank" rel="noreferrer">
+              Read state contract
+            </a>
+            <a className="button button-secondary" href={siblingSiteUrl} target="_blank" rel="noreferrer">
+              Visit sibling site
+            </a>
+          </div>
         </div>
-        <div className="hero-actions">
-          <a className="button button-primary" href={`${repoRoot}/README.md`} target="_blank" rel="noreferrer">
-            Open repo docs
-          </a>
-          <a className="button" href="https://peterponyu.github.io/oh-my-copilot/" target="_blank" rel="noreferrer">
-            Compare sibling site
-          </a>
+
+        <div className="hero-aside panel panel-inset">
+          <p className="eyebrow">current public-graph checks</p>
+          <ul className="check-list compact-list">
+            {landingChecks.map((item) => (
+              <li key={item}>{item}</li>
+            ))}
+          </ul>
         </div>
-        <ul className="check-list compact-list">
-          <li>This site is repo-owned and checked in under apps/cursor-backbone-site/.</li>
-          <li>Cursor product capability remains host-product-only unless this repo ships proof artifacts.</li>
-          <li>Unsupported-or-out-of-scope packaging stays visibly negative instead of implied support.</li>
-        </ul>
       </section>
 
       <section id="evidence" className="panel">
         <div className="section-heading">
           <div>
             <p className="eyebrow">required landing evidence links</p>
-            <h2>Docs, state, references, and benchmark notes stay one click away.</h2>
+            <h3>Docs, state, references, and benchmark notes stay one click away.</h3>
           </div>
           <p>
-            The landing surface exposes the evidence needed to audit public wording before trusting
-            any stronger claim.
+            The flagship landing surface exposes the repo-owned evidence needed to audit public
+            wording before trusting stronger claims.
           </p>
         </div>
-        <div className="card-grid evidence-grid">
+        <div className="link-grid">
           {evidenceLinks.map((item) => (
-            <article key={item.title} className="panel nested-panel evidence-card">
-              <h3>{item.title}</h3>
+            <article key={item.title} className="panel panel-inset link-card">
+              <h4>{item.title}</h4>
               <p>{item.detail}</p>
-              <a className="proof-link" href={item.href} target="_blank" rel="noreferrer">
-                {item.href.replace('https://github.com/PeterPonyu/oh-my-cursor/blob/main/', '')}
+              <a className="text-link" href={item.href} target="_blank" rel="noreferrer">
+                Open {item.title}
               </a>
             </article>
           ))}
+          <article className="panel panel-inset link-card">
+            <h4>Sibling context: oh-my-copilot</h4>
+            <p>
+              Compare the Copilot sibling homepage as context only; it is not the canonical identity
+              root for oh-my-cursor.
+            </p>
+            <a className="text-link" href={siblingSiteUrl} target="_blank" rel="noreferrer">
+              Open sibling site
+            </a>
+          </article>
         </div>
       </section>
 
@@ -146,7 +176,7 @@ export default function HomePage() {
         <div className="section-heading">
           <div>
             <p className="eyebrow">surface classes</p>
-            <h2>The public contract stays explicit about ownership.</h2>
+            <h3>The public contract stays explicit about ownership.</h3>
           </div>
           <p>
             Every public sentence should preserve the difference between repo-owned,
@@ -155,11 +185,11 @@ export default function HomePage() {
         </div>
         <div className="triple-grid">
           {surfaceCards.map((card) => (
-            <article key={card.title} className="panel nested-panel">
+            <article key={card.title} className="panel panel-inset">
               <p className="badge-row">
                 <span className="badge">{card.title}</span>
               </p>
-              <h3>{card.heading}</h3>
+              <h4>{card.heading}</h4>
               <ul className="check-list compact-list">
                 {card.bullets.map((item) => (
                   <li key={item}>{item}</li>
@@ -174,27 +204,27 @@ export default function HomePage() {
         <div className="section-heading">
           <div>
             <p className="eyebrow">proof ceiling</p>
-            <h2>Proof class decides how far public wording may go.</h2>
+            <h3>Proof class decides how far public wording may go.</h3>
           </div>
           <p>
-            The repo remains useful by keeping the strongest proof visible and refusing silent
+            The repo stays useful by making the strongest available proof visible and refusing silent
             upgrades from product capability to repo-owned behavior.
           </p>
         </div>
-        <div className="card-grid proof-grid">
+        <div className="card-grid">
           {proofRails.map((rail) => (
-            <article key={rail.title} className="panel nested-panel">
-              <h3>{rail.title}</h3>
+            <article key={rail.title} className="panel panel-inset">
+              <h4>{rail.title}</h4>
               <p>{rail.detail}</p>
             </article>
           ))}
         </div>
       </section>
 
-      <section className="panel split-panel">
-        <article className="panel nested-panel">
+      <section className="panel two-column-grid">
+        <article className="panel panel-inset">
           <p className="eyebrow">validators</p>
-          <h2>Local verification stays visible.</h2>
+          <h3>Local verification stays visible.</h3>
           <ul className="check-list compact-list">
             {validatorLinks.map((item) => (
               <li key={item.title}>
@@ -205,15 +235,15 @@ export default function HomePage() {
             ))}
           </ul>
         </article>
-        <article className="panel nested-panel">
+        <article className="panel panel-inset">
           <p className="eyebrow">sibling context</p>
-          <h2>Compare the Copilot sibling without collapsing identity.</h2>
+          <h3>Shared flagship rhythm, repo-specific boundaries.</h3>
           <p>
             The sibling link exists for context and comparison only. It does not change the
             canonical identity root of oh-my-cursor, and it does not imply broader ownership than
             this repository can prove.
           </p>
-          <a className="button" href="https://peterponyu.github.io/oh-my-copilot/" target="_blank" rel="noreferrer">
+          <a className="button button-secondary" href={siblingSiteUrl} target="_blank" rel="noreferrer">
             Sibling context: oh-my-copilot
           </a>
         </article>

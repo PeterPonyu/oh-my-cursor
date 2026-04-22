@@ -1,16 +1,20 @@
 :root {
   color-scheme: light;
   --background: #07111f;
+  --background-accent: radial-gradient(circle at top left, rgba(56, 189, 248, 0.2), transparent 30%),
+    radial-gradient(circle at top right, rgba(125, 211, 252, 0.12), transparent 28%),
+    linear-gradient(180deg, #07111f 0%, #0b1729 52%, #07111f 100%);
   --foreground: #f8fafc;
   --muted: #c8d3e1;
-  --panel: rgba(11, 20, 35, 0.88);
-  --panel-strong: #0e1b30;
+  --muted-strong: #e2e8f0;
+  --panel: rgba(11, 20, 35, 0.84);
+  --panel-strong: rgba(12, 24, 42, 0.96);
+  --panel-inset: rgba(255, 255, 255, 0.04);
   --border: rgba(148, 163, 184, 0.22);
   --accent: #7dd3fc;
-  --accent-strong: #38bdf8;
-  --accent-soft: rgba(56, 189, 248, 0.16);
-  --warm: #f59e0b;
-  --shadow: 0 28px 70px rgba(2, 6, 23, 0.42);
+  --accent-strong: #bae6fd;
+  --accent-cyan: #67e8f9;
+  --shadow: 0 28px 56px rgba(2, 6, 23, 0.42);
 }
 
 * {
@@ -18,9 +22,7 @@
 }
 
 html {
-  background:
-    radial-gradient(circle at top, rgba(56, 189, 248, 0.15), transparent 28%),
-    linear-gradient(180deg, #07111f 0%, #091729 42%, #07111f 100%);
+  background: #07111f;
   color: var(--foreground);
   font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   scroll-behavior: smooth;
@@ -28,63 +30,76 @@ html {
 
 body {
   margin: 0;
+  min-height: 100vh;
+  background: var(--background-accent);
 }
 
 body a {
   color: inherit;
+  text-decoration: none;
 }
 
 .site-shell {
   margin: 0 auto;
-  max-width: 78rem;
+  max-width: 80rem;
   padding: 2rem 1.25rem 4rem;
 }
 
 .site-header {
-  align-items: flex-start;
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
+  display: grid;
+  gap: 1.25rem;
   margin-bottom: 2rem;
 }
 
-.brand-block {
-  max-width: 40rem;
+.site-header-copy {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.site-intro {
+  max-width: 48rem;
+}
+
+.header-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
 }
 
 .nav-list {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.9rem;
+  gap: 0.85rem;
   list-style: none;
   margin: 0;
   padding: 0;
 }
 
 .nav-list a {
-  background: rgba(15, 23, 42, 0.42);
-  border: 1px solid var(--border);
+  border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 999px;
-  color: var(--foreground);
+  color: var(--muted-strong);
   display: inline-flex;
+  font-size: 0.95rem;
+  font-weight: 600;
   padding: 0.65rem 0.95rem;
-  text-decoration: none;
+  transition: border-color 0.2s ease, background-color 0.2s ease, transform 0.2s ease;
 }
 
 .nav-list a:hover,
-.nav-list a:focus-visible,
-.button:hover,
-.button:focus-visible,
-.proof-link:hover,
-.proof-link:focus-visible {
-  border-color: rgba(125, 211, 252, 0.55);
-  color: white;
+.nav-list a:focus-visible {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 255, 255, 0.18);
   outline: none;
+  transform: translateY(-1px);
 }
 
 .panel-stack,
 .card-grid,
-.triple-grid {
+.triple-grid,
+.two-column-grid,
+.link-grid,
+.hero-grid {
   display: grid;
   gap: 1rem;
 }
@@ -98,42 +113,25 @@ body a {
   padding: 1.5rem;
 }
 
-.nested-panel {
-  background: linear-gradient(180deg, rgba(14, 27, 48, 0.96), rgba(9, 18, 33, 0.96));
+.panel-inset {
+  background: var(--panel-inset);
+  border-color: rgba(255, 255, 255, 0.08);
   box-shadow: none;
 }
 
 .hero-panel {
   background:
-    linear-gradient(135deg, rgba(56, 189, 248, 0.18), rgba(14, 27, 48, 0.98) 52%),
-    linear-gradient(180deg, rgba(14, 27, 48, 0.98), rgba(9, 18, 33, 0.98));
+    linear-gradient(135deg, rgba(125, 211, 252, 0.18), rgba(103, 232, 249, 0.08)),
+    var(--panel-strong);
 }
 
 .hero-copy {
-  max-width: 44rem;
+  display: grid;
+  gap: 1rem;
 }
 
-.hero-actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.8rem;
-  margin: 1.5rem 0;
-}
-
-.button {
-  align-items: center;
-  background: rgba(15, 23, 42, 0.35);
-  border: 1px solid var(--border);
-  border-radius: 999px;
-  color: var(--foreground);
-  display: inline-flex;
-  font-weight: 700;
-  padding: 0.8rem 1.1rem;
-  text-decoration: none;
-}
-
-.button-primary {
-  background: linear-gradient(135deg, rgba(56, 189, 248, 0.24), rgba(14, 27, 48, 0.75));
+.hero-aside {
+  align-self: start;
 }
 
 .section-heading {
@@ -142,41 +140,73 @@ body a {
   margin-bottom: 1rem;
 }
 
-.split-panel {
-  display: grid;
-  gap: 1rem;
+.action-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
 }
 
-.evidence-grid,
-.proof-grid {
-  grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+.button {
+  align-items: center;
+  border-radius: 999px;
+  display: inline-flex;
+  font-weight: 700;
+  justify-content: center;
+  min-height: 2.75rem;
+  padding: 0.75rem 1.05rem;
+  transition: transform 0.2s ease, opacity 0.2s ease, border-color 0.2s ease;
 }
 
-.triple-grid {
-  grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+.button:hover,
+.button:focus-visible,
+.text-link:hover,
+.text-link:focus-visible,
+.proof-link:hover,
+.proof-link:focus-visible {
+  opacity: 0.95;
+  outline: none;
+  transform: translateY(-1px);
 }
 
-.evidence-card {
-  min-height: 12rem;
+.button-primary {
+  background: linear-gradient(135deg, var(--accent), var(--accent-cyan));
+  color: #07111f;
 }
 
-.compact-list {
-  margin-top: 0.75rem;
+.button-secondary {
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: var(--foreground);
+}
+
+.text-link {
+  color: var(--accent-cyan);
+  display: inline-flex;
+  font-weight: 700;
+  margin-top: 0.25rem;
+}
+
+.text-link:hover,
+.text-link:focus-visible {
+  text-decoration: underline;
 }
 
 .check-list {
   display: grid;
   gap: 0.75rem;
-  margin: 0;
+  margin: 1rem 0 0;
   padding-left: 1.25rem;
 }
 
+.compact-list {
+  gap: 0.6rem;
+}
+
 .eyebrow {
-  color: var(--accent);
-  font-size: 0.8rem;
+  color: var(--accent-strong);
+  font-size: 0.82rem;
   font-weight: 800;
-  letter-spacing: 0.1em;
-  margin: 0 0 0.5rem;
+  letter-spacing: 0.12em;
+  margin: 0 0 0.25rem;
   text-transform: uppercase;
 }
 
@@ -185,70 +215,93 @@ body a {
 }
 
 .badge {
-  background: var(--accent-soft);
-  border: 1px solid rgba(125, 211, 252, 0.28);
+  align-items: center;
+  background: rgba(125, 211, 252, 0.16);
+  border: 1px solid rgba(125, 211, 252, 0.24);
   border-radius: 999px;
-  color: var(--accent);
+  color: var(--accent-strong);
   display: inline-flex;
-  font-size: 0.85rem;
+  font-size: 0.82rem;
   font-weight: 800;
-  padding: 0.3rem 0.75rem;
+  padding: 0.35rem 0.8rem;
 }
 
 h1,
 h2,
 h3,
+h4,
 p,
 ul {
   margin-top: 0;
 }
 
+h1,
+h2,
+h3,
+h4 {
+  color: var(--foreground);
+  line-height: 1.15;
+}
+
 h1 {
-  font-size: clamp(2.4rem, 5vw, 4.3rem);
-  line-height: 0.95;
-  margin-bottom: 0.75rem;
+  font-size: clamp(2.25rem, 5vw, 4rem);
+  letter-spacing: -0.04em;
+  margin-bottom: 0;
 }
 
 h2 {
-  font-size: clamp(1.6rem, 3vw, 2.45rem);
-  line-height: 1.1;
-  margin-bottom: 0.85rem;
+  font-size: clamp(1.8rem, 3vw, 3rem);
+  letter-spacing: -0.03em;
 }
 
 h3 {
-  font-size: 1.1rem;
-  margin-bottom: 0.75rem;
+  font-size: clamp(1.25rem, 2.2vw, 1.9rem);
 }
 
-.lede,
+h4 {
+  font-size: 1.1rem;
+}
+
 p,
 li {
   color: var(--muted);
   line-height: 1.7;
 }
 
+strong {
+  color: var(--foreground);
+}
+
 .proof-link {
   border-bottom: 1px solid rgba(125, 211, 252, 0.35);
-  color: var(--accent);
+  color: var(--accent-cyan);
+  display: inline-flex;
   font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
   font-size: 0.84rem;
   overflow-wrap: anywhere;
-  text-decoration: none;
 }
 
-@media (min-width: 880px) {
-  .site-header {
-    align-items: flex-end;
-    flex-direction: row;
-    justify-content: space-between;
+@media (min-width: 768px) {
+  .site-shell {
+    padding: 2.5rem 2rem 5rem;
+  }
+
+  .hero-grid {
+    grid-template-columns: minmax(0, 1.7fr) minmax(18rem, 0.95fr);
+  }
+
+  .card-grid,
+  .link-grid,
+  .two-column-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .triple-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 
   .section-heading {
     align-items: end;
-    grid-template-columns: minmax(0, 1.3fr) minmax(18rem, 0.7fr);
-  }
-
-  .split-panel {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: minmax(0, 1.2fr) minmax(0, 0.8fr);
   }
 }
