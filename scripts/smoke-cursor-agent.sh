@@ -104,6 +104,27 @@ if [[ "$RUN_AGENT_SMOKE" == "1" ]]; then
     exit 1
   }
   printf 'ok: cursor-agent task scenario smoke returned CURSOR_TASK_SCENARIO_OK (environment-gated runtime proof)\n'
+
+  task_plan_output="$(
+    timeout "$TIMEOUT_SECONDS" cursor-agent \
+      -p \
+      --output-format text \
+      --model auto \
+      --mode ask \
+      --trust \
+      --workspace "$ROOT" \
+      "Without editing files or running write commands, a richer packaging claim is proposed. Which validator should be rerun first, and what ownership class must checked-in plugin packaging currently keep? Reply with exactly: CURSOR_TASK_PLAN_OK scripts/validate-benchmark-evidence.sh unsupported-or-out-of-scope" 2>&1
+  )" || {
+    printf '%s\n' "$task_plan_output" >&2
+    echo "FAIL: cursor-agent task plan smoke failed" >&2
+    exit 1
+  }
+  printf '%s\n' "$task_plan_output" | grep -Fxq 'CURSOR_TASK_PLAN_OK scripts/validate-benchmark-evidence.sh unsupported-or-out-of-scope' || {
+    printf '%s\n' "$task_plan_output" >&2
+    echo "FAIL: cursor-agent task plan smoke missing CURSOR_TASK_PLAN_OK" >&2
+    exit 1
+  }
+  printf 'ok: cursor-agent task plan smoke returned CURSOR_TASK_PLAN_OK (environment-gated runtime proof)\n'
 else
   printf 'ok: model-backed Cursor smoke skipped; runtime claim remains bounded until enhanced prompt proof is requested\n'
 fi

@@ -3,7 +3,7 @@
     "name": "default_auth",
     "command": "./scripts/check-default-auth.sh",
     "success": true,
-    "duration_sec": 2.34,
+    "duration_sec": 2.23,
     "output_tail": "\u2713 Logged in as fuzeyu09@gmail.com\nCURSOR_AUTH_OK\nok: default Cursor auth is available\nCURSOR_MODEL_AUTO_OK\nok: cursor-agent exposes the auto model\nok: cursor config auth user is fuzeyu09@gmail.com\nok: cursor config default model is default",
     "markers": [
       "CURSOR_AUTH_OK",
@@ -14,7 +14,7 @@
     "name": "surface_visibility",
     "command": "./scripts/validate-surface-visibility.sh",
     "success": true,
-    "duration_sec": 0.16,
+    "duration_sec": 0.17,
     "output_tail": "ok: apps/cursor-backbone-site/eslint.config.mjs\nok: apps/cursor-backbone-site/tsconfig.json\nok: apps/cursor-backbone-site/next-env.d.ts\nok: apps/cursor-backbone-site/next.config.ts\nok: apps/cursor-backbone-site/app/layout.tsx\nok: apps/cursor-backbone-site/app/page.tsx\nok: .github/workflows/deploy-pages.yml\nok: next.config.ts keeps static export output\nok: deploy workflow uses official Pages artifact/deploy actions\nok: apps/cursor-backbone-site/out/index.html\nok: exported landing HTML preserves required naming, proof links, sibling link, and ownership terms\nok: surface visibility validation complete",
     "markers": [
       "REFINEMENT_MAP_OK",
@@ -42,11 +42,12 @@
     "name": "smoke_cursor",
     "command": "RUN_CURSOR_AGENT_SMOKE=1 CURSOR_SMOKE_SKIP_AUTH_CHECK=1 ./scripts/smoke-cursor-agent.sh --run-agent-prompt",
     "success": true,
-    "duration_sec": 13.31,
-    "output_tail": "ok: reusing upstream default auth/model proof (environment-gated)\nok: cursor-agent prompt smoke returned CURSOR_AGENT_OK (environment-gated runtime proof)\nok: cursor-agent task scenario smoke returned CURSOR_TASK_SCENARIO_OK (environment-gated runtime proof)\nok: Cursor CLI smoke validation complete",
+    "duration_sec": 26.49,
+    "output_tail": "ok: reusing upstream default auth/model proof (environment-gated)\nok: cursor-agent prompt smoke returned CURSOR_AGENT_OK (environment-gated runtime proof)\nok: cursor-agent task scenario smoke returned CURSOR_TASK_SCENARIO_OK (environment-gated runtime proof)\nok: cursor-agent task plan smoke returned CURSOR_TASK_PLAN_OK (environment-gated runtime proof)\nok: Cursor CLI smoke validation complete",
     "markers": [
       "CURSOR_AGENT_OK",
-      "CURSOR_TASK_SCENARIO_OK"
+      "CURSOR_TASK_SCENARIO_OK",
+      "CURSOR_TASK_PLAN_OK"
     ]
   }
 ]

@@ -1,16 +1,16 @@
 {
   "profile": "backbone",
   "variant": "enhanced",
-  "score": 160,
-  "max_score": 160,
-  "threshold_score": 160,
+  "score": 170,
+  "max_score": 170,
+  "threshold_score": 170,
   "passed": true,
   "release_blocking": false,
   "expected_baseline_score": 130,
-  "required_delta_vs_baseline": 30,
-  "actual_delta_vs_baseline": 30,
+  "required_delta_vs_baseline": 40,
+  "actual_delta_vs_baseline": 40,
   "investigation_required": false,
-  "improvement_summary": "Enhanced evidence improved by 30 over the baseline floor; benchmark-backed uplift observed.",
+  "improvement_summary": "Enhanced evidence improved by 40 over the baseline floor; benchmark-backed uplift observed.",
   "dimensions": [
     {
       "name": "default_auth",
@@ -42,7 +42,7 @@
       "weight": 10,
       "required": true,
       "passed": true,
-      "evidence": "ok: reusing upstream default auth/model proof (environment-gated)\nok: cursor-agent prompt smoke returned CURSOR_AGENT_OK (environment-gated runtime proof)\nok: cursor-agent task scenario smoke returned CURSOR_TASK_SCENARIO_OK (environment-gated runtime proof)\nok: Cursor CLI smoke validation complete"
+      "evidence": "ok: reusing upstream default auth/model proof (environment-gated)\nok: cursor-agent prompt smoke returned CURSOR_AGENT_OK (environment-gated runtime proof)\nok: cursor-agent task scenario smoke returned CURSOR_TASK_SCENARIO_OK (environment-gated runtime proof)\nok: cursor-agent task plan smoke returned CURSOR_TASK_PLAN_OK (environment-gated runtime proof)\nok: Cursor CLI smoke validation complete"
     },
     {
       "name": "PLUGIN_BOUNDARY_OK",
@@ -50,7 +50,7 @@
       "weight": 10,
       "required": true,
       "passed": true,
-      "evidence": "ok: reusing upstream default auth/model proof (environment-gated)\nok: cursor-agent prompt smoke returned CURSOR_AGENT_OK (environment-gated runtime proof)\nok: cursor-agent task scenario smoke returned CURSOR_TASK_SCENARIO_OK (environment-gated runtime proof)\nok: Cursor CLI smoke validation complete"
+      "evidence": "ok: reusing upstream default auth/model proof (environment-gated)\nok: cursor-agent prompt smoke returned CURSOR_AGENT_OK (environment-gated runtime proof)\nok: cursor-agent task scenario smoke returned CURSOR_TASK_SCENARIO_OK (environment-gated runtime proof)\nok: cursor-agent task plan smoke returned CURSOR_TASK_PLAN_OK (environment-gated runtime proof)\nok: Cursor CLI smoke validation complete"
     },
     {
       "name": "DISCOVERABILITY_OK",
@@ -58,7 +58,7 @@
       "weight": 10,
       "required": true,
       "passed": true,
-      "evidence": "ok: reusing upstream default auth/model proof (environment-gated)\nok: cursor-agent prompt smoke returned CURSOR_AGENT_OK (environment-gated runtime proof)\nok: cursor-agent task scenario smoke returned CURSOR_TASK_SCENARIO_OK (environment-gated runtime proof)\nok: Cursor CLI smoke validation complete"
+      "evidence": "ok: reusing upstream default auth/model proof (environment-gated)\nok: cursor-agent prompt smoke returned CURSOR_AGENT_OK (environment-gated runtime proof)\nok: cursor-agent task scenario smoke returned CURSOR_TASK_SCENARIO_OK (environment-gated runtime proof)\nok: cursor-agent task plan smoke returned CURSOR_TASK_PLAN_OK (environment-gated runtime proof)\nok: Cursor CLI smoke validation complete"
     },
     {
       "name": "state_contract",
@@ -82,7 +82,7 @@
       "weight": 20,
       "required": true,
       "passed": true,
-      "evidence": "ok: reusing upstream default auth/model proof (environment-gated)\nok: cursor-agent prompt smoke returned CURSOR_AGENT_OK (environment-gated runtime proof)\nok: cursor-agent task scenario smoke returned CURSOR_TASK_SCENARIO_OK (environment-gated runtime proof)\nok: Cursor CLI smoke validation complete"
+      "evidence": "ok: reusing upstream default auth/model proof (environment-gated)\nok: cursor-agent prompt smoke returned CURSOR_AGENT_OK (environment-gated runtime proof)\nok: cursor-agent task scenario smoke returned CURSOR_TASK_SCENARIO_OK (environment-gated runtime proof)\nok: cursor-agent task plan smoke returned CURSOR_TASK_PLAN_OK (environment-gated runtime proof)\nok: Cursor CLI smoke validation complete"
     },
     {
       "name": "CURSOR_TASK_SCENARIO_OK",
@@ -90,7 +90,15 @@
       "weight": 10,
       "required": true,
       "passed": true,
-      "evidence": "ok: reusing upstream default auth/model proof (environment-gated)\nok: cursor-agent prompt smoke returned CURSOR_AGENT_OK (environment-gated runtime proof)\nok: cursor-agent task scenario smoke returned CURSOR_TASK_SCENARIO_OK (environment-gated runtime proof)\nok: Cursor CLI smoke validation complete"
+      "evidence": "ok: reusing upstream default auth/model proof (environment-gated)\nok: cursor-agent prompt smoke returned CURSOR_AGENT_OK (environment-gated runtime proof)\nok: cursor-agent task scenario smoke returned CURSOR_TASK_SCENARIO_OK (environment-gated runtime proof)\nok: cursor-agent task plan smoke returned CURSOR_TASK_PLAN_OK (environment-gated runtime proof)\nok: Cursor CLI smoke validation complete"
+    },
+    {
+      "name": "CURSOR_TASK_PLAN_OK",
+      "description": "agent can choose the right validator and ownership class for a packaging claim",
+      "weight": 10,
+      "required": true,
+      "passed": true,
+      "evidence": "ok: reusing upstream default auth/model proof (environment-gated)\nok: cursor-agent prompt smoke returned CURSOR_AGENT_OK (environment-gated runtime proof)\nok: cursor-agent task scenario smoke returned CURSOR_TASK_SCENARIO_OK (environment-gated runtime proof)\nok: cursor-agent task plan smoke returned CURSOR_TASK_PLAN_OK (environment-gated runtime proof)\nok: Cursor CLI smoke validation complete"
     }
   ]
 }

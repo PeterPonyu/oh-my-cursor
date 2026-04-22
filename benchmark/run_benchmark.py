@@ -16,6 +16,7 @@ EVIDENCE_MARKERS = (
     "CURSOR_MODEL_AUTO_OK",
     "CURSOR_AGENT_OK",
     "CURSOR_TASK_SCENARIO_OK",
+    "CURSOR_TASK_PLAN_OK",
     "REFINEMENT_MAP_OK",
     "PLUGIN_BOUNDARY_OK",
     "DISCOVERABILITY_OK",
@@ -291,9 +292,10 @@ def build_evaluation(profile: str, variant: str, results: list[CheckResult]) -> 
         "backbone_verify": ("check", "backbone verification passes", 25),
         "CURSOR_AGENT_OK": ("marker", "model-backed cursor smoke returns CURSOR_AGENT_OK", 20),
         "CURSOR_TASK_SCENARIO_OK": ("marker", "agent can answer a constrained practical repo-task question", 10),
+        "CURSOR_TASK_PLAN_OK": ("marker", "agent can choose the right validator and ownership class for a packaging claim", 10),
     }
 
-    enhanced_only_names = {"CURSOR_AGENT_OK", "CURSOR_TASK_SCENARIO_OK"}
+    enhanced_only_names = {"CURSOR_AGENT_OK", "CURSOR_TASK_SCENARIO_OK", "CURSOR_TASK_PLAN_OK"}
     baseline_names = tuple(name for name in weight_map.keys() if name not in enhanced_only_names)
     active_names = tuple(weight_map.keys()) if variant == "enhanced" else baseline_names
     required_names = active_names
@@ -327,7 +329,7 @@ def build_evaluation(profile: str, variant: str, results: list[CheckResult]) -> 
     max_score = sum(d.weight for d in dimensions)
     threshold_score = sum(d.weight for d in dimensions if d.required)
     expected_baseline_score = sum(
-        weight for name, (_, _, weight) in weight_map.items() if name not in {"CURSOR_AGENT_OK", "CURSOR_TASK_SCENARIO_OK"}
+        weight for name, (_, _, weight) in weight_map.items() if name not in {"CURSOR_AGENT_OK", "CURSOR_TASK_SCENARIO_OK", "CURSOR_TASK_PLAN_OK"}
     )
     enhanced_max_score = sum(weight for _, _, weight in weight_map.values())
     actual_delta_vs_baseline = score - expected_baseline_score if variant == "enhanced" else 0

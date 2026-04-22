@@ -53,6 +53,9 @@ runs also require a constrained practical repo-task answer
 (`CURSOR_TASK_SCENARIO_OK`) so the score reflects more than basic smoke
 availability. Baseline scores now report only the baseline contract ceiling,
 while enhanced carries the extra runtime/task uplift slots.
+Enhanced now also requires a second deterministic repo-work answer
+(`CURSOR_TASK_PLAN_OK`) that chooses the right validator and ownership class
+for a packaging-claim scenario.
 
 If this repo later ships a checked-in Pages landing surface, that site still has
 to expose `Benchmark Notes` as a visible proof entry point. The landing page may
