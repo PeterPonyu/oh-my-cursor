@@ -368,6 +368,12 @@ def main() -> int:
     parser.add_argument("--variant", choices=["auto", "baseline", "enhanced"], default="auto")
     args = parser.parse_args()
 
+    if args.variant == "enhanced" and not args.run_agent_smoke:
+        parser.error(
+            "--variant enhanced requires --run-agent-smoke "
+            "(enhanced scoring activates CURSOR_AGENT_OK and raises threshold_score)."
+        )
+
     invocation_root = Path(args.root).resolve()
     root = resolve_canonical_root(invocation_root)
     variant = determine_variant(args.run_agent_smoke, args.variant)
