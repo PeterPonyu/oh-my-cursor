@@ -96,7 +96,6 @@ class CursorScoringInvariantTests(unittest.TestCase):
         """expected_baseline_score must not count any enhanced-only dimension weights."""
         ev = MODULE.build_evaluation("backbone", "enhanced", _all_pass_enhanced_results())
         enhanced_only_names = {"CURSOR_AGENT_OK", "CURSOR_TASK_SCENARIO_OK", "CURSOR_TASK_PLAN_OK", "CURSOR_TASK_COMMAND_OK"}
-        weight_map = MODULE.build_evaluation.__code__.co_consts  # just verify via recompute
         # Recompute expected_baseline_score from weight_map directly
         raw_weight_map = {
             "default_auth": 20,
@@ -211,7 +210,7 @@ class CursorScoringInvariantTests(unittest.TestCase):
         proc = subprocess.run(
             [
                 "python3",
-                "/home/zeyufu/Desktop/oh-my-cursor/benchmark/run_benchmark.py",
+                str(MODULE_PATH),
                 "--variant",
                 "enhanced",
             ],
