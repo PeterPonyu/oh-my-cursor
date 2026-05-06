@@ -4,7 +4,7 @@ set -euo pipefail
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 PLUGIN_NAME="oh-my-cursor"
 TARGET_ROOT="${HOME}/.cursor/plugins/local"
-MODE="symlink"
+MODE="copy"
 FORCE=0
 
 usage() {
@@ -14,13 +14,13 @@ Usage: scripts/install-local-plugin.sh [--root PATH] [--target-root PATH] [--nam
 Installs the repo-root Cursor plugin into Cursor's local plugin directory.
 
 Defaults:
-  - mode: symlink
+  - mode: copy (minimal runtime payload only)
   - target root: ~/.cursor/plugins/local
   - plugin name: oh-my-cursor
 
 This script validates the checked-in plugin structure first, then either:
   - creates/refreshes a symlink, or
-  - copies the plugin files into the local plugin directory.
+  - copies only the minimal runtime plugin payload into the local plugin directory.
 
 It does not reload Cursor for you; the final reload remains a manual product action.
 USAGE
@@ -69,6 +69,28 @@ done
 log() { printf 'ok: %s\n' "$*"; }
 fail() { printf 'FAIL: %s\n' "$*" >&2; exit 1; }
 
+copy_minimal_payload() {
+  local src="$1"
+  local dst="$2"
+
+  rsync -a \
+    -m \
+    --delete \
+    --include='/.cursor-plugin/***' \
+    --include='/.cursor/hooks.json' \
+    --include='/.cursor/hooks/***' \
+    --include='/.cursor/agents/***' \
+    --include='/rules/***' \
+    --include='/skills/***' \
+    --include='/AGENTS.md' \
+    --include='/README.md' \
+    --include='/CHANGELOG.md' \
+    --include='/LICENSE' \
+    --include='*/' \
+    --exclude='*' \
+    "$src"/ "$dst"/
+}
+
 cd "$ROOT"
 "$ROOT/scripts/validate-plugin-structure.sh" >/dev/null
 
@@ -96,14 +118,8 @@ else
     rm -rf "$TARGET_PATH"
   fi
   mkdir -p "$TARGET_PATH"
-  rsync -a \
-    --delete \
-    --exclude '.git/' \
-    --exclude 'node_modules/' \
-    --exclude '.omx/team/' \
-    --exclude '.omx/state/team/' \
-    "$ROOT"/ "$TARGET_PATH"/
-  log "copied plugin into $TARGET_PATH"
+  copy_minimal_payload "$ROOT" "$TARGET_PATH"
+  log "copied minimal runtime plugin payload into $TARGET_PATH"
 fi
 
 [[ -f "$TARGET_PATH/.cursor-plugin/plugin.json" ]] || fail "installed plugin is missing .cursor-plugin/plugin.json"
@@ -111,5 +127,5 @@ log "installed plugin root contains .cursor-plugin/plugin.json"
 
 cat <<EOF
 next: reload Cursor or use Developer: Reload Window
-next: confirm the plugin-owned rule and skill are visible from ${TARGET_PATH}
+next: confirm rules/skills/hooks/agents are visible from ${TARGET_PATH}
 EOF

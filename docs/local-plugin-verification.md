@@ -16,8 +16,14 @@ plugin directory without claiming more automation than the repo actually owns.
    ./scripts/install-local-plugin.sh
    ```
 
-   This creates a symlink by default at `~/.cursor/plugins/local/oh-my-cursor`.
-   Use `--copy` if you need a copied plugin tree instead of a symlink.
+   This creates a copied plugin tree by default at
+   `~/.cursor/plugins/local/oh-my-cursor`.
+   Use `--symlink` if you need a live repository symlink for development.
+   Copy mode installs only the minimal runtime plugin payload (`.cursor-plugin/`,
+   `rules/`, `skills/`, `.cursor/hooks.json`, `.cursor/hooks/`,
+   `.cursor/agents/`, plus top-level metadata files) and omits repository
+   development/test surfaces such as `benchmark/`, `apps/`, `docs/`, and
+   `scripts/`.
 2. Confirm the plugin root contains:
    - `.cursor-plugin/plugin.json`
    - the shipped plugin rules
