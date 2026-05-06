@@ -63,8 +63,8 @@ def validate_hooks() -> None:
         fail(".cursor/hooks.json must contain a hooks object")
 
     required_events = {
-        "afterFileEdit": ".cursor/hooks/claim-proof-audit.py",
-        "stop": ".cursor/hooks/completion-summary-audit.py",
+        "afterFileEdit": ".cursor/hooks/claim-guard.py",
+        "stop": ".cursor/hooks/stop-gate.py",
     }
     for event, expected_script in required_events.items():
         entries = list(iter_hook_entries(hooks.get(event)))
@@ -111,7 +111,7 @@ def validate_agents() -> None:
     if not agents_dir.is_dir():
         fail("missing .cursor/agents directory")
     agents = sorted(agents_dir.glob("*.md"))
-    expected = {"verifier", "critic", "debugger", "security-reviewer"}
+    expected = {"verifier", "critic", "debugger", "security-reviewer", "planner", "researcher"}
     names: set[str] = set()
     for path in agents:
         frontmatter, body = parse_frontmatter(path)

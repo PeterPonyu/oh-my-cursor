@@ -3,12 +3,12 @@
   "hooks": {
     "afterFileEdit": [
       {
-        "command": "python3 .cursor/hooks/claim-proof-audit.py"
+        "command": "python3 .cursor/hooks/claim-guard.py"
       }
     ],
     "stop": [
       {
-        "command": "python3 .cursor/hooks/completion-summary-audit.py",
+        "command": "python3 .cursor/hooks/stop-gate.py",
         "loop_limit": 1,
         "automatic_followup": false
       }

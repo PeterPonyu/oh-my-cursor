@@ -30,11 +30,16 @@ The repository currently owns only these checked-in state-like surfaces:
 - `AGENTS.md`
 - `.cursor/rules/*.mdc`
 - `.cursor-plugin/plugin.json`
-- `.cursor/hooks.json` and `.cursor/hooks/`
-- `.cursor/agents/`
-- the shipped plugin rule/skill payload that accompanies the manifest
-- bounded documentation
-- local verification/benchmark scripts
+- `.cursor/hooks.json` and `.cursor/hooks/` (`claim-guard.py`, `stop-gate.py`)
+- `.cursor/agents/` (`researcher`, `planner`, `verifier`, `critic`, `debugger`,
+  `security-reviewer`)
+- `.cursor/state/` workflow-state contract (`workflow-state.schema.json`,
+  `workflow-state.example.json`, `README.md`)
+- the shipped plugin rule/skill payload that accompanies the manifest, including
+  `skills/phase-controller/SKILL.md`
+- bounded documentation, including `docs/orchestration.md`
+- local verification/benchmark scripts (including
+  `scripts/validate-workflow-state.py`)
 - `apps/cursor-backbone-site/` and `.github/workflows/deploy-pages.yml` only
   when they are actually checked in and locally validated
 - benchmark artifacts under `benchmark/results/current-baseline/` and
@@ -52,6 +57,16 @@ Treat local orchestration scratch directories as workspace-private unless a
 specific artifact is intentionally documented, reviewed, and checked in. Durable
 planning or context notes may be tracked when they are part of a reviewed
 workflow, while session churn remains ignored by default.
+
+## Workflow-state contract
+
+The `.cursor/state/workflow-state.schema.json` schema defines the shape of an
+opt-in, file-backed workflow-state document used by the `phase-controller`
+skill and the `stop-gate.py` hook. Documents that follow the schema are the
+only state object hooks may **read**; nothing in this repo writes that state
+automatically. The validator at `scripts/validate-workflow-state.py` keeps the
+contract honest. See [`docs/orchestration.md`](./orchestration.md) for the full
+lifecycle map.
 
 ## Host-product-only state
 

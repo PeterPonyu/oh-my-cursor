@@ -15,19 +15,26 @@ required=(
   .cursor-plugin/plugin.json
     .cursor/hooks.json
     .cursor/hooks/README.md
-    .cursor/hooks/claim-proof-audit.py
-    .cursor/hooks/completion-summary-audit.py
+    .cursor/hooks/claim-guard.py
+    .cursor/hooks/stop-gate.py
+    .cursor/state/workflow-state.schema.json
+    .cursor/state/workflow-state.example.json
+    .cursor/state/README.md
     .cursor/agents/verifier.md
     .cursor/agents/critic.md
     .cursor/agents/debugger.md
     .cursor/agents/security-reviewer.md
+    .cursor/agents/planner.md
+    .cursor/agents/researcher.md
   rules/repo-owned-plugin-boundary.mdc
   skills/local-plugin-check/SKILL.md
+  skills/phase-controller/SKILL.md
   .cursor/rules/00-repo-scope.mdc
   .cursor/rules/10-docs-claims.mdc
   docs/confirmed-surfaces.md
   docs/fallback-policy.md
   docs/local-plugin-verification.md
+  docs/orchestration.md
   docs/references.md
   docs/state-contract.md
   scripts/check-local-plugin-install.sh
@@ -37,6 +44,7 @@ required=(
     scripts/validate-public-language.py
     scripts/validate-cursor-workflow-artifacts.py
     scripts/smoke-cursor-workflow-artifacts.sh
+    scripts/validate-workflow-state.py
   scripts/validate-pages-surface.sh
   scripts/validate-state-contract.sh
   scripts/smoke-cursor-agent.sh
@@ -53,7 +61,7 @@ prompts_count="$(find . -path './.git' -prune -o -name '*.prompt.md' -print | wc
 skills_count="$(find . -path './.git' -prune -o -name 'SKILL.md' -print | wc -l | tr -d ' ')"
 hooks_count="$(find .cursor -path './.git' -prune -o -name 'hooks.json' -print | wc -l | tr -d ' ')"
 
-[[ "$agents_count" -ge "4" ]] || fail "expected at least four checked-in project agents"
+[[ "$agents_count" -ge "6" ]] || fail "expected at least six checked-in project agents"
 [[ "$prompts_count" == "0" ]] || fail "unexpected checked-in prompt files: $prompts_count"
 [[ "$skills_count" -ge "1" ]] || fail "expected at least one checked-in skill file"
 [[ "$hooks_count" == "1" ]] || fail "expected exactly one checked-in hook manifest"

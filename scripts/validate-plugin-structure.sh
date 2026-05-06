@@ -11,20 +11,28 @@ required=(
   .cursor-plugin/plugin.json
     .cursor/hooks.json
     .cursor/hooks/README.md
-    .cursor/hooks/claim-proof-audit.py
-    .cursor/hooks/completion-summary-audit.py
+    .cursor/hooks/claim-guard.py
+    .cursor/hooks/stop-gate.py
+    .cursor/state/workflow-state.schema.json
+    .cursor/state/workflow-state.example.json
+    .cursor/state/README.md
     .cursor/agents/verifier.md
     .cursor/agents/critic.md
     .cursor/agents/debugger.md
     .cursor/agents/security-reviewer.md
+    .cursor/agents/planner.md
+    .cursor/agents/researcher.md
   rules/repo-owned-plugin-boundary.mdc
   skills/local-plugin-check/SKILL.md
+  skills/phase-controller/SKILL.md
   docs/local-plugin-verification.md
+  docs/orchestration.md
   CHANGELOG.md
   scripts/install-local-plugin.sh
   scripts/check-local-plugin-install.sh
     scripts/validate-cursor-workflow-artifacts.py
     scripts/smoke-cursor-workflow-artifacts.sh
+    scripts/validate-workflow-state.py
 )
 
 for path in "${required[@]}"; do
@@ -85,7 +93,7 @@ agents_count="$(find .cursor/agents -type f -name '*.md' | wc -l | tr -d ' ')"
 [[ "$rules_count" -ge 1 ]] || fail "expected at least one plugin-owned rule"
 [[ "$skills_count" -ge 1 ]] || fail "expected at least one plugin-owned skill"
 [[ "$hooks_count" == "1" ]] || fail "expected exactly one project hook manifest"
-[[ "$agents_count" -ge 4 ]] || fail "expected at least four checked-in project agents"
+[[ "$agents_count" -ge 6 ]] || fail "expected at least six checked-in project agents"
 
 log "plugin-owned rule count is $rules_count"
 log "plugin-owned skill count is $skills_count"
@@ -93,6 +101,7 @@ log "project hook manifest count is $hooks_count"
 log "checked-in project agent count is $agents_count"
 
 python3 scripts/validate-cursor-workflow-artifacts.py
+python3 scripts/validate-workflow-state.py >/dev/null
 
 grep -q '\.cursor-plugin/plugin.json' README.md || fail "README must mention the repo-root plugin manifest"
 grep -q '~/.cursor/plugins/local/oh-my-cursor' README.md || fail "README must mention the local plugin path"

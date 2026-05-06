@@ -25,18 +25,41 @@ The current repo-owned backbone includes:
 
 - root `AGENTS.md` guidance;
 - project rules in `.cursor/rules/`;
-- project hooks at `.cursor/hooks.json` plus `.cursor/hooks/` scripts;
-- project agents in `.cursor/agents/`;
+- project hooks at `.cursor/hooks.json` plus `.cursor/hooks/` lifecycle scripts
+  (`claim-guard.py`, `stop-gate.py`);
+- project agents in `.cursor/agents/` (`researcher`, `planner`, `verifier`,
+  `critic`, `debugger`, `security-reviewer`);
+- a shared workflow-state contract under `.cursor/state/`;
+- the `phase-controller` skill that routes work across the lifecycle;
 - the repo-root Cursor plugin manifest at `.cursor-plugin/plugin.json`;
 - plugin-owned rules and skills;
 - bounded documentation that separates confirmed support from inference; and
 - local verification scripts and benchmark artifacts tied to the canonical repo
   root.
 
+## Plugin orchestration
+
+Treat `oh-my-cursor` as orchestration-first. The plugin's hooks, skills,
+agents, and shared workflow-state document coordinate one explicit lifecycle:
+
+```text
+intake → research → plan → execute → verify → review → done
+                                              ↘ blocked
+```
+
+Start with [`docs/orchestration.md`](./docs/orchestration.md) for the full
+lifecycle map. The shared state contract lives under
+[`.cursor/state/`](./.cursor/state/README.md) and the orchestration entry
+skill is
+[`skills/phase-controller/SKILL.md`](./skills/phase-controller/SKILL.md).
+
 ## Start here
 
 | Need | Read |
 | --- | --- |
+| Plugin orchestration overview | [`docs/orchestration.md`](./docs/orchestration.md) |
+| Phase-controller skill | [`skills/phase-controller/SKILL.md`](./skills/phase-controller/SKILL.md) |
+| Workflow-state contract | [`.cursor/state/README.md`](./.cursor/state/README.md) |
 | Repository policy | [`AGENTS.md`](./AGENTS.md) |
 | Product requirements | [`docs/PRD.yaml`](./docs/PRD.yaml) |
 | Confirmed ownership and proof boundaries | [`docs/confirmed-surfaces.md`](./docs/confirmed-surfaces.md) |
@@ -49,6 +72,7 @@ The current repo-owned backbone includes:
 | Public language validator | [`scripts/validate-public-language.py`](./scripts/validate-public-language.py) |
 | Hook and agent artifact validator | [`scripts/validate-cursor-workflow-artifacts.py`](./scripts/validate-cursor-workflow-artifacts.py) |
 | Workflow artifact smoke | [`scripts/smoke-cursor-workflow-artifacts.sh`](./scripts/smoke-cursor-workflow-artifacts.sh) |
+| Workflow-state validator | [`scripts/validate-workflow-state.py`](./scripts/validate-workflow-state.py) |
 | Surface visibility check | [`scripts/validate-surface-visibility.sh`](./scripts/validate-surface-visibility.sh) |
 | Benchmark evidence check | [`scripts/validate-benchmark-evidence.sh`](./scripts/validate-benchmark-evidence.sh) |
 | Landing-surface contract | [`scripts/validate-pages-surface.sh`](./scripts/validate-pages-surface.sh) |

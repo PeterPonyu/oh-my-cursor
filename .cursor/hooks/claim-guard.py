@@ -1,4 +1,11 @@
 #!/usr/bin/env python3
+"""afterFileEdit hook: guard public claim/proof wording.
+
+Replaces the older `claim-proof-audit.py` with a brief, lifecycle-style name.
+Behavior is unchanged: scan edited public files for legacy comparison wording
+and severe unsupported runtime claims, fail-open on warnings, and only block
+on severe overclaims.
+"""
 from __future__ import annotations
 
 import json

@@ -80,6 +80,7 @@ copy_minimal_payload() {
     --include='/.cursor/hooks.json' \
     --include='/.cursor/hooks/***' \
     --include='/.cursor/agents/***' \
+    --include='/.cursor/state/***' \
     --include='/rules/***' \
     --include='/skills/***' \
     --include='/AGENTS.md' \

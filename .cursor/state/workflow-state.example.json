@@ -1,0 +1,41 @@
+{
+  "task_id": "example-orchestration-task",
+  "title": "Example workflow state for oh-my-cursor",
+  "phase": "verify",
+  "status": "in_progress",
+  "current_role": "verifier",
+  "next_action": "run scripts/check-local-plugin-install.sh and scripts/smoke-cursor-workflow-artifacts.sh, then mark AC-002 passed",
+  "acceptance_criteria": [
+    {
+      "id": "AC-001",
+      "criterion": "local plugin install copies only the minimal runtime payload",
+      "status": "passed",
+      "evidence": "scripts/check-local-plugin-install.sh"
+    },
+    {
+      "id": "AC-002",
+      "criterion": "workflow artifact smoke passes after hook rename",
+      "status": "pending",
+      "evidence": ""
+    }
+  ],
+  "failure": {
+    "type": "",
+    "message": "",
+    "retry_count": 0
+  },
+  "history": [
+    {
+      "phase": "plan",
+      "status": "passed",
+      "note": "phase-controller skill produced AC-001 and AC-002",
+      "at": "2026-05-06"
+    },
+    {
+      "phase": "execute",
+      "status": "passed",
+      "note": "implementer completed install/hook rename",
+      "at": "2026-05-06"
+    }
+  ]
+}

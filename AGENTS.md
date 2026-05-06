@@ -38,11 +38,15 @@ explicit:
     supports.
 
 Current `repo-owned` surfaces here are the root `AGENTS.md`, `.cursor/rules/`,
-`.cursor/hooks.json` plus `.cursor/hooks/`, `.cursor/agents/`, the repo-root
-plugin manifest with explicit `rules`/`skills`/`agents`/`hooks` references,
-bounded docs, local validators, and checked-in benchmark artifacts. MCP,
-custom modes, and background agents remain outside this repo until a concrete
-artifact, ownership model, and validator land together.
+`.cursor/hooks.json` plus `.cursor/hooks/` (`claim-guard.py`, `stop-gate.py`),
+`.cursor/agents/` (including `researcher`, `planner`, `verifier`, `critic`,
+`debugger`, `security-reviewer`), the `.cursor/state/` workflow-state contract
+and its schema/example, the `skills/phase-controller/SKILL.md` orchestration
+entry skill, the repo-root plugin manifest with explicit
+`rules`/`skills`/`agents`/`hooks` references, bounded docs, local validators,
+and checked-in benchmark artifacts. MCP, custom modes, and background agents
+remain outside this repo until a concrete artifact, ownership model, and
+validator land together.
 
 ## Promotion boundaries
 

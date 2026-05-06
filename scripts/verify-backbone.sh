@@ -15,19 +15,26 @@ required=(
   .cursor-plugin/plugin.json
   .cursor/hooks.json
   .cursor/hooks/README.md
-  .cursor/hooks/claim-proof-audit.py
-  .cursor/hooks/completion-summary-audit.py
+  .cursor/hooks/claim-guard.py
+  .cursor/hooks/stop-gate.py
+  .cursor/state/workflow-state.schema.json
+  .cursor/state/workflow-state.example.json
+  .cursor/state/README.md
   .cursor/agents/verifier.md
   .cursor/agents/critic.md
   .cursor/agents/debugger.md
   .cursor/agents/security-reviewer.md
+  .cursor/agents/planner.md
+  .cursor/agents/researcher.md
   rules/repo-owned-plugin-boundary.mdc
   skills/local-plugin-check/SKILL.md
+  skills/phase-controller/SKILL.md
   .cursor/rules/00-repo-scope.mdc
   .cursor/rules/10-docs-claims.mdc
   docs/confirmed-surfaces.md
   docs/fallback-policy.md
   docs/local-plugin-verification.md
+  docs/orchestration.md
   docs/references.md
   docs/state-contract.md
   scripts/check-local-plugin-install.sh
@@ -36,6 +43,7 @@ required=(
   scripts/validate-public-language.py
   scripts/validate-cursor-workflow-artifacts.py
   scripts/smoke-cursor-workflow-artifacts.sh
+  scripts/validate-workflow-state.py
   scripts/validate-benchmark-evidence.sh
   scripts/validate-pages-surface.sh
 )

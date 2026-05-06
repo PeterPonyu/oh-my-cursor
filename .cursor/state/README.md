@@ -1,0 +1,40 @@
+# Workflow state (repo-owned, file-backed)
+
+This directory ships the **workflow-state contract** that hooks, skills, and
+agents in `oh-my-cursor` share. It is intentionally:
+
+- **file-backed**: a JSON document, not a daemon;
+- **human-visible**: anyone can read it in a normal file editor;
+- **opt-in**: tasks are not required to maintain a state file, but when one
+  exists the `stop-gate.py` hook will use it to remind you about pending
+  acceptance criteria; and
+- **bounded**: no automatic mutation, no background worker.
+
+## Files
+
+- `workflow-state.schema.json` — JSON Schema describing the allowed phases,
+  statuses, role names, and evidence shape.
+- `workflow-state.example.json` — Reference document showing how a real task
+  state looks. Use it as a template, not as live state.
+
+## Usage
+
+1. When starting a non-trivial task, create a state file (for example
+   `docs/plans/<task-id>/workflow-state.json`) that follows the schema.
+2. The `phase-controller` skill (`skills/phase-controller/SKILL.md`) describes
+   how to advance phases and update acceptance criteria.
+3. The `stop-gate.py` hook can read a workflow-state file passed via the
+   `OH_MY_CURSOR_WORKFLOW_STATE` environment variable or via a JSON path field
+   inside the stop event. When acceptance criteria are still pending, it emits
+   a clear reminder instead of a generic message.
+4. The `scripts/validate-workflow-state.py` validator lets you check any state
+   document locally.
+
+## Boundaries
+
+- This repo does **not** ship a background runner that reads or writes the
+  state on its own.
+- Hooks remain conservative; they may reference the state, but they will not
+  mutate it.
+- Long-lived orchestration, retry queues, or multi-session resume are
+  Cursor host-product capabilities and stay out of scope here.
