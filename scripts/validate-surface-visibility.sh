@@ -19,7 +19,9 @@ required=(
     .cursor/hooks/stop-gate.py
     .cursor/state/workflow-state.schema.json
     .cursor/state/workflow-state.example.json
+    .cursor/state/workflow-state.py
     .cursor/state/README.md
+    .cursor/agents/orchestrator.md
     .cursor/agents/verifier.md
     .cursor/agents/critic.md
     .cursor/agents/debugger.md
@@ -45,6 +47,7 @@ required=(
     scripts/validate-cursor-workflow-artifacts.py
     scripts/smoke-cursor-workflow-artifacts.sh
     scripts/validate-workflow-state.py
+        scripts/workflow-state.py
   scripts/validate-pages-surface.sh
   scripts/validate-state-contract.sh
   scripts/smoke-cursor-agent.sh
@@ -61,7 +64,7 @@ prompts_count="$(find . -path './.git' -prune -o -name '*.prompt.md' -print | wc
 skills_count="$(find . -path './.git' -prune -o -name 'SKILL.md' -print | wc -l | tr -d ' ')"
 hooks_count="$(find .cursor -path './.git' -prune -o -name 'hooks.json' -print | wc -l | tr -d ' ')"
 
-[[ "$agents_count" -ge "6" ]] || fail "expected at least six checked-in project agents"
+[[ "$agents_count" -ge "7" ]] || fail "expected at least seven checked-in project agents"
 [[ "$prompts_count" == "0" ]] || fail "unexpected checked-in prompt files: $prompts_count"
 [[ "$skills_count" -ge "1" ]] || fail "expected at least one checked-in skill file"
 [[ "$hooks_count" == "1" ]] || fail "expected exactly one checked-in hook manifest"

@@ -24,11 +24,13 @@ intake → research → plan → execute → verify → review → done
 
 Statuses per phase: `pending | in_progress | passed | failed | blocked`.
 
-Roles routed by this controller map to checked-in agents under
+The entry-point role is `.cursor/agents/orchestrator.md`. Roles routed by this
+controller map to checked-in agents under
 `.cursor/agents/`:
 
 | Phase | Recommended role | Agent prompt |
 | --- | --- | --- |
+| any | orchestrator | `.cursor/agents/orchestrator.md` |
 | research | researcher | `.cursor/agents/researcher.md` |
 | plan | planner | `.cursor/agents/planner.md` |
 | execute | implementer (or skill) | implementation is user/agent-driven |

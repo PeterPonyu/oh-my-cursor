@@ -35,15 +35,17 @@ Each phase advance is an action on a checked-in JSON document that follows
 | --- | --- | --- |
 | Plugin manifest | `.cursor-plugin/plugin.json` | Declares the repo-root plugin and points Cursor at the rules, skills, agents, and hooks payload. |
 | Hooks | `.cursor/hooks.json`, `.cursor/hooks/claim-guard.py`, `.cursor/hooks/stop-gate.py` | Lightweight gates. `claim-guard.py` checks public claim/proof on file edits; `stop-gate.py` reads any active workflow-state file and reminds about pending acceptance criteria. |
-| Agents | `.cursor/agents/researcher.md`, `planner.md`, `verifier.md`, `critic.md`, `debugger.md`, `security-reviewer.md` | Role prompts the orchestrator routes work to. All agents are read-only. |
+| Agents | `.cursor/agents/orchestrator.md`, `researcher.md`, `planner.md`, `verifier.md`, `critic.md`, `debugger.md`, `security-reviewer.md` | Role prompts. `orchestrator.md` is the entry point; it routes work to the other roles. Most role agents are read-only; `debugger` and `orchestrator` may update files only when the requested workflow requires it. |
 | Skills | `skills/phase-controller/SKILL.md`, plus `plan/`, `iterate-loop/`, `review/`, `debug/`, `trace/`, `parallel-batch/`, `auto-execute/`, `security-review/`, `local-plugin-check/`, `deep-interview/`, `doctor/` | Workflow recipes the user or agent invokes by name. |
 | Workflow state | `.cursor/state/workflow-state.schema.json`, `.cursor/state/workflow-state.example.json`, `.cursor/state/README.md` | The shared state contract; file-backed, human-visible, opt-in. |
+| State writer | `.cursor/state/workflow-state.py` plus repo wrapper `scripts/workflow-state.py` | Creates or updates local workflow-state JSON files when the user or agent intentionally advances phase, acceptance criteria, or failure metadata. The `.cursor/state/` helper is part of the minimal installed plugin payload. |
 | Validators | `scripts/validate-workflow-state.py`, `scripts/validate-cursor-workflow-artifacts.py`, `scripts/smoke-cursor-workflow-artifacts.sh`, `scripts/validate-plugin-structure.sh`, `scripts/check-local-plugin-install.sh`, `scripts/install-local-plugin.sh` | Make the orchestration locally provable and keep the install minimal. |
 
 ## How a task flows
 
 1. **Intake.** Create
-   `docs/plans/<task-id>/workflow-state.json` from the example. Validate with
+   `docs/plans/<task-id>/workflow-state.json` from the example or with
+   `python3 scripts/workflow-state.py init docs/plans/<task-id>/workflow-state.json --task-id <task-id>` in the repo (installed plugin users can call `.cursor/state/workflow-state.py`). Validate with
    `python3 scripts/validate-workflow-state.py <path>`.
 2. **Research.** Invoke `.cursor/agents/researcher.md` (read-only). Capture
    findings into the state's `next_action` and notes; do not start coding.
@@ -76,6 +78,18 @@ Failure types from the schema:
 - `escalate` — surface to the user; mark `phase=blocked`.
 - `flaky` — record as flaky in history; do not consume retry budget.
 - `regression` — debugger first, then implementer; require fresh evidence.
+
+## When state is written
+
+Workflow status is written only when a user or agent intentionally changes the
+state file, either by editing JSON directly or by running
+`.cursor/state/workflow-state.py` or the repo wrapper `scripts/workflow-state.py`.
+Hooks do not mutate state. Typical write points:
+
+- task start: `workflow-state.py init ...`
+- phase advance: `workflow-state.py set ... --phase verify --status in_progress`
+- acceptance update: `workflow-state.py ac ... --id AC-001 --status passed --evidence scripts/check-local-plugin-install.sh`
+- failure record: `workflow-state.py fail ... --type fixable --message "..."`
 
 ## Boundaries
 

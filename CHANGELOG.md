@@ -3,18 +3,21 @@
 ## 2026-05-06
 
 ### Plugin orchestration first
+
 - introduced `docs/orchestration.md` as the orchestration-first overview that
   ties hooks, skills, agents, and shared workflow state into one explicit
   lifecycle (intake → research → plan → execute → verify → review → done →
   blocked)
 - added the shared workflow-state contract under `.cursor/state/` with
-  `workflow-state.schema.json`, `workflow-state.example.json`, and a README
+  `workflow-state.schema.json`, `workflow-state.example.json`, a README, and a
+  stdlib `workflow-state.py` helper for intentional local state writes
 - added `skills/phase-controller/SKILL.md` as the orchestration entry skill
-- added `.cursor/agents/planner.md` and `.cursor/agents/researcher.md`
-  read-only role prompts
+- added `.cursor/agents/orchestrator.md` as the entry agent plus
+  `.cursor/agents/planner.md` and `.cursor/agents/researcher.md` role prompts
 - added `scripts/validate-workflow-state.py` for local schema validation
 
 ### Hook lifecycle rename
+
 - renamed `.cursor/hooks/claim-proof-audit.py` → `.cursor/hooks/claim-guard.py`
 - renamed `.cursor/hooks/completion-summary-audit.py` →
   `.cursor/hooks/stop-gate.py`
@@ -29,6 +32,7 @@
 ## 2026-04-22
 
 ### Repo-root Cursor plugin promotion
+
 - added a repo-root plugin manifest at `.cursor-plugin/plugin.json`
 - added a minimal shipped plugin payload:
   - `rules/repo-owned-plugin-boundary.mdc`
@@ -37,6 +41,7 @@
   checked-in Cursor plugin surface instead of only describing one
 
 ### Plugin install + smoke hardening
+
 - added `scripts/install-local-plugin.sh` for reproducible local plugin setup
 - added retry/backoff in `scripts/smoke-cursor-agent.sh` for transient
   connection-loss recovery in model-backed Cursor smoke

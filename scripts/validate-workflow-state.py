@@ -21,6 +21,7 @@ ALLOWED_PHASES = {"intake", "research", "plan", "execute", "verify", "review", "
 ALLOWED_STATUSES = {"pending", "in_progress", "passed", "failed", "blocked"}
 ALLOWED_ROLES = {
     "",
+    "orchestrator",
     "researcher",
     "planner",
     "implementer",

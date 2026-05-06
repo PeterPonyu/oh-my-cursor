@@ -68,6 +68,9 @@ trap cleanup EXIT
 SYMLINK_TARGET="${TARGET_ROOT%/}/symlink"
 COPY_TARGET="${TARGET_ROOT%/}/copy"
 
+mkdir -p "$COPY_TARGET/oh-my-copilot-workspace"
+printf '{"stale": true}\n' > "$COPY_TARGET/oh-my-copilot-workspace/stale.json"
+
 "$ROOT/scripts/install-local-plugin.sh" --target-root "$SYMLINK_TARGET" --name "$PLUGIN_NAME" --symlink --force >/dev/null
 plugin_path="${SYMLINK_TARGET}/${PLUGIN_NAME}"
 [[ -L "$plugin_path" ]] || fail "symlink mode did not create a symlink at $plugin_path"
@@ -77,6 +80,7 @@ log "symlink mode installs the repo-root plugin correctly"
 
 "$ROOT/scripts/install-local-plugin.sh" --target-root "$COPY_TARGET" --name "$PLUGIN_NAME" --copy --force >/dev/null
 plugin_path="${COPY_TARGET}/${PLUGIN_NAME}"
+[[ ! -e "$COPY_TARGET/oh-my-copilot-workspace" ]] || fail "copy mode did not remove legacy oh-my-copilot-workspace alias"
 [[ ! -L "$plugin_path" ]] || fail "copy mode unexpectedly created a symlink at $plugin_path"
 [[ -d "$plugin_path" ]] || fail "copy mode did not create plugin directory at $plugin_path"
 [[ -f "$plugin_path/.cursor-plugin/plugin.json" ]] || fail "copy mode plugin missing manifest"
@@ -88,10 +92,12 @@ plugin_path="${COPY_TARGET}/${PLUGIN_NAME}"
 [[ -f "$plugin_path/.cursor/hooks/claim-guard.py" ]] || fail "copy mode plugin missing claim-guard hook"
 [[ -f "$plugin_path/.cursor/hooks/stop-gate.py" ]] || fail "copy mode plugin missing stop-gate hook"
 [[ -d "$plugin_path/.cursor/agents" ]] || fail "copy mode plugin missing agents directory"
+[[ -f "$plugin_path/.cursor/agents/orchestrator.md" ]] || fail "copy mode plugin missing orchestrator agent"
 [[ -f "$plugin_path/.cursor/agents/planner.md" ]] || fail "copy mode plugin missing planner agent"
 [[ -f "$plugin_path/.cursor/agents/researcher.md" ]] || fail "copy mode plugin missing researcher agent"
 [[ -d "$plugin_path/.cursor/state" ]] || fail "copy mode plugin missing workflow-state directory"
 [[ -f "$plugin_path/.cursor/state/workflow-state.schema.json" ]] || fail "copy mode plugin missing workflow-state schema"
+[[ -f "$plugin_path/.cursor/state/workflow-state.py" ]] || fail "copy mode plugin missing workflow-state writer"
 [[ ! -d "$plugin_path/benchmark" ]] || fail "copy mode should not include benchmark assets"
 [[ ! -d "$plugin_path/apps" ]] || fail "copy mode should not include app assets"
 [[ ! -d "$plugin_path/docs" ]] || fail "copy mode should not include docs assets"

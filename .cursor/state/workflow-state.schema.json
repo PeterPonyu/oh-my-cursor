@@ -27,7 +27,7 @@
     },
     "current_role": {
       "type": "string",
-      "enum": ["", "researcher", "planner", "implementer", "verifier", "critic", "debugger", "security-reviewer"],
+      "enum": ["", "orchestrator", "researcher", "planner", "implementer", "verifier", "critic", "debugger", "security-reviewer"],
       "description": "Optional. Role expected to advance the next step."
     },
     "next_action": {

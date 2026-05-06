@@ -1,12 +1,32 @@
 ---
-description: Keep the oh-my-cursor plugin payload truthful, locally verifiable, and artifact-backed
+description: Keep the Oh My Cursor plugin orchestration payload truthful, locally verifiable, and artifact-backed.
+globs:
+	- AGENTS.md
+	- README.md
+	- .cursor-plugin/plugin.json
+	- .cursor/**/*
+	- rules/**/*
+	- skills/**/*
+	- docs/**/*
+	- scripts/**/*
 alwaysApply: false
 ---
 
 # Repo-owned plugin boundary
 
-- Treat this repository's plugin surface as a checked-in manifest plus explicit references to `rules`, `skills`, `.cursor/agents`, and `.cursor/hooks.json`.
-- Keep shipped hooks and agents bounded to the files present in this repo and the validators that inspect them.
-- Do not imply commands, marketplace publication, MCP defaults, custom modes, or background-agent provisioning unless matching artifacts and validators land in the same change.
-- Keep local plugin instructions aligned with `docs/local-plugin-verification.md` and `~/.cursor/plugins/local` as a manual user-environment verification path.
-- When plugin ownership claims change, update validator scripts and `docs/references.md` in the same edit.
+- Treat this repository's plugin surface as a checked-in manifest plus explicit
+	references to `rules`, `skills`, `.cursor/agents`, `.cursor/hooks.json`, and
+	`.cursor/state`.
+- Treat `skills/phase-controller/SKILL.md` and `.cursor/agents/orchestrator.md`
+	as the orchestration entry points. Other skills and agents are workers in
+	that lifecycle.
+- Keep shipped hooks bounded to short lifecycle helpers. `claim-guard.py` and
+	`stop-gate.py` may read local workflow state; they must not become hidden
+	daemons.
+- Keep shipped agents bounded to checked-in prompts and validators. Do not
+	imply background-worker provisioning unless matching Cursor product support,
+	artifacts, and validators land together.
+- Keep local plugin instructions aligned with `docs/local-plugin-verification.md`
+	and `~/.cursor/plugins/local` as a manual user-environment verification path.
+- When plugin ownership claims change, update validator scripts and
+	`docs/references.md` in the same edit.

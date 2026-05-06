@@ -35,7 +35,7 @@ features:
       - store agents under .cursor/agents
       - include valid YAML frontmatter with name, description, model, and readonly fields
       - keep prompts Cursor-native and tied to repository evidence
-      - ship planner and researcher prompts so the orchestration loop has plan/research workers
+      - ship orchestrator, planner, and researcher prompts so the orchestration loop has an entry point plus plan/research workers
   orchestration:
     goal: Coordinate hooks, skills, and agents through one explicit, file-backed lifecycle.
     requirements:
@@ -44,6 +44,7 @@ features:
       - ship skills/phase-controller/SKILL.md as the orchestration entry skill
       - extend stop-gate.py to surface pending acceptance criteria from an active workflow-state file
       - validate state documents locally with scripts/validate-workflow-state.py
+      - provide .cursor/state/workflow-state.py plus the scripts/workflow-state.py wrapper so users and agents can intentionally create or update local workflow-state JSON files
   validators:
     goal: Make the new workflow artifacts locally provable.
     requirements:
@@ -61,7 +62,7 @@ acceptance_criteria:
   - docs/PRD.yaml exists and describes the independent product posture.
   - .cursor/hooks.json wires afterFileEdit and stop events to checked-in lifecycle hook scripts (claim-guard.py and stop-gate.py).
   - .cursor/hooks contains README.md plus stdlib-only Python hook scripts that emit valid JSON.
-  - .cursor/agents contains verifier, critic, debugger, security-reviewer, planner, and researcher prompts with valid frontmatter.
+  - .cursor/agents contains orchestrator, verifier, critic, debugger, security-reviewer, planner, and researcher prompts with valid frontmatter.
   - .cursor/state ships workflow-state.schema.json, workflow-state.example.json, and a README that explains the contract.
   - skills/phase-controller/SKILL.md is the documented orchestration entry skill.
   - docs/orchestration.md is the orchestration-first overview and is referenced from README.md.
@@ -69,6 +70,7 @@ acceptance_criteria:
   - scripts/validate-public-language.py prints PUBLIC_LANGUAGE_OK when public text is clean.
   - scripts/validate-cursor-workflow-artifacts.py prints HOOKS_ARTIFACTS_OK and AGENTS_ARTIFACTS_OK when artifacts are valid.
   - scripts/validate-workflow-state.py prints WORKFLOW_STATE_OK for a valid state document.
+  - scripts/workflow-state.py can initialize and update a local workflow-state JSON file.
   - scripts/smoke-cursor-workflow-artifacts.sh exercises both hook scripts and artifact validation.
   - scripts/verify-backbone.sh runs the new validators.
   - Core docs and required skills describe the repository as a self-developed Cursor-native product with artifact-backed proof.

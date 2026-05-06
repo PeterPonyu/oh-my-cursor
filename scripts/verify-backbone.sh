@@ -19,7 +19,9 @@ required=(
   .cursor/hooks/stop-gate.py
   .cursor/state/workflow-state.schema.json
   .cursor/state/workflow-state.example.json
+  .cursor/state/workflow-state.py
   .cursor/state/README.md
+  .cursor/agents/orchestrator.md
   .cursor/agents/verifier.md
   .cursor/agents/critic.md
   .cursor/agents/debugger.md
@@ -44,6 +46,7 @@ required=(
   scripts/validate-cursor-workflow-artifacts.py
   scripts/smoke-cursor-workflow-artifacts.sh
   scripts/validate-workflow-state.py
+  scripts/workflow-state.py
   scripts/validate-benchmark-evidence.sh
   scripts/validate-pages-surface.sh
 )

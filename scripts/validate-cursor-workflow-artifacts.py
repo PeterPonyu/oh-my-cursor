@@ -111,7 +111,7 @@ def validate_agents() -> None:
     if not agents_dir.is_dir():
         fail("missing .cursor/agents directory")
     agents = sorted(agents_dir.glob("*.md"))
-    expected = {"verifier", "critic", "debugger", "security-reviewer", "planner", "researcher"}
+    expected = {"orchestrator", "verifier", "critic", "debugger", "security-reviewer", "planner", "researcher"}
     names: set[str] = set()
     for path in agents:
         frontmatter, body = parse_frontmatter(path)

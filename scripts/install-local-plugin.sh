@@ -6,6 +6,7 @@ PLUGIN_NAME="oh-my-cursor"
 TARGET_ROOT="${HOME}/.cursor/plugins/local"
 MODE="copy"
 FORCE=0
+LEGACY_PLUGIN_NAMES=("oh-my-copilot-workspace")
 
 usage() {
   cat <<'USAGE'
@@ -69,6 +70,21 @@ done
 log() { printf 'ok: %s\n' "$*"; }
 fail() { printf 'FAIL: %s\n' "$*" >&2; exit 1; }
 
+cleanup_legacy_aliases() {
+  local target_root="$1"
+
+  [[ "$PLUGIN_NAME" == "oh-my-cursor" ]] || return 0
+
+  local legacy_name legacy_path
+  for legacy_name in "${LEGACY_PLUGIN_NAMES[@]}"; do
+    legacy_path="${target_root%/}/${legacy_name}"
+    if [[ -e "$legacy_path" || -L "$legacy_path" ]]; then
+      rm -rf "$legacy_path"
+      log "removed legacy local plugin alias at $legacy_path"
+    fi
+  done
+}
+
 copy_minimal_payload() {
   local src="$1"
   local dst="$2"
@@ -97,6 +113,7 @@ cd "$ROOT"
 
 TARGET_PATH="${TARGET_ROOT%/}/${PLUGIN_NAME}"
 mkdir -p "$TARGET_ROOT"
+cleanup_legacy_aliases "$TARGET_ROOT"
 
 if [[ -e "$TARGET_PATH" || -L "$TARGET_PATH" ]]; then
   if [[ "$FORCE" != "1" ]]; then

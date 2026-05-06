@@ -15,7 +15,9 @@ required=(
     .cursor/hooks/stop-gate.py
     .cursor/state/workflow-state.schema.json
     .cursor/state/workflow-state.example.json
+    .cursor/state/workflow-state.py
     .cursor/state/README.md
+    .cursor/agents/orchestrator.md
     .cursor/agents/verifier.md
     .cursor/agents/critic.md
     .cursor/agents/debugger.md
@@ -33,6 +35,7 @@ required=(
     scripts/validate-cursor-workflow-artifacts.py
     scripts/smoke-cursor-workflow-artifacts.sh
     scripts/validate-workflow-state.py
+    scripts/workflow-state.py
 )
 
 for path in "${required[@]}"; do
@@ -93,7 +96,7 @@ agents_count="$(find .cursor/agents -type f -name '*.md' | wc -l | tr -d ' ')"
 [[ "$rules_count" -ge 1 ]] || fail "expected at least one plugin-owned rule"
 [[ "$skills_count" -ge 1 ]] || fail "expected at least one plugin-owned skill"
 [[ "$hooks_count" == "1" ]] || fail "expected exactly one project hook manifest"
-[[ "$agents_count" -ge 6 ]] || fail "expected at least six checked-in project agents"
+[[ "$agents_count" -ge 7 ]] || fail "expected at least seven checked-in project agents"
 
 log "plugin-owned rule count is $rules_count"
 log "plugin-owned skill count is $skills_count"

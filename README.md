@@ -27,9 +27,9 @@ The current repo-owned backbone includes:
 - project rules in `.cursor/rules/`;
 - project hooks at `.cursor/hooks.json` plus `.cursor/hooks/` lifecycle scripts
   (`claim-guard.py`, `stop-gate.py`);
-- project agents in `.cursor/agents/` (`researcher`, `planner`, `verifier`,
-  `critic`, `debugger`, `security-reviewer`);
-- a shared workflow-state contract under `.cursor/state/`;
+- project agents in `.cursor/agents/` (`orchestrator`, `researcher`,
+  `planner`, `verifier`, `critic`, `debugger`, `security-reviewer`);
+- a shared workflow-state contract and runtime helper under `.cursor/state/`;
 - the `phase-controller` skill that routes work across the lifecycle;
 - the repo-root Cursor plugin manifest at `.cursor-plugin/plugin.json`;
 - plugin-owned rules and skills;
@@ -60,6 +60,7 @@ skill is
 | Plugin orchestration overview | [`docs/orchestration.md`](./docs/orchestration.md) |
 | Phase-controller skill | [`skills/phase-controller/SKILL.md`](./skills/phase-controller/SKILL.md) |
 | Workflow-state contract | [`.cursor/state/README.md`](./.cursor/state/README.md) |
+| Workflow-state writer | [`.cursor/state/workflow-state.py`](./.cursor/state/workflow-state.py) |
 | Repository policy | [`AGENTS.md`](./AGENTS.md) |
 | Product requirements | [`docs/PRD.yaml`](./docs/PRD.yaml) |
 | Confirmed ownership and proof boundaries | [`docs/confirmed-surfaces.md`](./docs/confirmed-surfaces.md) |
@@ -86,7 +87,8 @@ skill is
 | --- | --- | --- | --- |
 | Root instructions and rules | `repo-owned` | `checked-in-artifact` | This repo ships `AGENTS.md` and `.cursor/rules/`. |
 | Project hooks | `repo-owned` in trusted Cursor workspaces | `checked-in-artifact`, plus runtime behavior only when Cursor runs the hooks | This repo ships `.cursor/hooks.json` and stdlib-only hook scripts for claim/proof and completion reminders. |
-| Project agents | `repo-owned` | `checked-in-artifact` | This repo ships `.cursor/agents/*.md` with validated frontmatter and concise prompts. |
+| Project agents | `repo-owned` | `checked-in-artifact` | This repo ships `.cursor/agents/*.md`, including the `orchestrator` entry agent, with validated frontmatter and concise prompts. |
+| Workflow-state contract and helper | `repo-owned` | `checked-in-artifact` | This repo ships `.cursor/state/` schema, example, README, and a stdlib state writer helper. |
 | Repo-root Cursor plugin manifest + bundled payload | `repo-owned` | `checked-in-artifact` | This repo treats `.cursor-plugin/plugin.json` plus referenced rules, skills, agents, and hooks as a checked-in plugin surface. |
 | Local plugin install walkthrough | `repo-owned` docs + manual user-environment verification | `checked-in-artifact` for the walkthrough, `runtime-smoke` only if a future authenticated smoke exists | The repo documents local plugin loading via `~/.cursor/plugins/local` and Cursor reload, while the loaded session remains user-environment proof. |
 | Verification and benchmark reporting | `repo-owned` | `checked-in-artifact` | This repo ships local validators, smoke wrappers, and checked-in benchmark artifacts. |
@@ -101,6 +103,8 @@ skill is
 - project hook configuration in `.cursor/hooks.json` and hook helpers under
   `.cursor/hooks/`;
 - project agents in `.cursor/agents/*.md`;
+- workflow-state schema, example, docs, and runtime helper under
+  `.cursor/state/`;
 - a repo-root plugin manifest under `.cursor-plugin/plugin.json`;
 - plugin-owned rules and skills;
 - documentation that labels confirmed behavior, inference, and explicit
@@ -149,10 +153,11 @@ Prefer the smallest confirmed Cursor-native surface first:
 2. `.cursor/rules/` project rules;
 3. `.cursor/hooks.json` and `.cursor/hooks/` helpers;
 4. `.cursor/agents/` project agents;
-5. the repo-root plugin manifest with explicit references to shipped payloads;
-6. bounded docs and validators that explain what is repo-owned vs
+5. `.cursor/state/` workflow-state contract and runtime helper;
+6. the repo-root plugin manifest with explicit references to shipped payloads;
+7. bounded docs and validators that explain what is repo-owned vs
    host-product-only; and
-7. opt-in MCP only after choosing a real server and ownership model.
+8. opt-in MCP only after choosing a real server and ownership model.
 
 That keeps the repo useful today while preventing deferred surfaces from turning
 into hidden maintenance debt.

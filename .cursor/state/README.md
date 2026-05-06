@@ -23,11 +23,15 @@ agents in `oh-my-cursor` share. It is intentionally:
    `docs/plans/<task-id>/workflow-state.json`) that follows the schema.
 2. The `phase-controller` skill (`skills/phase-controller/SKILL.md`) describes
    how to advance phases and update acceptance criteria.
-3. The `stop-gate.py` hook can read a workflow-state file passed via the
+3. Write or update the file intentionally with `.cursor/state/workflow-state.py`
+  (available in the installed plugin payload), the repository wrapper
+  `scripts/workflow-state.py`, or by editing JSON directly when that is
+  clearer.
+4. The `stop-gate.py` hook can read a workflow-state file passed via the
    `OH_MY_CURSOR_WORKFLOW_STATE` environment variable or via a JSON path field
    inside the stop event. When acceptance criteria are still pending, it emits
    a clear reminder instead of a generic message.
-4. The `scripts/validate-workflow-state.py` validator lets you check any state
+5. The `scripts/validate-workflow-state.py` validator lets you check any state
    document locally.
 
 ## Boundaries

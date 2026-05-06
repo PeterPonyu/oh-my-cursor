@@ -21,15 +21,20 @@ plugin directory without claiming more automation than the repo actually owns.
    Use `--symlink` if you need a live repository symlink for development.
    Copy mode installs only the minimal runtime plugin payload (`.cursor-plugin/`,
    `rules/`, `skills/`, `.cursor/hooks.json`, `.cursor/hooks/`,
-   `.cursor/agents/`, plus top-level metadata files) and omits repository
-   development/test surfaces such as `benchmark/`, `apps/`, `docs/`, and
-   `scripts/`.
+   `.cursor/agents/`, `.cursor/state/`, plus top-level metadata files) and
+   omits repository development/test surfaces such as `benchmark/`, `apps/`,
+   `docs/`, and `scripts/`.
+   When installing the default `oh-my-cursor` plugin, the helper also removes
+   the old `oh-my-copilot-workspace` local alias from the same target root so
+   Cursor's plugin list does not keep showing the stale workspace companion
+   after a reload.
 2. Confirm the plugin root contains:
    - `.cursor-plugin/plugin.json`
    - the shipped plugin rules
    - at least one shipped plugin skill
    - `.cursor/hooks.json` and `.cursor/hooks/`
    - `.cursor/agents/`
+   - `.cursor/state/`
 3. Start Cursor, or run **Developer: Reload Window** if Cursor is already open.
 4. Open the local plugin workspace and confirm the shipped plugin components are
    visible/active.

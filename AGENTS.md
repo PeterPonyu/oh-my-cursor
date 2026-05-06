@@ -39,10 +39,11 @@ explicit:
 
 Current `repo-owned` surfaces here are the root `AGENTS.md`, `.cursor/rules/`,
 `.cursor/hooks.json` plus `.cursor/hooks/` (`claim-guard.py`, `stop-gate.py`),
-`.cursor/agents/` (including `researcher`, `planner`, `verifier`, `critic`,
-`debugger`, `security-reviewer`), the `.cursor/state/` workflow-state contract
-and its schema/example, the `skills/phase-controller/SKILL.md` orchestration
-entry skill, the repo-root plugin manifest with explicit
+`.cursor/agents/` (including `orchestrator`, `researcher`, `planner`,
+`verifier`, `critic`, `debugger`, `security-reviewer`), the `.cursor/state/`
+workflow-state contract plus its schema/example/runtime helper, the
+`skills/phase-controller/SKILL.md` orchestration entry skill, the repo-root
+plugin manifest with explicit
 `rules`/`skills`/`agents`/`hooks` references, bounded docs, local validators,
 and checked-in benchmark artifacts. MCP, custom modes, and background agents
 remain outside this repo until a concrete artifact, ownership model, and
@@ -59,9 +60,9 @@ validator land together.
   that workflow is officially documented.
 - Do **not** add MCP config until a concrete server and ownership model are
   chosen.
-- Hooks and agents are now repo-owned only to the extent represented by
-  `.cursor/hooks.json`, `.cursor/hooks/`, `.cursor/agents/`, and the validators
-  that inspect them.
+- Hooks, agents, and workflow-state helpers are now repo-owned only to the
+  extent represented by `.cursor/hooks.json`, `.cursor/hooks/`,
+  `.cursor/agents/`, `.cursor/state/`, and the validators that inspect them.
 
 ## Editing posture
 
