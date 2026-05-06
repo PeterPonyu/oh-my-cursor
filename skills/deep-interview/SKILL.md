@@ -94,10 +94,9 @@ The default proceed-threshold is `ambiguity <= 0.20`. The user can override
 ## Boundaries
 
 - This skill does not implement a "challenge agent" runtime, ontology graph
-  database, or persisted state across sessions. Those features in OMC's
-  `deep-interview` rely on hooks Cursor does not document; this adaptation is a
-  paper version of the same idea that is fully reproducible by the model
-  itself in chat.
+   database, or persisted state across sessions. It is a conversational method
+   that is fully reproducible by the model itself in chat, with the final spec
+   written to checked-in docs when useful.
 - Mathematical scoring here is an honest estimate from the model. It is not
   an audited metric. Treat it as a forcing function, not a proof.
 - Specs are advisory; they do not gate execution unless a downstream skill

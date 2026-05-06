@@ -1,5 +1,4 @@
 const repoRoot = 'https://github.com/PeterPonyu/oh-my-cursor/blob/main'
-const siblingSiteUrl = 'https://peterponyu.github.io/oh-my-copilot/'
 
 const evidenceLinks = [
   {
@@ -48,7 +47,7 @@ const surfaceCards = [
     heading: 'Checked-in surfaces this repo ships and can validate',
     bullets: [
       'apps/cursor-backbone-site/ as a repo-owned public site surface',
-      'Root AGENTS.md, .cursor/rules, bounded docs, and validators',
+      'Root AGENTS.md, .cursor/rules, .cursor/hooks, .cursor/agents, bounded docs, and validators',
       'Benchmark artifacts that record checked-in evidence for the canonical repo root',
     ],
   },
@@ -65,7 +64,7 @@ const surfaceCards = [
     title: 'unsupported-or-out-of-scope',
     heading: 'Surfaces this repo intentionally does not claim today',
     bullets: [
-      'Checked-in plugin, hook, prompt, skill, or custom-agent packaging',
+      'Prompt packaging, custom modes, background-agent provisioning, or MCP defaults',
       'Repo-file custom mode configuration or repo-file background-agent provisioning',
       'A default repo-owned .cursor/mcp.json or repo-owned product packaging claims',
     ],
@@ -94,7 +93,7 @@ const validatorLinks = [
 const landingChecks = [
   'The hero, metadata, and primary heading all lead with oh-my-cursor.',
   'Docs, State Contract, References, and Benchmark Notes stay visible from the landing surface.',
-  'Sibling navigation points to oh-my-copilot as comparison context rather than canonical ownership.',
+  'Hooks and agents are described only as checked-in repo-owned artifacts.',
   'repo-owned, host-product-only, and unsupported-or-out-of-scope stay visibly distinct.',
 ]
 
@@ -107,8 +106,7 @@ export default function HomePage() {
           <h2>Truthful flagship styling without broadening the contract.</h2>
           <p>
             <strong>oh-my-cursor</strong> uses this landing surface as its canonical public root.
-            The visual system is intentionally sibling-consistent with oh-my-copilot, but the
-            content remains Cursor-native, docs-first, and explicit about what this repository
+            The content remains Cursor-native, docs-first, and explicit about what this repository
             actually owns.
           </p>
           <p>
@@ -121,9 +119,6 @@ export default function HomePage() {
             </a>
             <a className="button button-secondary" href={`${repoRoot}/docs/state-contract.md`} target="_blank" rel="noreferrer">
               Read state contract
-            </a>
-            <a className="button button-secondary" href={siblingSiteUrl} target="_blank" rel="noreferrer">
-              Visit sibling site
             </a>
           </div>
         </div>
@@ -159,16 +154,6 @@ export default function HomePage() {
               </a>
             </article>
           ))}
-          <article className="panel panel-inset link-card">
-            <h4>Sibling context: oh-my-copilot</h4>
-            <p>
-              Compare the Copilot sibling homepage as context only; it is not the canonical identity
-              root for oh-my-cursor.
-            </p>
-            <a className="text-link" href={siblingSiteUrl} target="_blank" rel="noreferrer">
-              Open sibling site
-            </a>
-          </article>
         </div>
       </section>
 
@@ -236,15 +221,14 @@ export default function HomePage() {
           </ul>
         </article>
         <article className="panel panel-inset">
-          <p className="eyebrow">sibling context</p>
-          <h3>Shared flagship rhythm, repo-specific boundaries.</h3>
+          <p className="eyebrow">workflow artifacts</p>
+          <h3>Hooks and agents stay evidence-backed.</h3>
           <p>
-            The sibling link exists for context and comparison only. It does not change the
-            canonical identity root of oh-my-cursor, and it does not imply broader ownership than
-            this repository can prove.
+            The landing surface names hooks and agents only because they are checked in, wired from
+            the plugin manifest, and covered by local validators.
           </p>
-          <a className="button button-secondary" href={siblingSiteUrl} target="_blank" rel="noreferrer">
-            Sibling context: oh-my-copilot
+          <a className="button button-secondary" href={`${repoRoot}/scripts/validate-cursor-workflow-artifacts.py`} target="_blank" rel="noreferrer">
+            Open workflow artifact validator
           </a>
         </article>
       </section>

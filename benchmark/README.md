@@ -1,21 +1,17 @@
 # oh-my-cursor Benchmark Notes
 
-This benchmark surface is intentionally **not the same** as
-`oh-my-copilot`'s benchmark harness.
-
-`oh-my-copilot` scores root/plugin/hook discoverability and installed-plugin
-state. `oh-my-cursor` still scores a different, smaller contract:
+This benchmark surface scores the focused Cursor benchmark contract shipped by
+`oh-my-cursor`:
 
 - default Cursor auth availability;
 - `auto` model availability;
-- visible repo-native surfaces (`AGENTS.md`, `.cursor/rules`, the repo-root
-  plugin manifest, and docs);
+- visible repo-native surfaces (`AGENTS.md`, `.cursor/rules`, `.cursor/hooks`,
+  `.cursor/agents`, the repo-root plugin manifest, and docs);
 - repo state-contract discipline; and
 - optional `cursor-agent` smoke using `--model auto`.
 
-The shared report shape is only **reporting-comparable** with
-`oh-my-copilot`. It is **not** an architectural-parity claim: this benchmark
-measures truthful Cursor-native proof for a smaller backbone contract.
+The report shape is **reporting-comparable** across baseline and enhanced runs,
+but the score is only a claim about this repository's checked-in proof.
 
 ## Run
 
@@ -39,12 +35,12 @@ The benchmark runs above are **environment-gated runtime proof**. They only
 strengthen public wording when local Cursor auth/model access is available and
 successful.
 
-## Why the score differs from oh-my-copilot
+## Why the score is focused
 
-This repo now ships a small repo-root plugin manifest and at least one plugin
-skill, but it still does **not** ship hooks, prompt files, custom agents, or
-namespaced multi-plugin packaging. Scoring it like `oh-my-copilot` would still
-be fake parity.
+This repo now ships a repo-root plugin manifest, plugin skills, project hooks,
+and project agents. It still does **not** ship prompt files, custom modes,
+background-agent provisioning, MCP defaults, or marketplace publication claims.
+The benchmark therefore stays tied to surfaces this repo actually owns.
 
 The benchmark now also requires the README-visible
 `refinement-priority-map.md` and `plugin-boundary-review.md` links, because
@@ -68,7 +64,7 @@ improve presentation, but it does not get to hide the benchmark contract.
 The benchmark here therefore treats the current Cursor-native backbone as:
 
 1. authenticated CLI availability;
-2. visible checked-in repository guidance;
+2. visible checked-in repository guidance, hooks, agents, and plugin metadata;
 3. explicit fallback/state discipline; and
 4. optional model-backed proof with `auto`.
 
@@ -90,6 +86,4 @@ variant-specific directories:
 
 Each run appends to `benchmark/results/history.jsonl` and regenerates
 `benchmark/results/history.md` so baseline/enhanced scores can be tracked over
-time by branch and git SHA. The benchmark wrapper also normalizes transient
-`/.omx/team/.../worktrees/...` invocation paths back to the canonical repo root
-before it records checked-in proof evidence.
+time by branch and git SHA.

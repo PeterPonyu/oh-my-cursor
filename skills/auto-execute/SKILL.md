@@ -5,14 +5,10 @@ description: Autonomous execution pipeline - expand idea, plan, implement, QA, a
 
 # Auto Execute
 
-> **Cursor host note.** OMC's `autopilot` skill chains analyst, architect,
-> executor, security-reviewer, and code-reviewer sub-agents through hooks.
-> Cursor's checked-in skill model does not document an equivalent
-> repo-checked-in sub-agent primitive, so this adaptation runs the same five
-> phases as **explicit, sequential skill invocations** that the Cursor agent
-> performs in one workspace. Each phase is a real, reproducible artifact
-> (spec, plan, code, test output, review report); there is no hidden hook
-> magic.
+> **Cursor host note.** This is a self-developed five-phase execution pipeline
+> for Cursor workspaces. It uses explicit phase gates and checked-in artifacts
+> rather than hidden runtime assumptions. Each phase produces reproducible
+> evidence: spec, plan, code, test output, and review report.
 
 ## Use when
 
@@ -92,9 +88,7 @@ Each phase must complete before the next begins.
   resumes from the first incomplete phase.
 - It does not invoke external models, MCP servers, or background daemons.
   All work happens through the Cursor agent in the current workspace.
-- It does not claim parity with Claude Code's `autopilot`. The OMC version
-  uses runtime hooks and a Task primitive that Cursor does not document as
-  repo-owned today; this version is a faithful, smaller pipeline that
-  works with Cursor's documented surfaces only.
+- It does not claim hidden orchestration. The workflow is explicit, sequential,
+  and bounded to Cursor surfaces this repo documents and validates.
 - It does not automatically deploy, push, or publish anything. Final
   delivery (commit, PR, deploy) stays with the user.

@@ -1,0 +1,61 @@
+product:
+  name: oh-my-cursor
+  posture: independent self-developed Cursor-native workflow backbone
+  date: 2026-05-06
+
+scope:
+  in:
+    - public language cleanup for repository-owned surfaces
+    - checked-in Cursor project hooks
+    - checked-in Cursor project agents
+    - local artifact validators
+    - conservative runtime and manual smoke evidence
+  out:
+    - default MCP configuration
+    - marketplace publication claims
+    - product-managed modes or background-agent provisioning
+
+features:
+  public_language_cleanup:
+    goal: Keep public docs, skills, rules, app copy, and benchmark notes focused on this repository's own product identity.
+    requirements:
+      - scan public-facing text for blocked legacy comparison terms
+      - keep ownership and proof wording explicit
+      - avoid stronger claims than current artifacts and smoke evidence support
+  hooks:
+    goal: Ship project hooks as repo-owned runtime helpers for trusted Cursor workspaces.
+    requirements:
+      - define versioned project hook configuration at .cursor/hooks.json
+      - run claim/proof checks after file edits
+      - run conservative completion checks on stop events
+      - keep hook scripts stdlib-only and fail-open unless a severe overclaim is detected
+  agents:
+    goal: Ship concise project agents for verification, critique, debugging, and security review.
+    requirements:
+      - store agents under .cursor/agents
+      - include valid YAML frontmatter with name, description, model, and readonly fields
+      - keep prompts Cursor-native and tied to repository evidence
+  validators:
+    goal: Make the new workflow artifacts locally provable.
+    requirements:
+      - validate public language hygiene
+      - validate hook configuration, hook script compilation, agent frontmatter, and plugin references
+      - include the new validators in the backbone verification script
+  runtime_manual_smoke:
+    goal: Provide bounded checks without overstating runtime behavior.
+    requirements:
+      - feed sample hook JSON to both hook scripts
+      - validate hook and agent artifacts locally
+      - document runtime behavior as dependent on trusted Cursor workspace execution
+
+acceptance_criteria:
+  - docs/PRD.yaml exists and describes the independent product posture.
+  - .cursor/hooks.json wires afterFileEdit and stop events to checked-in hook scripts.
+  - .cursor/hooks contains README.md plus stdlib-only Python hook scripts that emit valid JSON.
+  - .cursor/agents contains verifier, critic, debugger, and security-reviewer prompts with valid frontmatter.
+  - .cursor-plugin/plugin.json references rules, skills, agents, and hooks.
+  - scripts/validate-public-language.py prints PUBLIC_LANGUAGE_OK when public text is clean.
+  - scripts/validate-cursor-workflow-artifacts.py prints HOOKS_ARTIFACTS_OK and AGENTS_ARTIFACTS_OK when artifacts are valid.
+  - scripts/smoke-cursor-workflow-artifacts.sh exercises both hook scripts and artifact validation.
+  - scripts/verify-backbone.sh runs the new validators.
+  - Core docs and required skills describe the repository as a self-developed Cursor-native product with artifact-backed proof.

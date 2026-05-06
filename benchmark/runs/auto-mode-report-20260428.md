@@ -33,10 +33,10 @@ uses the authenticated `copilot --model gpt-4.1` path instead of local Ollama.
 |repo|run dir|status|model|n_tasks|task_end|run_end|missing|premium|errors|
 |---|---|---|---|---:|---:|---:|---|---:|---:|
 |oh-my-cursor|20260428T074445Z__a1-pilot__vanilla__cursor-auto__6f6c7b475205|ok|cursor/auto|1|1|1|none||0|
-|oh-my-cursor|20260428T074510Z__a1-pilot__with-omc__cursor-auto__bd0a8deb43c2|ok|cursor/auto|1|1|1|none||0|
+|oh-my-cursor|20260428T074510Z__a1-pilot__workflow__cursor-auto__bd0a8deb43c2|ok|cursor/auto|1|1|1|none||0|
 |oh-my-cursor|20260428T074536Z__A1-full__vanilla__cursor-auto__de0d58762c7b|ok|cursor/auto|1|1|1|none||0|
 |oh-my-copilot|20260428T075845Z__A1__vanilla__github_copilot-cli_gpt-4.1__7e4e1ef2a54d|ok|github/copilot-cli/gpt-4.1|1|1|1|none|0|0|
-|oh-my-copilot|20260428T075915Z__A1__with-omc__github_copilot-cli_gpt-4.1__c1dce149ec8a|ok|github/copilot-cli/gpt-4.1|1|1|1|none|0|0|
+|oh-my-copilot|20260428T075915Z__A1__workflow__github_copilot-cli_gpt-4.1__c1dce149ec8a|ok|github/copilot-cli/gpt-4.1|1|1|1|none|0|0|
 |oh-my-copilot|20260428T080013Z__A1-full__vanilla__github_copilot-cli_gpt-4.1__acf5e6e96883|ok|github/copilot-cli/gpt-4.1|1|1|1|none|0|0|
 
 ## Preserved stale-run audit

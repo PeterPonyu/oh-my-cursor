@@ -13,6 +13,14 @@ required=(
   README.md
   benchmark/README.md
   .cursor-plugin/plugin.json
+    .cursor/hooks.json
+    .cursor/hooks/README.md
+    .cursor/hooks/claim-proof-audit.py
+    .cursor/hooks/completion-summary-audit.py
+    .cursor/agents/verifier.md
+    .cursor/agents/critic.md
+    .cursor/agents/debugger.md
+    .cursor/agents/security-reviewer.md
   rules/repo-owned-plugin-boundary.mdc
   skills/local-plugin-check/SKILL.md
   .cursor/rules/00-repo-scope.mdc
@@ -26,6 +34,9 @@ required=(
   scripts/check-default-auth.sh
   scripts/install-local-plugin.sh
   scripts/validate-plugin-structure.sh
+    scripts/validate-public-language.py
+    scripts/validate-cursor-workflow-artifacts.py
+    scripts/smoke-cursor-workflow-artifacts.sh
   scripts/validate-pages-surface.sh
   scripts/validate-state-contract.sh
   scripts/smoke-cursor-agent.sh
@@ -37,20 +48,20 @@ for path in "${required[@]}"; do
   log "$path"
 done
 
-agents_count="$(find . -path './.git' -prune -o -name '*.agent.md' -print | wc -l | tr -d ' ')"
+agents_count="$(find .cursor/agents -type f -name '*.md' | wc -l | tr -d ' ')"
 prompts_count="$(find . -path './.git' -prune -o -name '*.prompt.md' -print | wc -l | tr -d ' ')"
 skills_count="$(find . -path './.git' -prune -o -name 'SKILL.md' -print | wc -l | tr -d ' ')"
-hooks_count="$(find . -path './.git' -prune -o -name 'hooks.json' -print | wc -l | tr -d ' ')"
+hooks_count="$(find .cursor -path './.git' -prune -o -name 'hooks.json' -print | wc -l | tr -d ' ')"
 
-[[ "$agents_count" == "0" ]] || fail "unexpected checked-in custom agent files: $agents_count"
+[[ "$agents_count" -ge "4" ]] || fail "expected at least four checked-in project agents"
 [[ "$prompts_count" == "0" ]] || fail "unexpected checked-in prompt files: $prompts_count"
 [[ "$skills_count" -ge "1" ]] || fail "expected at least one checked-in skill file"
-[[ "$hooks_count" == "0" ]] || fail "unexpected checked-in hook manifests: $hooks_count"
+[[ "$hooks_count" == "1" ]] || fail "expected exactly one checked-in hook manifest"
 
-log "current repo intentionally has 0 checked-in custom agents"
+log "current repo ships checked-in project agents"
 log "current repo intentionally has 0 checked-in prompt files"
 log "current repo ships at least one checked-in skill bundle"
-log "current repo intentionally has 0 checked-in hook manifests"
+log "current repo ships one checked-in hook manifest"
 
 command -v python3 >/dev/null 2>&1 || fail "python3 not found"
 
@@ -73,8 +84,6 @@ patterns = {
     "repo-file custom modes": rf"\b{subject}\b.{{0,80}}\b{verb}\b.{{0,80}}\brepo[- ](?:file|native)\b.{{0,60}}\bcustom modes?\b",
     "repo-file background agents": rf"\b{subject}\b.{{0,80}}\b{verb}\b.{{0,80}}\brepo[- ](?:file|native)\b.{{0,60}}\bbackground[- ]agents?\b",
     "default checked-in mcp config": rf"\b{subject}\b.{{0,80}}\b{verb}\b.{{0,80}}\b(?:default|checked[- ]in|repo[- ]owned)\b.{{0,40}}(?:\.cursor/mcp\.json|mcp config)\b",
-    "checked-in custom-agent packaging": rf"\b{subject}\b.{{0,80}}\b{verb}\b.{{0,80}}\b(?:checked[- ]in\s+)?custom[- ]agent packaging\b",
-    "checked-in hook packaging": rf"\b{subject}\b.{{0,80}}\b{verb}\b.{{0,80}}\b(?:checked[- ]in\s+)?hook(?: manifests?| packaging surface|s)\b",
 }
 negations = (
     "does not",
@@ -112,10 +121,14 @@ print("ok: positive overclaim scan stayed clean for README/AGENTS/docs/benchmark
 PY
 
 ./scripts/validate-plugin-structure.sh
+python3 scripts/validate-public-language.py
+python3 scripts/validate-cursor-workflow-artifacts.py
 grep -q 'AGENTS.md' docs/confirmed-surfaces.md || fail "confirmed surfaces doc must mention AGENTS.md"
 grep -q '\.cursor/rules' docs/confirmed-surfaces.md || fail "confirmed surfaces doc must mention .cursor/rules"
+grep -q '\.cursor/hooks.json' docs/confirmed-surfaces.md || fail "confirmed surfaces doc must mention .cursor/hooks.json"
+grep -q '\.cursor/agents' docs/confirmed-surfaces.md || fail "confirmed surfaces doc must mention .cursor/agents"
 grep -q 'cursor-backbone-site' docs/confirmed-surfaces.md || fail "confirmed surfaces doc must mention the landing-site proof rule"
-grep -Eq 'different, smaller contract' benchmark/README.md || fail "benchmark README must describe the smaller Cursor benchmark contract"
+grep -Eq 'focused Cursor benchmark contract' benchmark/README.md || fail "benchmark README must describe the focused Cursor benchmark contract"
 grep -Eq 'reporting-comparable' benchmark/README.md || fail "benchmark README must keep reporting-comparable wording"
 python3 - <<'PY'
 from __future__ import annotations

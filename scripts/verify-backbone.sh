@@ -13,6 +13,14 @@ required=(
   README.md
   benchmark/README.md
   .cursor-plugin/plugin.json
+  .cursor/hooks.json
+  .cursor/hooks/README.md
+  .cursor/hooks/claim-proof-audit.py
+  .cursor/hooks/completion-summary-audit.py
+  .cursor/agents/verifier.md
+  .cursor/agents/critic.md
+  .cursor/agents/debugger.md
+  .cursor/agents/security-reviewer.md
   rules/repo-owned-plugin-boundary.mdc
   skills/local-plugin-check/SKILL.md
   .cursor/rules/00-repo-scope.mdc
@@ -25,6 +33,9 @@ required=(
   scripts/check-local-plugin-install.sh
   scripts/install-local-plugin.sh
   scripts/validate-plugin-structure.sh
+  scripts/validate-public-language.py
+  scripts/validate-cursor-workflow-artifacts.py
+  scripts/smoke-cursor-workflow-artifacts.sh
   scripts/validate-benchmark-evidence.sh
   scripts/validate-pages-surface.sh
 )
@@ -45,7 +56,7 @@ grep -q 'host-product-only' docs/fallback-policy.md || fail "fallback policy mus
 grep -q 'docs.cursor.com/en/cli/using' docs/references.md || fail "references doc must keep Cursor CLI source link"
 grep -q 'nextjs.org/docs/app/building-your-application/deploying/static-exports' docs/references.md || fail "references doc must keep Next.js static export source link"
 grep -q 'docs.github.com/en/pages/getting-started-with-github-pages/using-custom-workflows-with-github-pages' docs/references.md || fail "references doc must keep GitHub Pages workflow source link"
-grep -Eq 'different, smaller contract' benchmark/README.md || fail "benchmark README must describe the smaller Cursor benchmark contract"
+grep -Eq 'focused Cursor benchmark contract' benchmark/README.md || fail "benchmark README must describe the focused Cursor benchmark contract"
 grep -Eq 'reporting-comparable' benchmark/README.md || fail "benchmark README must keep reporting-comparable wording"
 
 command -v python3 >/dev/null 2>&1 || fail "python3 not found"
@@ -69,8 +80,6 @@ patterns = {
     "repo-file custom modes": rf"\b{subject}\b.{{0,80}}\b{verb}\b.{{0,80}}\brepo[- ](?:file|native)\b.{{0,60}}\bcustom modes?\b",
     "repo-file background agents": rf"\b{subject}\b.{{0,80}}\b{verb}\b.{{0,80}}\brepo[- ](?:file|native)\b.{{0,60}}\bbackground[- ]agents?\b",
     "default checked-in mcp config": rf"\b{subject}\b.{{0,80}}\b{verb}\b.{{0,80}}\b(?:default|checked[- ]in|repo[- ]owned)\b.{{0,40}}(?:\.cursor/mcp\.json|mcp config)\b",
-    "checked-in custom-agent packaging": rf"\b{subject}\b.{{0,80}}\b{verb}\b.{{0,80}}\b(?:checked[- ]in\s+)?custom[- ]agent packaging\b",
-    "checked-in hook packaging": rf"\b{subject}\b.{{0,80}}\b{verb}\b.{{0,80}}\b(?:checked[- ]in\s+)?hook(?: manifests?| packaging surface|s)\b",
 }
 negations = (
     "does not",
@@ -108,6 +117,8 @@ print("ok: positive overclaim scan stayed clean for README/AGENTS/docs/benchmark
 PY
 
 ./scripts/validate-plugin-structure.sh
+python3 scripts/validate-public-language.py
+python3 scripts/validate-cursor-workflow-artifacts.py
 ./scripts/check-local-plugin-install.sh
 ./scripts/validate-pages-surface.sh
 if [[ "${CURSOR_SKIP_BENCHMARK_EVIDENCE:-0}" == "1" ]]; then

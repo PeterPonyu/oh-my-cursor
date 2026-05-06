@@ -9,12 +9,22 @@ fail() { printf 'FAIL: %s\n' "$*" >&2; exit 1; }
 
 required=(
   .cursor-plugin/plugin.json
+    .cursor/hooks.json
+    .cursor/hooks/README.md
+    .cursor/hooks/claim-proof-audit.py
+    .cursor/hooks/completion-summary-audit.py
+    .cursor/agents/verifier.md
+    .cursor/agents/critic.md
+    .cursor/agents/debugger.md
+    .cursor/agents/security-reviewer.md
   rules/repo-owned-plugin-boundary.mdc
   skills/local-plugin-check/SKILL.md
   docs/local-plugin-verification.md
   CHANGELOG.md
   scripts/install-local-plugin.sh
   scripts/check-local-plugin-install.sh
+    scripts/validate-cursor-workflow-artifacts.py
+    scripts/smoke-cursor-workflow-artifacts.sh
 )
 
 for path in "${required[@]}"; do
@@ -53,23 +63,36 @@ author = manifest.get("author")
 if not isinstance(author, dict) or not str(author.get("name", "")).strip():
     raise SystemExit("FAIL: plugin manifest must include author.name")
 
+expected_paths = {
+    "rules": "rules",
+    "skills": "skills",
+    "agents": ".cursor/agents",
+    "hooks": ".cursor/hooks.json",
+}
+for key, expected in expected_paths.items():
+    actual = manifest.get(key)
+    if actual != expected:
+        raise SystemExit(f"FAIL: plugin manifest must set {key!r} to {expected!r}, got {actual!r}")
+
 print("ok: plugin manifest fields are present and well-formed")
 PY
 
 rules_count="$(find rules -type f \( -name '*.md' -o -name '*.mdc' -o -name '*.markdown' \) | wc -l | tr -d ' ')"
 skills_count="$(find skills -type f -name 'SKILL.md' | wc -l | tr -d ' ')"
-hooks_count="$(find . -path './.git' -prune -o -name 'hooks.json' -print | wc -l | tr -d ' ')"
-agents_count="$(find . -path './.git' -prune -o -name '*.agent.md' -print | wc -l | tr -d ' ')"
+hooks_count="$(find .cursor -path './.git' -prune -o -name 'hooks.json' -print | wc -l | tr -d ' ')"
+agents_count="$(find .cursor/agents -type f -name '*.md' | wc -l | tr -d ' ')"
 
 [[ "$rules_count" -ge 1 ]] || fail "expected at least one plugin-owned rule"
 [[ "$skills_count" -ge 1 ]] || fail "expected at least one plugin-owned skill"
-[[ "$hooks_count" == "0" ]] || fail "hook manifests remain deferred for this repo"
-[[ "$agents_count" == "0" ]] || fail "custom agent packaging remains deferred for this repo"
+[[ "$hooks_count" == "1" ]] || fail "expected exactly one project hook manifest"
+[[ "$agents_count" -ge 4 ]] || fail "expected at least four checked-in project agents"
 
 log "plugin-owned rule count is $rules_count"
 log "plugin-owned skill count is $skills_count"
-log "hooks remain deferred"
-log "custom agents remain deferred"
+log "project hook manifest count is $hooks_count"
+log "checked-in project agent count is $agents_count"
+
+python3 scripts/validate-cursor-workflow-artifacts.py
 
 grep -q '\.cursor-plugin/plugin.json' README.md || fail "README must mention the repo-root plugin manifest"
 grep -q '~/.cursor/plugins/local/oh-my-cursor' README.md || fail "README must mention the local plugin path"

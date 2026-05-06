@@ -29,10 +29,11 @@ repo-root `oh-my-cursor` plugin.
 - read `docs/local-plugin-verification.md`
 - load the repo from `~/.cursor/plugins/local/oh-my-cursor`
 - reload Cursor
-- verify the shipped plugin rule and skill are visible
+- verify the shipped plugin rules, skills, hooks, and agents are visible as
+    applicable in the local Cursor environment
 
 ## Boundaries
 
 - This skill validates the **checked-in plugin structure**.
-- It does **not** by itself prove marketplace publication, hook manifests,
-  custom-agent packaging, or repo-owned MCP defaults.
+- It does **not** by itself prove marketplace publication, custom modes,
+  background-agent provisioning, or MCP defaults.

@@ -1,9 +1,12 @@
 ---
-description: Keep the oh-my-cursor plugin payload minimal, truthful, and locally verifiable
+description: Keep the oh-my-cursor plugin payload truthful, locally verifiable, and artifact-backed
 alwaysApply: false
 ---
 
-- Treat this repository's plugin surface as intentionally small: manifest, plugin-owned rules, and plugin-owned skills first.
-- Do not imply shipped hooks, custom agents, commands, marketplace publication, or MCP defaults unless matching artifacts and validators land in the same change.
+# Repo-owned plugin boundary
+
+- Treat this repository's plugin surface as a checked-in manifest plus explicit references to `rules`, `skills`, `.cursor/agents`, and `.cursor/hooks.json`.
+- Keep shipped hooks and agents bounded to the files present in this repo and the validators that inspect them.
+- Do not imply commands, marketplace publication, MCP defaults, custom modes, or background-agent provisioning unless matching artifacts and validators land in the same change.
 - Keep local plugin instructions aligned with `docs/local-plugin-verification.md` and `~/.cursor/plugins/local` as a manual user-environment verification path.
-- When plugin ownership claims change, update the validator scripts and `docs/references.md` in the same edit.
+- When plugin ownership claims change, update validator scripts and `docs/references.md` in the same edit.
