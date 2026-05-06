@@ -1,4 +1,4 @@
-# Hard fallback policy
+# Fallback policy
 
 This repository intentionally uses a strict fallback policy so it stays aligned
 with documented Cursor behavior and with the shared claim/proof discipline.
@@ -10,7 +10,9 @@ fall back to the smallest proven `repo-owned` surface:
 
 - root `AGENTS.md` guidance;
 - `.cursor/rules/` project rules;
-- the checked-in repo-root plugin manifest plus its minimal rule/skill payload;
+- `.cursor/hooks.json` plus `.cursor/hooks/` helpers;
+- `.cursor/agents/` project agents;
+- the checked-in repo-root plugin manifest plus referenced payloads;
   and
 - ordinary repository documentation and validators.
 
@@ -37,15 +39,19 @@ This means:
 Until they are directly proven and deliberately adopted, this repository does
 **not** claim:
 
-- checked-in hook manifests or custom-agent surfaces;
-- repo-file provisioning for custom modes;
-- repo-file provisioning for background agents;
-- a default repo-owned MCP configuration; or
+- custom mode provisioning;
+- background-agent provisioning;
+- a default MCP configuration; or
 - marketplace publication as the proof story for local plugin use.
+
+Hooks and agents are no longer listed as non-claims because the repo now ships
+`.cursor/hooks.json`, `.cursor/hooks/`, and `.cursor/agents/`. Their runtime
+behavior remains bounded by Cursor's trusted-workspace execution and local
+manual verification.
 
 ## Local plugin rule
 
-The repo-root plugin is intentionally small. If a future edit proposes extra
+The repo-root plugin is intentionally bounded. If a future edit proposes extra
 plugin-owned surfaces, keep the same proof discipline:
 
 1. concrete checked-in artifact;

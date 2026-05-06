@@ -1,5 +1,11 @@
 .cursor/mcp.json
 .cursor/memories/
+.cursor/hooks/state/
 .DS_Store
 __pycache__/
 *.pyc
+benchmark/runs/data/
+
+# Local orchestration scratch state (generated per local run; not durable artifacts)
+.omc/
+.omx/

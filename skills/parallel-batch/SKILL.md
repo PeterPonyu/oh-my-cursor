@@ -5,15 +5,13 @@ description: Parallel execution pattern for independent tasks, using the cursor-
 
 # Parallel Batch
 
-> **Cursor host note.** OMC's `ultrawork` fires multiple sub-agents in one
-> turn via Claude Code's `Task` tool. Cursor's checked-in skill model does
-> **not** document a sub-agent / Task primitive this repo can own as a
-> repo-shipped surface. The verified host primitive for spawning parallel
-> work is the **`cursor-agent` CLI** (a real Cursor product binary). This
-> skill therefore expresses parallelism as **N background `cursor-agent`
-> processes**, with an explicit downgrade path to sequential execution when
-> the CLI is not available. Verify against the Cursor CLI version installed
-> on the user's machine (`cursor-agent --version`) before relying on flags.
+> **Cursor host note.** This is a self-developed parallel execution pattern for
+> independent tasks. The verified host primitive for spawning parallel work is
+> the **`cursor-agent` CLI**. This skill expresses parallelism as **N background
+> `cursor-agent` processes**, with an explicit downgrade path to sequential
+> execution when the CLI is not available. Verify against the Cursor CLI version
+> installed on the user's machine (`cursor-agent --version`) before relying on
+> flags.
 
 ## Use when
 

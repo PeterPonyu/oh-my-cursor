@@ -3,7 +3,6 @@ import Link from 'next/link'
 import './globals.css'
 
 const SITE_URL = 'https://peterponyu.github.io/oh-my-cursor/'
-const SIBLING_URL = 'https://peterponyu.github.io/oh-my-copilot/'
 const DOCS_URL = 'https://github.com/PeterPonyu/oh-my-cursor/blob/main/README.md'
 const STATE_CONTRACT_URL = 'https://github.com/PeterPonyu/oh-my-cursor/blob/main/docs/state-contract.md'
 const REFERENCES_URL = 'https://github.com/PeterPonyu/oh-my-cursor/blob/main/docs/references.md'
@@ -26,7 +25,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'oh-my-cursor — docs-first Cursor backbone',
     description:
-      'Repo-owned Cursor backbone homepage with visible docs, state contract, references, benchmark notes, and sibling-context navigation.',
+      'Repo-owned Cursor backbone homepage with visible docs, state contract, references, benchmark notes, hooks, and agents.',
     url: SITE_URL,
     siteName: 'oh-my-cursor',
     type: 'website',
@@ -47,7 +46,6 @@ const NAV_ITEMS: NavItem[] = [
   { href: STATE_CONTRACT_URL, label: 'State Contract', kind: 'external' },
   { href: REFERENCES_URL, label: 'References', kind: 'external' },
   { href: BENCHMARK_URL, label: 'Benchmark Notes', kind: 'external' },
-  { href: SIBLING_URL, label: 'Sibling: oh-my-copilot', kind: 'external' },
 ]
 
 function NavLink({ item }: { item: NavItem }) {
@@ -78,9 +76,6 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
               </p>
             </div>
             <div className="header-actions">
-              <a className="button button-secondary" href={SIBLING_URL} target="_blank" rel="noreferrer">
-                View sibling context
-              </a>
               <a className="button button-primary" href={DOCS_URL} target="_blank" rel="noreferrer">
                 Open repo docs
               </a>

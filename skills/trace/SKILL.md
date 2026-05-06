@@ -5,13 +5,10 @@ description: Evidence-driven causal tracing - explain why an observed result hap
 
 # Trace
 
-> **Cursor host note.** Trace is a single-agent thinking pattern in this
-> repo. OMC's original `trace` skill spawns parallel "tracer lanes" via a
-> built-in team primitive; Cursor does not document an equivalent
-> repo-checked-in primitive, so this adaptation runs the lanes sequentially
-> in one chat with explicit lane labels. If you have access to multiple
-> `cursor-agent` invocations, you can simulate parallel lanes by running this
-> skill in separate terminals and merging the outputs by hand.
+> **Cursor host note.** Trace is a single-agent thinking pattern in this repo.
+> It runs causal lanes sequentially in one chat with explicit lane labels. If
+> you have access to multiple `cursor-agent` invocations, you can run separate
+> lanes in separate terminals and merge the outputs by hand.
 
 ## Use when
 

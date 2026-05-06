@@ -22,6 +22,8 @@ plugin directory without claiming more automation than the repo actually owns.
    - `.cursor-plugin/plugin.json`
    - the shipped plugin rules
    - at least one shipped plugin skill
+   - `.cursor/hooks.json` and `.cursor/hooks/`
+   - `.cursor/agents/`
 3. Start Cursor, or run **Developer: Reload Window** if Cursor is already open.
 4. Open the local plugin workspace and confirm the shipped plugin components are
    visible/active.
@@ -44,9 +46,7 @@ plugin directory without claiming more automation than the repo actually owns.
 The local plugin walkthrough does **not** by itself prove or imply:
 
 - default MCP configuration;
-- checked-in hook manifests;
-- checked-in custom-agent surfaces;
-- repo-file custom mode provisioning; or
+- custom mode provisioning; or
 - marketplace publication.
 
 ## Suggested evidence to capture

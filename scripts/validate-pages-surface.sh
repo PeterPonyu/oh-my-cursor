@@ -62,12 +62,10 @@ grep -qi '>References<' "$EXPORT_HTML" \
   || fail "exported landing HTML must keep a visible References link"
 grep -qi '>Benchmark Notes<' "$EXPORT_HTML" \
   || fail "exported landing HTML must keep a visible Benchmark Notes link"
-grep -qi 'oh-my-copilot' "$EXPORT_HTML" \
-  || fail "exported landing HTML must include the sibling oh-my-copilot link"
 
 for term in repo-owned host-product-only unsupported-or-out-of-scope; do
   grep -qi "$term" "$EXPORT_HTML" \
     || fail "exported landing HTML must preserve the visible ownership term: $term"
 done
 
-log "exported landing HTML preserves required naming, proof links, sibling link, and ownership terms"
+log "exported landing HTML preserves required naming, proof links, and ownership terms"

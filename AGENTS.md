@@ -1,15 +1,17 @@
 # oh-my-cursor repository instructions
 
-This repository is a Cursor-native backbone, not a parity clone of another
-agent framework.
+This repository is an independent, self-developed Cursor-native workflow
+backbone. Keep it docs-first, evidence-backed, and explicit about which
+surfaces are checked in here versus managed by Cursor itself.
 
 ## Core rules
 
 - Keep the repo docs-first and evidence-backed.
 - Prefer root `AGENTS.md` plus `.cursor/rules/` before inventing new packaging
   layers.
-- When changing capability claims, update `docs/references.md` with official
-  links and the access date.
+- When changing capability claims in `AGENTS.md`, `README.md`, `docs/**`, or
+  `.cursor/rules/**`, update `docs/references.md` in the same change with
+  official links and the access date.
 - Label inference as inference.
 
 ## Claim/proof discipline
@@ -36,12 +38,13 @@ explicit:
     supports.
 
 Current `repo-owned` surfaces here are the root `AGENTS.md`, `.cursor/rules/`,
+`.cursor/hooks.json` plus `.cursor/hooks/`, `.cursor/agents/`, the repo-root
+plugin manifest with explicit `rules`/`skills`/`agents`/`hooks` references,
 bounded docs, local validators, and checked-in benchmark artifacts. MCP,
-modes, background agents, plugins, skills, hooks, and subagents may exist as
-Cursor product capabilities, but this repo does not automatically own or ship
-those surfaces.
+custom modes, and background agents remain outside this repo until a concrete
+artifact, ownership model, and validator land together.
 
-## Hard boundaries
+## Promotion boundaries
 
 - Do **not** claim checked-in Cursor plugin/package loading unless directly
   proven with current official Cursor documentation and a reproducible proof
@@ -52,11 +55,13 @@ those surfaces.
   that workflow is officially documented.
 - Do **not** add MCP config until a concrete server and ownership model are
   chosen.
+- Hooks and agents are now repo-owned only to the extent represented by
+  `.cursor/hooks.json`, `.cursor/hooks/`, `.cursor/agents/`, and the validators
+  that inspect them.
 
 ## Editing posture
 
 - Prefer small, reviewable documentation and rule changes.
-- Keep wording Cursor-native instead of translating terminology from other
-  tools one-to-one.
+- Keep wording Cursor-native and product-specific.
 - If a surface is ambiguous, fall back to plain repository guidance and scoped
   rules rather than speculative automation.

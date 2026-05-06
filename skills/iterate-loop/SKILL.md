@@ -5,14 +5,11 @@ description: Persistence pattern - iterate against a small PRD until every accep
 
 # Iterate Loop
 
-> **Cursor host note.** OMC's `ralph` skill uses Claude Code's stop-hook to
-> auto-resume the loop. Cursor does not document an equivalent
-> repo-owned stop-hook primitive in current verified surfaces, so this
-> adaptation runs as an **explicit** loop the user (or `cursor-agent`) drives
-> turn-by-turn. Persistence comes from a small `prd.json` checked into the
-> workspace, not from a runtime hook. If a Cursor stop/continue hook
-> primitive becomes officially documented later, this skill can be upgraded;
-> until then it is a discipline, not a daemon.
+> **Cursor host note.** This is a self-developed explicit persistence pattern
+> for Cursor workspaces. Persistence comes from a small `prd.json` checked into
+> the workspace and fresh verification evidence, not from implicit continuation.
+> Project hooks may remind the user to verify completion, but this skill remains
+> a disciplined loop rather than a daemon.
 
 ## Use when
 
@@ -93,8 +90,9 @@ is finished before its output exists.
   If the user closes the session, they must reopen it and say "continue
   iterate-loop"; the next turn rereads `prd.json` and picks up.
 - It does not promise parallel execution. Use `parallel-batch` for that.
-- It does not ship hooks, MCP tools, or background daemons. Cursor's
-  documented surfaces this repo can own do not include those today.
+- It does not require MCP tools or background daemons. Project hooks may provide
+  conservative reminders, but loop progress is still driven by explicit
+  verification and PRD updates.
 - The reviewer pass is a separate skill invocation, not a sub-agent. Run
   `review` (and optionally `security-review`) in a follow-up turn.
 

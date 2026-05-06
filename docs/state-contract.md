@@ -8,8 +8,8 @@ aligned with the claim/proof discipline.
 | State family | Ownership class | Current rule |
 | --- | --- | --- |
 | User auth and default model selection | `host-product-only` user environment | Cursor CLI auth/model state lives outside the repo. |
-| Repo guidance, root rules, repo-root plugin files, validators, and benchmark evidence | `repo-owned` | This repo checks in the files that define its backbone and proof surface. |
-| Default MCP config, repo memories, repo-file custom modes, repo-file background-agent files | `unsupported-or-out-of-scope` until deliberately adopted | These are not checked in by the current backbone. |
+| Repo guidance, root rules, hooks, agents, repo-root plugin files, validators, and benchmark evidence | `repo-owned` | This repo checks in the files that define its backbone and proof surface. |
+| Default MCP config, repo memories, custom modes, background-agent files | `unsupported-or-out-of-scope` until deliberately adopted | These are not checked in by the current backbone. |
 
 ## User-level state
 
@@ -30,21 +30,28 @@ The repository currently owns only these checked-in state-like surfaces:
 - `AGENTS.md`
 - `.cursor/rules/*.mdc`
 - `.cursor-plugin/plugin.json`
+- `.cursor/hooks.json` and `.cursor/hooks/`
+- `.cursor/agents/`
 - the shipped plugin rule/skill payload that accompanies the manifest
 - bounded documentation
 - local verification/benchmark scripts
 - `apps/cursor-backbone-site/` and `.github/workflows/deploy-pages.yml` only
   when they are actually checked in and locally validated
 - benchmark artifacts under `benchmark/results/current-baseline/` and
-  `benchmark/results/current-enhanced/`, with the benchmark wrapper normalizing
-  transient `/.omx/team/.../worktrees/...` invocation paths back to the
-  canonical repo root before writing checked-in evidence
+  `benchmark/results/current-enhanced/`
 
 Those are the only surfaces this repo should describe as `repo-owned`
 state/proof artifacts today.
 
 If the Pages app/workflow is absent, it remains a planned or missing checked-in
 artifact rather than a current state guarantee.
+
+## Local scratch-state policy
+
+Treat local orchestration scratch directories as workspace-private unless a
+specific artifact is intentionally documented, reviewed, and checked in. Durable
+planning or context notes may be tracked when they are part of a reviewed
+workflow, while session churn remains ignored by default.
 
 ## Host-product-only state
 
@@ -65,10 +72,9 @@ does **not** check in:
 
 - `.cursor/mcp.json`
 - `.cursor/memories/`
-- repo-file custom mode packaging
-- repo-file background-agent provisioning
-- checked-in custom-agent surfaces
-- checked-in hook manifests
+- custom mode packaging
+- background-agent provisioning
+- unchecked workflow surfaces beyond the hooks and agents shipped here
 
 ## Why this matters
 
@@ -95,3 +101,6 @@ Run:
 ./scripts/check-default-auth.sh
 ./scripts/validate-state-contract.sh
 ```
+
+The validation script keeps this state contract bounded to checked-in proof.
+<!-- end state contract -->

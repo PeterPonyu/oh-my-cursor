@@ -1,10 +1,10 @@
 # Plugin Promotion Boundary Review
 
 This note is a **review/governance document** for `oh-my-cursor`. It explains
-why the approved plugin promotion should stay intentionally small: a repo-root
-plugin manifest, a minimal shipped rule/skill payload, truthful docs, and
-support-tooling that proves the boundary without pretending every adjacent
-Cursor surface is now repo-owned.
+why the approved plugin promotion should stay intentionally bounded: a
+repo-root plugin manifest, shipped rules and skills, checked-in hooks and
+agents, truthful docs, and support tooling that proves the boundary without
+pretending every adjacent Cursor surface is now repo-owned.
 
 Use it alongside:
 
@@ -18,14 +18,15 @@ Use it alongside:
 
 The approved repository boundary is coherent:
 
-- **repo-owned Cursor-native surfaces** are root guidance, `.cursor/rules`, the
-  repo-root plugin manifest, the minimal shipped plugin rule/skill payload,
-  bounded docs, Pages visibility rules, validators, and benchmark artifacts;
+- **repo-owned Cursor-native surfaces** are root guidance, `.cursor/rules`,
+  `.cursor/hooks.json`, `.cursor/hooks/`, `.cursor/agents/`, the repo-root
+  plugin manifest, shipped rules and skills, bounded docs, Pages visibility
+  rules, validators, and benchmark artifacts;
 - **shell + Python** remain the right medium for validation, canonical-root
   normalization, benchmark reporting, and optional runtime smoke; and
-- **hooks, custom agents, commands, MCP defaults, and other richer surfaces**
-  stay deferred until this repo intentionally adopts concrete artifacts with
-  validator and benchmark coverage.
+- **commands, MCP defaults, custom modes, background-agent provisioning, and
+  other richer surfaces** stay deferred until this repo intentionally adopts
+  concrete artifacts with validator and benchmark coverage.
 
 The main review recommendation is to **keep the promotion boundary explicit** so
 future docs or experiments do not quietly convert product-awareness into fake
@@ -35,11 +36,12 @@ repo-owned capability claims.
 
 | Concern | Canonical medium now | Why this medium is correct | What should not be promoted yet |
 | --- | --- | --- | --- |
-| Always-on repo guidance and ownership rules | Root `AGENTS.md`, `.cursor/rules/`, bounded docs | These are the checked-in surfaces the repo actually ships and validates today. | Do not imply hooks or custom-agent surfaces just because Cursor product docs mention them. |
-| Repo-root plugin manifest plus shipped rule/skill payload | Checked-in plugin files under the repo root | This is the smallest useful plugin surface that can be reviewed, documented, and locally tested without broadening scope. | Do not let the minimal plugin payload become a back door for unproven commands, hooks, or MCP defaults. |
+| Always-on repo guidance and ownership rules | Root `AGENTS.md`, `.cursor/rules/`, bounded docs | These are the checked-in surfaces the repo actually ships and validates today. | Do not imply broader product-managed behavior without matching proof. |
+| Project hooks and agents | `.cursor/hooks.json`, `.cursor/hooks/`, `.cursor/agents/` | These are concrete checked-in workflow artifacts with local validators. | Do not describe runtime behavior beyond trusted Cursor workspace execution and smoke evidence. |
+| Repo-root plugin manifest plus shipped payload references | Checked-in plugin files under the repo root | This is a useful plugin surface that can be reviewed, documented, and locally tested without broadening scope. | Do not let the plugin payload become a back door for unproven commands or MCP defaults. |
 | Local plugin verification notes | Checked-in documentation plus manual user-environment steps | The walkthrough is reproducible and truthful about what the repo owns versus what the user's Cursor install must do. | Do not rewrite manual reload/local-install steps as if the repo automates them. |
 | Validation, canonical-root normalization, benchmark history, and optional smoke | Shell + Python in `scripts/` and `benchmark/` | These are proof/support responsibilities, not the repo's public customization surface. | Do not market these scripts as plugin runtime features. |
-| Hooks, custom agents, commands, MCP defaults, background agents | Product-awareness in docs/references only unless a concrete checked-in artifact lands | Cursor may support these surfaces, but this repo intentionally keeps them outside the current shipped boundary. | Do not upgrade `host-product-only` or `unsupported-or-out-of-scope` wording into implied repo ownership. |
+| Commands, MCP defaults, custom modes, background agents | Product-awareness in docs/references only unless a concrete checked-in artifact lands | Cursor may support these surfaces, but this repo intentionally keeps them outside the current shipped boundary. | Do not upgrade `host-product-only` or `unsupported-or-out-of-scope` wording into implied repo ownership. |
 
 ## Code-quality review observations
 
@@ -51,8 +53,8 @@ surface. Its strength comes from being reviewable:
 - one repo-root manifest;
 - a small plugin payload;
 - docs that describe the actual ownership boundary; and
-- validators that prove the repo-owned files exist and the deferred surfaces
-  remain deferred.
+- validators that prove the repo-owned files exist and deferred surfaces remain
+  bounded.
 
 ### 2. Shell + Python remain support infrastructure, not a design failure
 
@@ -87,8 +89,7 @@ language.
 This review should guide how benchmark outcomes are read:
 
 1. **Doc/rule/plugin-structure improvements may be correct even when scores stay flat.**
-   - The current benchmark still measures a smaller contract than
-     `oh-my-copilot`.
+  The current benchmark still measures a focused Cursor contract.
 2. **Support-tooling improvements may increase proof quality without expanding the plugin payload.**
    - Canonical-root normalization and clearer validators are good examples.
 3. **A score should only expand when the repo-owned contract expands.**
@@ -118,5 +119,5 @@ For `oh-my-cursor`, the near-term rule should stay:
   requires new artifacts, validators, and benchmark coverage.**
 
 That preserves the repository's strongest quality: a small truthful plugin-ready
-backbone with clear ownership classes instead of a larger but blurrier parity
-story.
+backbone with clear ownership classes instead of a larger but blurrier claim
+surface.
