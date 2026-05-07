@@ -1,0 +1,20 @@
+## Handoff: Phase 4 → Phase 5 (mcp-state-bridge-2026-05)
+- **Decided**: AC-401 is enforced as a literal grep gate. Agent-callable surfaces (`.cursor/agents/`, `skills/`, `rules/`) must not contain ANY mention of the state writer CLI -- not even disclaimers like "do not call this CLI from agents". Disclaimers belong in `docs/orchestration.md` (developer-facing).
+- **Decided**: the read-only validator `scripts/validate-workflow-state.py` stays agent-callable. The grep gate filters by exact substring `workflow-state.py` minus `validate-workflow-state.py`, so the validator is not a hit.
+- **Rejected**: keeping a "do not invoke" sentence inside the orchestrator agent prompt. The strict grep cannot distinguish a directive from a disclaimer; cleaner to omit the CLI from agent-callable text entirely.
+- **Files (Phase 4)**:
+  - patched: `.cursor/agents/orchestrator.md` (Initialize-state instructions now route through bridge tools; Boundaries section drops the disclaimer pointing at `.cursor/state/workflow-state.py`)
+  - patched: `skills/phase-controller/SKILL.md` (state-IO step routes through bridge tools; validator reference kept)
+  - patched: `docs/orchestration.md` (Writer table split into agent-callable bridge vs developer-only CLI; typical write points listed for both)
+  - patched: `CHANGELOG.md`, `docs/plans/mcp-state-bridge-2026-05/expected-rename-references.txt`
+- **Acceptance criteria evidenced**:
+  - AC-401: `grep -RIn 'workflow-state.py' .cursor/agents/ skills/ rules/ | grep -v validate-workflow-state.py` returns ZERO hits.
+  - AC-402: `python3 scripts/validate-public-language.py` exits 0.
+  - AC-403: `CURSOR_SKIP_BENCHMARK_EVIDENCE=1 ./scripts/verify-backbone.sh` reports only the pre-existing pages-export failure (`apps/cursor-backbone-site/out/index.html` requires `pnpm build` -- unrelated to MCP work).
+  - AC-404: `python3 scripts/validate-cursor-workflow-artifacts.py` exits 0.
+  - 27/27 unittest cases still pass.
+- **Remaining for Phase 5**:
+  - Ship `scripts/validate-hook-readonly.py` (AST scan): assert no hook under `.cursor/hooks/*.py` calls a write API on `.cursor/state/workflow-state.json`; allowlist `_trace.py` writes to `.omcs/`.
+  - Add `--check-shared-lock` mode that imports both the CLI shim path and the bridge state_io path and asserts they reach the same `_locking.file_lock` callable identity.
+  - Add `--self-test` mode using `tempfile.TemporaryDirectory` (V2 isolation contract).
+  - Wire the new validator into `verify-backbone.sh`.

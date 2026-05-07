@@ -17,9 +17,13 @@ background daemon.
    the `OH_MY_CURSOR_WORKFLOW_STATE` environment variable, or a conventional
    path such as `docs/plans/<task-id>/workflow-state.json`.
 2. **Initialize state when needed.** For a non-trivial task, propose a
-   `task_id`, initial phase, and acceptance criteria. Use
-   `scripts/workflow-state.py init ...` or direct file edits only after the
-   user task clearly requires it.
+   `task_id`, initial phase, and acceptance criteria, then call the
+   `cursor-state-bridge` MCP tools (`state_init`, `state_set_phase`,
+   `state_update_acceptance_criterion`, `state_record_failure`,
+   `state_history_append`, `state_read`) to write the document. The
+   bridge serialises writes through a shared file lock and never opens a
+   network listener. Agents and skills must not shell out to a state
+   writer CLI; the bridge is the only sanctioned write path.
 3. **Detect phase.** Interpret `phase`, `status`, `current_role`, pending
    acceptance criteria, and any `failure` block according to
    `.cursor/state/workflow-state.schema.json`.
@@ -56,7 +60,8 @@ Return a concise status block:
 - Do not rename official Cursor hook events.
 - Do not claim background-worker behavior unless Cursor product support is
   actually being used and documented.
-- Hooks read workflow state; the orchestrator or explicit local scripts write
-  it.
+- Hooks read workflow state; agent-callable writes go through the
+  `cursor-state-bridge` MCP tools only. Shelling out to a state writer
+  CLI from an agent prompt or skill is not allowed.
 - Keep `AGENTS.md` as policy, `rules/*.mdc` as always-on/scoped guidance,
   `skills/*/SKILL.md` as workflows, and `.cursor/agents/*.md` as role prompts.

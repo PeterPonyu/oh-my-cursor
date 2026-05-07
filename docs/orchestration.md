@@ -38,7 +38,8 @@ Each phase advance is an action on a checked-in JSON document that follows
 | Agents | `.cursor/agents/orchestrator.md`, `researcher.md`, `planner.md`, `verifier.md`, `critic.md`, `debugger.md`, `security-reviewer.md` | Role prompts. `orchestrator.md` is the entry point; it routes work to the other roles. Most role agents are read-only; `debugger` and `orchestrator` may update files only when the requested workflow requires it. |
 | Skills | `skills/phase-controller/SKILL.md`, plus `plan/`, `iterate-loop/`, `review/`, `debug/`, `trace/`, `parallel-batch/`, `auto-execute/`, `security-review/`, `local-plugin-check/`, `deep-interview/`, `doctor/` | Workflow recipes the user or agent invokes by name. |
 | Workflow state | `.cursor/state/workflow-state.schema.json`, `.cursor/state/workflow-state.example.json`, `.cursor/state/README.md` | The shared state contract; file-backed, human-visible, opt-in. |
-| State writer | `.cursor/state/workflow-state.py` plus repo wrapper `scripts/workflow-state.py` | Creates or updates local workflow-state JSON files when the user or agent intentionally advances phase, acceptance criteria, or failure metadata. The `.cursor/state/` helper is part of the minimal installed plugin payload. |
+| State writer (agent-callable) | `mcp/cursor-state-bridge/` MCP tools (`state_init`, `state_set_phase`, `state_update_acceptance_criterion`, `state_record_failure`, `state_history_append`) | Sole agent-callable writer of `.cursor/state/workflow-state.json` (and per-task variants under `docs/plans/<task-id>/`). Routes through the shared `file_lock` from `.cursor/state/_locking.py`. Opt-in install via `scripts/install-local-plugin.sh --with-mcp`. |
+| State writer (developer-only fallback) | `.cursor/state/workflow-state.py` plus repo wrapper `scripts/workflow-state.py` | Library API + thin CLI shim for developer terminals. Calls the same `init_state` / `set_state` / ... library functions as the bridge so concurrent CLI and bridge writes serialise on the same lock. Not invoked from agent prompts or skills. |
 | Validators | `scripts/validate-workflow-state.py`, `scripts/validate-cursor-workflow-artifacts.py`, `scripts/smoke-cursor-workflow-artifacts.sh`, `scripts/validate-plugin-structure.sh`, `scripts/check-local-plugin-install.sh`, `scripts/install-local-plugin.sh` | Make the orchestration locally provable and keep the install minimal. |
 
 ## How a task flows
@@ -81,15 +82,26 @@ Failure types from the schema:
 
 ## When state is written
 
-Workflow status is written only when a user or agent intentionally changes the
-state file, either by editing JSON directly or by running
-`.cursor/state/workflow-state.py` or the repo wrapper `scripts/workflow-state.py`.
-Hooks do not mutate state. Typical write points:
+Workflow status is written only by an explicit, structured call. Agents and
+skills route through the `cursor-state-bridge` MCP tools (`state_init`,
+`state_set_phase`, `state_update_acceptance_criterion`,
+`state_record_failure`, `state_history_append`); developer terminals can
+also use the CLI shim at `.cursor/state/workflow-state.py`. Both paths
+share the same library and the same `file_lock`. Hooks do not mutate
+state. Typical write points (agent-callable form via the bridge):
 
-- task start: `workflow-state.py init ...`
-- phase advance: `workflow-state.py set ... --phase verify --status in_progress`
-- acceptance update: `workflow-state.py ac ... --id AC-001 --status passed --evidence scripts/check-local-plugin-install.sh`
-- failure record: `workflow-state.py fail ... --type fixable --message "..."`
+- task start: `state_init { task_id, title?, phase?, ... }`
+- phase advance: `state_set_phase { task_id, phase: "verify", status: "in_progress" }`
+- acceptance update: `state_update_acceptance_criterion { task_id, ac_id: "AC-001", status: "passed", evidence: "scripts/check-local-plugin-install.sh" }`
+- failure record: `state_record_failure { task_id, type: "fixable", message: "..." }`
+- history note: `state_history_append { task_id, note: "..." }`
+
+Developer-only equivalents (not for agents/skills):
+
+- task start: `python3 .cursor/state/workflow-state.py init ...`
+- phase advance: `python3 .cursor/state/workflow-state.py set ... --phase verify --status in_progress`
+- acceptance update: `python3 .cursor/state/workflow-state.py ac ... --id AC-001 --status passed --evidence scripts/check-local-plugin-install.sh`
+- failure record: `python3 .cursor/state/workflow-state.py fail ... --type fixable --message "..."`
 
 ## Boundaries
 

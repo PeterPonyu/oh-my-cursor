@@ -3,7 +3,6 @@ CHANGELOG.md:175:- added `scripts/validate-workflow-state.py` for local schema v
 CHANGELOG.md:33:- refactored `.cursor/state/workflow-state.py` to expose a typed library
 CHANGELOG.md:38:  `python3 .cursor/state/workflow-state.py {init,set,ac,fail}` keeps the
 CHANGELOG.md:51:- extended `scripts/validate-workflow-state.py` with
-.cursor/agents/orchestrator.md:21:   `scripts/workflow-state.py init ...` or direct file edits only after the
 .cursor/hooks/failure-router.py:72:        "Record the failure with .cursor/state/workflow-state.py (or scripts/workflow-state.py) using one of: "
 .cursor/hooks/read-advisor.py:56:            "and only edited through the writer at .cursor/state/workflow-state.py."
 .cursor/hooks/shell-guard.py:119:            + ". Use scripts/workflow-state.py for state edits and scripts/install-local-plugin.sh for the local plugin path."
@@ -19,16 +18,16 @@ CHANGELOG.md:51:- extended `scripts/validate-workflow-state.py` with
 docs/mcp-bridge.md:18:`.cursor/state/workflow-state.py` stays in place as a thin shim over a
 docs/mcp-bridge.md:76:  `.cursor/state/workflow-state.py` CLI shim the same library and the same
 docs/mcp-tool-surface.md:42:| 2 | locking shim + library refactor at `.cursor/state/_locking.py` and `.cursor/state/workflow-state.py`; `state_init`, `state_set_phase`, `state_record_failure` promoted to functional | AC-201..AC-209 | shipped |
-docs/orchestration.md:106:python3 scripts/validate-workflow-state.py
-docs/orchestration.md:41:| State writer | `.cursor/state/workflow-state.py` plus repo wrapper `scripts/workflow-state.py` | Creates or updates local workflow-state JSON files when the user or agent intentionally advances phase, acceptance criteria, or failure metadata. The `.cursor/state/` helper is part of the minimal installed plugin payload. |
-docs/orchestration.md:42:| Validators | `scripts/validate-workflow-state.py`, `scripts/validate-cursor-workflow-artifacts.py`, `scripts/smoke-cursor-workflow-artifacts.sh`, `scripts/validate-plugin-structure.sh`, `scripts/check-local-plugin-install.sh`, `scripts/install-local-plugin.sh` | Make the orchestration locally provable and keep the install minimal. |
-docs/orchestration.md:48:   `python3 scripts/workflow-state.py init docs/plans/<task-id>/workflow-state.json --task-id <task-id>` in the repo (installed plugin users can call `.cursor/state/workflow-state.py`). Validate with
-docs/orchestration.md:49:   `python3 scripts/validate-workflow-state.py <path>`.
-docs/orchestration.md:86:`.cursor/state/workflow-state.py` or the repo wrapper `scripts/workflow-state.py`.
-docs/orchestration.md:89:- task start: `workflow-state.py init ...`
-docs/orchestration.md:90:- phase advance: `workflow-state.py set ... --phase verify --status in_progress`
-docs/orchestration.md:91:- acceptance update: `workflow-state.py ac ... --id AC-001 --status passed --evidence scripts/check-local-plugin-install.sh`
-docs/orchestration.md:92:- failure record: `workflow-state.py fail ... --type fixable --message "..."`
+docs/orchestration.md:101:- task start: `python3 .cursor/state/workflow-state.py init ...`
+docs/orchestration.md:102:- phase advance: `python3 .cursor/state/workflow-state.py set ... --phase verify --status in_progress`
+docs/orchestration.md:103:- acceptance update: `python3 .cursor/state/workflow-state.py ac ... --id AC-001 --status passed --evidence scripts/check-local-plugin-install.sh`
+docs/orchestration.md:104:- failure record: `python3 .cursor/state/workflow-state.py fail ... --type fixable --message "..."`
+docs/orchestration.md:118:python3 scripts/validate-workflow-state.py
+docs/orchestration.md:42:| State writer (developer-only fallback) | `.cursor/state/workflow-state.py` plus repo wrapper `scripts/workflow-state.py` | Library API + thin CLI shim for developer terminals. Calls the same `init_state` / `set_state` / ... library functions as the bridge so concurrent CLI and bridge writes serialise on the same lock. Not invoked from agent prompts or skills. |
+docs/orchestration.md:43:| Validators | `scripts/validate-workflow-state.py`, `scripts/validate-cursor-workflow-artifacts.py`, `scripts/smoke-cursor-workflow-artifacts.sh`, `scripts/validate-plugin-structure.sh`, `scripts/check-local-plugin-install.sh`, `scripts/install-local-plugin.sh` | Make the orchestration locally provable and keep the install minimal. |
+docs/orchestration.md:49:   `python3 scripts/workflow-state.py init docs/plans/<task-id>/workflow-state.json --task-id <task-id>` in the repo (installed plugin users can call `.cursor/state/workflow-state.py`). Validate with
+docs/orchestration.md:50:   `python3 scripts/validate-workflow-state.py <path>`.
+docs/orchestration.md:89:also use the CLI shim at `.cursor/state/workflow-state.py`. Both paths
 docs/plans/mcp-state-bridge-2026-05/consensus-plan.md:119:**Objective.** Make `.cursor/state/workflow-state.py` the single shared implementation. Bridge imports it; CLI shim calls it. Eliminate the two-writer window in code, not just convention (R6 + B3 + B12). Note on rename: we KEEP the filename `workflow-state.py` and refactor it in place; B2's grep gate therefore runs as a no-op idempotent check. If a future PR renames the file, the same gate becomes load-bearing.
 docs/plans/mcp-state-bridge-2026-05/consensus-plan.md:122:- `.cursor/state/workflow-state.py` refactored to expose typed library API: `init_state(...)`, `set_state(...)`, `update_acceptance_criterion(...)`, `record_failure(...)`, `append_history(...)`, `read_state(...)`. Existing `cmd_*` argparse handlers become thin shims around the library API. Returns the new state dict (in-memory representation post-write).
 docs/plans/mcp-state-bridge-2026-05/consensus-plan.md:123:- `mcp/cursor-state-bridge/state_io.py` imports the library API from `.cursor/state/workflow-state.py`. Zero `subprocess` calls.
@@ -88,5 +87,5 @@ scripts/verify-backbone.sh:34:  .cursor/state/workflow-state.py
 scripts/verify-backbone.sh:63:  scripts/validate-workflow-state.py
 scripts/verify-backbone.sh:64:  scripts/workflow-state.py
 scripts/workflow-state.py:9:HELPER = Path(__file__).resolve().parents[1] / ".cursor" / "state" / "workflow-state.py"
-skills/phase-controller/SKILL.md:121:python3 scripts/validate-workflow-state.py path/to/workflow-state.json
-skills/phase-controller/SKILL.md:52:   `python3 scripts/validate-workflow-state.py <path>`.
+skills/phase-controller/SKILL.md:126:python3 scripts/validate-workflow-state.py path/to/workflow-state.json
+skills/phase-controller/SKILL.md:56:   validator `python3 scripts/validate-workflow-state.py <path>`; the

@@ -47,9 +47,14 @@ session. It complements existing skills (`plan`, `iterate-loop`, `review`,
 ## Steps
 
 1. **Locate or create the state file.** Default location for new tasks:
-   `docs/plans/<task-id>/workflow-state.json`. Confirm the document validates
-   against `.cursor/state/workflow-state.schema.json` using
-   `python3 scripts/validate-workflow-state.py <path>`.
+   `docs/plans/<task-id>/workflow-state.json`. Agent-callable writes go
+   through the `cursor-state-bridge` MCP tools (`state_init`,
+   `state_set_phase`, `state_update_acceptance_criterion`,
+   `state_record_failure`, `state_history_append`, `state_read`).
+   Validate the on-disk document against
+   `.cursor/state/workflow-state.schema.json` with the read-only
+   validator `python3 scripts/validate-workflow-state.py <path>`; the
+   validator does not write and remains agent-callable.
 2. **Detect the current phase.** Read `phase` and `status`. If `phase` is
    missing, set `phase=intake`, `status=pending`.
 3. **Decide the next action.**

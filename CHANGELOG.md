@@ -2,6 +2,25 @@
 
 ## 2026-05-07
 
+### MCP layer Phase 4 — agent + skill rewiring (bridge as sole agent-callable writer)
+
+- rewrote `.cursor/agents/orchestrator.md` so the entry-point agent
+  invokes the `cursor-state-bridge` MCP tools (`state_init`,
+  `state_set_phase`, `state_update_acceptance_criterion`,
+  `state_record_failure`, `state_history_append`, `state_read`) instead
+  of shelling out to a state writer CLI; clarified that hooks read,
+  bridge writes, and shelling out from agent prompts or skills is not
+  allowed
+- updated `skills/phase-controller/SKILL.md` to point at the bridge
+  tools for state writes; the read-only validator
+  `scripts/validate-workflow-state.py` remains agent-callable
+- updated `docs/orchestration.md` Writer table to distinguish the
+  agent-callable bridge from the developer-only CLI shim; documented
+  agent-callable typical write points and developer-only equivalents
+- AC-401 grep gate now returns zero writer-CLI references across
+  `.cursor/agents/`, `skills/`, `rules/`; developer-facing docs may
+  still reference the CLI
+
 ### MCP layer Phase 3 — full six-tool functional surface + PRD-AC index
 
 - promoted `state_update_acceptance_criterion` and `state_history_append`
