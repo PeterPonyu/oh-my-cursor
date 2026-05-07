@@ -127,3 +127,8 @@ mcp_acceptance_criteria:
   AC-605: { phase: 6, status: shipped, summary: "docs/confirmed-surfaces.md row for mcp/cursor-state-bridge present" }
   AC-606: { phase: 6, status: planned, summary: "default auth OFF; smoke --auth without token passes" }
   AC-607: { phase: 6, status: planned, summary: "validate-mcp-trace --self-test rejects malformed lines" }
+  AC-701: { phase: 7, status: shipped, summary: "synthetic 1500-entry history compacts to 1000 after the next write" }
+  AC-702: { phase: 7, status: shipped, summary: "FIFO eviction drops the oldest entries first" }
+  AC-703: { phase: 7, status: shipped, summary: "post-compaction history[].at remains monotonic non-decreasing" }
+  AC-704: { phase: 7, status: shipped, summary: "history_cap=0 opts out of compaction" }
+  AC-705: { phase: 7, status: shipped, summary: "the most-recent history entry is preserved verbatim" }

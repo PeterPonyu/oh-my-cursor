@@ -178,16 +178,71 @@ def _check_history_monotonic(path: Path) -> None:
     ok(f"history[].at is monotonic non-decreasing ({len(ats)} entries): {path}")
 
 
+def _check_history_cap(path: Path, cap: int) -> None:
+    """AC-701..AC-705 helper: assert ``len(history) <= cap`` and timestamps monotonic.
+
+    ``cap <= 0`` skips the size assertion (matches the library's
+    opt-out sentinel) but still verifies monotonicity, so callers can
+    cheaply re-run the existing monotonic check via ``--check-history-cap 0``.
+    """
+    if not path.is_file():
+        fail(f"state file not found: {path}")
+    try:
+        data = json.loads(path.read_text(encoding="utf-8"))
+    except json.JSONDecodeError as exc:
+        fail(f"state file is not valid JSON: {exc}")
+    if not isinstance(data, dict):
+        fail("state file root must be a JSON object")
+    history = data.get("history") or []
+    if not isinstance(history, list):
+        fail("history must be an array")
+    if cap > 0 and len(history) > cap:
+        fail(
+            f"history[] has {len(history)} entries; expected <= {cap} "
+            "(library compaction was bypassed or the cap was disabled at write time)"
+        )
+    ats: list[str] = []
+    for index, item in enumerate(history):
+        if not isinstance(item, dict):
+            fail(f"history[{index}] must be an object")
+        at = item.get("at", "")
+        if not isinstance(at, str):
+            fail(f"history[{index}].at must be a string")
+        ats.append(at)
+    if ats != sorted(ats):
+        fail("history[].at is not monotonic non-decreasing after compaction")
+    if cap > 0:
+        ok(f"history[] has {len(history)} entries (<= {cap}) and is monotonic: {path}")
+    else:
+        ok(f"history[] is monotonic non-decreasing ({len(history)} entries; cap disabled): {path}")
+
+
 def main() -> int:
     args = list(sys.argv[1:])
     monotonic_only = False
+    cap_check: int | None = None
     if "--check-history-monotonic" in args:
         args.remove("--check-history-monotonic")
         monotonic_only = True
+    if "--check-history-cap" in args:
+        idx = args.index("--check-history-cap")
+        if idx + 1 >= len(args):
+            fail("--check-history-cap requires an integer argument")
+        try:
+            cap_check = int(args[idx + 1])
+        except ValueError:
+            fail("--check-history-cap argument must be an integer")
+        # Remove both the flag and its value.
+        del args[idx : idx + 2]
 
     target = Path(args[0]) if args else (ROOT / ".cursor" / "state" / "workflow-state.example.json")
     if not SCHEMA_PATH.is_file():
         fail(f"schema missing: {SCHEMA_PATH}")
+
+    if cap_check is not None:
+        _check_history_cap(target, cap_check)
+        print("WORKFLOW_STATE_HISTORY_CAP_OK")
+        return 0
 
     if monotonic_only:
         _check_history_monotonic(target)

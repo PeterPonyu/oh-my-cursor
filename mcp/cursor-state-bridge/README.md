@@ -76,6 +76,25 @@ message starting `jail-escape:`.
 | `OH_MY_CURSOR_MCP_TRACE` | enabled (any value other than `0`/`false`/`no`/`off`) | Disables the JSONL trace lane when set to a falsey value. |
 | `OH_MY_CURSOR_MCP_TRACE_FILE` | `<workspace>/.omcs/cursor-state-bridge/trace.jsonl` | Override target for trace records. |
 
+## History retention (Phase 7)
+
+Every write tool accepts an optional `history_cap` integer in its
+`arguments` object. When omitted, the cap defaults to **1000**.
+After each successful write, the library trims `history[]` to its
+trailing `cap` entries (FIFO eviction — oldest dropped first), so the
+on-disk file never grows unbounded over a long-lived task.
+
+- `history_cap >= 1` — keep at most `history_cap` entries.
+- `history_cap == 0` — opt out; no compaction.
+- Negative values are normalised to opt-out.
+
+The CLI shim accepts the same knob via `--history-cap N` on every
+mutating subcommand (`init`, `set`, `ac`, `fail`, `history`).
+Compaction always runs **before** the atomic tmp+rename, so concurrent
+readers never observe a partially-evicted document. The
+`scripts/validate-workflow-state.py --check-history-cap N` flag asserts
+the on-disk file satisfies the cap and stays monotonic.
+
 ## Trace lane (Phase 6)
 
 The bridge writes one JSONL record per JSON-RPC call to

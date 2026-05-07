@@ -2,6 +2,34 @@
 
 ## 2026-05-07
 
+### MCP layer Phase 7 — bounded history[] retention with FIFO eviction
+
+Closes follow-up F1 from the v2 ADR.
+
+- added `DEFAULT_HISTORY_CAP = 1000` and `_compact_history(state, cap)`
+  to `.cursor/state/workflow-state.py`; threaded `history_cap` kwarg
+  through every public library write function (`init_state`,
+  `set_state`, `update_acceptance_criterion`, `record_failure`,
+  `append_history`) and through every `cmd_*` argparse shim. Compaction
+  runs immediately after `_push_history` and before
+  `_atomic_write_state`, so the on-disk document is always bounded
+- bridge `mcp/cursor-state-bridge/state_io.py` now extracts
+  `history_cap` from each mutating tool's params (default 1000;
+  accepts string numerals; falls back to default on invalid input)
+- `scripts/validate-workflow-state.py` gained `--check-history-cap N`
+  which asserts both the size cap (`len(history) <= N`) and timestamp
+  monotonicity post-eviction
+- new `mcp/cursor-state-bridge/tests/test_history_compaction.py`
+  (AC-701..AC-705 + defensive negative-cap normalisation): 33/33
+  unittest cases pass
+- `history_cap=0` is the documented opt-out sentinel; negative values
+  normalised to opt-out
+- workflow-state schema unchanged (R4 preserved); cap is a per-call
+  knob, not a schema field
+- updated `mcp/cursor-state-bridge/README.md`, `docs/state-contract.md`,
+  `docs/PRD.yaml` (rows for AC-701..AC-705), consensus plan F1 row
+  marked shipped, `docs/plans/.../handoffs/phase-7.md` ledger
+
 ### Docs cleanup — polish README, archive dev-process notes
 
 - polished `README.md` from 228 to 119 lines: tightened the intro to a

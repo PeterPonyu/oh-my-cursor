@@ -106,6 +106,27 @@ def state_read(workspace: Path, params: dict[str, Any]) -> dict[str, Any]:
     return _mcp_text(parsed)
 
 
+_DEFAULT_HISTORY_CAP = 1000
+
+
+def _history_cap(params: dict[str, Any]) -> int:
+    """Extract optional ``history_cap`` from tool params (Phase 7).
+
+    Defaults to 1000 when absent.  Non-int / invalid values fall back to
+    the default rather than raise -- the cap is a retention knob, not a
+    schema field.
+    """
+    raw = params.get("history_cap")
+    if isinstance(raw, int):
+        return raw
+    if isinstance(raw, str) and raw.lstrip("-").isdigit():
+        try:
+            return int(raw)
+        except ValueError:
+            return _DEFAULT_HISTORY_CAP
+    return _DEFAULT_HISTORY_CAP
+
+
 def state_init(workspace: Path, params: dict[str, Any]) -> dict[str, Any]:
     task_id = params.get("task_id")
     if not isinstance(task_id, str) or not task_id:
@@ -120,6 +141,7 @@ def state_init(workspace: Path, params: dict[str, Any]) -> dict[str, Any]:
         status=str(params.get("status", "pending")),
         role=str(params.get("role", "orchestrator")),
         next_action=str(params.get("next_action", "")),
+        history_cap=_history_cap(params),
     )
     return _mcp_text(state)
 
@@ -140,6 +162,7 @@ def state_set_phase(workspace: Path, params: dict[str, Any]) -> dict[str, Any]:
         role=params.get("role") if isinstance(params.get("role"), str) else None,
         next_action=params.get("next_action") if isinstance(params.get("next_action"), str) else None,
         note=str(params.get("note", "advanced phase via cursor-state-bridge")),
+        history_cap=_history_cap(params),
     )
     return _mcp_text(state)
 
@@ -165,6 +188,7 @@ def state_record_failure(workspace: Path, params: dict[str, Any]) -> dict[str, A
         message=message,
         retry_count=retry_count,
         note=str(params.get("note", "")),
+        history_cap=_history_cap(params),
     )
     return _mcp_text(state)
 
@@ -189,6 +213,7 @@ def state_update_acceptance_criterion(workspace: Path, params: dict[str, Any]) -
         criterion=params.get("criterion") if isinstance(params.get("criterion"), str) else None,
         evidence=params.get("evidence") if isinstance(params.get("evidence"), str) else None,
         note=str(params.get("note", "")),
+        history_cap=_history_cap(params),
     )
     return _mcp_text(state)
 
@@ -208,5 +233,6 @@ def state_history_append(workspace: Path, params: dict[str, Any]) -> dict[str, A
         note=note,
         phase=params.get("phase") if isinstance(params.get("phase"), str) else None,
         status=params.get("status") if isinstance(params.get("status"), str) else None,
+        history_cap=_history_cap(params),
     )
     return _mcp_text(state)

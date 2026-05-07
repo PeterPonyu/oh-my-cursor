@@ -41,6 +41,11 @@ from _locking import file_lock  # noqa: E402  (path-relative import by design)
 # Schema enums (keep in sync with workflow-state.schema.json)
 # ---------------------------------------------------------------------------
 
+# Default cap for history[] FIFO eviction (Phase 7).  cap=0 disables
+# compaction; negative values are normalised to 0 so a misconfigured caller
+# never surfaces a runtime error from the retention path.
+DEFAULT_HISTORY_CAP = 1000
+
 PHASES = {"intake", "research", "plan", "execute", "verify", "review", "done", "blocked"}
 STATUSES = {"pending", "in_progress", "passed", "failed", "blocked"}
 ROLES = {
@@ -120,6 +125,29 @@ def _push_history(state: dict[str, Any], note: str, *, phase: str | None = None,
         })
 
 
+def _compact_history(state: dict[str, Any], cap: int = DEFAULT_HISTORY_CAP) -> None:
+    """FIFO-evict ``history[]`` so its length never exceeds ``cap``.
+
+    ``cap <= 0`` disables compaction entirely (sentinel for opt-out).  The
+    function mutates ``state["history"]`` in place and is intended to be
+    called after :func:`_push_history` and before :func:`_atomic_write_state`,
+    so each write has a single bounded history when it lands on disk.
+
+    Compaction preserves the most-recent ``cap`` entries; the eviction is
+    FIFO — the oldest entries are dropped first — so the surviving slice
+    keeps timestamps monotonic non-decreasing whenever the input was.
+    """
+    if not isinstance(cap, int) or cap <= 0:
+        return
+    history = state.get("history")
+    if not isinstance(history, list):
+        return
+    if len(history) <= cap:
+        return
+    # Slice off the oldest entries; keep the trailing window of size cap.
+    state["history"] = history[-cap:]
+
+
 # ---------------------------------------------------------------------------
 # Public library API
 # ---------------------------------------------------------------------------
@@ -146,6 +174,7 @@ def init_state(
     status: str = "pending",
     role: str = "orchestrator",
     next_action: str = "",
+    history_cap: int = DEFAULT_HISTORY_CAP,
 ) -> dict[str, Any]:
     """Create a new workflow-state file.
 
@@ -173,6 +202,7 @@ def init_state(
         "history": [],
     }
     _push_history(state, "initialized workflow state")
+    _compact_history(state, history_cap)
     with file_lock(path):
         _atomic_write_state(path, state)
     return state
@@ -186,6 +216,7 @@ def set_state(
     role: str | None = None,
     next_action: str | None = None,
     note: str = "updated workflow state",
+    history_cap: int = DEFAULT_HISTORY_CAP,
 ) -> dict[str, Any]:
     """Update phase / status / role / next_action; append history entry."""
     path = Path(path)
@@ -206,6 +237,7 @@ def set_state(
         if next_action is not None:
             state["next_action"] = next_action
         _push_history(state, note)
+        _compact_history(state, history_cap)
         _atomic_write_state(path, state)
     return state
 
@@ -218,6 +250,7 @@ def update_acceptance_criterion(
     criterion: str | None = None,
     evidence: str | None = None,
     note: str = "",
+    history_cap: int = DEFAULT_HISTORY_CAP,
 ) -> dict[str, Any]:
     """Add or update an acceptance criterion.
 
@@ -253,6 +286,7 @@ def update_acceptance_criterion(
             if evidence is not None:
                 target["evidence"] = evidence
         _push_history(state, note or f"updated acceptance criterion {ac_id}")
+        _compact_history(state, history_cap)
         _atomic_write_state(path, state)
     return state
 
@@ -264,6 +298,7 @@ def record_failure(
     message: str = "",
     retry_count: int = 0,
     note: str = "",
+    history_cap: int = DEFAULT_HISTORY_CAP,
 ) -> dict[str, Any]:
     """Record failure metadata; status flips to ``failed`` when ``type`` is set."""
     path = Path(path)
@@ -276,6 +311,7 @@ def record_failure(
         state["status"] = "failed" if type else state.get("status", "failed")
         state["failure"] = {"type": type, "message": message, "retry_count": retry_count}
         _push_history(state, note or f"recorded failure type {type}")
+        _compact_history(state, history_cap)
         _atomic_write_state(path, state)
     return state
 
@@ -286,12 +322,14 @@ def append_history(
     note: str,
     phase: str | None = None,
     status: str | None = None,
+    history_cap: int = DEFAULT_HISTORY_CAP,
 ) -> dict[str, Any]:
     """Append a free-form history entry without mutating top-level fields."""
     path = Path(path)
     with file_lock(path):
         state = _load_state(path)
         _push_history(state, note, phase=phase, status=status)
+        _compact_history(state, history_cap)
         _atomic_write_state(path, state)
     return state
 
@@ -310,6 +348,7 @@ def cmd_init(args: argparse.Namespace) -> None:
         status=args.status,
         role=args.role,
         next_action=args.next_action,
+        history_cap=args.history_cap,
     )
     print(f"ok: wrote workflow state: {args.path}")
 
@@ -322,6 +361,7 @@ def cmd_set(args: argparse.Namespace) -> None:
         role=args.role if args.role is not None else None,
         next_action=args.next_action if args.next_action is not None else None,
         note=args.note or "updated workflow state",
+        history_cap=args.history_cap,
     )
     print(f"ok: wrote workflow state: {args.path}")
 
@@ -334,6 +374,7 @@ def cmd_ac(args: argparse.Namespace) -> None:
         criterion=args.criterion,
         evidence=args.evidence,
         note=args.note,
+        history_cap=args.history_cap,
     )
     print(f"ok: wrote workflow state: {args.path}")
 
@@ -345,6 +386,7 @@ def cmd_fail(args: argparse.Namespace) -> None:
         message=args.message,
         retry_count=args.retry_count,
         note=args.note,
+        history_cap=args.history_cap,
     )
     print(f"ok: wrote workflow state: {args.path}")
 
@@ -355,8 +397,22 @@ def cmd_history(args: argparse.Namespace) -> None:
         note=args.note,
         phase=args.phase,
         status=args.status,
+        history_cap=args.history_cap,
     )
     print(f"ok: wrote workflow state: {args.path}")
+
+
+def _add_history_cap(parser: argparse.ArgumentParser) -> None:
+    """Attach the shared ``--history-cap`` option (Phase 7)."""
+    parser.add_argument(
+        "--history-cap",
+        type=int,
+        default=DEFAULT_HISTORY_CAP,
+        help=(
+            f"FIFO eviction cap for history[] entries (default {DEFAULT_HISTORY_CAP}). "
+            "Pass 0 to disable compaction."
+        ),
+    )
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -371,6 +427,7 @@ def build_parser() -> argparse.ArgumentParser:
     init.add_argument("--status", default="pending")
     init.add_argument("--role", default="orchestrator")
     init.add_argument("--next-action", default="")
+    _add_history_cap(init)
     init.set_defaults(func=cmd_init)
 
     set_cmd = sub.add_parser("set", help="update phase/status/role/next action")
@@ -380,6 +437,7 @@ def build_parser() -> argparse.ArgumentParser:
     set_cmd.add_argument("--role")
     set_cmd.add_argument("--next-action")
     set_cmd.add_argument("--note")
+    _add_history_cap(set_cmd)
     set_cmd.set_defaults(func=cmd_set)
 
     ac = sub.add_parser("ac", help="add or update an acceptance criterion")
@@ -389,6 +447,7 @@ def build_parser() -> argparse.ArgumentParser:
     ac.add_argument("--status", default="pending")
     ac.add_argument("--evidence")
     ac.add_argument("--note")
+    _add_history_cap(ac)
     ac.set_defaults(func=cmd_ac)
 
     fail_cmd = sub.add_parser("fail", help="record failure metadata")
@@ -397,6 +456,7 @@ def build_parser() -> argparse.ArgumentParser:
     fail_cmd.add_argument("--message", default="")
     fail_cmd.add_argument("--retry-count", type=int, default=0)
     fail_cmd.add_argument("--note")
+    _add_history_cap(fail_cmd)
     fail_cmd.set_defaults(func=cmd_fail)
 
     history_cmd = sub.add_parser("history", help="append a history entry")
@@ -404,6 +464,7 @@ def build_parser() -> argparse.ArgumentParser:
     history_cmd.add_argument("--note", required=True)
     history_cmd.add_argument("--phase")
     history_cmd.add_argument("--status")
+    _add_history_cap(history_cmd)
     history_cmd.set_defaults(func=cmd_history)
 
     return parser
