@@ -146,10 +146,54 @@ def validate(path: Path) -> None:
     ok(f"workflow-state document is valid: {path}")
 
 
+def _check_history_monotonic(path: Path) -> None:
+    """AC-208 helper: verify history[].at is non-decreasing ISO date strings.
+
+    Empty or missing history is treated as monotonic by definition.
+    """
+    if not path.is_file():
+        fail(f"state file not found: {path}")
+    try:
+        data = json.loads(path.read_text(encoding="utf-8"))
+    except json.JSONDecodeError as exc:
+        fail(f"state file is not valid JSON: {exc}")
+    if not isinstance(data, dict):
+        fail("state file root must be a JSON object")
+    history = data.get("history") or []
+    if not isinstance(history, list):
+        fail("history must be an array")
+    ats: list[str] = []
+    for index, item in enumerate(history):
+        if not isinstance(item, dict):
+            fail(f"history[{index}] must be an object")
+        at = item.get("at", "")
+        if not isinstance(at, str):
+            fail(f"history[{index}].at must be a string")
+        ats.append(at)
+    if ats != sorted(ats):
+        fail(
+            "history[].at is not monotonic non-decreasing; "
+            "concurrent writers may have interleaved without holding file_lock"
+        )
+    ok(f"history[].at is monotonic non-decreasing ({len(ats)} entries): {path}")
+
+
 def main() -> int:
-    target = Path(sys.argv[1]) if len(sys.argv) > 1 else (ROOT / ".cursor" / "state" / "workflow-state.example.json")
+    args = list(sys.argv[1:])
+    monotonic_only = False
+    if "--check-history-monotonic" in args:
+        args.remove("--check-history-monotonic")
+        monotonic_only = True
+
+    target = Path(args[0]) if args else (ROOT / ".cursor" / "state" / "workflow-state.example.json")
     if not SCHEMA_PATH.is_file():
         fail(f"schema missing: {SCHEMA_PATH}")
+
+    if monotonic_only:
+        _check_history_monotonic(target)
+        print("WORKFLOW_STATE_HISTORY_MONOTONIC_OK")
+        return 0
+
     validate(target)
     print("WORKFLOW_STATE_OK")
     return 0

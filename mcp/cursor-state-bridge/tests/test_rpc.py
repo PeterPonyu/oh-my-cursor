@@ -196,19 +196,22 @@ class TestRPC(unittest.TestCase):
     # ------------------------------------------------------------------
 
     def test_unimplemented_tool_returns_minus_32601(self) -> None:
+        # Phase 2 promoted state_init / state_set_phase / state_record_failure
+        # to functional handlers.  state_history_append and
+        # state_update_acceptance_criterion remain Phase 3 placeholders.
         resp = self._bridge.send(
             {
                 "jsonrpc": "2.0",
                 "id": 6,
                 "method": "tools/call",
-                "params": {"name": "state_init", "arguments": {}},
+                "params": {"name": "state_history_append", "arguments": {"task_id": "T", "event": "x"}},
             }
         )
         error = resp.get("error", {})
         self.assertEqual(
             error.get("code"),
             -32601,
-            f"expected error code -32601 for unimplemented tool, got: {resp}",
+            f"expected error code -32601 for Phase-3 placeholder tool, got: {resp}",
         )
 
 

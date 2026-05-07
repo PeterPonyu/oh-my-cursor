@@ -2,6 +2,33 @@
 
 ## 2026-05-07
 
+### MCP layer Phase 2 — library refactor + shared lock + 3 write-tool promotions
+
+- introduced `.cursor/state/_locking.py` POSIX `fcntl` advisory file_lock
+  context manager; placed under `.cursor/state/` (always shipped) so the
+  CLI shim never imports across the `--with-mcp` boundary
+- refactored `.cursor/state/workflow-state.py` to expose a typed library
+  API (`init_state`, `set_state`, `update_acceptance_criterion`,
+  `record_failure`, `append_history`, `read_state`); each write function
+  acquires the shared `file_lock` and writes atomically via tmp-file
+  rename; the existing `cmd_*` argparse handlers became thin shims so
+  `python3 .cursor/state/workflow-state.py {init,set,ac,fail}` keeps the
+  exact same CLI contract
+- added `mcp/cursor-state-bridge/state_io.py` that imports the workflow-state
+  library via `importlib.util.spec_from_file_location` and dispatches
+  every write tool through it; bridge has zero `subprocess` calls
+- promoted `state_init`, `state_set_phase`, `state_record_failure` from
+  `-32601` placeholders to functional handlers in `server.py`;
+  `state_update_acceptance_criterion` and `state_history_append` stay
+  Phase 3 placeholders
+- added tests: `mcp/cursor-state-bridge/tests/test_library_api.py`
+  (six entrypoints, zero argparse mocks), `tests/test_locking_concurrent.py`
+  (two subprocess writers serialise; history monotonic), `tests/test_jail.py`
+  (direct unit tests for `resolve_jailed`, `jail_roots`, three jail roots)
+- extended `scripts/validate-workflow-state.py` with
+  `--check-history-monotonic` flag (AC-208 evidence helper)
+- 22/22 unittest cases pass; PR1 + Phase 2 regression chain green
+
 ### MCP layer Phase 1 — `cursor-state-bridge` skeleton
 
 - shipped `mcp/cursor-state-bridge/` as a stdio JSON-RPC 2.0 MCP server

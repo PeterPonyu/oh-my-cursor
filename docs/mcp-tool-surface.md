@@ -5,14 +5,14 @@ Six MCP tools mapped 1:1 to the workflow-state schema at
 
 ## Tool table
 
-| Tool | PR1 status | Library API (Phase 2) | Schema field touched |
+| Tool | Status | Library API | Schema field touched |
 | --- | --- | --- | --- |
-| `state_read` | functional | `read_state(workspace, task_id?)` | (read-only) |
-| `state_init` | planned-phase-2-3 (`-32601`) | `init_state(task_id, plan_id, ...)` | full document |
-| `state_set_phase` | planned-phase-2-3 (`-32601`) | `set_state(phase=..., status?)` | `phase`, `status`, `history[]` |
-| `state_record_failure` | planned-phase-2-3 (`-32601`) | `record_failure(message, phase?, retry_count?)` | `failure`, `history[]` |
-| `state_update_acceptance_criterion` | planned-phase-2-3 (`-32601`) | `update_acceptance_criterion(ac_id, status, evidence?)` | `acceptance_criteria[]`, `history[]` |
-| `state_history_append` | planned-phase-2-3 (`-32601`) | `append_history(event, ...)` | `history[]` |
+| `state_read` | functional (PR1) | `read_state(path)` | (read-only) |
+| `state_init` | functional (Phase 2) | `init_state(path, task_id, ...)` | full document |
+| `state_set_phase` | functional (Phase 2) | `set_state(path, phase=..., status?)` | `phase`, `status`, `history[]` |
+| `state_record_failure` | functional (Phase 2) | `record_failure(path, type, message, retry_count)` | `failure`, `history[]` |
+| `state_update_acceptance_criterion` | placeholder (`-32601`, Phase 3) | `update_acceptance_criterion(path, ac_id, status, evidence?)` | `acceptance_criteria[]`, `history[]` |
+| `state_history_append` | placeholder (`-32601`, Phase 3) | `append_history(path, note, ...)` | `history[]` |
 
 ### `state_read` (PR1 functional)
 
@@ -36,11 +36,11 @@ not tightened by the tool.
 
 ## PR scope and promotion path
 
-| Phase | Tools shipped | Acceptance criteria |
-| --- | --- | --- |
-| 1 (PR1) | `state_read` (functional); other 5 advertised but `-32601` | AC-101..AC-110 |
-| 2 | locking shim + library refactor at `.cursor/state/_locking.py` and `.cursor/state/workflow-state.py`; `state_init`, `state_set_phase`, `state_record_failure` promoted to functional | AC-201..AC-209 |
-| 3 | `state_update_acceptance_criterion`, `state_history_append` promoted; full six-tool functional surface | AC-301..AC-305 |
+| Phase | Tools shipped | Acceptance criteria | Status |
+| --- | --- | --- | --- |
+| 1 (PR1) | `state_read` (functional); other 5 advertised but `-32601` | AC-101..AC-110 | shipped |
+| 2 | locking shim + library refactor at `.cursor/state/_locking.py` and `.cursor/state/workflow-state.py`; `state_init`, `state_set_phase`, `state_record_failure` promoted to functional | AC-201..AC-209 | shipped |
+| 3 | `state_update_acceptance_criterion`, `state_history_append` promoted; full six-tool functional surface | AC-301..AC-305 | planned |
 
 ## Boundary
 

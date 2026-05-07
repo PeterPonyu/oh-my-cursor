@@ -7,13 +7,20 @@ shipped under `.cursor/state/`. It speaks JSON-RPC 2.0 over standard input
 and standard output, exposes a fixed six-tool surface, and never opens a
 network listener.
 
-## Status (PR1)
+## Status (PR1 + Phase 2)
 
-PR1 ships the skeleton plus one functional tool (`state_read`). The other
-five tools are advertised by `tools/list` but their handlers return JSON-RPC
-error code `-32601` with the message `method not implemented in this PR
-(Phase 3)`. This is intentional — Phase 2 lands the shared library refactor
-and locking shim, and Phase 3 promotes the remaining five tools to functional.
+After Phase 2 the bridge ships **four** functional tools (`state_read`,
+`state_init`, `state_set_phase`, `state_record_failure`). The remaining
+two (`state_update_acceptance_criterion`, `state_history_append`) stay
+advertised by `tools/list` but return JSON-RPC error code `-32601`
+("method not implemented in this PR (Phase 3)") until Phase 3 lands.
+
+Phase 2 also introduced the shared library at
+`.cursor/state/workflow-state.py` (typed `init_state`, `set_state`,
+`update_acceptance_criterion`, `record_failure`, `append_history`,
+`read_state`) and the POSIX `file_lock` shim at `.cursor/state/_locking.py`.
+Both the bridge and the CLI shim import the same library, so concurrent
+writers serialise on a single advisory lock per state file.
 
 ## Install (manual, opt-in)
 
@@ -35,12 +42,12 @@ in the MCP servers panel.
 
 ## Tool surface
 
-| Tool | PR1 status | Wraps (Phase 2 library API) |
+| Tool | Status | Wraps (library API) |
 | --- | --- | --- |
-| `state_read` | functional | `read_state()` |
-| `state_init` | placeholder (`-32601`) | `init_state(...)` |
-| `state_set_phase` | placeholder (`-32601`) | `set_state(phase=...)` |
-| `state_record_failure` | placeholder (`-32601`) | `record_failure(...)` |
+| `state_read` | functional (PR1) | `read_state()` |
+| `state_init` | functional (Phase 2) | `init_state(...)` |
+| `state_set_phase` | functional (Phase 2) | `set_state(phase=...)` |
+| `state_record_failure` | functional (Phase 2) | `record_failure(...)` |
 | `state_update_acceptance_criterion` | placeholder (`-32601`) | `update_acceptance_criterion(...)` |
 | `state_history_append` | placeholder (`-32601`) | `append_history(...)` |
 

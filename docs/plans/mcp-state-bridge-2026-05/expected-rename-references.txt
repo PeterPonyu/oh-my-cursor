@@ -1,5 +1,8 @@
-CHANGELOG.md:121:  stdlib `workflow-state.py` helper for intentional local state writes
-CHANGELOG.md:125:- added `scripts/validate-workflow-state.py` for local schema validation
+CHANGELOG.md:10:- refactored `.cursor/state/workflow-state.py` to expose a typed library
+CHANGELOG.md:148:  stdlib `workflow-state.py` helper for intentional local state writes
+CHANGELOG.md:152:- added `scripts/validate-workflow-state.py` for local schema validation
+CHANGELOG.md:15:  `python3 .cursor/state/workflow-state.py {init,set,ac,fail}` keeps the
+CHANGELOG.md:28:- extended `scripts/validate-workflow-state.py` with
 .cursor/agents/orchestrator.md:21:   `scripts/workflow-state.py init ...` or direct file edits only after the
 .cursor/hooks/failure-router.py:72:        "Record the failure with .cursor/state/workflow-state.py (or scripts/workflow-state.py) using one of: "
 .cursor/hooks/read-advisor.py:56:            "and only edited through the writer at .cursor/state/workflow-state.py."
@@ -8,12 +11,14 @@ CHANGELOG.md:125:- added `scripts/validate-workflow-state.py` for local schema v
 .cursor/hooks/tool-guard.py:73:            "Prefer the writer helper at .cursor/state/workflow-state.py "
 .cursor/hooks/tool-guard.py:74:            "(or scripts/workflow-state.py from the repo root) so phase, "
 .cursor/hooks/tool-guard.py:8:helper at `.cursor/state/workflow-state.py`.
+.cursor/state/_locking.py:4:shim at `.cursor/state/workflow-state.py` and the MCP bridge under
 .cursor/state/README.md:26:3. Write or update the file intentionally with `.cursor/state/workflow-state.py`
 .cursor/state/README.md:28:  `scripts/workflow-state.py`, or by editing JSON directly when that is
 .cursor/state/README.md:34:5. The `scripts/validate-workflow-state.py` validator lets you check any state
+.cursor/state/workflow-state.py:31:# is invoked directly (``python3 .cursor/state/workflow-state.py ...``)
 docs/mcp-bridge.md:18:`.cursor/state/workflow-state.py` stays in place as a thin shim over a
 docs/mcp-bridge.md:76:  `.cursor/state/workflow-state.py` CLI shim the same library and the same
-docs/mcp-tool-surface.md:42:| 2 | locking shim + library refactor at `.cursor/state/_locking.py` and `.cursor/state/workflow-state.py`; `state_init`, `state_set_phase`, `state_record_failure` promoted to functional | AC-201..AC-209 |
+docs/mcp-tool-surface.md:42:| 2 | locking shim + library refactor at `.cursor/state/_locking.py` and `.cursor/state/workflow-state.py`; `state_init`, `state_set_phase`, `state_record_failure` promoted to functional | AC-201..AC-209 | shipped |
 docs/orchestration.md:106:python3 scripts/validate-workflow-state.py
 docs/orchestration.md:41:| State writer | `.cursor/state/workflow-state.py` plus repo wrapper `scripts/workflow-state.py` | Creates or updates local workflow-state JSON files when the user or agent intentionally advances phase, acceptance criteria, or failure metadata. The `.cursor/state/` helper is part of the minimal installed plugin payload. |
 docs/orchestration.md:42:| Validators | `scripts/validate-workflow-state.py`, `scripts/validate-cursor-workflow-artifacts.py`, `scripts/smoke-cursor-workflow-artifacts.sh`, `scripts/validate-plugin-structure.sh`, `scripts/check-local-plugin-install.sh`, `scripts/install-local-plugin.sh` | Make the orchestration locally provable and keep the install minimal. |
@@ -50,6 +55,14 @@ docs/PRD.yaml:84:  - scripts/workflow-state.py can initialize and update a local
 docs/state-contract.md:37:  `workflow-state.example.json`, `workflow-state.py`, `README.md`)
 docs/state-contract.md:42:  `scripts/validate-workflow-state.py`)
 docs/state-contract.md:75:automatically. The validator at `scripts/validate-workflow-state.py` keeps the
+mcp/cursor-state-bridge/README.md:19:`.cursor/state/workflow-state.py` (typed `init_state`, `set_state`,
+mcp/cursor-state-bridge/state_io.py:30:# Library loader (imports `.cursor/state/workflow-state.py` once per process)
+mcp/cursor-state-bridge/state_io.py:3:Loads ``.cursor/state/workflow-state.py`` and ``.cursor/state/_locking.py``
+mcp/cursor-state-bridge/state_io.py:44:    state_path = state_dir / "workflow-state.py"
+mcp/cursor-state-bridge/tests/test_library_api.py:1:"""Library API tests for `.cursor/state/workflow-state.py` (AC-206).
+mcp/cursor-state-bridge/tests/test_library_api.py:22:LIB_PATH = STATE_DIR / "workflow-state.py"
+mcp/cursor-state-bridge/tests/test_library_api.py:27:    """Load `.cursor/state/workflow-state.py` as a module (no Namespace mocks)."""
+mcp/cursor-state-bridge/tests/test_locking_concurrent.py:25:LIB_PATH = STATE_DIR / "workflow-state.py"
 README.md:63:| Workflow-state writer | [`.cursor/state/workflow-state.py`](./.cursor/state/workflow-state.py) |
 README.md:76:| Workflow-state validator | [`scripts/validate-workflow-state.py`](./scripts/validate-workflow-state.py) |
 scripts/check-local-plugin-install.sh:123:[[ -f "$plugin_path/.cursor/state/workflow-state.py" ]] || fail "copy mode plugin missing workflow-state writer"

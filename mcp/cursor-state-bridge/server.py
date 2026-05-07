@@ -16,7 +16,8 @@ import sys
 from pathlib import Path
 from typing import Any
 
-from jail import JailError, resolve_jailed
+from jail import JailError
+import state_io as _state_io
 
 # ---------------------------------------------------------------------------
 # Tool definitions (advertised by tools/list)
@@ -126,6 +127,20 @@ _TOOLS: list[dict[str, Any]] = [
 
 _NOT_IMPLEMENTED_MSG = "method not implemented in this PR (Phase 3)"
 
+# Tools whose handlers route through state_io (functional after Phase 2).
+_FUNCTIONAL_TOOLS: dict[str, str] = {
+    "state_read": "state_read",
+    "state_init": "state_init",
+    "state_set_phase": "state_set_phase",
+    "state_record_failure": "state_record_failure",
+}
+
+# Tools that remain Phase 3 placeholders.
+_PLACEHOLDER_TOOLS: set[str] = {
+    "state_update_acceptance_criterion",
+    "state_history_append",
+}
+
 
 def _ok(req_id: Any, result: Any) -> dict[str, Any]:
     return {"jsonrpc": "2.0", "id": req_id, "result": result}
@@ -218,50 +233,23 @@ class Server:
         tool_name = params.get("name", "")
         tool_params = params.get("arguments", {}) or {}
 
-        if tool_name == "state_read":
+        if tool_name in _FUNCTIONAL_TOOLS:
+            handler = getattr(_state_io, _FUNCTIONAL_TOOLS[tool_name])
             try:
-                result = self._tool_state_read(tool_params)
+                result = handler(self._workspace, tool_params)
                 _send(_ok(req_id, result))
             except JailError as exc:
                 _send(_err(req_id, -32602, str(exc)))
+            except (ValueError, TypeError, KeyError) as exc:
+                _send(_err(req_id, -32602, f"invalid params: {exc}"))
+            except SystemExit as exc:
+                # The library raises SystemExit("FAIL: ...") on schema-enum
+                # violations.  Surface as JSON-RPC -32602 instead of crashing.
+                msg = str(exc.code) if isinstance(exc.code, str) else "validation error"
+                _send(_err(req_id, -32602, f"invalid params: {msg}"))
             except Exception as exc:  # noqa: BLE001
                 _send(_err(req_id, -32603, f"internal error: {exc}"))
-        elif tool_name in {
-            "state_init",
-            "state_set_phase",
-            "state_record_failure",
-            "state_update_acceptance_criterion",
-            "state_history_append",
-        }:
+        elif tool_name in _PLACEHOLDER_TOOLS:
             _send(_err(req_id, -32601, _NOT_IMPLEMENTED_MSG))
         else:
             _send(_err(req_id, -32601, f"unknown tool: {tool_name}"))
-
-    # ------------------------------------------------------------------
-    # state_read implementation
-    # ------------------------------------------------------------------
-
-    def _tool_state_read(self, params: dict[str, Any]) -> dict[str, Any]:
-        """Read workflow-state.json; return MCP content response."""
-        workspace_str = params.get("workspace")
-        workspace = Path(workspace_str).resolve() if workspace_str else self._workspace
-
-        task_id = params.get("task_id") or ""
-
-        if task_id:
-            target = workspace / "docs" / "plans" / task_id / "workflow-state.json"
-        else:
-            target = workspace / ".cursor" / "state" / "workflow-state.json"
-
-        # Validate jail containment before any IO.
-        resolve_jailed(workspace, target)
-
-        if not target.exists():
-            return {"content": [{"type": "text", "text": "no state"}]}
-
-        try:
-            parsed = json.loads(target.read_text(encoding="utf-8"))
-        except json.JSONDecodeError as exc:
-            raise RuntimeError(f"state file parse error: {exc}") from exc
-
-        return {"content": [{"type": "text", "text": json.dumps(parsed)}]}
