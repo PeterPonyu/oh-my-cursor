@@ -63,7 +63,19 @@ def validate_hooks() -> None:
         fail(".cursor/hooks.json must contain a hooks object")
 
     required_events = {
+        "sessionStart": ".cursor/hooks/session-bootstrap.py",
+        "sessionEnd": ".cursor/hooks/session-summary.py",
+        "beforeSubmitPrompt": ".cursor/hooks/prompt-router.py",
+        "preToolUse": ".cursor/hooks/tool-guard.py",
+        "postToolUse": ".cursor/hooks/state-watcher.py",
+        "postToolUseFailure": ".cursor/hooks/failure-router.py",
+        "subagentStart": ".cursor/hooks/subagent-bootstrap.py",
+        "subagentStop": ".cursor/hooks/subagent-summary.py",
+        "beforeShellExecution": ".cursor/hooks/shell-guard.py",
+        "afterShellExecution": ".cursor/hooks/shell-debrief.py",
+        "beforeReadFile": ".cursor/hooks/read-advisor.py",
         "afterFileEdit": ".cursor/hooks/claim-guard.py",
+        "preCompact": ".cursor/hooks/compact-reminder.py",
         "stop": ".cursor/hooks/stop-gate.py",
     }
     for event, expected_script in required_events.items():
@@ -84,6 +96,12 @@ def validate_hooks() -> None:
     stop_entries = list(iter_hook_entries(hooks.get("stop")))
     if not any(entry.get("loop_limit") in (0, 1) for entry in stop_entries if isinstance(entry, dict)):
         fail("stop hook must include a conservative loop_limit")
+
+    trace_helper = ROOT / ".cursor" / "hooks" / "_trace.py"
+    if not trace_helper.is_file():
+        fail("missing .cursor/hooks/_trace.py shared trace helper")
+    py_compile.compile(str(trace_helper), doraise=True)
+
     print("HOOKS_ARTIFACTS_OK")
 
 

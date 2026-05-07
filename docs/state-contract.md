@@ -30,7 +30,7 @@ The repository currently owns only these checked-in state-like surfaces:
 - `AGENTS.md`
 - `.cursor/rules/*.mdc`
 - `.cursor-plugin/plugin.json`
-- `.cursor/hooks.json` and `.cursor/hooks/` (`claim-guard.py`, `stop-gate.py`)
+- `.cursor/hooks.json` and `.cursor/hooks/` (`session-bootstrap.py`, `session-summary.py`, `prompt-router.py`, `tool-guard.py`, `state-watcher.py`, `failure-router.py`, `subagent-bootstrap.py`, `subagent-summary.py`, `shell-guard.py`, `shell-debrief.py`, `read-advisor.py`, `claim-guard.py`, `compact-reminder.py`, `stop-gate.py`)
 - `.cursor/agents/` (`orchestrator`, `researcher`, `planner`, `verifier`,
   `critic`, `debugger`, `security-reviewer`)
 - `.cursor/state/` workflow-state contract (`workflow-state.schema.json`,
@@ -57,6 +57,14 @@ Treat local orchestration scratch directories as workspace-private unless a
 specific artifact is intentionally documented, reviewed, and checked in. Durable
 planning or context notes may be tracked when they are part of a reviewed
 workflow, while session churn remains ignored by default.
+
+`.omcs/` is the oh-my-cursor scratch directory and is gitignored. The MCP
+bridge at `mcp/cursor-state-bridge/` writes its structured trace lane to
+`.omcs/cursor-state-bridge/trace.jsonl` once the trace implementation lands
+in Phase 6 (a path explicitly chosen to avoid colliding with the existing
+hook trace at `.omcs/hook-trace.log`). `.omcs/cursor-state-bridge/` is a
+permitted runtime write target for the bridge — workspace-private,
+gitignored, and **not** a checked-in `repo-owned` surface in its own right.
 
 ## Workflow-state contract
 

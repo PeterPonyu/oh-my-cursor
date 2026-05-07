@@ -1,0 +1,71 @@
+CHANGELOG.md:121:  stdlib `workflow-state.py` helper for intentional local state writes
+CHANGELOG.md:125:- added `scripts/validate-workflow-state.py` for local schema validation
+.cursor/agents/orchestrator.md:21:   `scripts/workflow-state.py init ...` or direct file edits only after the
+.cursor/hooks/failure-router.py:72:        "Record the failure with .cursor/state/workflow-state.py (or scripts/workflow-state.py) using one of: "
+.cursor/hooks/read-advisor.py:56:            "and only edited through the writer at .cursor/state/workflow-state.py."
+.cursor/hooks/shell-guard.py:119:            + ". Use scripts/workflow-state.py for state edits and scripts/install-local-plugin.sh for the local plugin path."
+.cursor/hooks/state-watcher.py:153:            + ". Use scripts/validate-workflow-state.py for the full validator output."
+.cursor/hooks/tool-guard.py:73:            "Prefer the writer helper at .cursor/state/workflow-state.py "
+.cursor/hooks/tool-guard.py:74:            "(or scripts/workflow-state.py from the repo root) so phase, "
+.cursor/hooks/tool-guard.py:8:helper at `.cursor/state/workflow-state.py`.
+.cursor/state/README.md:26:3. Write or update the file intentionally with `.cursor/state/workflow-state.py`
+.cursor/state/README.md:28:  `scripts/workflow-state.py`, or by editing JSON directly when that is
+.cursor/state/README.md:34:5. The `scripts/validate-workflow-state.py` validator lets you check any state
+docs/mcp-bridge.md:18:`.cursor/state/workflow-state.py` stays in place as a thin shim over a
+docs/mcp-bridge.md:76:  `.cursor/state/workflow-state.py` CLI shim the same library and the same
+docs/mcp-tool-surface.md:42:| 2 | locking shim + library refactor at `.cursor/state/_locking.py` and `.cursor/state/workflow-state.py`; `state_init`, `state_set_phase`, `state_record_failure` promoted to functional | AC-201..AC-209 |
+docs/orchestration.md:106:python3 scripts/validate-workflow-state.py
+docs/orchestration.md:41:| State writer | `.cursor/state/workflow-state.py` plus repo wrapper `scripts/workflow-state.py` | Creates or updates local workflow-state JSON files when the user or agent intentionally advances phase, acceptance criteria, or failure metadata. The `.cursor/state/` helper is part of the minimal installed plugin payload. |
+docs/orchestration.md:42:| Validators | `scripts/validate-workflow-state.py`, `scripts/validate-cursor-workflow-artifacts.py`, `scripts/smoke-cursor-workflow-artifacts.sh`, `scripts/validate-plugin-structure.sh`, `scripts/check-local-plugin-install.sh`, `scripts/install-local-plugin.sh` | Make the orchestration locally provable and keep the install minimal. |
+docs/orchestration.md:48:   `python3 scripts/workflow-state.py init docs/plans/<task-id>/workflow-state.json --task-id <task-id>` in the repo (installed plugin users can call `.cursor/state/workflow-state.py`). Validate with
+docs/orchestration.md:49:   `python3 scripts/validate-workflow-state.py <path>`.
+docs/orchestration.md:86:`.cursor/state/workflow-state.py` or the repo wrapper `scripts/workflow-state.py`.
+docs/orchestration.md:89:- task start: `workflow-state.py init ...`
+docs/orchestration.md:90:- phase advance: `workflow-state.py set ... --phase verify --status in_progress`
+docs/orchestration.md:91:- acceptance update: `workflow-state.py ac ... --id AC-001 --status passed --evidence scripts/check-local-plugin-install.sh`
+docs/orchestration.md:92:- failure record: `workflow-state.py fail ... --type fixable --message "..."`
+docs/plans/mcp-state-bridge-2026-05/consensus-plan.md:119:**Objective.** Make `.cursor/state/workflow-state.py` the single shared implementation. Bridge imports it; CLI shim calls it. Eliminate the two-writer window in code, not just convention (R6 + B3 + B12). Note on rename: we KEEP the filename `workflow-state.py` and refactor it in place; B2's grep gate therefore runs as a no-op idempotent check. If a future PR renames the file, the same gate becomes load-bearing.
+docs/plans/mcp-state-bridge-2026-05/consensus-plan.md:122:- `.cursor/state/workflow-state.py` refactored to expose typed library API: `init_state(...)`, `set_state(...)`, `update_acceptance_criterion(...)`, `record_failure(...)`, `append_history(...)`, `read_state(...)`. Existing `cmd_*` argparse handlers become thin shims around the library API. Returns the new state dict (in-memory representation post-write).
+docs/plans/mcp-state-bridge-2026-05/consensus-plan.md:123:- `mcp/cursor-state-bridge/state_io.py` imports the library API from `.cursor/state/workflow-state.py`. Zero `subprocess` calls.
+docs/plans/mcp-state-bridge-2026-05/consensus-plan.md:126:- `scripts/validate-workflow-state.py` extended with `--check-history-monotonic` flag (used by AC-208 and PM1 leading indicator).
+docs/plans/mcp-state-bridge-2026-05/consensus-plan.md:132:| AC-201 | Library API exists with the six functions and matching type hints. | `python3 -c "from importlib import util; m=util.spec_from_file_location('ws','.cursor/state/workflow-state.py'); mod=util.module_from_spec(m); m.loader.exec_module(mod); [getattr(mod,fn) for fn in ('init_state','set_state','update_acceptance_criterion','record_failure','append_history','read_state')]"` exits 0. |
+docs/plans/mcp-state-bridge-2026-05/consensus-plan.md:134:| AC-203 | CLI shim still works: `python3 .cursor/state/workflow-state.py init --task-id T1 --plan-id P1 --output <tmp>` produces a schema-valid file. | `scripts/validate-state-contract.sh` exits 0. |
+docs/plans/mcp-state-bridge-2026-05/consensus-plan.md:136:| AC-205 | Existing `validate-workflow-state.py` continues to pass on the example state. | `python3 scripts/validate-workflow-state.py .cursor/state/workflow-state.example.json` exits 0. |
+docs/plans/mcp-state-bridge-2026-05/consensus-plan.md:139:| AC-208 | Concurrency proof: two subprocess writers calling `state_set_phase` simultaneously produce a monotonic `history[]` containing both writes with no interleaving. | `pytest mcp/cursor-state-bridge/tests/test_locking_concurrent.py -q -m posix` exits 0; the test asserts `len(history)==2` and timestamps strictly non-decreasing; `python3 scripts/validate-workflow-state.py --check-history-monotonic <tmp>` exits 0. |
+docs/plans/mcp-state-bridge-2026-05/consensus-plan.md:142:**Validators added/extended.** `validate-workflow-state.py --check-history-monotonic` (new flag); `validate-rename-references.py` continues as no-op idempotent pass.
+docs/plans/mcp-state-bridge-2026-05/consensus-plan.md:172:| AC-304 | `state_read` returns a dict that round-trips through `validate-workflow-state.py` with no diff. | `python3 scripts/validate-workflow-state.py <state-file-after-state_read>` exits 0; `diff <state_read_dump> <state-file>` returns empty. |
+docs/plans/mcp-state-bridge-2026-05/consensus-plan.md:175:**Validators added/extended.** Reuses `validate-workflow-state.py`, `smoke-cursor-workflow-artifacts.sh`.
+docs/plans/mcp-state-bridge-2026-05/consensus-plan.md:197:| AC-401 | No agent-facing prompt or skill instructs an agent to invoke `python3 .cursor/state/workflow-state.py ...` directly. | `grep -RIn 'workflow-state.py' .cursor/agents/ skills/ rules/` returns zero hits in agent-callable surfaces (developer-facing docs may still reference it). Captured in `validate-rename-references.py` allowlist. |
+docs/plans/mcp-state-bridge-2026-05/consensus-plan.md:216:- The same validator asserts `.cursor/state/workflow-state.py`, when used as a CLI, ultimately serializes through the same lock as the bridge (verified by importing the library API and asserting `_locking.file_lock` is invoked in the write path; smoke evidence supplied by AC-208).
+docs/plans/mcp-state-bridge-2026-05/consensus-plan.md:278:| Renaming `.cursor/state/workflow-state.py`. | Optional and deferred; B2 grep gate ships now as no-op idempotent. |
+docs/plans/mcp-state-bridge-2026-05/consensus-plan.md:287:**Decision.** Ship a narrow stdio MCP server `cursor-state-bridge` under `mcp/cursor-state-bridge/` as the sole agent-callable writer of `.cursor/state/workflow-state.json`, exposing six state-IO tools that share one lock with a refactored `.cursor/state/workflow-state.py` library API. Default install excludes `mcp/`; opt-in via `--with-mcp`.
+docs/plans/mcp-state-bridge-2026-05/consensus-plan.md:42:| PM1 | A second writer (CLI shim invoked in parallel with bridge) corrupts `history[]`. | `history[]` length grows by >1 per writer call; `validate-workflow-state.py --check-history-monotonic` fails in CI. | R6 library refactor (one shared implementation), R3 lock shim `mcp/cursor-state-bridge/_locking.py` shipped Phase 2, AC-208 concurrent-writers test. |
+docs/plans/mcp-state-bridge-2026-05/handoffs/team-verify.md:31:  - Phase 2: ship `.cursor/state/_locking.py` (V1 location), refactor `.cursor/state/workflow-state.py` to typed library API; promote `state_init`, `state_set_phase`, `state_record_failure` from `-32601` placeholders to functional handlers.
+docs/plans/mcp-state-bridge-2026-05/handoffs/team-verify.md:8:  - Track C's rename-fixture had to be regenerated by the lead at the end because adding the MCP entry to CHANGELOG.md/AGENTS.md/README.md/etc. introduced new `workflow-state.py` references that shifted the baseline. The fixture is now stable and `validate-rename-references.py` exits 0.
+docs/plans/mcp-state-bridge-2026-05/open-questions.md:5:- [ ] F3 (feature decision): should the CLI surface (`python3 .cursor/state/workflow-state.py ...`) remain user-facing or become bridge-only? — Decide after 30 days of trace data on CLI usage post-Phase 6.
+docs/PRD.yaml:57:      - validate state documents locally with scripts/validate-workflow-state.py
+docs/PRD.yaml:58:      - provide .cursor/state/workflow-state.py plus the scripts/workflow-state.py wrapper so users and agents can intentionally create or update local workflow-state JSON files
+docs/PRD.yaml:83:  - scripts/validate-workflow-state.py prints WORKFLOW_STATE_OK for a valid state document.
+docs/PRD.yaml:84:  - scripts/workflow-state.py can initialize and update a local workflow-state JSON file.
+docs/state-contract.md:37:  `workflow-state.example.json`, `workflow-state.py`, `README.md`)
+docs/state-contract.md:42:  `scripts/validate-workflow-state.py`)
+docs/state-contract.md:75:automatically. The validator at `scripts/validate-workflow-state.py` keeps the
+README.md:63:| Workflow-state writer | [`.cursor/state/workflow-state.py`](./.cursor/state/workflow-state.py) |
+README.md:76:| Workflow-state validator | [`scripts/validate-workflow-state.py`](./scripts/validate-workflow-state.py) |
+scripts/check-local-plugin-install.sh:123:[[ -f "$plugin_path/.cursor/state/workflow-state.py" ]] || fail "copy mode plugin missing workflow-state writer"
+scripts/smoke-cursor-workflow-artifacts.sh:16:shell_debrief_payload='{"event":"afterShellExecution","command":"python3 scripts/validate-workflow-state.py","output":"WORKFLOW_STATE_OK","duration":150,"sandbox":"trusted"}'
+scripts/smoke-cursor-workflow-artifacts.sh:38:python3 scripts/validate-workflow-state.py >/dev/null
+scripts/validate-plugin-structure.sh:129:python3 scripts/validate-workflow-state.py >/dev/null
+scripts/validate-plugin-structure.sh:33:    .cursor/state/workflow-state.py
+scripts/validate-plugin-structure.sh:53:    scripts/validate-workflow-state.py
+scripts/validate-plugin-structure.sh:54:    scripts/workflow-state.py
+scripts/validate-surface-visibility.sh:34:    .cursor/state/workflow-state.py
+scripts/validate-surface-visibility.sh:64:    scripts/validate-workflow-state.py
+scripts/validate-surface-visibility.sh:65:        scripts/workflow-state.py
+scripts/validate-workflow-state.py:5:  python3 scripts/validate-workflow-state.py [path]
+scripts/verify-backbone.sh:34:  .cursor/state/workflow-state.py
+scripts/verify-backbone.sh:63:  scripts/validate-workflow-state.py
+scripts/verify-backbone.sh:64:  scripts/workflow-state.py
+scripts/workflow-state.py:9:HELPER = Path(__file__).resolve().parents[1] / ".cursor" / "state" / "workflow-state.py"
+skills/phase-controller/SKILL.md:121:python3 scripts/validate-workflow-state.py path/to/workflow-state.json
+skills/phase-controller/SKILL.md:52:   `python3 scripts/validate-workflow-state.py <path>`.

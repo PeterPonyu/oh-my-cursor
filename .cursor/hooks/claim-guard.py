@@ -14,6 +14,8 @@ import sys
 from pathlib import Path
 from urllib.parse import unquote, urlparse
 
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from _trace import trace as _trace  # noqa: E402
 
 ROOT = Path(__file__).resolve().parents[2]
 
@@ -216,6 +218,14 @@ def main() -> int:
     else:
         output["message"] = "Claim/proof audit passed."
 
+    _trace({
+        "hook": "claim-guard",
+        "event": "afterFileEdit",
+        "status": status,
+        "checked_files": output.get("checked_files", []),
+        "warning_count": warning_count,
+        "severe_count": severe_count,
+    })
     print(json.dumps(output, ensure_ascii=False))
     return 2 if severe_count else 0
 

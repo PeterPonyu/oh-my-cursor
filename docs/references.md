@@ -23,6 +23,7 @@ When capability claims change in `AGENTS.md`, `README.md`, `docs/**`, or
 | [Model Context Protocol (MCP) for CLI](https://docs.cursor.com/cli/mcp) | Cursor/CLI MCP support, configuration references, and CLI MCP commands. | Supports `host-product-only` MCP wording at `official-doc`; this repo still does not claim a default `.cursor/mcp.json`. |
 | [Modes](https://docs.cursor.com/chat/custom-modes) | Agent/Ask/Manual/Custom modes as product capabilities and product-managed configuration. | Supports `host-product-only` mode wording at `official-doc`; this repo does not claim repo-file custom-mode packaging. |
 | [Background Agents](https://docs.cursor.com/background-agents) | Background agents as asynchronous remote product capability. | Supports `host-product-only` background-agent wording at `official-doc`; this repo does not claim repo-file provisioning. |
+| [Model Context Protocol specification](https://spec.modelcontextprotocol.io/) | JSON-RPC 2.0 wire format, `initialize` / `tools/list` / `tools/call` semantics, transport options. | Supports `repo-owned` `checked-in-artifact` wording for the `mcp/cursor-state-bridge/` server's stdio JSON-RPC implementation; runtime smoke evidence is gated by `RUN_MCP_BRIDGE_SMOKE=1`. |
 
 ## Landing-surface deployment references
 

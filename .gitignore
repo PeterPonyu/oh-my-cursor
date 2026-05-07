@@ -7,5 +7,6 @@ __pycache__/
 benchmark/runs/data/
 
 # Local orchestration scratch state (generated per local run; not durable artifacts)
+.omcs/
 .omc/
 .omx/

@@ -16,7 +16,19 @@ required=(
   .cursor/hooks.json
   .cursor/hooks/README.md
   .cursor/hooks/claim-guard.py
+  .cursor/hooks/prompt-router.py
+  .cursor/hooks/shell-guard.py
   .cursor/hooks/stop-gate.py
+  .cursor/hooks/session-bootstrap.py
+  .cursor/hooks/session-summary.py
+  .cursor/hooks/tool-guard.py
+  .cursor/hooks/state-watcher.py
+  .cursor/hooks/failure-router.py
+  .cursor/hooks/subagent-bootstrap.py
+  .cursor/hooks/subagent-summary.py
+  .cursor/hooks/shell-debrief.py
+  .cursor/hooks/read-advisor.py
+  .cursor/hooks/compact-reminder.py
   .cursor/state/workflow-state.schema.json
   .cursor/state/workflow-state.example.json
   .cursor/state/workflow-state.py
@@ -42,6 +54,9 @@ required=(
   scripts/check-local-plugin-install.sh
   scripts/install-local-plugin.sh
   scripts/validate-plugin-structure.sh
+  scripts/validate-mcp-server-structure.py
+  scripts/smoke-mcp-cursor-state-bridge.sh
+  scripts/validate-rename-references.py
   scripts/validate-public-language.py
   scripts/validate-cursor-workflow-artifacts.py
   scripts/smoke-cursor-workflow-artifacts.sh

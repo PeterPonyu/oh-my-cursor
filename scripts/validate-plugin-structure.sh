@@ -7,6 +7,21 @@ cd "$ROOT"
 log() { printf 'ok: %s\n' "$*"; }
 fail() { printf 'FAIL: %s\n' "$*" >&2; exit 1; }
 
+# ---------------------------------------------------------------------------
+# --self-test mode (AC-110/AC-107): read-only checks, no working-tree mutation
+# ---------------------------------------------------------------------------
+if [[ "${1:-}" == "--self-test" ]]; then
+  echo "self-test: tracked mcp.json detection"
+  if git ls-files .cursor/mcp.json 2>/dev/null | grep -q .; then
+    echo "self-test: real repo has tracked .cursor/mcp.json (unexpected)"; exit 1
+  fi
+  echo "self-test: no tracked .cursor/mcp.json — passes negative case"
+  echo "self-test: .cursor/mcp.example.json present check"
+  [[ -f .cursor/mcp.example.json ]] || { echo "self-test: missing .cursor/mcp.example.json"; exit 1; }
+  echo "VALIDATE_PLUGIN_STRUCTURE_SELF_TEST_OK"
+  exit 0
+fi
+
 required=(
   .cursor-plugin/plugin.json
     .cursor/hooks.json
@@ -24,6 +39,7 @@ required=(
     .cursor/agents/security-reviewer.md
     .cursor/agents/planner.md
     .cursor/agents/researcher.md
+    .cursor/mcp.example.json
   rules/repo-owned-plugin-boundary.mdc
   skills/local-plugin-check/SKILL.md
   skills/phase-controller/SKILL.md
@@ -42,6 +58,12 @@ for path in "${required[@]}"; do
   [[ -f "$path" ]] || fail "missing required plugin file: $path"
   log "$path"
 done
+
+# AC-107: .cursor/mcp.json must never be tracked in git
+if git ls-files .cursor/mcp.json 2>/dev/null | grep -q .; then
+  fail "tracked .cursor/mcp.json is forbidden; use .cursor/mcp.example.json instead"
+fi
+log ".cursor/mcp.json is not tracked (correct)"
 
 command -v python3 >/dev/null 2>&1 || fail "python3 not found"
 

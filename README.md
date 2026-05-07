@@ -26,7 +26,7 @@ The current repo-owned backbone includes:
 - root `AGENTS.md` guidance;
 - project rules in `.cursor/rules/`;
 - project hooks at `.cursor/hooks.json` plus `.cursor/hooks/` lifecycle scripts
-  (`claim-guard.py`, `stop-gate.py`);
+  (`session-bootstrap.py`, `session-summary.py`, `prompt-router.py`, `tool-guard.py`, `state-watcher.py`, `failure-router.py`, `subagent-bootstrap.py`, `subagent-summary.py`, `shell-guard.py`, `shell-debrief.py`, `read-advisor.py`, `claim-guard.py`, `compact-reminder.py`, `stop-gate.py`);
 - project agents in `.cursor/agents/` (`orchestrator`, `researcher`,
   `planner`, `verifier`, `critic`, `debugger`, `security-reviewer`);
 - a shared workflow-state contract and runtime helper under `.cursor/state/`;
@@ -128,6 +128,20 @@ appropriate proof artifacts:
 - background-agent provisioning;
 - a default `.cursor/mcp.json`; or
 - marketplace publication as a completion gate for local plugin use.
+
+## MCP bridge (opt-in)
+
+The repo ships an MCP server at `mcp/cursor-state-bridge/` that owns
+agent-callable writes to `.cursor/state/workflow-state.json`. It speaks
+stdio JSON-RPC 2.0, exposes six tools mapped 1:1 to the workflow-state
+schema (one functional in PR1, five planned for Phase 2-3), and never opens
+a network listener. The default plugin install excludes the bridge; opt in
+with `./scripts/install-local-plugin.sh --with-mcp` and copy the
+checked-in template at `.cursor/mcp.example.json` to `.cursor/mcp.json`
+(the user-environment file is gitignored). See
+[`docs/mcp-bridge.md`](./docs/mcp-bridge.md) for the boundary, jail roots,
+and verification recipe; [`docs/mcp-tool-surface.md`](./docs/mcp-tool-surface.md)
+for the tool table.
 
 ## Local plugin loading
 

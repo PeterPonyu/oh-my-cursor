@@ -38,7 +38,7 @@ explicit:
     supports.
 
 Current `repo-owned` surfaces here are the root `AGENTS.md`, `.cursor/rules/`,
-`.cursor/hooks.json` plus `.cursor/hooks/` (`claim-guard.py`, `stop-gate.py`),
+`.cursor/hooks.json` plus `.cursor/hooks/` (`session-bootstrap.py`, `session-summary.py`, `prompt-router.py`, `tool-guard.py`, `state-watcher.py`, `failure-router.py`, `subagent-bootstrap.py`, `subagent-summary.py`, `shell-guard.py`, `shell-debrief.py`, `read-advisor.py`, `claim-guard.py`, `compact-reminder.py`, `stop-gate.py`),
 `.cursor/agents/` (including `orchestrator`, `researcher`, `planner`,
 `verifier`, `critic`, `debugger`, `security-reviewer`), the `.cursor/state/`
 workflow-state contract plus its schema/example/runtime helper, the
@@ -61,8 +61,18 @@ validator land together.
 - Do **not** add MCP config until a concrete server and ownership model are
   chosen.
 - Hooks, agents, and workflow-state helpers are now repo-owned only to the
-  extent represented by `.cursor/hooks.json`, `.cursor/hooks/`,
+  extent represented by `.cursor/hooks.json` (wiring fourteen documented
+  Cursor hook events), `.cursor/hooks/` (session-bootstrap, session-summary,
+  prompt-router, tool-guard, state-watcher, failure-router,
+  subagent-bootstrap, subagent-summary, shell-guard, shell-debrief,
+  read-advisor, claim-guard, compact-reminder, stop-gate),
   `.cursor/agents/`, `.cursor/state/`, and the validators that inspect them.
+- The MCP server at `mcp/cursor-state-bridge/` is `repo-owned` opt-in: the
+  default plugin install excludes it; users add it via
+  `./scripts/install-local-plugin.sh --with-mcp` and create
+  `.cursor/mcp.json` from the checked-in template at
+  `.cursor/mcp.example.json` (the user-environment file itself is
+  gitignored and validator-rejected if accidentally tracked).
 
 ## Editing posture
 

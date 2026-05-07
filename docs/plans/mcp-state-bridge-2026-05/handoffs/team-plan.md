@@ -1,0 +1,12 @@
+## Handoff: team-plan → team-exec
+- **Scope**: Phase 1 (PR1) of the consensus-approved plan at `docs/plans/mcp-state-bridge-2026-05/consensus-plan.md`. AC-101..AC-110.
+- **Architecture (locked)**: Option A — narrow stdio MCP server `cursor-state-bridge` under `mcp/cursor-state-bridge/`. Six tools (only `state_read` functional in PR1; others are `tools/list`-advertised but `tools/call` returns `-32601` until Phase 3). Stdio JSON-RPC 2.0, line-delimited. Three jail roots: `.cursor/state/`, `docs/plans/<task-id>/`, `.omcs/cursor-state-bridge/`.
+- **Decided**: directory uses hyphenated `cursor-state-bridge` (human-readable); package invoked via direct script path (`python3 ${workspaceFolder}/mcp/cursor-state-bridge/__main__.py`) NOT `-m cursor_state_bridge` because hyphens are not valid Python identifiers. Canonical fixture shape adjusted accordingly.
+- **Rejected**: underscore directory `cursor_state_bridge/` (less readable in repo browser); `-m` invocation with PYTHONPATH manipulation (more fragile).
+- **Risks**: integration of three parallel tracks; agents may produce inconsistent JSON-RPC framing if not pinned.
+- **Files in scope (PR1)**: see plan Section 5.
+- **Track decomposition**:
+  - Track A: `mcp/cursor-state-bridge/{__init__,__main__,server,jail}.py` + `fixtures/{mcp.example.canonical,trace-schema}.json` + `.cursor/mcp.example.json` (byte-equal)
+  - Track B: `mcp/cursor-state-bridge/tests/{__init__,test_rpc,test_state_io_read}.py`
+  - Track C: `scripts/validate-mcp-server-structure.py`, `scripts/smoke-mcp-cursor-state-bridge.sh`, `scripts/validate-rename-references.py`, `docs/plans/mcp-state-bridge-2026-05/expected-rename-references.txt`, patches to `scripts/{install-local-plugin,check-local-plugin-install,validate-plugin-structure}.sh`
+  - Lead (me): all docs, then full validator chain (`team-verify`).

@@ -26,9 +26,20 @@ features:
     goal: Ship project hooks as repo-owned runtime helpers for trusted Cursor workspaces.
     requirements:
       - define versioned project hook configuration at .cursor/hooks.json
+      - emit a discipline and workflow-state reminder on sessionStart
+      - emit an observational summary on sessionEnd
+      - surface skill, agent, and phase routing hints plus active workflow-state summaries before each submitted prompt
+      - keep direct edits to workflow-state.json bounded by asking for confirmation on preToolUse when non-shell editing tools target it
+      - validate edited workflow-state.json documents against the schema on postToolUse using only the Python standard library
+      - route tool failures to the debugger role and recommend recording failure metadata via the writer on postToolUseFailure
+      - link subagent runs to checked-in role prompts on subagentStart and emit observational summaries on subagentStop without requesting auto follow-ups
+      - warn on risky shell patterns and ask for confirmation before commands that would corrupt repo-owned state files or the local plugin install path on beforeShellExecution
+      - emit evidence notes on afterShellExecution when the recorded command invokes a repo-owned validator, smoke, install/check helper, or the state writer
+      - emit a human-visibility reminder on beforeReadFile when the target is a known workflow-state document
       - run claim/proof checks after file edits
+      - surface workflow-state anchors on preCompact so context compaction preserves them
       - run conservative completion checks on stop events
-      - keep hook scripts stdlib-only and fail-open unless a severe overclaim is detected
+      - keep hook scripts stdlib-only and fail-open unless a severe unsupported claim or a severe state-corrupting shell pattern is detected
   agents:
     goal: Ship concise project agents for verification, critique, debugging, security review, planning, and research.
     requirements:
@@ -60,7 +71,7 @@ features:
 
 acceptance_criteria:
   - docs/PRD.yaml exists and describes the independent product posture.
-  - .cursor/hooks.json wires afterFileEdit and stop events to checked-in lifecycle hook scripts (claim-guard.py and stop-gate.py).
+  - .cursor/hooks.json wires sessionStart, sessionEnd, beforeSubmitPrompt, preToolUse, postToolUse, postToolUseFailure, subagentStart, subagentStop, beforeShellExecution, afterShellExecution, beforeReadFile, afterFileEdit, preCompact, and stop events to checked-in lifecycle hook scripts (session-bootstrap.py, session-summary.py, prompt-router.py, tool-guard.py, state-watcher.py, failure-router.py, subagent-bootstrap.py, subagent-summary.py, shell-guard.py, shell-debrief.py, read-advisor.py, claim-guard.py, compact-reminder.py, and stop-gate.py).
   - .cursor/hooks contains README.md plus stdlib-only Python hook scripts that emit valid JSON.
   - .cursor/agents contains orchestrator, verifier, critic, debugger, security-reviewer, planner, and researcher prompts with valid frontmatter.
   - .cursor/state ships workflow-state.schema.json, workflow-state.example.json, and a README that explains the contract.

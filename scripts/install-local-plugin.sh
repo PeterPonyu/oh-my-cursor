@@ -6,11 +6,12 @@ PLUGIN_NAME="oh-my-cursor"
 TARGET_ROOT="${HOME}/.cursor/plugins/local"
 MODE="copy"
 FORCE=0
+WITH_MCP=0
 LEGACY_PLUGIN_NAMES=("oh-my-copilot-workspace")
 
 usage() {
   cat <<'USAGE'
-Usage: scripts/install-local-plugin.sh [--root PATH] [--target-root PATH] [--name NAME] [--copy|--symlink] [--force]
+Usage: scripts/install-local-plugin.sh [--root PATH] [--target-root PATH] [--name NAME] [--copy|--symlink] [--force] [--with-mcp]
 
 Installs the repo-root Cursor plugin into Cursor's local plugin directory.
 
@@ -24,6 +25,9 @@ This script validates the checked-in plugin structure first, then either:
   - copies only the minimal runtime plugin payload into the local plugin directory.
 
 It does not reload Cursor for you; the final reload remains a manual product action.
+
+Flags:
+  --with-mcp  Also copy the mcp/ tree (default: omitted from minimal payload)
 USAGE
 }
 
@@ -56,6 +60,10 @@ while (($#)); do
       FORCE=1
       shift
       ;;
+    --with-mcp)
+      WITH_MCP=1
+      shift
+      ;;
     -h|--help)
       usage
       exit 0
@@ -83,11 +91,25 @@ cleanup_legacy_aliases() {
       log "removed legacy local plugin alias at $legacy_path"
     fi
   done
+
+  # Idempotent cleanup of stale mcp/ from a prior --with-mcp install
+  if [[ "$WITH_MCP" != "1" ]]; then
+    local stale_mcp="${target_root%/}/${PLUGIN_NAME}/mcp"
+    if [[ -d "$stale_mcp" ]]; then
+      rm -rf "$stale_mcp"
+      log "removed stale mcp/ tree from previous --with-mcp install at $stale_mcp"
+    fi
+  fi
 }
 
 copy_minimal_payload() {
   local src="$1"
   local dst="$2"
+
+  local mcp_includes=()
+  if [[ "$WITH_MCP" == "1" ]]; then
+    mcp_includes=(--include='/mcp/' --include='/mcp/***')
+  fi
 
   rsync -a \
     -m \
@@ -104,6 +126,7 @@ copy_minimal_payload() {
     --include='/CHANGELOG.md' \
     --include='/LICENSE' \
     --include='*/' \
+    "${mcp_includes[@]}" \
     --exclude='*' \
     "$src"/ "$dst"/
 }
