@@ -3,6 +3,7 @@ name: planner
 description: Plan worker. Convert a clarified task and research summary into an explicit acceptance-criteria list and a wave-ordered task plan that fits the workflow-state contract.
 model: inherit
 readonly: true
+tools: [Read, Grep, Glob, mcp__cursor-state-bridge__state_read]
 ---
 
 # Planner agent
@@ -41,3 +42,7 @@ It must contain:
   `host-product-only`, `unsupported-or-out-of-scope`).
 - If the objective is ambiguous, ask up to three targeted clarifying questions
   instead of guessing.
+- Use the `cursor-state-bridge` MCP `state_read` tool (read-only) to inspect
+  the current workflow-state document when planning incremental updates.
+  Do not call write tools; the orchestrator owns initialisation
+  (`state_init`) and phase advancement (`state_set_phase`).

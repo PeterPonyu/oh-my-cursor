@@ -70,11 +70,12 @@ STALE_ARCHIVED_PATHS = (
 
 # 3. Legacy short names (subset of validate-public-language patterns; kept
 #    here so the agent-surface gate stays self-contained even if the public-
-#    language validator is run separately).
+#    language validator is run separately). Pruned in Stage 3: `omc` and
+#    `oh-my-claudecode` were dropped because `.omc/state` is a documented
+#    boundary token in this repo. `omx` and `oh-my-codex` remain forbidden
+#    on agent-callable surfaces.
 LEGACY_SHORT_NAMES = (
-    (re.compile(r"(?<![A-Za-z0-9])omc(?![A-Za-z0-9])", re.IGNORECASE), "legacy-short-name-a"),
     (re.compile(r"(?<![A-Za-z0-9])omx(?![A-Za-z0-9])", re.IGNORECASE), "legacy-short-name-b"),
-    (re.compile(r"oh-my-claudecode", re.IGNORECASE), "legacy-package-a"),
     (re.compile(r"oh-my-codex", re.IGNORECASE), "legacy-package-b"),
 )
 

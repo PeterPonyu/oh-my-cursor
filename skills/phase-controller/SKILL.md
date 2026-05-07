@@ -42,16 +42,23 @@ controller map to checked-in agents under
 
 Use this skill at the start of any non-trivial task and before stopping a
 session. It complements existing skills (`plan`, `iterate-loop`, `review`,
-`debug`) by deciding **which one to invoke next**.
+`debug`, `trace`) by deciding **which one to invoke next**. `debug` is the
+diagnosis-first lane; `trace` is its causal-investigation peer for harder
+"why did this happen?" questions.
 
 ## Steps
 
-1. **Locate or create the state file.** Default location for new tasks:
-   `docs/plans/<task-id>/workflow-state.json`. Agent-callable writes go
-   through the `cursor-state-bridge` MCP tools (`state_init`,
+1. **Locate or create the state file.** The canonical location is
+   `.cursor/state/workflow-state.json`; this is the path that
+   `stop-gate.py`, `compact-reminder.py`, `state-watcher.py`, and the
+   default bridge resolver all read. Per-task archives at
+   `docs/plans/<task-id>/workflow-state.json` are opt-in (pass `task_id`
+   when calling `state_init` to use that subdirectory). Agent-callable
+   writes go through the `cursor-state-bridge` MCP tools (`state_init`,
    `state_set_phase`, `state_update_acceptance_criterion`,
-   `state_record_failure`, `state_history_append`, `state_read`).
-   Validate the on-disk document against
+   `state_record_failure`, `state_history_append`, `state_read`); both
+   targets share the bridge's `file_lock` invariant. Validate the
+   on-disk document against
    `.cursor/state/workflow-state.schema.json` with the read-only
    validator `python3 scripts/validate-workflow-state.py <path>`; the
    validator does not write and remains agent-callable.
@@ -69,8 +76,13 @@ session. It complements existing skills (`plan`, `iterate-loop`, `review`,
      evidence is captured.
    - `verify` → invoke the `verifier` agent. It must check evidence, not run
      code itself.
-   - `review` → invoke `critic` and, when the change touches secrets, auth,
-     supply chain, or external surfaces, also `security-reviewer`.
+   - `review` → invoke `critic` **always**; additionally invoke
+     `security-reviewer` when the change touches secrets, auth, supply chain,
+     or external surfaces. Both reviewers' verdicts feed the shared loop gate
+     defined in `skills/iterate-loop/SKILL.md` step 7: `APPROVE` /
+     `SAFE TO MERGE` => `pass`, `COMMENT` / `FIX HIGH+ FIRST` => `comment`,
+     `REQUEST CHANGES` / `DO NOT DEPLOY` => `block`. Advance to `done` only
+     when every reviewer that ran maps to `pass` or `comment`.
    - `done` → set `status=passed` and stop. The `stop-gate.py` hook will use
      this state to confirm closure.
    - `blocked` → record the blocker, set `failure.type` to one of

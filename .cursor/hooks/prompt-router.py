@@ -34,7 +34,7 @@ SKILL_NAMES = {
 }
 
 AGENT_NAMES = {
-    "orchestrator", "researcher", "planner", "verifier",
+    "orchestrator", "researcher", "planner", "implementer", "verifier",
     "critic", "debugger", "security-reviewer",
 }
 

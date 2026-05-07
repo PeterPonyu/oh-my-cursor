@@ -72,9 +72,11 @@ ls .cursor-plugin/plugin.json
 ls skills/
 ```
 
-- Expect at least the shipped skills the repo declares (today: the
-  `local-plugin-check` skill plus the ten skills in this catalogue).
-- WARN if any expected skill directory is missing a `SKILL.md`.
+- Enumerate every directory under `skills/` from the actual filesystem;
+  do not hardcode an expected count. Each skill directory must contain a
+  `SKILL.md` whose frontmatter declares a `name:` matching the directory.
+- WARN if any directory is missing `SKILL.md`, or if the `name:` value
+  does not match its directory.
 
 ### 5. Plugin manifest
 

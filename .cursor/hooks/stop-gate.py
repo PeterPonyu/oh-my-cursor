@@ -59,6 +59,18 @@ def _loop_count(payload: dict) -> int:
 
 
 def _resolve_state_path(payload: dict) -> Path | None:
+    """Locate the workflow-state document for this stop event.
+
+    Resolution order:
+    1. ``OH_MY_CURSOR_WORKFLOW_STATE`` environment variable -- override-only,
+       intended for unusual setups (per-task archives under
+       ``docs/plans/<task-id>/``, alternative workspace layouts, tests).
+    2. ``workflow_state`` field on the stop payload -- same override semantics
+       provided per-event by the host.
+    3. The canonical default ``.cursor/state/workflow-state.json`` (matches
+       the path the cursor-state-bridge writes when no ``task_id`` is set,
+       and the path ``state-watcher.py`` validates after every bridge write).
+    """
     candidates: list[str] = []
     env_path = os.environ.get("OH_MY_CURSOR_WORKFLOW_STATE")
     if env_path:
@@ -66,6 +78,7 @@ def _resolve_state_path(payload: dict) -> Path | None:
     payload_path = payload.get("workflow_state") if isinstance(payload, dict) else None
     if isinstance(payload_path, str):
         candidates.append(payload_path)
+    candidates.append(str(ROOT / ".cursor" / "state" / "workflow-state.json"))
     for raw in candidates:
         try:
             candidate = Path(raw).expanduser()

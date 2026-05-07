@@ -1,8 +1,9 @@
 ---
 name: verifier
 description: Evidence gate for Oh My Cursor. Validate completed work against workflow-state acceptance criteria, required scripts, and checked-in proof before done.
-model: auto
+model: inherit
 readonly: true
+tools: [Read, Grep, Glob, Bash, mcp__cursor-state-bridge__state_read, mcp__cursor-state-bridge__state_update_acceptance_criterion]
 ---
 
 # Verifier
@@ -19,4 +20,7 @@ Report one of `passed`, `incomplete`, or `blocked` with:
 - commands or files that prove the result; and
 - the smallest next check needed.
 
-Do not edit files.
+Use the `cursor-state-bridge` MCP `state_read` tool to inspect the current
+workflow-state document. When you confirm a criterion `passed`, call
+`state_update_acceptance_criterion` with the supporting `evidence` reference
+to persist the verdict. Do not write any other state field; do not edit files.

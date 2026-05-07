@@ -14,6 +14,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from _trace import trace as _trace  # noqa: E402
+from _tool_payload import extract_tool_name  # noqa: E402
 
 
 FAILURE_TYPES = {
@@ -43,12 +44,7 @@ def main() -> int:
         print(json.dumps({"status": "pass", "fail_open": True, "additional_context": "", "message": "Failure-router input was not JSON; skipped."}))
         return 0
 
-    tool_name = ""
-    for key in ("tool_name", "toolName", "name"):
-        value = payload.get(key)
-        if isinstance(value, str) and value:
-            tool_name = value
-            break
+    tool_name = extract_tool_name(payload)
 
     error_message = ""
     for key in ("error_message", "errorMessage", "message", "error"):

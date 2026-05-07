@@ -38,14 +38,14 @@ EXCLUDED_PREFIXES = (
 PUBLIC_SUFFIXES = {".md", ".mdc", ".markdown", ".yaml", ".yml", ".tsx", ".ts", ".jsx", ".js"}
 
 LANGUAGE_PATTERNS = {
-    "legacy-short-name-a": re.compile(r"(?<![A-Za-z0-9])omc(?![A-Za-z0-9])", re.IGNORECASE),
+    # Self-referential heritage tokens (`omc`, `oh-my-claudecode`, `Claude
+    # Code`, `migration from`, `adaptation`) appear legitimately across this
+    # repo's docs and were pruned from the warning surface to reduce noise.
+    # The blocking surface is `SEVERE_OVERCLAIMS` below; only the tokens
+    # below remain as fail-open warnings for genuinely external references.
     "legacy-short-name-b": re.compile(r"(?<![A-Za-z0-9])omx(?![A-Za-z0-9])", re.IGNORECASE),
-    "legacy-package-a": re.compile(r"oh-my-claudecode", re.IGNORECASE),
     "legacy-package-b": re.compile(r"oh-my-codex", re.IGNORECASE),
-    "external-agent-product": re.compile(r"Claude Code", re.IGNORECASE),
     "source-system": re.compile(r"source[ -]system", re.IGNORECASE),
-    "comparison-transition": re.compile(r"migration from", re.IGNORECASE),
-    "adaptation": re.compile(r"adaptation", re.IGNORECASE),
     "comparison-clone": re.compile(r"parity clone", re.IGNORECASE),
     "legacy-arm": re.compile(r"with-omc", re.IGNORECASE),
     "external-source": re.compile(r"external[ -]source", re.IGNORECASE),

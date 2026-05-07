@@ -15,6 +15,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from _trace import trace as _trace  # noqa: E402
+from _active_role import set_active_role  # noqa: E402
 
 ROOT = Path(__file__).resolve().parents[2]
 AGENTS_DIR = ROOT / ".cursor" / "agents"
@@ -23,6 +24,7 @@ KNOWN_ROLES = {
     "orchestrator",
     "researcher",
     "planner",
+    "implementer",
     "verifier",
     "critic",
     "debugger",
@@ -59,6 +61,16 @@ def main() -> int:
     role_prompt_exists = bool(role_prompt_path and role_prompt_path.is_file())
 
     if role_match and role_prompt_exists:
+        subagent_id = ""
+        for key in ("subagent_id", "subagentId", "session_id", "sessionId"):
+            value = payload.get(key)
+            if isinstance(value, str) and value:
+                subagent_id = value
+                break
+        try:
+            set_active_role(subagent_type, subagent_id=subagent_id)
+        except OSError:
+            pass
         user_message = (
             f"Subagent-bootstrap: matched role `{subagent_type}`. "
             f"Use the checked-in prompt at .cursor/agents/{subagent_type}.md "

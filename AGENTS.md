@@ -40,8 +40,10 @@ explicit:
 Current `repo-owned` surfaces here are the root `AGENTS.md`, `.cursor/rules/`,
 `.cursor/hooks.json` plus `.cursor/hooks/` (`session-bootstrap.py`, `session-summary.py`, `prompt-router.py`, `tool-guard.py`, `state-watcher.py`, `failure-router.py`, `subagent-bootstrap.py`, `subagent-summary.py`, `shell-guard.py`, `shell-debrief.py`, `read-advisor.py`, `claim-guard.py`, `compact-reminder.py`, `stop-gate.py`),
 `.cursor/agents/` (including `orchestrator`, `researcher`, `planner`,
-`verifier`, `critic`, `debugger`, `security-reviewer`), the `.cursor/state/`
-workflow-state contract plus its schema/example/runtime helper, the
+`implementer`, `verifier`, `critic`, `debugger`, `security-reviewer`), the
+`.cursor/state/` workflow-state contract plus its schema/example/runtime
+helper (see [`docs/state-boundaries.md`](docs/state-boundaries.md) for the
+`.cursor/state` vs `.omc/state` ownership rule), the
 `skills/phase-controller/SKILL.md` orchestration entry skill, the repo-root
 plugin manifest with explicit
 `rules`/`skills`/`agents`/`hooks` references, bounded docs, local validators,

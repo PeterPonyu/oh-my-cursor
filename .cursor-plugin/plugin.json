@@ -9,5 +9,6 @@
   "rules": "rules",
   "skills": "skills",
   "agents": ".cursor/agents",
-  "hooks": ".cursor/hooks.json"
+  "hooks": ".cursor/hooks.json",
+  "mcp": ".cursor/mcp.example.json"
 }

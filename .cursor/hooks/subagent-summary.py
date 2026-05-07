@@ -14,6 +14,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from _trace import trace as _trace  # noqa: E402
+from _active_role import clear_active_role  # noqa: E402
 
 
 def _read_payload() -> dict:
@@ -61,6 +62,11 @@ def main() -> int:
         for item in raw_modified:
             if isinstance(item, str):
                 modified_files.append(item)
+
+    try:
+        clear_active_role()
+    except OSError:
+        pass
 
     output = {
         "status": "pass",

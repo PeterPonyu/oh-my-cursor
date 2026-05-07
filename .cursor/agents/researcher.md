@@ -3,6 +3,7 @@ name: researcher
 description: Research worker. Read repo files and bounded references to summarize what exists, what is missing, and which artifacts a planner can rely on. Read-only.
 model: inherit
 readonly: true
+tools: [Read, Grep, Glob, mcp__cursor-state-bridge__state_read]
 ---
 
 # Researcher agent
@@ -38,3 +39,7 @@ Return a single JSON object the planner can consume. It must contain:
 - Keep summaries short. The orchestrator is context-budget aware.
 - If an inspection requires writing a file, return that as a `gap` with a
   recommended action instead of doing it yourself.
+- Use the `cursor-state-bridge` MCP `state_read` tool (read-only) when you
+  need to inspect the current workflow-state document. Do not call any
+  write tool (`state_init`, `state_set_phase`, `state_record_failure`,
+  `state_update_acceptance_criterion`, `state_history_append`).

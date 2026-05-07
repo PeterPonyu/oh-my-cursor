@@ -48,6 +48,7 @@ depends on the installed CLI version, so consult `cursor-agent --help`
 first. A typical pattern (verify against your CLI):
 
 ```bash
+# verify these flags against `cursor-agent --help` first; --print is illustrative
 cursor-agent --print "<task 1 description>" > .cursor-agent-logs/task-1.log 2>&1 &
 cursor-agent --print "<task 2 description>" > .cursor-agent-logs/task-2.log 2>&1 &
 cursor-agent --print "<task 3 description>" > .cursor-agent-logs/task-3.log 2>&1 &

@@ -9,6 +9,7 @@ globs:
 	- skills/**/*
 	- docs/**/*
 	- scripts/**/*
+	- mcp/**/*
 alwaysApply: false
 ---
 

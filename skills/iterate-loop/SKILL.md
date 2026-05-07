@@ -26,7 +26,9 @@ description: Persistence pattern - iterate against a small PRD until every accep
 
 ## PRD shape
 
-Create `prd.json` at the workspace root (or under `docs/prd.json`):
+Create `prd.json` at the workspace root (`./prd.json`). This is the canonical
+location every step in this skill (and `auto-execute`) reads from. Other
+locations are not supported by the resume path:
 
 ```json
 {
@@ -62,11 +64,23 @@ with criteria that name a file, a command, or an observable behavior.
    Update `prd.json` on disk.
 6. **Loop back to step 2** until every story is `passes: true`.
 7. **Reviewer pass.** Run the `review` skill (and `security-review` if the
-   change touches auth, input handling, or secrets). Treat any
-   `REQUEST CHANGES` verdict as a regression: fix and re-verify, do not
-   override.
+   change touches auth, input handling, or secrets). Map each reviewer's raw
+   verdict to the shared loop gate before deciding to stop:
+
+   | Reviewer | Raw verdict | Loop gate |
+   | --- | --- | --- |
+   | `review` | `APPROVE` | `pass` |
+   | `review` | `COMMENT` | `comment` |
+   | `review` | `REQUEST CHANGES` | `block` |
+   | `security-review` | `SAFE TO MERGE` | `pass` |
+   | `security-review` | `FIX HIGH+ FIRST` | `comment` |
+   | `security-review` | `DO NOT DEPLOY` | `block` |
+
+   Any `block` is a regression: fix and re-verify, do not override. A `comment`
+   is recorded but does not block progression. Stop when **every reviewer that
+   ran returned `pass` or `comment`** under this mapping.
 8. **Stop.** Report the final state of `prd.json`, the verification commands
-   used, and the reviewer verdict.
+   used, and the reviewer verdicts (raw and mapped).
 
 ## Anti-patterns
 
@@ -76,6 +90,22 @@ with criteria that name a file, a command, or an observable behavior.
 - Deleting tests to make them pass.
 - Hand-waving the reviewer pass ("looks good to me").
 - Reducing scope to declare victory.
+
+## State sync (optional, via cursor-state-bridge MCP)
+
+When a workflow-state document is in scope, mirror PRD progress to
+`.cursor/state/workflow-state.json` through the `cursor-state-bridge` MCP
+tools so verifiers and `stop-gate.py` can read it:
+
+- `state_update_acceptance_criterion` when a story flips to `passes: true`,
+  passing the supporting `evidence` reference (file path or command output
+  snippet).
+- `state_history_append` to log a one-line note per loop iteration when
+  evidence is worth retaining.
+- `state_record_failure` after the third recurring failure, before stopping.
+
+The bridge serialises every write through a shared `file_lock`; never edit
+`workflow-state.json` directly.
 
 ## Background commands
 
@@ -98,8 +128,9 @@ is finished before its output exists.
 
 ## Stop conditions
 
-- Every story has `passes: true`, all reviewer verdicts are `APPROVE` or
-  `COMMENT`, fresh test/build evidence is in the chat.
+- Every story has `passes: true`, every reviewer that ran maps to `pass` or
+  `comment` under the shared loop gate above (see Workflow step 7), fresh
+  test/build evidence is in the chat.
 - The user says "stop", "cancel", or "abort".
 - The same failure recurs three iterations in a row - stop and report it as
   a fundamental issue rather than retrying indefinitely.
