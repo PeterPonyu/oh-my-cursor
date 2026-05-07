@@ -411,3 +411,23 @@ and evidenced by `mcp/cursor-state-bridge/tests/test_history_compaction.py`.
 per-call knob, not a schema field.  POSIX `file_lock` from
 `.cursor/state/_locking.py` still serialises every write.  Default
 install footprint unchanged.
+
+---
+
+## Phase 8 — agent-callable surface contract enforcement (post-consensus follow-up F5)
+
+Mechanically locks down what was already a clean status quo.  AC IDs
+**AC-801..AC-805** are mapped in `docs/PRD.yaml#mcp_acceptance_criteria`
+and evidenced by `scripts/validate-agent-bridge-contract.py`.
+
+| AC | Statement | Evidence |
+|---|---|---|
+| AC-801 | Default scan exits 0 across the 22 agent-callable surfaces under `.cursor/agents/`, `skills/`, `rules/`, `.cursor/rules/`. | `python3 scripts/validate-agent-bridge-contract.py` |
+| AC-802 | `--self-test` detects writer-CLI bypass, stale archived-doc paths, and legacy short names; clean fixture passes; tempdir-isolated, never mutates the working tree. | `python3 scripts/validate-agent-bridge-contract.py --self-test`; `git status --porcelain` empty after. |
+| AC-803 | A writer-CLI bypass on an agent-callable surface is rejected with a precise file:line cite. | self-test `bypass.md` synthetic offender. |
+| AC-804 | Stale `docs/refinement-priority-map.md` / `docs/plugin-boundary-review.md` / `docs/fallback-policy.md` references are detected (must use `docs/archive/`). | self-test `stale.md` synthetic offender. |
+| AC-805 | Validator chained into `verify-backbone.sh` and the required-file arrays in `verify-backbone.sh` + `validate-surface-visibility.sh`. | `grep validate-agent-bridge-contract scripts/verify-backbone.sh` returns non-empty. |
+
+**Discipline preserved**: no agent-callable .md / .mdc was modified by
+this phase — the contract enforcement targets the no-violation status
+quo that landed in Phase 4 + the README-polish pass.

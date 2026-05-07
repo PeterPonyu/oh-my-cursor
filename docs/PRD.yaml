@@ -132,3 +132,8 @@ mcp_acceptance_criteria:
   AC-703: { phase: 7, status: shipped, summary: "post-compaction history[].at remains monotonic non-decreasing" }
   AC-704: { phase: 7, status: shipped, summary: "history_cap=0 opts out of compaction" }
   AC-705: { phase: 7, status: shipped, summary: "the most-recent history entry is preserved verbatim" }
+  AC-801: { phase: 8, status: shipped, summary: "validate-agent-bridge-contract default scan exits 0 across .cursor/agents, skills, rules, .cursor/rules" }
+  AC-802: { phase: 8, status: shipped, summary: "--self-test detects writer-CLI bypass, stale archived-doc paths, and legacy short names; clean fixture passes" }
+  AC-803: { phase: 8, status: shipped, summary: "writer-CLI bypass on agent-callable surface is rejected with a precise file:line cite" }
+  AC-804: { phase: 8, status: shipped, summary: "stale docs/refinement-priority-map.md / plugin-boundary-review.md / fallback-policy.md path is detected (must use docs/archive/)" }
+  AC-805: { phase: 8, status: shipped, summary: "validate-agent-bridge-contract chained into verify-backbone.sh and required-file arrays" }

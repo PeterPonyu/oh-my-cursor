@@ -2,6 +2,35 @@
 
 ## 2026-05-07
 
+### MCP layer Phase 8 — agent-callable surface contract enforcement
+
+Closes follow-up F5. Mechanically locks down what was already a clean
+status quo across the 22 agent-callable .md / .mdc files.
+
+- new `scripts/validate-agent-bridge-contract.py` (stdlib only) with two
+  modes:
+  - default: scans `.cursor/agents/*.md`, `skills/**/SKILL.md`,
+    `rules/*.mdc`, and `.cursor/rules/*.mdc`. Detects three classes of
+    offenders: writer-CLI bypass (direct references to
+    `.cursor/state/workflow-state.py` / `scripts/workflow-state.py`),
+    stale archived-doc paths (`docs/refinement-priority-map.md` /
+    `docs/plugin-boundary-review.md` / `docs/fallback-policy.md` —
+    must use `docs/archive/`), and legacy short-name leakage.
+  - `--self-test`: seeds three synthetic offenders + a clean fixture in
+    a `tempfile.TemporaryDirectory` (V2 isolation), confirms each is
+    detected, confirms the clean fixture passes; never mutates the
+    working tree.
+- chained `validate-agent-bridge-contract.py` into `verify-backbone.sh`
+  and added it to the required-file arrays in `verify-backbone.sh` and
+  `validate-surface-visibility.sh`.
+- 22 of 22 agent-callable surfaces clean on the first run; no prompt
+  rewrites needed.
+- broader audit also confirmed: 0 broken cross-doc links across the
+  same surfaces.
+- `validate-prd-ac-mapping.py` now reports 50 plan AC IDs ↔ 50 PRD rows.
+
+ACs evidenced: AC-801..AC-805.
+
 ### MCP layer Phase 7 — bounded history[] retention with FIFO eviction
 
 Closes follow-up F1 from the v2 ADR.

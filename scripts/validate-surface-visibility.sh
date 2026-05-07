@@ -60,6 +60,7 @@ required=(
   scripts/validate-rename-references.py
   scripts/validate-prd-ac-mapping.py
   scripts/validate-hook-readonly.py
+  scripts/validate-agent-bridge-contract.py
     scripts/validate-public-language.py
     scripts/validate-cursor-workflow-artifacts.py
     scripts/smoke-cursor-workflow-artifacts.sh
