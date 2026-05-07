@@ -2,6 +2,34 @@
 
 ## 2026-05-07
 
+### Docs cleanup — polish README, archive dev-process notes
+
+- polished `README.md` from 228 to 119 lines: tightened the intro to a
+  single claim/proof discipline section, cut "Start here" from 22
+  links to 6 essentials (`AGENTS.md`, `docs/orchestration.md`,
+  `docs/state-contract.md`, `docs/mcp-bridge.md`, `docs/PRD.yaml`,
+  `CHANGELOG.md`), folded the Plugin-orchestration intro and
+  Design-rule list into the ownership map, dropped the Landing-surface
+  contract section
+- moved three dev-process docs that no longer drive the live entry
+  path into `docs/archive/`:
+  `docs/refinement-priority-map.md`,
+  `docs/plugin-boundary-review.md`,
+  `docs/fallback-policy.md`
+- updated dependents: `scripts/verify-backbone.sh` (new
+  `docs/archive/fallback-policy.md` path + grep assertions),
+  `scripts/validate-surface-visibility.sh` (dropped the discoverability
+  assertion that required specific links in README's Start here),
+  `scripts/validate-benchmark-evidence.sh` (now requires
+  `archive/refinement-priority-map.md` and `archive/plugin-boundary-review.md`
+  in benchmark README), `scripts/smoke-cursor-agent.sh` (task scenario
+  fixture updated), `benchmark/README.md` (paragraph rewrite explaining
+  the archival), `benchmark/test_history_cleanup.py` (fixture string
+  updated). Frozen historical evidence under
+  `benchmark/results/{baseline,enhanced}/*.json` was left untouched
+- the archived docs remain checked in for reference; new contributors
+  see only the live entry path through the README
+
 ### MCP layer Phase 6 — auth shake + structured trace lane + mcp-auth doc
 
 - shipped `mcp/cursor-state-bridge/_trace.py`: JSONL emitter writing to

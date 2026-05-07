@@ -74,8 +74,6 @@ mcp/cursor-state-bridge/tests/test_library_api.py:1:"""Library API tests for `.c
 mcp/cursor-state-bridge/tests/test_library_api.py:22:LIB_PATH = STATE_DIR / "workflow-state.py"
 mcp/cursor-state-bridge/tests/test_library_api.py:27:    """Load `.cursor/state/workflow-state.py` as a module (no Namespace mocks)."""
 mcp/cursor-state-bridge/tests/test_locking_concurrent.py:25:LIB_PATH = STATE_DIR / "workflow-state.py"
-README.md:63:| Workflow-state writer | [`.cursor/state/workflow-state.py`](./.cursor/state/workflow-state.py) |
-README.md:76:| Workflow-state validator | [`scripts/validate-workflow-state.py`](./scripts/validate-workflow-state.py) |
 scripts/check-local-plugin-install.sh:123:[[ -f "$plugin_path/.cursor/state/workflow-state.py" ]] || fail "copy mode plugin missing workflow-state writer"
 scripts/smoke-cursor-workflow-artifacts.sh:16:shell_debrief_payload='{"event":"afterShellExecution","command":"python3 scripts/validate-workflow-state.py","output":"WORKFLOW_STATE_OK","duration":150,"sandbox":"trusted"}'
 scripts/smoke-cursor-workflow-artifacts.sh:38:python3 scripts/validate-workflow-state.py >/dev/null

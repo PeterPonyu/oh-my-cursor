@@ -42,14 +42,14 @@ and project agents. It still does **not** ship prompt files, custom modes,
 background-agent provisioning, MCP defaults, or marketplace publication claims.
 The benchmark therefore stays tied to surfaces this repo actually owns.
 
-The benchmark now also requires the README-visible
-`refinement-priority-map.md` and `plugin-boundary-review.md` links, because
-those documents are part of the current repo-owned proof surface.
-It now treats their placement in the main **Start here** path as part of the
-contract as well, so discoverability is measured instead of implied. Enhanced
-runs also require a constrained practical repo-task answer
-(`CURSOR_TASK_SCENARIO_OK`) so the score reflects more than basic smoke
-availability. Baseline scores now report only the baseline contract ceiling,
+Historical dev-process notes were moved under `docs/archive/` after the
+backbone matured: `archive/refinement-priority-map.md` and
+`archive/plugin-boundary-review.md` remain checked in there as
+reference-only artifacts so prior benchmark evidence stays linkable, but
+the live README no longer lists them. Enhanced runs still require a
+constrained practical repo-task answer (`CURSOR_TASK_SCENARIO_OK`) so
+the score reflects more than basic smoke availability. Baseline scores
+now report only the baseline contract ceiling,
 while enhanced carries the extra runtime/task uplift slots.
 Enhanced now also requires a second deterministic repo-work answer
 (`CURSOR_TASK_PLAN_OK`) that chooses the right validator and ownership class

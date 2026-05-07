@@ -8,11 +8,11 @@ pretending every adjacent Cursor surface is now repo-owned.
 
 Use it alongside:
 
-- [`docs/confirmed-surfaces.md`](./confirmed-surfaces.md)
-- [`docs/fallback-policy.md`](./fallback-policy.md)
-- [`docs/local-plugin-verification.md`](./local-plugin-verification.md)
-- [`docs/refinement-priority-map.md`](./refinement-priority-map.md)
-- [`benchmark/README.md`](../benchmark/README.md)
+- [`docs/confirmed-surfaces.md`](../confirmed-surfaces.md)
+- [`docs/archive/fallback-policy.md`](./fallback-policy.md)
+- [`docs/local-plugin-verification.md`](../local-plugin-verification.md)
+- [`docs/archive/refinement-priority-map.md`](./refinement-priority-map.md)
+- [`benchmark/README.md`](../../benchmark/README.md)
 
 ## Review verdict
 

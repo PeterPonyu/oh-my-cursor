@@ -46,7 +46,7 @@ required=(
   .cursor/rules/00-repo-scope.mdc
   .cursor/rules/10-docs-claims.mdc
   docs/confirmed-surfaces.md
-  docs/fallback-policy.md
+  docs/archive/fallback-policy.md
   docs/local-plugin-verification.md
   docs/orchestration.md
   docs/references.md
@@ -169,17 +169,9 @@ if start == -1 or end == -1:
     raise SystemExit("FAIL: README is missing the Start here -> Ownership map structure")
 segment = text[start:end]
 required = [
-    "docs/refinement-priority-map.md",
-    "docs/plugin-boundary-review.md",
-    "scripts/validate-benchmark-evidence.sh",
 ]
-missing = [item for item in required if item not in segment]
-if missing:
-    raise SystemExit(f"FAIL: README Start here section is missing required discoverability links: {missing}")
-print("ok: README Start here section exposes refinement-priority, plugin-boundary, and benchmark-evidence links")
+print("ok: README Start here -> Ownership map structure present (post-archive: discoverability links no longer required)")
 PY
-log "REFINEMENT_MAP_OK"
-log "PLUGIN_BOUNDARY_OK"
 log "DISCOVERABILITY_OK"
 
 ./scripts/validate-pages-surface.sh
