@@ -7,20 +7,22 @@ shipped under `.cursor/state/`. It speaks JSON-RPC 2.0 over standard input
 and standard output, exposes a fixed six-tool surface, and never opens a
 network listener.
 
-## Status (PR1 + Phase 2)
+## Status (PR1 + Phase 2 + Phase 3)
 
-After Phase 2 the bridge ships **four** functional tools (`state_read`,
-`state_init`, `state_set_phase`, `state_record_failure`). The remaining
-two (`state_update_acceptance_criterion`, `state_history_append`) stay
-advertised by `tools/list` but return JSON-RPC error code `-32601`
-("method not implemented in this PR (Phase 3)") until Phase 3 lands.
+After Phase 3 all six advertised tools are functional:
+`state_read`, `state_init`, `state_set_phase`, `state_record_failure`,
+`state_update_acceptance_criterion`, `state_history_append`. There are
+no `-32601` placeholders left for known tools; an unknown tool name
+still returns `-32601` with an `unknown tool:` prefix.
 
-Phase 2 also introduced the shared library at
-`.cursor/state/workflow-state.py` (typed `init_state`, `set_state`,
-`update_acceptance_criterion`, `record_failure`, `append_history`,
-`read_state`) and the POSIX `file_lock` shim at `.cursor/state/_locking.py`.
-Both the bridge and the CLI shim import the same library, so concurrent
-writers serialise on a single advisory lock per state file.
+The shared library at `.cursor/state/workflow-state.py` (typed
+`init_state`, `set_state`, `update_acceptance_criterion`,
+`record_failure`, `append_history`, `read_state`) and the POSIX
+`file_lock` shim at `.cursor/state/_locking.py` are imported by both
+the bridge and the CLI shim, so concurrent writers serialise on a
+single advisory lock per state file. `evidence` on
+`state_update_acceptance_criterion` stays optional — the schema is not
+tightened.
 
 ## Install (manual, opt-in)
 
@@ -48,8 +50,8 @@ in the MCP servers panel.
 | `state_init` | functional (Phase 2) | `init_state(...)` |
 | `state_set_phase` | functional (Phase 2) | `set_state(phase=...)` |
 | `state_record_failure` | functional (Phase 2) | `record_failure(...)` |
-| `state_update_acceptance_criterion` | placeholder (`-32601`) | `update_acceptance_criterion(...)` |
-| `state_history_append` | placeholder (`-32601`) | `append_history(...)` |
+| `state_update_acceptance_criterion` | functional (Phase 3) | `update_acceptance_criterion(...)` |
+| `state_history_append` | functional (Phase 3) | `append_history(...)` |
 
 `evidence` on `state_update_acceptance_criterion` stays optional, matching
 `.cursor/state/workflow-state.schema.json` exactly.

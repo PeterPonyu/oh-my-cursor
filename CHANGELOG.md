@@ -2,6 +2,29 @@
 
 ## 2026-05-07
 
+### MCP layer Phase 3 — full six-tool functional surface + PRD-AC index
+
+- promoted `state_update_acceptance_criterion` and `state_history_append`
+  from `-32601` placeholders to functional handlers in
+  `mcp/cursor-state-bridge/state_io.py`; `_PLACEHOLDER_TOOLS` in
+  `server.py` is now empty (an unknown tool name still returns `-32601`
+  with `unknown tool:` prefix)
+- `evidence` on `state_update_acceptance_criterion` stays OPTIONAL
+  (R4 / AC-302); the schema at `.cursor/state/workflow-state.schema.json`
+  is **not** tightened
+- shipped `scripts/validate-prd-ac-mapping.py` (AC-305): cross-references
+  every `AC-NNN` referenced in the consensus plan against a new
+  `mcp_acceptance_criteria` mapping in `docs/PRD.yaml`; rejects orphan
+  rows on either side
+- added `mcp/cursor-state-bridge/tests/test_acceptance_criteria.py` with
+  AC-301..AC-304 coverage (missing-status rejected with -32602, invalid
+  status rejected, evidence verbatim/preserved/empty default,
+  `state_history_append` preserves top-level fields, `tools/list`
+  reports six functional tools with no `not implemented` errors)
+- updated `mcp/cursor-state-bridge/tests/test_rpc.py` placeholder test
+  to target an unknown tool name (every advertised tool is now functional)
+- 27/27 unittest cases pass; PR1 + Phase 2 + Phase 3 regression chain green
+
 ### MCP layer Phase 2 — library refactor + shared lock + 3 write-tool promotions
 
 - introduced `.cursor/state/_locking.py` POSIX `fcntl` advisory file_lock

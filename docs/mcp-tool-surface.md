@@ -11,8 +11,8 @@ Six MCP tools mapped 1:1 to the workflow-state schema at
 | `state_init` | functional (Phase 2) | `init_state(path, task_id, ...)` | full document |
 | `state_set_phase` | functional (Phase 2) | `set_state(path, phase=..., status?)` | `phase`, `status`, `history[]` |
 | `state_record_failure` | functional (Phase 2) | `record_failure(path, type, message, retry_count)` | `failure`, `history[]` |
-| `state_update_acceptance_criterion` | placeholder (`-32601`, Phase 3) | `update_acceptance_criterion(path, ac_id, status, evidence?)` | `acceptance_criteria[]`, `history[]` |
-| `state_history_append` | placeholder (`-32601`, Phase 3) | `append_history(path, note, ...)` | `history[]` |
+| `state_update_acceptance_criterion` | functional (Phase 3) | `update_acceptance_criterion(path, ac_id, status, evidence?)` | `acceptance_criteria[]`, `history[]` |
+| `state_history_append` | functional (Phase 3) | `append_history(path, note, ...)` | `history[]` |
 
 ### `state_read` (PR1 functional)
 
@@ -40,7 +40,7 @@ not tightened by the tool.
 | --- | --- | --- | --- |
 | 1 (PR1) | `state_read` (functional); other 5 advertised but `-32601` | AC-101..AC-110 | shipped |
 | 2 | locking shim + library refactor at `.cursor/state/_locking.py` and `.cursor/state/workflow-state.py`; `state_init`, `state_set_phase`, `state_record_failure` promoted to functional | AC-201..AC-209 | shipped |
-| 3 | `state_update_acceptance_criterion`, `state_history_append` promoted; full six-tool functional surface | AC-301..AC-305 | planned |
+| 3 | `state_update_acceptance_criterion`, `state_history_append` promoted; full six-tool functional surface; `validate-prd-ac-mapping.py` ships the AC↔PRD index | AC-301..AC-305 | shipped |
 
 ## Boundary
 

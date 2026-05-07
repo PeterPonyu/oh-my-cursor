@@ -170,10 +170,43 @@ def state_record_failure(workspace: Path, params: dict[str, Any]) -> dict[str, A
 
 
 def state_update_acceptance_criterion(workspace: Path, params: dict[str, Any]) -> dict[str, Any]:
-    """Phase 3 promotes this from ``-32601``.  Phase 2 keeps it placeholder."""
-    raise NotImplementedError("state_update_acceptance_criterion is promoted in Phase 3")
+    """Add or update an acceptance criterion.  Evidence stays OPTIONAL (R4)."""
+    task_id = params.get("task_id")
+    if not isinstance(task_id, str) or not task_id:
+        raise ValueError("state_update_acceptance_criterion: task_id is required")
+    ac_id = params.get("ac_id")
+    if not isinstance(ac_id, str) or not ac_id:
+        raise ValueError("state_update_acceptance_criterion: ac_id is required")
+    status = params.get("status")
+    if not isinstance(status, str) or not status:
+        raise ValueError("state_update_acceptance_criterion: status is required")
+    target = _resolve_state_path(workspace, task_id)
+    library = _load_workflow_state(workspace)
+    state = library.update_acceptance_criterion(
+        target,
+        ac_id=ac_id,
+        status=status,
+        criterion=params.get("criterion") if isinstance(params.get("criterion"), str) else None,
+        evidence=params.get("evidence") if isinstance(params.get("evidence"), str) else None,
+        note=str(params.get("note", "")),
+    )
+    return _mcp_text(state)
 
 
 def state_history_append(workspace: Path, params: dict[str, Any]) -> dict[str, Any]:
-    """Phase 3 promotes this from ``-32601``.  Phase 2 keeps it placeholder."""
-    raise NotImplementedError("state_history_append is promoted in Phase 3")
+    """Append a free-form history entry without mutating top-level fields."""
+    task_id = params.get("task_id")
+    if not isinstance(task_id, str) or not task_id:
+        raise ValueError("state_history_append: task_id is required")
+    note = params.get("note") or params.get("event")
+    if not isinstance(note, str) or not note:
+        raise ValueError("state_history_append: note (or event) is required")
+    target = _resolve_state_path(workspace, task_id)
+    library = _load_workflow_state(workspace)
+    state = library.append_history(
+        target,
+        note=note,
+        phase=params.get("phase") if isinstance(params.get("phase"), str) else None,
+        status=params.get("status") if isinstance(params.get("status"), str) else None,
+    )
+    return _mcp_text(state)

@@ -127,19 +127,20 @@ _TOOLS: list[dict[str, Any]] = [
 
 _NOT_IMPLEMENTED_MSG = "method not implemented in this PR (Phase 3)"
 
-# Tools whose handlers route through state_io (functional after Phase 2).
+# Tools whose handlers route through state_io (functional after Phase 3).
 _FUNCTIONAL_TOOLS: dict[str, str] = {
     "state_read": "state_read",
     "state_init": "state_init",
     "state_set_phase": "state_set_phase",
     "state_record_failure": "state_record_failure",
+    "state_update_acceptance_criterion": "state_update_acceptance_criterion",
+    "state_history_append": "state_history_append",
 }
 
-# Tools that remain Phase 3 placeholders.
-_PLACEHOLDER_TOOLS: set[str] = {
-    "state_update_acceptance_criterion",
-    "state_history_append",
-}
+# No placeholder tools remain after Phase 3; kept as an empty set so the
+# dispatch arm in _handle_tools_call still type-checks if Phase-X work
+# reintroduces a placeholder later.
+_PLACEHOLDER_TOOLS: set[str] = set()
 
 
 def _ok(req_id: Any, result: Any) -> dict[str, Any]:
