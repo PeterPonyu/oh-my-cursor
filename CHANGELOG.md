@@ -2,6 +2,27 @@
 
 ## 2026-05-07
 
+### MCP layer Phase 5 — hook read-only AST scanner + shared-lock enforcement
+
+- shipped `scripts/validate-hook-readonly.py` (stdlib only) with three modes:
+  - default: AST-walks every `.cursor/hooks/*.py` (excluding `_trace.py`),
+    flags any write call (`write_text`, `write_bytes`, `open`, `json.dump`)
+    whose argument is a string literal pointing at
+    `.cursor/state/workflow-state*.json`; current 14 hook files clean
+  - `--check-shared-lock`: imports the workflow-state library, asserts
+    `_locking` resolves to `.cursor/state/_locking.py`, asserts no
+    `.cursor/state/*.py` imports from `mcp/`, asserts the bridge does
+    not ship a duplicate `_locking.py` (V1 contract)
+  - `--self-test`: seeds a synthetic offender hook + a synthetic
+    `_trace.py`-style hook inside `tempfile.TemporaryDirectory` (V2
+    isolation), confirms the offender is detected and the trace path is
+    not, never mutates the working tree
+- chained `validate-hook-readonly.py` and the `--check-shared-lock` mode
+  into `scripts/verify-backbone.sh`; added it to the required-file
+  arrays in `verify-backbone.sh` and `validate-surface-visibility.sh`
+
+ACs evidenced: AC-501..AC-505.
+
 ### MCP layer Phase 4 — agent + skill rewiring (bridge as sole agent-callable writer)
 
 - rewrote `.cursor/agents/orchestrator.md` so the entry-point agent

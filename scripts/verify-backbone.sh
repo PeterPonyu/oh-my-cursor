@@ -57,6 +57,8 @@ required=(
   scripts/validate-mcp-server-structure.py
   scripts/smoke-mcp-cursor-state-bridge.sh
   scripts/validate-rename-references.py
+  scripts/validate-prd-ac-mapping.py
+  scripts/validate-hook-readonly.py
   scripts/validate-public-language.py
   scripts/validate-cursor-workflow-artifacts.py
   scripts/smoke-cursor-workflow-artifacts.sh
@@ -145,6 +147,8 @@ PY
 ./scripts/validate-plugin-structure.sh
 python3 scripts/validate-public-language.py
 python3 scripts/validate-cursor-workflow-artifacts.py
+python3 scripts/validate-hook-readonly.py
+python3 scripts/validate-hook-readonly.py --check-shared-lock
 ./scripts/check-local-plugin-install.sh
 ./scripts/validate-pages-surface.sh
 if [[ "${CURSOR_SKIP_BENCHMARK_EVIDENCE:-0}" == "1" ]]; then

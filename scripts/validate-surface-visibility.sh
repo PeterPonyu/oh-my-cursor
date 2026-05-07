@@ -58,6 +58,8 @@ required=(
   scripts/validate-mcp-server-structure.py
   scripts/smoke-mcp-cursor-state-bridge.sh
   scripts/validate-rename-references.py
+  scripts/validate-prd-ac-mapping.py
+  scripts/validate-hook-readonly.py
     scripts/validate-public-language.py
     scripts/validate-cursor-workflow-artifacts.py
     scripts/smoke-cursor-workflow-artifacts.sh
