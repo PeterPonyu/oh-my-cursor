@@ -389,3 +389,25 @@ Every AC has an `evidence` field that is a runnable command or a checked-in arti
 - **Iteration 2 (planner v2 → architect v2 → critic v2)**: Architect `architecturally-sound-with-revisions` (V1–V3 mechanical pinning only). Critic **APPROVE**.
 - **Status**: FINAL. No iteration 3.
 - **Mode used**: deliberate (auth/security boundary + public API surface auto-trigger). No `--interactive` flag, so workflow ends here without execution invocation.
+
+---
+
+## Phase 7 — bounded history retention (post-consensus follow-up F1)
+
+Shipped after the original 6 phases as a small, scope-bounded extension
+that closes follow-up F1 from Section 4 of the ADR.  AC IDs
+**AC-701..AC-705** are mapped in `docs/PRD.yaml#mcp_acceptance_criteria`
+and evidenced by `mcp/cursor-state-bridge/tests/test_history_compaction.py`.
+
+| AC | Statement | Evidence |
+|---|---|---|
+| AC-701 | A synthetic state with 1500 history entries gets compacted to 1000 after the next write. | `pytest mcp/cursor-state-bridge/tests/test_history_compaction.py::TestHistoryCompaction::test_compacts_1500_to_default_cap -q` |
+| AC-702 | FIFO eviction: the oldest entries are dropped first. | `pytest …::test_fifo_eviction_drops_oldest -q` |
+| AC-703 | Post-compaction `history[].at` remains monotonic non-decreasing. | `pytest …::test_post_compaction_timestamps_monotonic -q`; `python3 scripts/validate-workflow-state.py --check-history-cap 1000 <path>` exits 0. |
+| AC-704 | `history_cap=0` opts out of compaction. | `pytest …::test_cap_zero_disables_compaction -q` |
+| AC-705 | The most-recent entry is preserved verbatim. | `pytest …::test_most_recent_entry_preserved -q` |
+
+**Discipline preserved**: workflow-state schema unchanged (R4); cap is a
+per-call knob, not a schema field.  POSIX `file_lock` from
+`.cursor/state/_locking.py` still serialises every write.  Default
+install footprint unchanged.
