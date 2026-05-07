@@ -66,6 +66,19 @@ hook trace at `.omcs/hook-trace.log`). `.omcs/cursor-state-bridge/` is a
 permitted runtime write target for the bridge — workspace-private,
 gitignored, and **not** a checked-in `repo-owned` surface in its own right.
 
+## History retention
+
+`history[]` grows by one entry per state mutation. To prevent unbounded
+file growth on long-lived tasks, every write path applies a FIFO
+eviction cap (default **1000**) immediately before the atomic
+tmp+rename. The cap is configurable per call via `history_cap` (library
+API and bridge tool params) or `--history-cap N` on the CLI shim, and
+`history_cap=0` opts out of compaction. Eviction preserves timestamp
+monotonicity by retaining the trailing window of the array. Local
+verification: `python3 scripts/validate-workflow-state.py
+--check-history-cap 1000 <path>` enforces the cap and re-checks the
+monotonic invariant.
+
 ## Workflow-state contract
 
 The `.cursor/state/workflow-state.schema.json` schema defines the shape of an

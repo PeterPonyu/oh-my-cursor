@@ -67,7 +67,8 @@ docs/PRD.yaml:83:  - scripts/validate-workflow-state.py prints WORKFLOW_STATE_OK
 docs/PRD.yaml:84:  - scripts/workflow-state.py can initialize and update a local workflow-state JSON file.
 docs/state-contract.md:37:  `workflow-state.example.json`, `workflow-state.py`, `README.md`)
 docs/state-contract.md:42:  `scripts/validate-workflow-state.py`)
-docs/state-contract.md:75:automatically. The validator at `scripts/validate-workflow-state.py` keeps the
+docs/state-contract.md:78:verification: `python3 scripts/validate-workflow-state.py
+docs/state-contract.md:88:automatically. The validator at `scripts/validate-workflow-state.py` keeps the
 mcp/cursor-state-bridge/README.md:18:The shared library at `.cursor/state/workflow-state.py` (typed
 mcp/cursor-state-bridge/README.md:95:`scripts/validate-workflow-state.py --check-history-cap N` flag asserts
 mcp/cursor-state-bridge/state_io.py:30:# Library loader (imports `.cursor/state/workflow-state.py` once per process)
