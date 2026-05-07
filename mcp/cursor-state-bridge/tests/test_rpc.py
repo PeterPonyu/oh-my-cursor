@@ -75,6 +75,15 @@ class BridgeProcess:
         except Exception:
             self.proc.kill()
             self.proc.wait(timeout=2)
+        finally:
+            # Close stdout/stderr handles to silence unittest's
+            # ResourceWarning on Python 3.12+.
+            for stream in (self.proc.stdout, self.proc.stderr):
+                try:
+                    if stream is not None and not stream.closed:
+                        stream.close()
+                except Exception:
+                    pass
 
 
 @unittest.skipUnless(BRIDGE_AVAILABLE, "bridge core not yet on disk (Track A in progress)")
