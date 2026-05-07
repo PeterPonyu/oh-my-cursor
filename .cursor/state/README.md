@@ -42,3 +42,38 @@ agents in `oh-my-cursor` share. It is intentionally:
   mutate it.
 - Long-lived orchestration, retry queues, or multi-session resume are
   Cursor host-product capabilities and stay out of scope here.
+
+## `.cursor/state/` vs `.omc/state/` — what this repo owns
+
+Two state directories may coexist in a workspace. Only one is owned by this
+repo.
+
+| Path | Owner | Schema | Hook reads | Hook writes |
+| --- | --- | --- | --- | --- |
+| `.cursor/state/workflow-state.json` | this repo (`oh-my-cursor`) | `workflow-state.schema.json` | yes (14 hooks) | no — only `workflow-state.py` and the bridge write |
+| `.cursor/state/active-role.json` | this repo (Stage 4) | single-role record | `tool-guard.py` | `subagent-bootstrap.py` writes; `subagent-summary.py` clears |
+| `.omc/state/*` | the user's global oh-my-claudecode harness | none in this repo | no | no |
+
+`.omc/state/*` (e.g. `mission-state.json`, `subagent-tracking.json`,
+`hud-stdin-cache.json`) is written by the user's globally installed
+`oh-my-claudecode` harness from `~/.claude/CLAUDE.md`. **This repo does not
+read, write, or contract about it.** Treat it as opaque scratch.
+
+**Decision rule for contributors**: when adding cross-system state, extend
+`.cursor/state/`, never `.omc/state/`. The OMC harness is upstream and out of
+scope for the Cursor port's hook layer.
+
+## Read vs write split
+
+- **Hooks read directly off disk** for performance. `stop-gate.py`,
+  `compact-reminder.py`, `session-bootstrap.py`, and similar consumers parse
+  `workflow-state.json` without going through the bridge. This is acceptable
+  for read-only consumers because writers always settle the file via
+  `os.replace` before releasing the shared `file_lock`.
+- **All writes go through one of two paths**: the library API in
+  `.cursor/state/workflow-state.py` (CLI shim) or the
+  `cursor-state-bridge` MCP tools (agent-callable). Both share the same
+  `file_lock` callable identity via the module-cache trick in
+  `mcp/cursor-state-bridge/state_io.py:_load_workflow_state`. Direct edits to
+  `workflow-state.json` are intercepted by `tool-guard.py` and require user
+  confirmation.

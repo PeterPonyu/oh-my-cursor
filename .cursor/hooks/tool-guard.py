@@ -18,6 +18,12 @@ from pathlib import Path, PurePosixPath
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from _trace import trace as _trace  # noqa: E402
+from _active_role import (  # noqa: E402
+    agent_is_readonly,
+    agent_tools_allowlist,
+    get_active_role,
+)
+from _tool_payload import extract_file_path, extract_tool_name  # noqa: E402
 
 
 EDIT_TOOLS = {"Write", "Edit", "MultiEdit", "NotebookEdit"}
@@ -34,37 +40,19 @@ def _read_payload() -> dict:
     return value if isinstance(value, dict) else {"payload": value}
 
 
-def _extract_tool_name(payload: dict) -> str:
-    for key in ("tool_name", "toolName", "name"):
-        value = payload.get(key)
-        if isinstance(value, str) and value:
-            return value
-    return ""
-
-
-def _extract_file_path(payload: dict) -> str:
-    tool_input = payload.get("tool_input") if isinstance(payload, dict) else None
-    if isinstance(tool_input, dict):
-        for key in ("file_path", "filePath", "path", "notebook_path", "notebookPath"):
-            value = tool_input.get(key)
-            if isinstance(value, str) and value.strip():
-                return value
-    for key in ("file_path", "filePath", "path"):
-        value = payload.get(key)
-        if isinstance(value, str) and value.strip():
-            return value
-    return ""
-
-
 def main() -> int:
     payload = _read_payload()
     if payload.get("_invalid_json"):
         print(json.dumps({"status": "pass", "fail_open": True, "permission": "allow", "user_message": "Tool-guard input was not JSON; skipped."}))
         return 0
 
-    tool_name = _extract_tool_name(payload)
-    file_path = _extract_file_path(payload)
+    tool_name = extract_tool_name(payload)
+    file_path = extract_file_path(payload)
     basename = PurePosixPath(file_path.replace("\\", "/")).name if file_path else ""
+
+    active_role = get_active_role()
+    role_readonly = agent_is_readonly(active_role) if active_role else None
+    role_tools = agent_tools_allowlist(active_role) if active_role else None
 
     if tool_name in EDIT_TOOLS and basename == "workflow-state.json":
         permission = "ask"
@@ -73,6 +61,21 @@ def main() -> int:
             "Prefer the writer helper at .cursor/state/workflow-state.py "
             "(or scripts/workflow-state.py from the repo root) so phase, "
             "acceptance criteria, and history advance through one bounded path."
+        )
+        status = "ask"
+    elif active_role and role_readonly is True and tool_name in EDIT_TOOLS:
+        permission = "ask"
+        message = (
+            f"Tool-guard: active subagent role `{active_role}` declares `readonly: true` "
+            f"in .cursor/agents/{active_role}.md. Edit-class tools require user confirmation. "
+            "If this edit is intended, approve to proceed; otherwise route the change to a non-readonly role."
+        )
+        status = "ask"
+    elif active_role and isinstance(role_tools, list) and tool_name and tool_name not in role_tools:
+        permission = "ask"
+        message = (
+            f"Tool-guard: active subagent role `{active_role}` does not list `{tool_name}` in its "
+            f"`tools:` allowlist (.cursor/agents/{active_role}.md). Approve to proceed or extend the allowlist."
         )
         status = "ask"
     else:
@@ -95,6 +98,7 @@ def main() -> int:
         "permission": permission,
         "tool_name": tool_name,
         "file_basename": basename,
+        "active_role": active_role or "",
     })
     print(json.dumps(output, ensure_ascii=False))
     return 0

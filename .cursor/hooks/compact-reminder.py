@@ -39,6 +39,11 @@ def _resolve_state_path(payload: dict) -> Path | None:
     payload_path = payload.get("workflow_state") if isinstance(payload, dict) else None
     if isinstance(payload_path, str):
         candidates.append(payload_path)
+    # Canonical fallback: the path the bridge writes to when no task_id is
+    # supplied. After Stage 7 (phase-controller pinned to .cursor/state),
+    # this is the everyday location and the env-var/payload overrides are
+    # only for unusual setups.
+    candidates.append(str(ROOT / ".cursor" / "state" / "workflow-state.json"))
     for raw in candidates:
         try:
             candidate = Path(raw).expanduser()
@@ -119,8 +124,12 @@ def main() -> int:
             parts.append("Recorded next action: " + str(state_summary["next_action"]) + ".")
     else:
         parts.append(
-            "Compact-reminder: no active workflow-state document was reachable. "
-            "If a task is in flight, set OH_MY_CURSOR_WORKFLOW_STATE before the next compaction."
+            "Compact-reminder: no active workflow-state document was reachable at "
+            ".cursor/state/workflow-state.json or via override. If a task is in "
+            "flight, run `state_init` through the cursor-state-bridge MCP server "
+            "(or `python3 .cursor/state/workflow-state.py init ...`) before the "
+            "next compaction so the post-compact summary keeps the orchestration "
+            "anchors."
         )
 
     output = {

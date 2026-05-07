@@ -100,6 +100,10 @@ _TOOLS: list[dict[str, Any]] = [
                 "task_id": {"type": "string"},
                 "ac_id": {"type": "string"},
                 "status": {"type": "string"},
+                "criterion": {
+                    "type": "string",
+                    "description": "Optional human-readable criterion text; sets or refreshes the AC body.",
+                },
                 "evidence": {
                     "type": "string",
                     "description": "Optional reference to a checked-in artifact or script output.",
@@ -111,7 +115,10 @@ _TOOLS: list[dict[str, Any]] = [
     },
     {
         "name": "state_history_append",
-        "description": "Append a single history event for a task.",
+        "description": (
+            "Append a single history event for a task. The event text may be passed as either "
+            "`event` (canonical) or `note` (legacy alias accepted by the handler)."
+        ),
         "inputSchema": {
             "type": "object",
             "properties": {
@@ -128,9 +135,7 @@ _TOOLS: list[dict[str, Any]] = [
 # JSON-RPC helpers
 # ---------------------------------------------------------------------------
 
-_NOT_IMPLEMENTED_MSG = "method not implemented in this PR (Phase 3)"
-
-# Tools whose handlers route through state_io (functional after Phase 3).
+# Tools whose handlers route through state_io.
 _FUNCTIONAL_TOOLS: dict[str, str] = {
     "state_read": "state_read",
     "state_init": "state_init",
@@ -139,11 +144,6 @@ _FUNCTIONAL_TOOLS: dict[str, str] = {
     "state_update_acceptance_criterion": "state_update_acceptance_criterion",
     "state_history_append": "state_history_append",
 }
-
-# No placeholder tools remain after Phase 3; kept as an empty set so the
-# dispatch arm in _handle_tools_call still type-checks if Phase-X work
-# reintroduces a placeholder later.
-_PLACEHOLDER_TOOLS: set[str] = set()
 
 
 def _ok(req_id: Any, result: Any) -> dict[str, Any]:
@@ -301,7 +301,5 @@ class Server:
                 _send(_err(req_id, -32602, f"invalid params: {msg}"))
             except Exception as exc:  # noqa: BLE001
                 _send(_err(req_id, -32603, f"internal error: {exc}"))
-        elif tool_name in _PLACEHOLDER_TOOLS:
-            _send(_err(req_id, -32601, _NOT_IMPLEMENTED_MSG))
         else:
             _send(_err(req_id, -32601, f"unknown tool: {tool_name}"))

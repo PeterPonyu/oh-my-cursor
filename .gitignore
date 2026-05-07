@@ -10,3 +10,8 @@ benchmark/runs/data/
 .omcs/
 .omc/
 .omx/
+
+# Runtime workflow-state artifacts (written by hooks/bridge; never durable)
+.cursor/state/workflow-state.json
+.cursor/state/active-role.json
+.cursor/state/*.lock
