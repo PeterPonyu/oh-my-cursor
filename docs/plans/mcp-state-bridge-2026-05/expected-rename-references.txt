@@ -1,9 +1,9 @@
-CHANGELOG.md:16:  `scripts/validate-workflow-state.py` remains agent-callable
-CHANGELOG.md:190:  stdlib `workflow-state.py` helper for intentional local state writes
-CHANGELOG.md:194:- added `scripts/validate-workflow-state.py` for local schema validation
-CHANGELOG.md:52:- refactored `.cursor/state/workflow-state.py` to expose a typed library
-CHANGELOG.md:57:  `python3 .cursor/state/workflow-state.py {init,set,ac,fail}` keeps the
-CHANGELOG.md:70:- extended `scripts/validate-workflow-state.py` with
+CHANGELOG.md:104:- refactored `.cursor/state/workflow-state.py` to expose a typed library
+CHANGELOG.md:109:  `python3 .cursor/state/workflow-state.py {init,set,ac,fail}` keeps the
+CHANGELOG.md:122:- extended `scripts/validate-workflow-state.py` with
+CHANGELOG.md:242:  stdlib `workflow-state.py` helper for intentional local state writes
+CHANGELOG.md:246:- added `scripts/validate-workflow-state.py` for local schema validation
+CHANGELOG.md:68:  `scripts/validate-workflow-state.py` remains agent-callable
 .cursor/hooks/failure-router.py:72:        "Record the failure with .cursor/state/workflow-state.py (or scripts/workflow-state.py) using one of: "
 .cursor/hooks/read-advisor.py:56:            "and only edited through the writer at .cursor/state/workflow-state.py."
 .cursor/hooks/shell-guard.py:119:            + ". Use scripts/workflow-state.py for state edits and scripts/install-local-plugin.sh for the local plugin path."
@@ -86,8 +86,8 @@ scripts/validate-plugin-structure.sh:33:    .cursor/state/workflow-state.py
 scripts/validate-plugin-structure.sh:53:    scripts/validate-workflow-state.py
 scripts/validate-plugin-structure.sh:54:    scripts/workflow-state.py
 scripts/validate-surface-visibility.sh:34:    .cursor/state/workflow-state.py
-scripts/validate-surface-visibility.sh:64:    scripts/validate-workflow-state.py
-scripts/validate-surface-visibility.sh:65:        scripts/workflow-state.py
+scripts/validate-surface-visibility.sh:66:    scripts/validate-workflow-state.py
+scripts/validate-surface-visibility.sh:67:        scripts/workflow-state.py
 scripts/validate-workflow-state.py:5:  python3 scripts/validate-workflow-state.py [path]
 scripts/verify-backbone.sh:34:  .cursor/state/workflow-state.py
 scripts/verify-backbone.sh:65:  scripts/validate-workflow-state.py

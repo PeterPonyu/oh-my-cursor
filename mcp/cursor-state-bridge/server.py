@@ -13,11 +13,14 @@ from __future__ import annotations
 
 import json
 import sys
+import time
 from pathlib import Path
 from typing import Any
 
 from jail import JailError
 import state_io as _state_io
+import _trace as _bridge_trace
+import auth as _bridge_auth
 
 # ---------------------------------------------------------------------------
 # Tool definitions (advertised by tools/list)
@@ -167,6 +170,11 @@ class Server:
     def __init__(self, workspace: str, task_id: str = "") -> None:
         self._workspace = Path(workspace).resolve()
         self._task_id = task_id
+        # Auth state: when expected_token() is non-None at startup, the
+        # client must complete a successful initialize handshake before
+        # any other call is honoured.  Default OFF.
+        self._auth_required = _bridge_auth.expected_token() is not None
+        self._auth_passed = not self._auth_required
 
     # ------------------------------------------------------------------
     # Public entry point
@@ -194,22 +202,65 @@ class Server:
         method = req.get("method", "") if isinstance(req, dict) else ""
         params = req.get("params", {}) if isinstance(req, dict) else {}
 
+        start = time.monotonic()
+        result_label = "ok"
+        error_class = ""
+        tool_label = method or ""
+        task_id_label = ""
+
         try:
             if method == "initialize":
-                _send(_ok(req_id, self._handle_initialize()))
+                # Auth shake (Phase 6).  When OH_MY_CURSOR_MCP_TOKEN is
+                # exported, the initialize params MUST carry a matching
+                # token; otherwise return -32001 unauthorized and refuse
+                # to advance the session.
+                if not _bridge_auth.authenticate(params):
+                    self._auth_passed = False
+                    _send(_err(req_id, -32001, "unauthorized: missing or invalid OH_MY_CURSOR_MCP_TOKEN"))
+                    result_label = "error"
+                    error_class = "-32001"
+                else:
+                    self._auth_passed = True
+                    _send(_ok(req_id, self._handle_initialize()))
+            elif self._auth_required and not self._auth_passed:
+                _send(_err(req_id, -32001, "unauthorized: complete initialize with OH_MY_CURSOR_MCP_TOKEN first"))
+                result_label = "error"
+                error_class = "-32001"
             elif method == "tools/list":
                 _send(_ok(req_id, self._handle_tools_list()))
             elif method == "tools/call":
-                result = self._handle_tools_call(req_id, params)
-                # _handle_tools_call sends the response itself (may be error or ok)
-                # to avoid double-send, return early when it handled sending.
-                return
+                if isinstance(params, dict):
+                    tool_label = params.get("name", "") or method
+                    args = params.get("arguments") or {}
+                    if isinstance(args, dict) and isinstance(args.get("task_id"), str):
+                        task_id_label = args["task_id"]
+                self._handle_tools_call(req_id, params)
+                # _handle_tools_call sends the response itself; trace below.
             else:
                 _send(_err(req_id, -32601, f"unknown method: {method}"))
+                result_label = "error"
+                error_class = "-32601"
         except JailError as exc:
             _send(_err(req_id, -32602, str(exc)))
+            result_label = "error"
+            error_class = "-32602"
         except Exception as exc:  # noqa: BLE001
             _send(_err(req_id, -32603, f"internal error: {exc}"))
+            result_label = "error"
+            error_class = "-32603"
+        finally:
+            duration_ms = (time.monotonic() - start) * 1000.0
+            record: dict[str, Any] = {
+                "tool": tool_label,
+                "phase": method or "?",
+                "result": result_label,
+                "duration_ms": round(duration_ms, 3),
+            }
+            if task_id_label:
+                record["task_id"] = task_id_label
+            if error_class:
+                record["error_class"] = error_class
+            _bridge_trace.trace(self._workspace, record)
 
     # ------------------------------------------------------------------
     # Method handlers

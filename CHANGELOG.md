@@ -2,6 +2,37 @@
 
 ## 2026-05-07
 
+### MCP layer Phase 6 — auth shake + structured trace lane + mcp-auth doc
+
+- shipped `mcp/cursor-state-bridge/_trace.py`: JSONL emitter writing to
+  `.omcs/cursor-state-bridge/trace.jsonl` (V3 path, distinct from
+  `.omcs/hook-trace.log`); 10 MiB FIFO eviction; opt-out via
+  `OH_MY_CURSOR_MCP_TRACE=0`; failures inside the tracer are swallowed
+- shipped `mcp/cursor-state-bridge/auth.py`: optional auth shake gated
+  on `OH_MY_CURSOR_MCP_TOKEN`; default OFF; when configured, the bridge
+  rejects `initialize` requests without a matching `params.token`
+  (JSON-RPC `-32001`) and refuses to honour any subsequent call until a
+  successful handshake
+- wired both into `mcp/cursor-state-bridge/server.py`: every JSON-RPC
+  call writes one structured trace record (ts, tool, phase, result,
+  duration_ms, optional task_id / error_class) and the dispatcher gates
+  on auth state when a token is configured
+- shipped `scripts/validate-mcp-trace.py` with `--self-test` (V2
+  tempdir-isolated): scans the last 50 trace lines against required
+  keys; rejects malformed JSON / missing keys / non-numeric duration_ms
+- updated `mcp/cursor-state-bridge/fixtures/trace-schema.json` from
+  Phase 1 placeholder to the canonical event schema
+- shipped `docs/mcp-auth.md` with the exact framing strings
+  ("defense-in-depth only", "does NOT protect against parent-process
+  compromise") and the threat-model section
+- extended `scripts/smoke-mcp-cursor-state-bridge.sh` `--auth` mode to
+  verify default-OFF behaviour, plus new `--auth-enforced` mode that
+  asserts the missing-token rejection and matching-token acceptance
+
+ACs evidenced: AC-601..AC-607.  The full plan (AC-101..AC-607) is now
+fully green; `validate-prd-ac-mapping.py` confirms all 40 plan AC IDs
+have rows in `docs/PRD.yaml#mcp_acceptance_criteria`.
+
 ### MCP layer Phase 5 — hook read-only AST scanner + shared-lock enforcement
 
 - shipped `scripts/validate-hook-readonly.py` (stdlib only) with three modes:

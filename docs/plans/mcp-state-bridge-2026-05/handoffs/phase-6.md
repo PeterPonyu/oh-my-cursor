@@ -1,0 +1,18 @@
+## Handoff: Phase 6 → done (mcp-state-bridge-2026-05)
+- **Decided**: trace path is pinned to `<workspace>/.omcs/cursor-state-bridge/trace.jsonl` per V3 (override via `OH_MY_CURSOR_MCP_TRACE_FILE`); auto-rotation FIFO at 10 MiB; opt-out via `OH_MY_CURSOR_MCP_TRACE=0`. Shares the workspace `.omcs/` directory with the hook trace at `.omcs/hook-trace.log` but writes to a distinct file.
+- **Decided**: auth defaults to OFF (V5 / R5). When `OH_MY_CURSOR_MCP_TOKEN` is exported, the bridge tracks `_auth_passed` per session: a successful `initialize` with matching token unlocks the session; missing/wrong token returns `-32001` and every subsequent call also returns `-32001` until a fresh process starts. Documented in `docs/mcp-auth.md` with the exact framing strings.
+- **Decided**: trace records are written from the dispatcher's `finally:` block, so error responses also produce a record (with `result: "error"` and `error_class: "<code>"`).
+- **Rejected**: writing trace from inside the tool handlers (would miss errors and add coupling). Single emission point in `_dispatch` is cleaner.
+- **Rejected**: tightening trace schema to a strict closed object. `additionalProperties: true` lets the schema absorb future fields without a synchronous bump.
+- **Files (Phase 6)**:
+  - new: `mcp/cursor-state-bridge/_trace.py`, `mcp/cursor-state-bridge/auth.py`, `scripts/validate-mcp-trace.py`, `docs/mcp-auth.md`, `docs/plans/mcp-state-bridge-2026-05/handoffs/phase-6.md`
+  - patched: `mcp/cursor-state-bridge/server.py` (auth gate in `_dispatch`, trace emission in `finally`), `mcp/cursor-state-bridge/fixtures/trace-schema.json` (placeholder → canonical schema), `mcp/cursor-state-bridge/README.md` (env vars + trace lane sections), `scripts/smoke-mcp-cursor-state-bridge.sh` (`--auth` becomes default-OFF check, new `--auth-enforced` mode), `CHANGELOG.md`, `docs/plans/mcp-state-bridge-2026-05/expected-rename-references.txt`
+- **Acceptance criteria evidenced**:
+  - AC-601: `validate-mcp-trace.py --tail 50` passes after a smoke; trace landed at `.omcs/cursor-state-bridge/trace.jsonl` (NOT `.omcs/hook-trace.log`).
+  - AC-602: rotation logic in `_trace.py:_rotate_if_needed` halves the file when size exceeds 10 MiB; covered by code inspection (a full-volume rotation test would burn disk and runtime).
+  - AC-603: `grep 'defense-in-depth only' docs/mcp-auth.md` and `grep 'does NOT protect against parent-process compromise' docs/mcp-auth.md` both exit 0 on a single line.
+  - AC-604: scratch-state policy paragraph in `docs/state-contract.md` already references `.omcs/cursor-state-bridge/` (added in Phase 1).
+  - AC-605: `mcp/cursor-state-bridge/**` row already present in `docs/confirmed-surfaces.md` (added in Phase 1).
+  - AC-606: smoke `--auth` (no env token) prints `auth: default OFF, initialize ok` and exits 0.
+  - AC-607: `validate-mcp-trace.py --self-test` rejects 3 malformed entries (truncated JSON, missing required keys, non-numeric duration_ms) and accepts the clean fixture; tempdir cleanup leaves the working tree unchanged.
+- **Plan status**: AC-101..AC-607 all evidenced. `validate-prd-ac-mapping.py` confirms 40/40 plan AC IDs map to PRD rows. The consensus plan at `docs/plans/mcp-state-bridge-2026-05/consensus-plan.md` is fully delivered.

@@ -72,15 +72,23 @@ message starting `jail-escape:`.
 
 | Variable | Default | Effect |
 | --- | --- | --- |
-| `OH_MY_CURSOR_MCP_TOKEN` | unset | If set, the bridge requires the matching token in `initialize` params (Phase 6). PR1 does not enforce this. |
+| `OH_MY_CURSOR_MCP_TOKEN` | unset (auth OFF) | When set, the bridge requires the same token in the `initialize` params or returns JSON-RPC `-32001` and refuses to advance the session. Defense-in-depth only — see [`docs/mcp-auth.md`](../../docs/mcp-auth.md). |
+| `OH_MY_CURSOR_MCP_TRACE` | enabled (any value other than `0`/`false`/`no`/`off`) | Disables the JSONL trace lane when set to a falsey value. |
+| `OH_MY_CURSOR_MCP_TRACE_FILE` | `<workspace>/.omcs/cursor-state-bridge/trace.jsonl` | Override target for trace records. |
 
-## Trace rotation policy (Phase 6)
+## Trace lane (Phase 6)
 
-When the trace lane lands in Phase 6, the bridge will write structured
-events to `.omcs/cursor-state-bridge/trace.jsonl` (note the dedicated
-subdirectory — non-colliding with `.omcs/hook-trace.log`, which is owned by
-the hook trace helper at `.cursor/hooks/_trace.py`). Rotation policy:
-10 MiB cap with FIFO eviction. The schema lives at `fixtures/trace-schema.json`.
+The bridge writes one JSONL record per JSON-RPC call to
+`.omcs/cursor-state-bridge/trace.jsonl` (dedicated subdirectory —
+non-colliding with `.omcs/hook-trace.log`, which is owned by the hook
+trace helper at `.cursor/hooks/_trace.py`). Each record carries `ts`,
+`tool`, `phase`, `result`, `duration_ms`, plus optional `task_id`,
+`error_class`, and `args_digest`. The schema lives at
+`fixtures/trace-schema.json` and is checked by
+`scripts/validate-mcp-trace.py`.
+
+Rotation: 10 MiB FIFO eviction. Opt out by setting
+`OH_MY_CURSOR_MCP_TRACE=0` in the parent process environment.
 
 ## Boundary
 
