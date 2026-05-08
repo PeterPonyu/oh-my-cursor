@@ -31,6 +31,12 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: "3.12"
+          cache: "pip"
+
+      - name: Install QA tooling
+        run: |
+          python3 -m pip install --upgrade pip
+          python3 -m pip install ruff mypy pytest
 
       - name: Docs scan baseline
         run: python3 scripts/count_md_files.py docs
@@ -38,26 +44,17 @@ jobs:
       - name: Compile Python sources
         run: python3 -m compileall benchmark scripts .cursor/hooks
 
+      - name: Lint (ruff)
+        run: python3 -m ruff check benchmark scripts .cursor/hooks
+
+      - name: Typecheck (mypy)
+        run: python3 -m mypy --ignore-missing-imports benchmark scripts .cursor/hooks
+
       - name: Validate workflow artifacts
         run: |
           python3 scripts/validate-public-language.py
           python3 scripts/validate-cursor-workflow-artifacts.py
           bash scripts/smoke-cursor-workflow-artifacts.sh
 
-      - name: Run pytest when available
-        shell: bash
-        run: |
-          set -euo pipefail
-          if python3 - <<'PY'
-          import importlib.util
-          import sys
-          sys.exit(0 if importlib.util.find_spec("pytest") else 1)
-          PY
-          then
-            python3 -m pytest -q
-          else
-            # Fallback guidance from plan: when pytest or deps are unavailable,
-            # keep compileall + key script checks as the practical baseline.
-            echo "pytest is not installed in this runner environment; skipping pytest gate."
-            echo "Install test dependencies to enable 'python3 -m pytest -q' in CI."
-          fi
+      - name: Test (pytest)
+        run: python3 -m pytest -q

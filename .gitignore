@@ -11,6 +11,10 @@ benchmark/runs/data/
 .omc/
 .omx/
 
+# Dated working documentation (feature plans/specs; not mature project docs)
+docs/plans/*-20*.md
+docs/specs/*-20*.md
+
 # Runtime workflow-state artifacts (written by hooks/bridge; never durable)
 .cursor/state/workflow-state.json
 .cursor/state/active-role.json

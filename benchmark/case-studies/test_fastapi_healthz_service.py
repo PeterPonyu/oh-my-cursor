@@ -6,16 +6,23 @@ import fastapi_healthz_service
 from fastapi_healthz_service import app
 
 
-def test_healthz_returns_ok_and_version() -> None:
+def test_healthz_returns_ok_and_version(monkeypatch) -> None:
+    expected_sha = "1234567890abcdef1234567890abcdef12345678"
+
+    def _mock_check_output(args, **kwargs):
+        assert args == ["git", "rev-parse", "HEAD"]
+        assert kwargs["text"] is True
+        assert kwargs["stderr"] is subprocess.DEVNULL
+        return f"{expected_sha}\n"
+
     fastapi_healthz_service._read_feature_flags.cache_clear()
+    fastapi_healthz_service._read_git_sha.cache_clear()
+    monkeypatch.setattr(subprocess, "check_output", _mock_check_output)
     client = TestClient(app)
     response = client.get("/healthz")
 
     assert response.status_code == 200
-    body = response.json()
-    assert body["status"] == "ok"
-    assert isinstance(body["version"], str)
-    assert body["version"]
+    assert response.json() == {"status": "ok", "version": expected_sha}
 
 
 def test_healthz_returns_unknown_when_git_lookup_fails(monkeypatch) -> None:
@@ -74,3 +81,26 @@ def test_feature_flag_treats_invalid_value_as_default_true(monkeypatch) -> None:
     response = client.get("/healthz")
 
     assert response.status_code == 200
+    assert response.json()["status"] == "ok"
+    assert "version" in response.json()
+
+
+def test_feature_flag_true_variants_enable_healthz(monkeypatch) -> None:
+    for value in ("1", "true", "yes", "on"):
+        monkeypatch.setenv("FEATURE_HEALTHZ_ENDPOINT_ENABLED", value)
+        fastapi_healthz_service._read_feature_flags.cache_clear()
+        fastapi_healthz_service._read_git_sha.cache_clear()
+
+        client = TestClient(app)
+        response = client.get("/healthz")
+        assert response.status_code == 200, value
+
+
+def test_feature_flag_false_variants_disable_healthz(monkeypatch) -> None:
+    for value in ("0", "false", "no", "off"):
+        monkeypatch.setenv("FEATURE_HEALTHZ_ENDPOINT_ENABLED", value)
+        fastapi_healthz_service._read_feature_flags.cache_clear()
+
+        client = TestClient(app)
+        response = client.get("/healthz")
+        assert response.status_code == 404, value

@@ -48,8 +48,13 @@ uses the authenticated `copilot --model gpt-4.1` path instead of local Ollama.
 
 ## Remaining risks
 
-- Full cross-arm benchmark completion is environment/time gated; bounded OAuth
-  and auto-mode smokes prove model routing, not a complete quality comparison.
+- **Resolved 2026-05-08**: "Full cross-arm benchmark completion is
+  environment/time gated" — superseded by
+  `benchmark/runs/cross-arm-report-20260508.md`. Both arms (`vanilla`,
+  `with-omc`) of the A1-full 60-task fixture now complete on the authenticated
+  local `cursor-agent --model auto` path with 0 errors. Bounded OAuth and
+  auto-mode smokes documented above remain valid model-routing proof; full
+  cross-arm completeness now extends that proof.
 - Copilot `--model auto` is environment-gated in this account and returned
   `402 You have no quota`; `gpt-4.1` is the confirmed zero-premium-request
   Copilot smoke model here.
