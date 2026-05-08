@@ -38,7 +38,7 @@ explicit:
     supports.
 
 Current `repo-owned` surfaces here are the root `AGENTS.md`, `.cursor/rules/`,
-`.cursor/hooks.json` plus `.cursor/hooks/` (`session-bootstrap.py`, `session-summary.py`, `prompt-router.py`, `tool-guard.py`, `state-watcher.py`, `failure-router.py`, `subagent-bootstrap.py`, `subagent-summary.py`, `shell-guard.py`, `shell-debrief.py`, `read-advisor.py`, `claim-guard.py`, `compact-reminder.py`, `stop-gate.py`),
+brand and metadata assets in `assets/`, `.cursor/hooks.json` plus `.cursor/hooks/` (`session-bootstrap.py`, `session-summary.py`, `prompt-router.py`, `tool-guard.py`, `state-watcher.py`, `failure-router.py`, `subagent-bootstrap.py`, `subagent-summary.py`, `shell-guard.py`, `shell-debrief.py`, `read-advisor.py`, `claim-guard.py`, `compact-reminder.py`, `stop-gate.py`),
 `.cursor/agents/` (including `orchestrator`, `researcher`, `planner`,
 `implementer`, `verifier`, `critic`, `debugger`, `security-reviewer`), the
 `.cursor/state/` workflow-state contract plus its schema/example/runtime

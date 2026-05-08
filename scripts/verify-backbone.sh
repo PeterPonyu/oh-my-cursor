@@ -11,6 +11,8 @@ required=(
   AGENTS.md
   CHANGELOG.md
   README.md
+  assets/oh-my-cursor-character.jpg
+  assets/oh-my-cursor-social-preview.jpg
   benchmark/README.md
   .cursor-plugin/plugin.json
   .cursor/hooks.json

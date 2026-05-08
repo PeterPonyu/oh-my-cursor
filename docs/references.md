@@ -36,11 +36,15 @@ When capability claims change in `AGENTS.md`, `README.md`, `docs/**`, or
 
 - Root `AGENTS.md`, `.cursor/rules/`, `.cursor/hooks.json`, `.cursor/hooks/`,
   `.cursor/agents/`, the repo-root plugin manifest, shipped rules/skills,
+  checked-in brand/readme/social assets under `assets/`, the root README image,
   local validators, and checked-in benchmark artifacts are current
   **repo-owned** surfaces.
 - Cursor CLI, MCP, custom modes, and background agents are real Cursor
   capabilities, but they remain **host-product-only** unless this repo ships and
   validates a corresponding checked-in surface.
+- `oh-my-claudecode` concepts referenced by the bridge docs are integration
+  targets, not Cursor-owned behavior; parity claims stay bounded by the local
+  mapping documents and checked-in Cursor artifacts.
 - Repo-file custom-mode packaging, repo-file background-agent provisioning, a
   default MCP config, and marketplace publication remain outside the
   current repo contract.
