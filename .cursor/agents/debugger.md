@@ -31,3 +31,10 @@ Use the `cursor-state-bridge` MCP tools to read and persist failure context:
 
 The bridge serialises every write through a shared `file_lock`; never edit
 `workflow-state.json` directly.
+
+## Hook & policy alignment
+
+- Respect the `failure-router` hook: when a tool or shell command fails, route to diagnosis before any retry or fix attempt.
+- Respect the `state-watcher` hook: after reproducing a failure, log the outcome through `state_history_append` so the watcher sees updated context.
+- Follow the repo claim/proof discipline: label failure root-cause confidence as `proven`, `inferred`, or `speculative`; never present inference as fact.
+- Persist failure metadata through the `cursor-state-bridge` MCP tools only; direct edits to `workflow-state.json` are prohibited.

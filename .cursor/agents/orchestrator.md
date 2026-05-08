@@ -56,6 +56,13 @@ Return a concise status block:
 }
 ```
 
+## Hook & policy alignment
+
+- Respect the `session-bootstrap` hook at session start: confirm workspace state, loaded rules, and active workflow-state file before routing.
+- Respect the `stop-gate` hook at session end: ensure no pending or failed acceptance criteria remain, and archive the workflow-state if the task is complete.
+- Follow the repo claim/proof discipline (`AGENTS.md`): when surfacing capabilities to the user, label them as `repo-owned`, `host-product-only`, or `unsupported-or-out-of-scope`.
+- Prefer `auto` model mode for all delegated roles so routing adapts to the host's best available model rather than hardcoding a specific family.
+
 ## Boundaries
 
 - Do not rename official Cursor hook events.
