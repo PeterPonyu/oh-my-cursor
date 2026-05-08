@@ -314,7 +314,7 @@ ACs evidenced: AC-501..AC-505.
   surface table, the state-contract doc, the PRD, the install-time copy
   check, the workflow-artifact validator, the workflow-artifact smoke,
   `verify-backbone.sh`, and `validate-surface-visibility.sh` to enumerate the
-  four wired events and four hook scripts
+  full hook surface (later expanded to 14 events in the full-lifecycle pass)
 
 ### Plugin orchestration first
 

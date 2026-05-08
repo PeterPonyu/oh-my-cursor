@@ -42,6 +42,11 @@ required=(
   .cursor/agents/security-reviewer.md
   .cursor/agents/planner.md
   .cursor/agents/researcher.md
+  .cursor/agents/implementer.md
+  .cursor/agents/code-reviewer.md
+  .cursor/agents/explore.md
+  .cursor/agents/test-engineer.md
+  .cursor/agents/tracer.md
   rules/repo-owned-plugin-boundary.mdc
   skills/local-plugin-check/SKILL.md
   skills/phase-controller/SKILL.md

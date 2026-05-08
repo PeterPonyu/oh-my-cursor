@@ -29,13 +29,12 @@ background daemon.
    acceptance criteria, and any `failure` block according to
    `.cursor/state/workflow-state.schema.json`.
 4. **Route roles.** Delegate or recommend the next role:
-   - `research` → `researcher`
+   - `research` → `researcher` (deep investigation) or `explore` (fast codebase mapping)
    - `plan` → `planner`
-   - `execute` → implementation skill or user-driven edits
-   - `verify` → `verifier`
-   - `review` → `critic`; add `security-reviewer` for auth, secrets, shell,
-     network, or supply-chain changes
-   - `failed` → `debugger` before retry
+   - `execute` → `implementer` or implementation skill
+   - `verify` → `verifier` (evidence gate) and `test-engineer` (test artifacts)
+   - `review` → `critic` (approach challenge), `code-reviewer` (implementation review); add `security-reviewer` for auth, secrets, shell, network, or supply-chain changes
+   - `failed` → `debugger` (diagnosis) or `tracer` (causal investigation with competing hypotheses)
 5. **Track evidence.** Mark an acceptance criterion `passed` only when its
    `evidence` field names a checked-in artifact or reproducible command.
 6. **Stop cleanly.** Before final delivery, ensure `stop-gate.py` would see no

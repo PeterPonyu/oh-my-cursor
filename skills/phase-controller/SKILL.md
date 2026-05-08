@@ -31,12 +31,12 @@ controller map to checked-in agents under
 | Phase | Recommended role | Agent prompt |
 | --- | --- | --- |
 | any | orchestrator | `.cursor/agents/orchestrator.md` |
-| research | researcher | `.cursor/agents/researcher.md` |
+| research | researcher, explore | `.cursor/agents/researcher.md`, `.cursor/agents/explore.md` |
 | plan | planner | `.cursor/agents/planner.md` |
-| execute | implementer (or skill) | implementation is user/agent-driven |
-| verify | verifier | `.cursor/agents/verifier.md` |
-| review | critic, security-reviewer | `.cursor/agents/critic.md`, `.cursor/agents/security-reviewer.md` |
-| any failure | debugger | `.cursor/agents/debugger.md` |
+| execute | implementer (or skill) | `.cursor/agents/implementer.md` |
+| verify | verifier, test-engineer | `.cursor/agents/verifier.md`, `.cursor/agents/test-engineer.md` |
+| review | critic, security-reviewer, code-reviewer | `.cursor/agents/critic.md`, `.cursor/agents/security-reviewer.md`, `.cursor/agents/code-reviewer.md` |
+| any failure | debugger, tracer | `.cursor/agents/debugger.md`, `.cursor/agents/tracer.md` |
 
 ## When to use
 

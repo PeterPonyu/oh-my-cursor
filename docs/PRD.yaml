@@ -73,7 +73,7 @@ acceptance_criteria:
   - docs/PRD.yaml exists and describes the independent product posture.
   - .cursor/hooks.json wires sessionStart, sessionEnd, beforeSubmitPrompt, preToolUse, postToolUse, postToolUseFailure, subagentStart, subagentStop, beforeShellExecution, afterShellExecution, beforeReadFile, afterFileEdit, preCompact, and stop events to checked-in lifecycle hook scripts (session-bootstrap.py, session-summary.py, prompt-router.py, tool-guard.py, state-watcher.py, failure-router.py, subagent-bootstrap.py, subagent-summary.py, shell-guard.py, shell-debrief.py, read-advisor.py, claim-guard.py, compact-reminder.py, and stop-gate.py).
   - .cursor/hooks contains README.md plus stdlib-only Python hook scripts that emit valid JSON.
-  - .cursor/agents contains orchestrator, verifier, critic, debugger, security-reviewer, planner, and researcher prompts with valid frontmatter.
+  - .cursor/agents contains orchestrator, researcher, planner, implementer, verifier, critic, code-reviewer, debugger, tracer, security-reviewer, explore, and test-engineer prompts with valid frontmatter.
   - .cursor/state ships workflow-state.schema.json, workflow-state.example.json, and a README that explains the contract.
   - skills/phase-controller/SKILL.md is the documented orchestration entry skill.
   - docs/orchestration.md is the orchestration-first overview and is referenced from README.md.

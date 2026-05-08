@@ -90,8 +90,8 @@ under `docs/plans/` and recommends the next state write to the orchestrator.
 ## Boundaries
 
 - Plans live in `docs/plans/` (or wherever the host project conventionally
-   stores planning notes). This skill does not write to hidden runtime state,
-   `.cursor/`,
+  stores planning notes). This skill does not write to hidden runtime state,
+  `.cursor/`,
   `.cursor-plugin/`, or anywhere else outside checked-in docs.
 - Plans are advisory artifacts. They do not auto-trigger execution and do not
   promise that any particular Cursor mode (Agent, Manual, Custom) will be

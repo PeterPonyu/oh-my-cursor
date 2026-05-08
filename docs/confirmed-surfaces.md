@@ -15,7 +15,7 @@ truth:
 | --- | --- | --- | --- |
 | Root instructions and policy | `repo-owned` | `checked-in-artifact` | This repo ships one root `AGENTS.md` and `.cursor/rules/` guidance. |
 | Project hooks | `repo-owned` in trusted Cursor workspaces | `checked-in-artifact` for files, stronger only with runtime evidence | This repo ships `.cursor/hooks.json` (wiring `sessionStart`, `sessionEnd`, `beforeSubmitPrompt`, `preToolUse`, `postToolUse`, `postToolUseFailure`, `subagentStart`, `subagentStop`, `beforeShellExecution`, `afterShellExecution`, `beforeReadFile`, `afterFileEdit`, `preCompact`, and `stop`) plus stdlib-only hook scripts under `.cursor/hooks/`. |
-| MCP server `cursor-state-bridge` (Phase 1 skeleton) | `repo-owned` (opt-in install via `--with-mcp`) | `checked-in-artifact` for source + validators; `runtime-smoke` only when `RUN_MCP_BRIDGE_SMOKE=1` is set | This repo ships `mcp/cursor-state-bridge/` as a stdio JSON-RPC 2.0 server with one functional tool (`state_read`) and five Phase-3 placeholders, plus `scripts/validate-mcp-server-structure.py`, `scripts/smoke-mcp-cursor-state-bridge.sh`, the byte-equal `.cursor/mcp.example.json` template, and tests. The user-environment config file `.cursor/mcp.json` is gitignored and validator-rejected. |
+| MCP server `cursor-state-bridge` (all eight phases shipped) | `repo-owned` (opt-in install via `--with-mcp`) | `checked-in-artifact` for source + validators; `runtime-smoke` only when `RUN_MCP_BRIDGE_SMOKE=1` is set | This repo ships `mcp/cursor-state-bridge/` as a stdio JSON-RPC 2.0 server with six functional tools (`state_read`, `state_init`, `state_set_phase`, `state_record_failure`, `state_update_acceptance_criterion`, `state_history_append`), plus trace lane, defense-in-depth auth, history FIFO eviction, agent-callable contract enforcement, `scripts/validate-mcp-server-structure.py`, `scripts/smoke-mcp-cursor-state-bridge.sh`, the byte-equal `.cursor/mcp.example.json` template, and tests. The user-environment config file `.cursor/mcp.json` is gitignored and validator-rejected. |
 | Project agents | `repo-owned` | `checked-in-artifact` | This repo ships `.cursor/agents/*.md` with validated YAML frontmatter and concise prompts. |
 | Repo-root Cursor plugin manifest + bundled payload references | `repo-owned` | `checked-in-artifact` | This repo promotes `.cursor-plugin/plugin.json` plus referenced rules, skills, agents, and hooks into a checked-in plugin surface. |
 | Local plugin load walkthrough | `repo-owned` docs with user-environment verification | `checked-in-artifact` for the walkthrough, stronger only with runtime evidence | This repo documents how to load the local plugin from `~/.cursor/plugins/local` and reload Cursor without pretending the reload step is repo-owned runtime automation. |
@@ -59,7 +59,9 @@ Official Cursor agent documentation describes project agents under
 
 **How this repo uses that evidence:**
 
-- keep verifier, critic, debugger, and security-reviewer agents under
+- keep all twelve agents (`orchestrator`, `researcher`, `planner`,
+  `implementer`, `verifier`, `critic`, `code-reviewer`, `debugger`,
+  `tracer`, `security-reviewer`, `explore`, `test-engineer`) under
   `.cursor/agents/`;
 - validate `name`, `description`, `model`, and `readonly` frontmatter; and
 - keep prompts concise and repository-specific.

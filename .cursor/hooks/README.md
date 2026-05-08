@@ -77,6 +77,25 @@ portable. The hooks **read** state; they never write it. Background
 workers, cross-session resume, and queued retries remain `host-product-only`
 Cursor capabilities and are intentionally out of scope here.
 
+## Shared helpers
+
+Three underscore-prefixed modules support the wired hooks but are not
+hook scripts themselves:
+
+- `_trace.py` — shared JSONL trace emitter used by every wired hook when
+  `OH_MY_CURSOR_HOOK_TRACE=1` is set. Read-only with respect to workflow
+  state; failures are swallowed.
+- `_tool_payload.py` — normalises Cursor payload field names
+  (`tool_name`/`toolName`/`name`, `file_path`/`filePath`/`path`) so hooks
+  share a single extraction path. Used by `tool-guard.py`,
+  `state-watcher.py`, `failure-router.py`, and `shell-debrief.py`.
+- `_active_role.py` — manages `.cursor/state/active-role.json` (the
+  single-active-subagent record). Provides `set_active_role`,
+  `clear_active_role`, and `get_active_role` with shared `file_lock`
+  serialisation. Used by `subagent-bootstrap.py`, `subagent-summary.py`,
+  and `tool-guard.py`. Also parses frontmatter from `.cursor/agents/*.md`
+  role prompts to extract `tools:` allowlists.
+
 ## Opt-in tracing for runtime evidence
 
 The shared helper at `_trace.py` (read-only with respect to workflow state)
