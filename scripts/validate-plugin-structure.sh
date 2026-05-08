@@ -39,6 +39,11 @@ required=(
     .cursor/agents/security-reviewer.md
     .cursor/agents/planner.md
     .cursor/agents/researcher.md
+    .cursor/agents/implementer.md
+    .cursor/agents/code-reviewer.md
+    .cursor/agents/explore.md
+    .cursor/agents/test-engineer.md
+    .cursor/agents/tracer.md
     .cursor/mcp.example.json
   rules/repo-owned-plugin-boundary.mdc
   skills/local-plugin-check/SKILL.md
@@ -66,14 +71,11 @@ fi
 log ".cursor/mcp.json is not tracked (correct)"
 
 contaminated=0
+find .cursor -type d -name "__pycache__" -exec rm -rf {} + 2>/dev/null || true
+find .cursor -name "*.pyc" -delete 2>/dev/null || true
 
-if find .cursor -type d -name "__pycache__" 2>/dev/null | grep -q .; then
-  fail "found __pycache__ directories in .cursor/ — run: find .cursor -type d -name '__pycache__' -exec rm -rf {} +"
-  contaminated=1
-fi
-
-if find .cursor -name "*.pyc" 2>/dev/null | grep -q .; then
-  fail "found *.pyc files in .cursor/ — run: find .cursor -name '*.pyc' -delete"
+if git ls-files .cursor 2>/dev/null | grep -qE '__pycache__|\.pyc$'; then
+  fail "pycache files are tracked in git — add __pycache__/ and *.pyc to .gitignore, then git rm --cached them"
   contaminated=1
 fi
 
@@ -157,7 +159,7 @@ agents_count="$(find .cursor/agents -type f -name '*.md' | wc -l | tr -d ' ')"
 [[ "$rules_count" -ge 1 ]] || fail "expected at least one plugin-owned rule"
 [[ "$skills_count" -ge 1 ]] || fail "expected at least one plugin-owned skill"
 [[ "$hooks_count" == "1" ]] || fail "expected exactly one project hook manifest"
-[[ "$agents_count" -ge 7 ]] || fail "expected at least seven checked-in project agents"
+[[ "$agents_count" -ge 12 ]] || fail "expected at least twelve checked-in project agents"
 
 log "plugin-owned rule count is $rules_count"
 log "plugin-owned skill count is $skills_count"

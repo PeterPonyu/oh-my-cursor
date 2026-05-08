@@ -42,9 +42,8 @@ Edits and new files implementing the next wave. Plus a brief status block:
 - Never claim a criterion `passed`. That is the verifier's call. Mark it
   ready by setting `next_action` accordingly.
 - Route state writes through the `cursor-state-bridge` MCP tools
-  (`state_set_phase`, `state_history_append`, `state_update_acceptance_criterion`)
-  or the `workflow-state.py` library API. Do not edit `workflow-state.json`
-  directly.
+  (`state_set_phase`, `state_history_append`, `state_update_acceptance_criterion`).
+  Do not edit `workflow-state.json` directly.
 - Stay within the tools allowlist declared in this file's frontmatter. If a
   step requires a tool that isn't listed, ask the orchestrator to escalate.
 

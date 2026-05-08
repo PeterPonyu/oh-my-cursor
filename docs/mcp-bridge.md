@@ -39,13 +39,12 @@ template at `.cursor/mcp.example.json`.
 
 ## Documents
 
-- [Tool surface table](./mcp-tool-surface.md) — six tools with PR1 status
-  and Phase 2/3 promotion path.
+- [Tool surface table](./mcp-tool-surface.md) — six tools, all functional across phases 1–3, with phases 4–8 adding validation, trace, auth, history retention, and contract enforcement.
 - [State contract](./state-contract.md) — workflow-state ownership and the
   bridge's role as the agent-callable writer.
 - [Consensus plan](./plans/mcp-state-bridge-2026-05/consensus-plan.md) and
   [open questions](./plans/mcp-state-bridge-2026-05/open-questions.md) —
-  the deliberate-mode ralplan that scoped this work into six phases, plus
+  the deliberate-mode ralplan that scoped this work into eight phases, plus
   the team-plan and team-verify handoffs under
   [`plans/mcp-state-bridge-2026-05/handoffs/`](./plans/mcp-state-bridge-2026-05/handoffs/).
 

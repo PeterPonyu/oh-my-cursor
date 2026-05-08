@@ -16,6 +16,27 @@ agents in `oh-my-cursor` share. It is intentionally:
   statuses, role names, and evidence shape.
 - `workflow-state.example.json` — Reference document showing how a real task
   state looks. Use it as a template, not as live state.
+- `workflow-state.py` — stdlib-only library API (`init_state`, `set_state`,
+  `update_acceptance_criterion`, `record_failure`, `append_history`,
+  `read_state`) with shared `file_lock` and atomic writes via tmp-file rename.
+  The `cmd_*` argparse shims provide the CLI interface
+  (`python3 .cursor/state/workflow-state.py {init,set,ac,fail}`).
+- `_locking.py` — POSIX `fcntl` advisory `file_lock` context manager used by
+  both the CLI library and the MCP bridge to serialise concurrent writes.
+
+## Runtime artifacts (never durable)
+
+These files may appear during active sessions but are not checked in and
+should not be relied upon between runs:
+
+- `active-role.json` — single-active-subagent record written by
+  `subagent-bootstrap.py` (via `_active_role.py`) and cleared by
+  `subagent-summary.py`. Consulted by `tool-guard.py` for role-based
+  tool allowlists.
+- `*.lock` — transient `fcntl` advisory lock files created during writes;
+  removed when the lock context exits.
+- `workflow-state.json` — the live state document when one exists; always
+  written atomically via tmp-file + `os.replace`.
 
 ## Usage
 

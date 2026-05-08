@@ -94,7 +94,7 @@ The default proceed-threshold is `ambiguity <= 0.20`. The user can override
 ## Boundaries
 
 - This skill does not implement a "challenge agent" runtime, ontology graph
-   database, or persisted state across sessions. It is a conversational method
+  database, or persisted state across sessions. It is a conversational method
    that is fully reproducible by the model itself in chat, with the final spec
    written to checked-in docs when useful.
 - Mathematical scoring here is an honest estimate from the model. It is not
