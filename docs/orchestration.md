@@ -18,6 +18,12 @@ lifecycle, and where each surface stops being repo-owned.
 What was missing was a single coordination contract that lets those surfaces
 share a view of the current task. This document is that contract.
 
+For cross-ecosystem alignment with `oh-my-claudecode`, see the
+[`Claude Code bridge`](./claudecode-bridge.md) and
+[`Claude Code parity matrix`](./claudecode-parity-matrix.md). Those documents
+map concepts without changing this repo's Cursor-owned state or proof
+boundaries.
+
 ## Lifecycle at a glance
 
 ```text

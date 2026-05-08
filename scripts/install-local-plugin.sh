@@ -123,6 +123,7 @@ copy_minimal_payload() {
     --include='/skills/***' \
     --include='/AGENTS.md' \
     --include='/README.md' \
+    --include='/assets/***' \
     --include='/CHANGELOG.md' \
     --include='/LICENSE' \
     --include='*/' \

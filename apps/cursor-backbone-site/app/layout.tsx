@@ -28,6 +28,14 @@ export const metadata: Metadata = {
       'Repo-owned Cursor backbone homepage with visible docs, state contract, references, benchmark notes, hooks, and agents.',
     url: SITE_URL,
     siteName: 'oh-my-cursor',
+    images: [
+      {
+        url: '/assets/oh-my-cursor-social-preview.jpg',
+        width: 1200,
+        height: 630,
+        alt: 'oh-my-cursor social preview',
+      },
+    ],
     type: 'website',
   },
   twitter: {
@@ -35,6 +43,7 @@ export const metadata: Metadata = {
     title: 'oh-my-cursor — docs-first Cursor backbone',
     description:
       'Repo-owned Cursor backbone homepage with visible proof links and explicit ownership boundaries.',
+    images: ['/assets/oh-my-cursor-social-preview.jpg'],
   },
 }
 

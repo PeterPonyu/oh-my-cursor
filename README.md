@@ -1,5 +1,9 @@
 # oh-my-cursor
 
+<div align="center">
+  <img src="./assets/oh-my-cursor-character.jpg" alt="oh-my-cursor character" width="600" />
+</div>
+
 A Cursor-native workflow backbone with an opt-in MCP server for
 agent-callable workflow-state writes. Hooks read state, the bridge
 writes it, and every claim is anchored to a checked-in artifact.
@@ -28,6 +32,8 @@ deferred surfaces with vague "could be added later" language.
 | One-page orchestration map | [`docs/orchestration.md`](./docs/orchestration.md) |
 | Workflow-state contract | [`docs/state-contract.md`](./docs/state-contract.md) |
 | MCP bridge (opt-in writer) | [`docs/mcp-bridge.md`](./docs/mcp-bridge.md) |
+| Claude Code bridge boundary | [`docs/claudecode-bridge.md`](./docs/claudecode-bridge.md) |
+| Claude Code parity matrix | [`docs/claudecode-parity-matrix.md`](./docs/claudecode-parity-matrix.md) |
 | Acceptance-criteria index | [`docs/PRD.yaml`](./docs/PRD.yaml) |
 | Change history | [`CHANGELOG.md`](./CHANGELOG.md) |
 
@@ -44,6 +50,7 @@ the live entry path.
 | Project hooks (`.cursor/hooks.json` + 14 stdlib-only scripts wiring 14 documented Cursor agent events) | `repo-owned` in trusted Cursor workspaces | `checked-in-artifact`; runtime behavior bounded by Cursor execution |
 | Project agents under `.cursor/agents/*.md` | `repo-owned` | `checked-in-artifact` |
 | Workflow-state contract under `.cursor/state/` (schema, example, library, lock primitive) | `repo-owned` | `checked-in-artifact` |
+| Checked-in brand/readme/social assets under `assets/` and the root README image | `repo-owned` | `checked-in-artifact` |
 | Repo-root plugin manifest at `.cursor-plugin/plugin.json` and shipped rules/skills | `repo-owned` | `checked-in-artifact` |
 | MCP server `mcp/cursor-state-bridge/` (six functional state-IO tools, opt-in install, stdio-only) | `repo-owned` (opt-in) | `checked-in-artifact`; `runtime-smoke` when `RUN_MCP_BRIDGE_SMOKE=1` |
 | Local validators and benchmark artifacts under `scripts/` and `benchmark/` | `repo-owned` | `checked-in-artifact` |
