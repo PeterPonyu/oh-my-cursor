@@ -1,0 +1,139 @@
+product:
+  name: oh-my-cursor
+  posture: independent self-developed Cursor-native workflow backbone
+  date: 2026-05-06
+
+scope:
+  in:
+    - public language cleanup for repository-owned surfaces
+    - checked-in Cursor project hooks
+    - checked-in Cursor project agents
+    - local artifact validators
+    - conservative runtime and manual smoke evidence
+  out:
+    - default MCP configuration
+    - marketplace publication claims
+    - product-managed modes or background-agent provisioning
+
+features:
+  public_language_cleanup:
+    goal: Keep public docs, skills, rules, app copy, and benchmark notes focused on this repository's own product identity.
+    requirements:
+      - scan public-facing text for blocked legacy comparison terms
+      - keep ownership and proof wording explicit
+      - avoid stronger claims than current artifacts and smoke evidence support
+  hooks:
+    goal: Ship project hooks as repo-owned runtime helpers for trusted Cursor workspaces.
+    requirements:
+      - define versioned project hook configuration at .cursor/hooks.json
+      - emit a discipline and workflow-state reminder on sessionStart
+      - emit an observational summary on sessionEnd
+      - surface skill, agent, and phase routing hints plus active workflow-state summaries before each submitted prompt
+      - keep direct edits to workflow-state.json bounded by asking for confirmation on preToolUse when non-shell editing tools target it
+      - validate edited workflow-state.json documents against the schema on postToolUse using only the Python standard library
+      - route tool failures to the debugger role and recommend recording failure metadata via the writer on postToolUseFailure
+      - link subagent runs to checked-in role prompts on subagentStart and emit observational summaries on subagentStop without requesting auto follow-ups
+      - warn on risky shell patterns and ask for confirmation before commands that would corrupt repo-owned state files or the local plugin install path on beforeShellExecution
+      - emit evidence notes on afterShellExecution when the recorded command invokes a repo-owned validator, smoke, install/check helper, or the state writer
+      - emit a human-visibility reminder on beforeReadFile when the target is a known workflow-state document
+      - run claim/proof checks after file edits
+      - surface workflow-state anchors on preCompact so context compaction preserves them
+      - run conservative completion checks on stop events
+      - keep hook scripts stdlib-only and fail-open unless a severe unsupported claim or a severe state-corrupting shell pattern is detected
+  agents:
+    goal: Ship concise project agents for verification, critique, debugging, security review, planning, and research.
+    requirements:
+      - store agents under .cursor/agents
+      - include valid YAML frontmatter with name, description, model, and readonly fields
+      - keep prompts Cursor-native and tied to repository evidence
+      - ship orchestrator, planner, and researcher prompts so the orchestration loop has an entry point plus plan/research workers
+  orchestration:
+    goal: Coordinate hooks, skills, and agents through one explicit, file-backed lifecycle.
+    requirements:
+      - publish docs/orchestration.md as the orchestration-first entry point
+      - ship .cursor/state/workflow-state.schema.json plus a documented example
+      - ship skills/phase-controller/SKILL.md as the orchestration entry skill
+      - extend stop-gate.py to surface pending acceptance criteria from an active workflow-state file
+      - validate state documents locally with scripts/validate-workflow-state.py
+      - provide .cursor/state/workflow-state.py plus the scripts/workflow-state.py wrapper so users and agents can intentionally create or update local workflow-state JSON files
+  validators:
+    goal: Make the new workflow artifacts locally provable.
+    requirements:
+      - validate public language hygiene
+      - validate hook configuration, hook script compilation, agent frontmatter, and plugin references
+      - include the new validators in the backbone verification script
+  runtime_manual_smoke:
+    goal: Provide bounded checks without overstating runtime behavior.
+    requirements:
+      - feed sample hook JSON to both hook scripts
+      - validate hook and agent artifacts locally
+      - document runtime behavior as dependent on trusted Cursor workspace execution
+
+acceptance_criteria:
+  - docs/PRD.yaml exists and describes the independent product posture.
+  - .cursor/hooks.json wires sessionStart, sessionEnd, beforeSubmitPrompt, preToolUse, postToolUse, postToolUseFailure, subagentStart, subagentStop, beforeShellExecution, afterShellExecution, beforeReadFile, afterFileEdit, preCompact, and stop events to checked-in lifecycle hook scripts (session-bootstrap.py, session-summary.py, prompt-router.py, tool-guard.py, state-watcher.py, failure-router.py, subagent-bootstrap.py, subagent-summary.py, shell-guard.py, shell-debrief.py, read-advisor.py, claim-guard.py, compact-reminder.py, and stop-gate.py).
+  - .cursor/hooks contains README.md plus stdlib-only Python hook scripts that emit valid JSON.
+  - .cursor/agents contains orchestrator, researcher, planner, implementer, verifier, critic, code-reviewer, debugger, tracer, security-reviewer, explore, and test-engineer prompts with valid frontmatter.
+  - .cursor/state ships workflow-state.schema.json, workflow-state.example.json, and a README that explains the contract.
+  - skills/phase-controller/SKILL.md is the documented orchestration entry skill.
+  - docs/orchestration.md is the orchestration-first overview and is referenced from README.md.
+  - .cursor-plugin/plugin.json references rules, skills, agents, and hooks.
+  - scripts/validate-public-language.py prints PUBLIC_LANGUAGE_OK when public text is clean.
+  - scripts/validate-cursor-workflow-artifacts.py prints HOOKS_ARTIFACTS_OK and AGENTS_ARTIFACTS_OK when artifacts are valid.
+  - scripts/validate-workflow-state.py prints WORKFLOW_STATE_OK for a valid state document.
+  - scripts/workflow-state.py can initialize and update a local workflow-state JSON file.
+  - scripts/smoke-cursor-workflow-artifacts.sh exercises both hook scripts and artifact validation.
+  - scripts/verify-backbone.sh runs the new validators.
+  - Core docs and required skills describe the repository as a self-developed Cursor-native product with artifact-backed proof.
+
+mcp_acceptance_criteria:
+  AC-101: { phase: 1, status: shipped, summary: "validate-mcp-server-structure prints MCP_SERVER_STRUCTURE_OK" }
+  AC-102: { phase: 1, status: shipped, summary: "smoke --full reports tools=6 and MCP_BRIDGE_SMOKE_OK" }
+  AC-103: { phase: 1, status: shipped, summary: "smoke --jail-escape returns -32602 with jail-escape prefix" }
+  AC-104: { phase: 1, status: shipped, summary: "validate-public-language clean against new public files" }
+  AC-105: { phase: 1, status: shipped, summary: "default install does not include mcp/" }
+  AC-106: { phase: 1, status: shipped, summary: "--with-mcp install includes mcp/cursor-state-bridge/server.py" }
+  AC-107: { phase: 1, status: shipped, summary: "validate-plugin-structure --self-test rejects tracked .cursor/mcp.json" }
+  AC-108: { phase: 1, status: shipped, summary: ".cursor/mcp.example.json byte-equal to canonical fixture" }
+  AC-109: { phase: 1, status: shipped, summary: "smoke fast-path bounded when RUN_MCP_BRIDGE_SMOKE unset" }
+  AC-110: { phase: 1, status: shipped, summary: "validate-plugin-structure allowlists .cursor/mcp.example.json" }
+  AC-201: { phase: 2, status: shipped, summary: "workflow-state.py exposes typed library API for six entrypoints" }
+  AC-202: { phase: 2, status: shipped, summary: "bridge state_io.py imports library; zero subprocess hits" }
+  AC-203: { phase: 2, status: shipped, summary: "CLI shim still works after refactor; validate-state-contract green" }
+  AC-204: { phase: 2, status: shipped, summary: "all writes acquire shared file_lock from .cursor/state/_locking.py" }
+  AC-205: { phase: 2, status: shipped, summary: "validate-workflow-state passes example state document" }
+  AC-206: { phase: 2, status: shipped, summary: "test_library_api covers six entrypoints, zero argparse mocks" }
+  AC-207: { phase: 2, status: shipped, summary: ".cursor/state/_locking.py imports cleanly on POSIX" }
+  AC-208: { phase: 2, status: shipped, summary: "test_locking_concurrent serialises two writers, history monotonic" }
+  AC-209: { phase: 2, status: shipped, summary: "smoke --jail-escape returns -32602 (re-confirmed Phase 2)" }
+  AC-301: { phase: 3, status: shipped, summary: "state_update_acceptance_criterion rejects missing or invalid status" }
+  AC-302: { phase: 3, status: shipped, summary: "evidence is OPTIONAL; schema NOT tightened" }
+  AC-303: { phase: 3, status: shipped, summary: "state_history_append preserves top-level fields" }
+  AC-304: { phase: 3, status: shipped, summary: "tools/list returns six functional tools, no -32601 placeholders" }
+  AC-305: { phase: 3, status: shipped, summary: "validate-prd-ac-mapping verifies plan AC IDs map to PRD rows" }
+  AC-401: { phase: 4, status: planned, summary: "agent-callable surfaces never reference workflow-state.py CLI directly" }
+  AC-402: { phase: 4, status: planned, summary: "validate-public-language clean after agent / skill rewiring" }
+  AC-403: { phase: 4, status: planned, summary: "verify-backbone green after rewiring" }
+  AC-404: { phase: 4, status: planned, summary: "validate-cursor-workflow-artifacts green after rewiring" }
+  AC-501: { phase: 5, status: planned, summary: "validate-hook-readonly exits 0 on real hook tree" }
+  AC-502: { phase: 5, status: planned, summary: "CLI shim and bridge share lock; --check-shared-lock asserts import direction" }
+  AC-503: { phase: 5, status: planned, summary: "validate-hook-readonly chained into verify-backbone" }
+  AC-504: { phase: 5, status: planned, summary: "--self-test detects synthetic offender inside tempfile.TemporaryDirectory" }
+  AC-505: { phase: 5, status: planned, summary: "_trace.py writes to .omcs/ are allowlisted" }
+  AC-601: { phase: 6, status: planned, summary: "bridge trace at .omcs/cursor-state-bridge/trace.jsonl, schema-conformant" }
+  AC-602: { phase: 6, status: planned, summary: "trace rotation 10 MiB FIFO eviction" }
+  AC-603: { phase: 6, status: planned, summary: "docs/mcp-auth.md contains defense-in-depth-only framing" }
+  AC-604: { phase: 6, status: shipped, summary: "docs/state-contract.md scratch-state policy notes .omcs/cursor-state-bridge/" }
+  AC-605: { phase: 6, status: shipped, summary: "docs/confirmed-surfaces.md row for mcp/cursor-state-bridge present" }
+  AC-606: { phase: 6, status: planned, summary: "default auth OFF; smoke --auth without token passes" }
+  AC-607: { phase: 6, status: planned, summary: "validate-mcp-trace --self-test rejects malformed lines" }
+  AC-701: { phase: 7, status: shipped, summary: "synthetic 1500-entry history compacts to 1000 after the next write" }
+  AC-702: { phase: 7, status: shipped, summary: "FIFO eviction drops the oldest entries first" }
+  AC-703: { phase: 7, status: shipped, summary: "post-compaction history[].at remains monotonic non-decreasing" }
+  AC-704: { phase: 7, status: shipped, summary: "history_cap=0 opts out of compaction" }
+  AC-705: { phase: 7, status: shipped, summary: "the most-recent history entry is preserved verbatim" }
+  AC-801: { phase: 8, status: shipped, summary: "validate-agent-bridge-contract default scan exits 0 across .cursor/agents, skills, rules, .cursor/rules" }
+  AC-802: { phase: 8, status: shipped, summary: "--self-test detects writer-CLI bypass, stale archived-doc paths, and legacy short names; clean fixture passes" }
+  AC-803: { phase: 8, status: shipped, summary: "writer-CLI bypass on agent-callable surface is rejected with a precise file:line cite" }
+  AC-804: { phase: 8, status: shipped, summary: "stale docs/refinement-priority-map.md / plugin-boundary-review.md / fallback-policy.md path is detected (must use docs/archive/)" }
+  AC-805: { phase: 8, status: shipped, summary: "validate-agent-bridge-contract chained into verify-backbone.sh and required-file arrays" }

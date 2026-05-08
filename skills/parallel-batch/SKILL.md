@@ -5,15 +5,13 @@ description: Parallel execution pattern for independent tasks, using the cursor-
 
 # Parallel Batch
 
-> **Cursor host note.** OMC's `ultrawork` fires multiple sub-agents in one
-> turn via Claude Code's `Task` tool. Cursor's checked-in skill model does
-> **not** document a sub-agent / Task primitive this repo can own as a
-> repo-shipped surface. The verified host primitive for spawning parallel
-> work is the **`cursor-agent` CLI** (a real Cursor product binary). This
-> skill therefore expresses parallelism as **N background `cursor-agent`
-> processes**, with an explicit downgrade path to sequential execution when
-> the CLI is not available. Verify against the Cursor CLI version installed
-> on the user's machine (`cursor-agent --version`) before relying on flags.
+> **Cursor host note.** This is a self-developed parallel execution pattern for
+> independent tasks. The verified host primitive for spawning parallel work is
+> the **`cursor-agent` CLI**. This skill expresses parallelism as **N background
+> `cursor-agent` processes**, with an explicit downgrade path to sequential
+> execution when the CLI is not available. Verify against the Cursor CLI version
+> installed on the user's machine (`cursor-agent --version`) before relying on
+> flags.
 
 ## Use when
 
@@ -50,6 +48,7 @@ depends on the installed CLI version, so consult `cursor-agent --help`
 first. A typical pattern (verify against your CLI):
 
 ```bash
+# verify these flags against `cursor-agent --help` first; --print is illustrative
 cursor-agent --print "<task 1 description>" > .cursor-agent-logs/task-1.log 2>&1 &
 cursor-agent --print "<task 2 description>" > .cursor-agent-logs/task-2.log 2>&1 &
 cursor-agent --print "<task 3 description>" > .cursor-agent-logs/task-3.log 2>&1 &

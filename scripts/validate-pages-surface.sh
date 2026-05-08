@@ -27,6 +27,7 @@ required_app_files=(
   "$SITE_ROOT/next.config.ts"
   "$SITE_ROOT/app/layout.tsx"
   "$SITE_ROOT/app/page.tsx"
+  "$SITE_ROOT/public/assets/oh-my-cursor-social-preview.jpg"
 )
 
 for path in "${required_app_files[@]}"; do
@@ -54,6 +55,8 @@ log "$EXPORT_HTML"
 
 grep -qi 'oh-my-cursor' "$EXPORT_HTML" \
   || fail "exported landing HTML must lead with oh-my-cursor naming"
+grep -qi 'oh-my-cursor-social-preview.jpg' "$EXPORT_HTML" \
+  || fail "exported landing HTML must reference the social preview asset"
 grep -qi '>Docs<' "$EXPORT_HTML" \
   || fail "exported landing HTML must keep a visible Docs link"
 grep -qi '>State Contract<' "$EXPORT_HTML" \
@@ -62,12 +65,10 @@ grep -qi '>References<' "$EXPORT_HTML" \
   || fail "exported landing HTML must keep a visible References link"
 grep -qi '>Benchmark Notes<' "$EXPORT_HTML" \
   || fail "exported landing HTML must keep a visible Benchmark Notes link"
-grep -qi 'oh-my-copilot' "$EXPORT_HTML" \
-  || fail "exported landing HTML must include the sibling oh-my-copilot link"
 
 for term in repo-owned host-product-only unsupported-or-out-of-scope; do
   grep -qi "$term" "$EXPORT_HTML" \
     || fail "exported landing HTML must preserve the visible ownership term: $term"
 done
 
-log "exported landing HTML preserves required naming, proof links, sibling link, and ownership terms"
+log "exported landing HTML preserves required naming, proof links, and ownership terms"

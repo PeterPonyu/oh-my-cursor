@@ -1,0 +1,46 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "cursor-state-bridge trace event",
+  "description": "JSONL event written to .omcs/cursor-state-bridge/trace.jsonl on every JSON-RPC call.",
+  "type": "object",
+  "required": ["ts", "tool", "phase", "result", "duration_ms"],
+  "properties": {
+    "ts": {
+      "type": "string",
+      "description": "ISO 8601 UTC timestamp."
+    },
+    "tool": {
+      "type": "string",
+      "description": "MCP tool name, or method name for non-tools/call requests."
+    },
+    "phase": {
+      "type": "string",
+      "description": "Workflow-state phase touched by the call, when applicable; otherwise the JSON-RPC method category."
+    },
+    "result": {
+      "type": "string",
+      "description": "'ok' on success or 'error' on JSON-RPC error response."
+    },
+    "duration_ms": {
+      "type": "number",
+      "description": "Wall-clock duration of the handler in milliseconds."
+    },
+    "pid": {
+      "type": "integer",
+      "description": "Bridge process id."
+    },
+    "task_id": {
+      "type": "string",
+      "description": "Task identifier when the call carried one."
+    },
+    "error_class": {
+      "type": "string",
+      "description": "JSON-RPC error code label when 'result' is 'error'."
+    },
+    "args_digest": {
+      "type": "string",
+      "description": "Optional short digest of the call arguments."
+    }
+  },
+  "additionalProperties": true
+}

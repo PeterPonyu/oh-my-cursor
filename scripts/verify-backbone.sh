@@ -11,20 +11,67 @@ required=(
   AGENTS.md
   CHANGELOG.md
   README.md
+  assets/oh-my-cursor-character.jpg
+  assets/oh-my-cursor-social-preview.jpg
   benchmark/README.md
   .cursor-plugin/plugin.json
+  .cursor/hooks.json
+  .cursor/hooks/README.md
+  .cursor/hooks/claim-guard.py
+  .cursor/hooks/prompt-router.py
+  .cursor/hooks/shell-guard.py
+  .cursor/hooks/stop-gate.py
+  .cursor/hooks/session-bootstrap.py
+  .cursor/hooks/session-summary.py
+  .cursor/hooks/tool-guard.py
+  .cursor/hooks/state-watcher.py
+  .cursor/hooks/failure-router.py
+  .cursor/hooks/subagent-bootstrap.py
+  .cursor/hooks/subagent-summary.py
+  .cursor/hooks/shell-debrief.py
+  .cursor/hooks/read-advisor.py
+  .cursor/hooks/compact-reminder.py
+  .cursor/state/workflow-state.schema.json
+  .cursor/state/workflow-state.example.json
+  .cursor/state/workflow-state.py
+  .cursor/state/README.md
+  .cursor/agents/orchestrator.md
+  .cursor/agents/verifier.md
+  .cursor/agents/critic.md
+  .cursor/agents/debugger.md
+  .cursor/agents/security-reviewer.md
+  .cursor/agents/planner.md
+  .cursor/agents/researcher.md
+  .cursor/agents/implementer.md
+  .cursor/agents/code-reviewer.md
+  .cursor/agents/explore.md
+  .cursor/agents/test-engineer.md
+  .cursor/agents/tracer.md
   rules/repo-owned-plugin-boundary.mdc
   skills/local-plugin-check/SKILL.md
+  skills/phase-controller/SKILL.md
   .cursor/rules/00-repo-scope.mdc
   .cursor/rules/10-docs-claims.mdc
   docs/confirmed-surfaces.md
-  docs/fallback-policy.md
+  docs/archive/fallback-policy.md
   docs/local-plugin-verification.md
+  docs/orchestration.md
   docs/references.md
   docs/state-contract.md
   scripts/check-local-plugin-install.sh
   scripts/install-local-plugin.sh
   scripts/validate-plugin-structure.sh
+  scripts/validate-mcp-server-structure.py
+  scripts/smoke-mcp-cursor-state-bridge.sh
+  scripts/validate-rename-references.py
+  scripts/validate-prd-ac-mapping.py
+  scripts/validate-hook-readonly.py
+  scripts/validate-agent-bridge-contract.py
+  scripts/validate-public-language.py
+  scripts/validate-cursor-workflow-artifacts.py
+  scripts/smoke-cursor-workflow-artifacts.sh
+  scripts/validate-workflow-state.py
+  scripts/workflow-state.py
   scripts/validate-benchmark-evidence.sh
   scripts/validate-pages-surface.sh
 )
@@ -40,12 +87,12 @@ grep -q 'unsupported-or-out-of-scope' README.md || fail "README must keep unsupp
 grep -q 'AGENTS.md' docs/confirmed-surfaces.md || fail "confirmed surfaces doc must mention AGENTS.md"
 grep -q '\.cursor/rules' docs/confirmed-surfaces.md || fail "confirmed surfaces doc must mention .cursor/rules"
 grep -q 'cursor-backbone-site' docs/confirmed-surfaces.md || fail "confirmed surfaces doc must describe the landing-site proof rule"
-grep -q 'unsupported-or-out-of-scope' docs/fallback-policy.md || fail "fallback policy must keep unsupported-or-out-of-scope wording"
-grep -q 'host-product-only' docs/fallback-policy.md || fail "fallback policy must keep host-product-only wording"
+grep -q 'unsupported-or-out-of-scope' docs/archive/fallback-policy.md || fail "fallback policy must keep unsupported-or-out-of-scope wording"
+grep -q 'host-product-only' docs/archive/fallback-policy.md || fail "fallback policy must keep host-product-only wording"
 grep -q 'docs.cursor.com/en/cli/using' docs/references.md || fail "references doc must keep Cursor CLI source link"
 grep -q 'nextjs.org/docs/app/building-your-application/deploying/static-exports' docs/references.md || fail "references doc must keep Next.js static export source link"
 grep -q 'docs.github.com/en/pages/getting-started-with-github-pages/using-custom-workflows-with-github-pages' docs/references.md || fail "references doc must keep GitHub Pages workflow source link"
-grep -Eq 'different, smaller contract' benchmark/README.md || fail "benchmark README must describe the smaller Cursor benchmark contract"
+grep -Eq 'focused Cursor benchmark contract' benchmark/README.md || fail "benchmark README must describe the focused Cursor benchmark contract"
 grep -Eq 'reporting-comparable' benchmark/README.md || fail "benchmark README must keep reporting-comparable wording"
 
 command -v python3 >/dev/null 2>&1 || fail "python3 not found"
@@ -69,8 +116,6 @@ patterns = {
     "repo-file custom modes": rf"\b{subject}\b.{{0,80}}\b{verb}\b.{{0,80}}\brepo[- ](?:file|native)\b.{{0,60}}\bcustom modes?\b",
     "repo-file background agents": rf"\b{subject}\b.{{0,80}}\b{verb}\b.{{0,80}}\brepo[- ](?:file|native)\b.{{0,60}}\bbackground[- ]agents?\b",
     "default checked-in mcp config": rf"\b{subject}\b.{{0,80}}\b{verb}\b.{{0,80}}\b(?:default|checked[- ]in|repo[- ]owned)\b.{{0,40}}(?:\.cursor/mcp\.json|mcp config)\b",
-    "checked-in custom-agent packaging": rf"\b{subject}\b.{{0,80}}\b{verb}\b.{{0,80}}\b(?:checked[- ]in\s+)?custom[- ]agent packaging\b",
-    "checked-in hook packaging": rf"\b{subject}\b.{{0,80}}\b{verb}\b.{{0,80}}\b(?:checked[- ]in\s+)?hook(?: manifests?| packaging surface|s)\b",
 }
 negations = (
     "does not",
@@ -108,6 +153,11 @@ print("ok: positive overclaim scan stayed clean for README/AGENTS/docs/benchmark
 PY
 
 ./scripts/validate-plugin-structure.sh
+python3 scripts/validate-public-language.py
+python3 scripts/validate-cursor-workflow-artifacts.py
+python3 scripts/validate-hook-readonly.py
+python3 scripts/validate-hook-readonly.py --check-shared-lock
+python3 scripts/validate-agent-bridge-contract.py
 ./scripts/check-local-plugin-install.sh
 ./scripts/validate-pages-surface.sh
 if [[ "${CURSOR_SKIP_BENCHMARK_EVIDENCE:-0}" == "1" ]]; then

@@ -1,0 +1,5 @@
+[
+  {"id":"a1-pilot-001","skill":"plan","prompt":"Plan a 4-step migration to add OAuth login to a Flask app that currently uses session cookies. Output: numbered steps with each step's file scope and rollback consideration."},
+  {"id":"a1-pilot-002","skill":"review","prompt":"Review this snippet for bugs:\n\n```python\ndef divide(a, b):\n    return a / b\n```\nReport: severity-rated findings."},
+  {"id":"a1-pilot-003","skill":"debug","prompt":"A user reports: 'My pytest run hangs forever, no output, no error.' Generate the top 3 most likely root causes ranked by base rate, plus the single fastest diagnostic command for each."}
+]

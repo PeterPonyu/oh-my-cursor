@@ -4,25 +4,30 @@ set -euo pipefail
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 PLUGIN_NAME="oh-my-cursor"
 TARGET_ROOT="${HOME}/.cursor/plugins/local"
-MODE="symlink"
+MODE="copy"
 FORCE=0
+WITH_MCP=0
+LEGACY_PLUGIN_NAMES=("oh-my-copilot-workspace")
 
 usage() {
   cat <<'USAGE'
-Usage: scripts/install-local-plugin.sh [--root PATH] [--target-root PATH] [--name NAME] [--copy|--symlink] [--force]
+Usage: scripts/install-local-plugin.sh [--root PATH] [--target-root PATH] [--name NAME] [--copy|--symlink] [--force] [--with-mcp]
 
 Installs the repo-root Cursor plugin into Cursor's local plugin directory.
 
 Defaults:
-  - mode: symlink
+  - mode: copy (minimal runtime payload only)
   - target root: ~/.cursor/plugins/local
   - plugin name: oh-my-cursor
 
 This script validates the checked-in plugin structure first, then either:
   - creates/refreshes a symlink, or
-  - copies the plugin files into the local plugin directory.
+  - copies only the minimal runtime plugin payload into the local plugin directory.
 
 It does not reload Cursor for you; the final reload remains a manual product action.
+
+Flags:
+  --with-mcp  Also copy the mcp/ tree (default: omitted from minimal payload)
 USAGE
 }
 
@@ -55,6 +60,10 @@ while (($#)); do
       FORCE=1
       shift
       ;;
+    --with-mcp)
+      WITH_MCP=1
+      shift
+      ;;
     -h|--help)
       usage
       exit 0
@@ -69,11 +78,77 @@ done
 log() { printf 'ok: %s\n' "$*"; }
 fail() { printf 'FAIL: %s\n' "$*" >&2; exit 1; }
 
+cleanup_legacy_aliases() {
+  local target_root="$1"
+
+  [[ "$PLUGIN_NAME" == "oh-my-cursor" ]] || return 0
+
+  local legacy_name legacy_path
+  for legacy_name in "${LEGACY_PLUGIN_NAMES[@]}"; do
+    legacy_path="${target_root%/}/${legacy_name}"
+    if [[ -e "$legacy_path" || -L "$legacy_path" ]]; then
+      rm -rf "$legacy_path"
+      log "removed legacy local plugin alias at $legacy_path"
+    fi
+  done
+
+  # Idempotent cleanup of stale mcp/ from a prior --with-mcp install
+  if [[ "$WITH_MCP" != "1" ]]; then
+    local stale_mcp="${target_root%/}/${PLUGIN_NAME}/mcp"
+    if [[ -d "$stale_mcp" ]]; then
+      rm -rf "$stale_mcp"
+      log "removed stale mcp/ tree from previous --with-mcp install at $stale_mcp"
+    fi
+  fi
+}
+
+copy_minimal_payload() {
+  local src="$1"
+  local dst="$2"
+
+  local mcp_includes=()
+  if [[ "$WITH_MCP" == "1" ]]; then
+    mcp_includes=(--include='/mcp/' --include='/mcp/***')
+  fi
+
+  rsync -a \
+    -m \
+    --delete \
+    --exclude='__pycache__/' \
+    --exclude='*.pyc' \
+    --exclude='*.lock' \
+    --exclude='.DS_Store' \
+    --exclude='*.swp' \
+    --exclude='*~' \
+    --exclude='/.cursor/memories/' \
+    --exclude='/.cursor/mcp.json' \
+    --exclude='/.cursor/state/workflow-state.json' \
+    --exclude='/.cursor/state/active-role.json' \
+    --exclude='/.cursor/hooks/state/' \
+    --include='/.cursor-plugin/***' \
+    --include='/.cursor/hooks.json' \
+    --include='/.cursor/hooks/***' \
+    --include='/.cursor/agents/***' \
+    --include='/.cursor/state/***' \
+    --include='/rules/***' \
+    --include='/skills/***' \
+    --include='/AGENTS.md' \
+    --include='/README.md' \
+    --include='/assets/***' \
+    --include='/CHANGELOG.md' \
+    --include='/LICENSE' \
+    --include='*/' \
+    "${mcp_includes[@]}" \
+    --exclude='*' \
+    "$src"/ "$dst"/
+}
+
 cd "$ROOT"
 "$ROOT/scripts/validate-plugin-structure.sh" >/dev/null
 
 TARGET_PATH="${TARGET_ROOT%/}/${PLUGIN_NAME}"
 mkdir -p "$TARGET_ROOT"
+cleanup_legacy_aliases "$TARGET_ROOT"
 
 if [[ -e "$TARGET_PATH" || -L "$TARGET_PATH" ]]; then
   if [[ "$FORCE" != "1" ]]; then
@@ -96,14 +171,8 @@ else
     rm -rf "$TARGET_PATH"
   fi
   mkdir -p "$TARGET_PATH"
-  rsync -a \
-    --delete \
-    --exclude '.git/' \
-    --exclude 'node_modules/' \
-    --exclude '.omx/team/' \
-    --exclude '.omx/state/team/' \
-    "$ROOT"/ "$TARGET_PATH"/
-  log "copied plugin into $TARGET_PATH"
+  copy_minimal_payload "$ROOT" "$TARGET_PATH"
+  log "copied minimal runtime plugin payload into $TARGET_PATH"
 fi
 
 [[ -f "$TARGET_PATH/.cursor-plugin/plugin.json" ]] || fail "installed plugin is missing .cursor-plugin/plugin.json"
@@ -111,5 +180,5 @@ log "installed plugin root contains .cursor-plugin/plugin.json"
 
 cat <<EOF
 next: reload Cursor or use Developer: Reload Window
-next: confirm the plugin-owned rule and skill are visible from ${TARGET_PATH}
+next: confirm rules/skills/hooks/agents are visible from ${TARGET_PATH}
 EOF

@@ -1,183 +1,126 @@
 # oh-my-cursor
 
-`oh-my-cursor` is a small, truthful Cursor-native repository that now promotes
-its repo root into a ready-to-use Cursor plugin while keeping ownership and
-proof boundaries explicit.
+<div align="center">
+  <img src="./assets/oh-my-cursor-character.jpg" alt="oh-my-cursor character" width="600" />
+</div>
 
-This repository follows a shared **claim/proof discipline**:
+A Cursor-native workflow backbone with an opt-in MCP server for
+agent-callable workflow-state writes. Hooks read state, the bridge
+writes it, and every claim is anchored to a checked-in artifact.
 
-- **repo-owned** — checked-in surfaces this repo actually ships;
-- **host-product-only** — Cursor capabilities the product supports, but this
-  repo does not provision as checked-in artifacts; and
-- **unsupported-or-out-of-scope** — surfaces this repo intentionally does not
-  ship or claim today.
+## Claim/proof discipline
 
-Public wording also stays inside an explicit proof ceiling:
+Every surface in this repo carries an explicit ownership and proof
+class:
 
-- **official-doc** when a claim is supported by current primary Cursor docs;
-- **checked-in-artifact** when this repo ships the surface and local validators
-  prove it is present; and
-- **runtime-smoke** only when optional authenticated/model-available smoke runs
-  succeed.
+- **repo-owned** — checked in here and locally validated.
+- **host-product-only** — Cursor capabilities the product supports, but
+  this repo does not provision as checked-in artifacts.
+- **unsupported-or-out-of-scope** — surfaces this repo intentionally
+  does not ship or claim.
 
-The current backbone deliberately starts from the strongest truthful
-repo-owned surfaces checked in today:
-
-- root `AGENTS.md` guidance;
-- project rules in `.cursor/rules/`;
-- the repo-root Cursor plugin manifest at `.cursor-plugin/plugin.json`;
-- plugin-owned rules plus at least one plugin-owned skill;
-- bounded documentation that separates confirmed support from inference; and
-- local verification scripts and benchmark artifacts tied to the canonical repo
-  root.
+Public wording stays inside the proof ceiling: **official-doc**,
+**checked-in-artifact**, or **runtime-smoke**. Don't upgrade a class
+without the matching artifact. Don't downgrade the wording for
+deferred surfaces with vague "could be added later" language.
 
 ## Start here
 
 | Need | Read |
 | --- | --- |
-| Repository policy | [`AGENTS.md`](./AGENTS.md) |
-| Confirmed ownership and proof boundaries | [`docs/confirmed-surfaces.md`](./docs/confirmed-surfaces.md) |
-| Local plugin load + reload walkthrough | [`docs/local-plugin-verification.md`](./docs/local-plugin-verification.md) |
-| Learning-driven refinement priorities | [`docs/refinement-priority-map.md`](./docs/refinement-priority-map.md) |
-| Plugin boundary + support-tooling review | [`docs/plugin-boundary-review.md`](./docs/plugin-boundary-review.md) |
-| Hard fallback and non-claim rules | [`docs/fallback-policy.md`](./docs/fallback-policy.md) |
-| Source links and access dates | [`docs/references.md`](./docs/references.md) |
-| State ownership contract | [`docs/state-contract.md`](./docs/state-contract.md) |
-| Local state contract | [`scripts/validate-state-contract.sh`](./scripts/validate-state-contract.sh) |
-| Surface visibility check | [`scripts/validate-surface-visibility.sh`](./scripts/validate-surface-visibility.sh) |
-| Benchmark evidence check | [`scripts/validate-benchmark-evidence.sh`](./scripts/validate-benchmark-evidence.sh) |
-| Landing-surface contract | [`scripts/validate-pages-surface.sh`](./scripts/validate-pages-surface.sh) |
-| Default auth check | [`scripts/check-default-auth.sh`](./scripts/check-default-auth.sh) |
-| Optional `auto`-model smoke | [`scripts/smoke-cursor-agent.sh`](./scripts/smoke-cursor-agent.sh) |
-| Local backbone verification | [`scripts/verify-backbone.sh`](./scripts/verify-backbone.sh) |
-| CI-safe local plugin install check | [`scripts/check-local-plugin-install.sh`](./scripts/check-local-plugin-install.sh) |
-| Benchmark notes | [`benchmark/README.md`](./benchmark/README.md) |
+| Always-on policy | [`AGENTS.md`](./AGENTS.md) |
+| One-page orchestration map | [`docs/orchestration.md`](./docs/orchestration.md) |
+| Workflow-state contract | [`docs/state-contract.md`](./docs/state-contract.md) |
+| MCP bridge (opt-in writer) | [`docs/mcp-bridge.md`](./docs/mcp-bridge.md) |
+| Claude Code bridge boundary | [`docs/claudecode-bridge.md`](./docs/claudecode-bridge.md) |
+| Claude Code parity matrix | [`docs/claudecode-parity-matrix.md`](./docs/claudecode-parity-matrix.md) |
+| Acceptance-criteria index | [`docs/PRD.yaml`](./docs/PRD.yaml) |
 | Change history | [`CHANGELOG.md`](./CHANGELOG.md) |
+
+Older dev-process notes (refinement priorities, plugin-boundary
+review, fallback policy) are checked in under
+[`docs/archive/`](./docs/archive/) for reference; they are not part of
+the live entry path.
 
 ## Ownership map
 
-| Outcome family | Ownership class | Strongest default proof here | What that means in this repo |
-| --- | --- | --- | --- |
-| Root instructions and rules | `repo-owned` | `checked-in-artifact` | This repo ships `AGENTS.md` and `.cursor/rules/`. |
-| Repo-root Cursor plugin manifest + bundled plugin rules/skills | `repo-owned` | `checked-in-artifact` | This repo treats `.cursor-plugin/plugin.json` plus its shipped rule/skill payload as a checked-in plugin surface. |
-| Local plugin install walkthrough | `repo-owned` docs + manual user-environment verification | `checked-in-artifact` for the walkthrough, `runtime-smoke` only if a future authenticated smoke exists | The repo documents local plugin loading via `~/.cursor/plugins/local` and Cursor reload, but the actual loaded session remains user-environment proof. |
-| Verification and benchmark reporting | `repo-owned` | `checked-in-artifact` | This repo ships local validators, smoke wrappers, and checked-in benchmark artifacts. |
-| Landing Pages site and deploy workflow | `repo-owned` only when checked in | `checked-in-artifact` once app files, workflow, and exported-output validation all exist | A future `apps/cursor-backbone-site/` surface counts as repo-owned only after the site, workflow, and visible-proof checks all land together. |
-| MCP support | `host-product-only` | `official-doc` | Cursor supports MCP, but this repo leaves it opt-in until a concrete server, auth model, and ownership decision are chosen. |
-| Modes and background agents | `host-product-only` | `official-doc` | Cursor exposes these capabilities as product surfaces; this repo does not package them as checked-in workflow files. |
-| Hooks, custom agents, repo-file custom modes, repo-file background-agent provisioning | `unsupported-or-out-of-scope` | `official-doc` for product awareness, negative repo claim here | This repo intentionally keeps these richer surfaces deferred until matching artifacts and proof land. |
+| Surface | Class | Strongest proof here |
+| --- | --- | --- |
+| Root `AGENTS.md` and `.cursor/rules/` | `repo-owned` | `checked-in-artifact` |
+| Project hooks (`.cursor/hooks.json` + 14 stdlib-only scripts wiring 14 documented Cursor agent events) | `repo-owned` in trusted Cursor workspaces | `checked-in-artifact`; runtime behavior bounded by Cursor execution |
+| Project agents under `.cursor/agents/*.md` | `repo-owned` | `checked-in-artifact` |
+| Workflow-state contract under `.cursor/state/` (schema, example, library, lock primitive) | `repo-owned` | `checked-in-artifact` |
+| Checked-in brand/readme/social assets under `assets/` and the root README image | `repo-owned` | `checked-in-artifact` |
+| Repo-root plugin manifest at `.cursor-plugin/plugin.json` and shipped rules/skills | `repo-owned` | `checked-in-artifact` |
+| MCP server `mcp/cursor-state-bridge/` (six functional state-IO tools, opt-in install, stdio-only) | `repo-owned` (opt-in) | `checked-in-artifact`; `runtime-smoke` when `RUN_MCP_BRIDGE_SMOKE=1` |
+| Local validators and benchmark artifacts under `scripts/` and `benchmark/` | `repo-owned` | `checked-in-artifact` |
+| Cursor CLI consumption of repo guidance (rules, hooks, agents) | `host-product-only` | `official-doc` |
+| Custom modes, background agents, MCP discovery flow | `host-product-only` | `official-doc` |
+| Default `.cursor/mcp.json`, marketplace publication, repo-file custom-mode packaging | `unsupported-or-out-of-scope` | n/a (explicitly not shipped) |
 
-## What this repo includes
+## MCP bridge (opt-in)
 
-- a root `AGENTS.md` for always-on project guidance;
-- scoped Cursor project rules in `.cursor/rules/*.mdc`;
-- a repo-root plugin manifest under `.cursor-plugin/plugin.json`;
-- a minimal shipped plugin payload with plugin-owned rules and at least one
-  plugin-owned skill;
-- documentation that labels confirmed behavior, inference, and explicit
-  non-claims;
-- a landing-surface validator that keeps any future repo-owned Pages site
-  docs-first, evidence-linked, and boundary-truthful; and
-- benchmark evidence under `benchmark/results/` that stays tied to the
-  canonical repo root.
+The repo ships `mcp/cursor-state-bridge/` — a stdio JSON-RPC 2.0 MCP
+server that owns agent-callable writes to
+`.cursor/state/workflow-state.json`. Six tools mapped 1:1 to the
+workflow-state schema (`state_read`, `state_init`, `state_set_phase`,
+`state_record_failure`, `state_update_acceptance_criterion`,
+`state_history_append`). No network listener; three jail roots;
+`OH_MY_CURSOR_MCP_TOKEN` defense-in-depth auth (default OFF).
 
-## What this repo does **not** claim
+Default install excludes the bridge. Opt in:
 
-This backbone intentionally does **not** claim any of the following unless they
-are later promoted with current official documentation, an approved plan, and
-appropriate proof artifacts:
+```bash
+./scripts/install-local-plugin.sh --with-mcp
+cp .cursor/mcp.example.json .cursor/mcp.json   # edit ${workspaceFolder} placeholders
+# reload Cursor; cursor-state-bridge appears in the MCP servers panel
+```
 
-- checked-in hook manifests or custom-agent packaging;
-- repo-file custom mode configuration;
-- repo-file background-agent provisioning;
-- a default repo-owned `.cursor/mcp.json`; or
-- marketplace publication as a completion gate for local plugin use.
+See [`docs/mcp-bridge.md`](./docs/mcp-bridge.md),
+[`docs/mcp-tool-surface.md`](./docs/mcp-tool-surface.md), and
+[`docs/mcp-auth.md`](./docs/mcp-auth.md). The full multi-phase plan
+that produced this bridge is archived under
+[`docs/plans/mcp-state-bridge-2026-05/`](./docs/plans/mcp-state-bridge-2026-05/).
 
 ## Local plugin loading
 
-The repo-owned plugin files are intended to be tested locally through Cursor's
-local plugin path:
+```bash
+./scripts/install-local-plugin.sh           # default minimal payload
+./scripts/install-local-plugin.sh --with-mcp # include the MCP bridge
+# restart Cursor or run Developer: Reload Window
+```
 
-1. run `./scripts/install-local-plugin.sh`;
-2. confirm the local plugin path now exists at `~/.cursor/plugins/local/oh-my-cursor`;
-3. confirm `.cursor-plugin/plugin.json` exists at the plugin root;
-4. restart Cursor or run **Developer: Reload Window**; and
-5. verify the shipped plugin components load as expected.
-
-The detailed manual checklist lives in
+The script copies the minimal runtime payload to
+`~/.cursor/plugins/local/oh-my-cursor`. Reload Cursor, then verify
+the shipped components are visible. Non-UI verification:
+[`scripts/check-local-plugin-install.sh`](./scripts/check-local-plugin-install.sh)
+(supports `--with-mcp`). Manual checklist:
 [`docs/local-plugin-verification.md`](./docs/local-plugin-verification.md).
-For a bounded non-UI verification of the helper itself, run
-[`scripts/check-local-plugin-install.sh`](./scripts/check-local-plugin-install.sh).
-
-## Design rule
-
-Prefer the smallest confirmed Cursor-native surface first:
-
-1. root `AGENTS.md`;
-2. `.cursor/rules/` project rules;
-3. the repo-root plugin manifest with a minimal shipped rule/skill payload;
-4. bounded docs and validators that explain what is repo-owned vs
-   host-product-only; and
-5. opt-in MCP only after choosing a real server and ownership model.
-
-That keeps the repo useful today while preventing richer deferred surfaces from
-turning into hidden maintenance debt.
-
-The flagship landing rhythm is intentionally still repo-local. The visual system
-now aligns with the sibling `oh-my-copilot` surface, but we are **not**
-extracting a shared cross-repo design-system package yet. That stays deferred
-until repeated patterns justify the maintenance cost and can be proven without
-weakening this repo's ownership/proof boundaries.
-
-## Landing-surface contract
-
-If this repo later checks in `apps/cursor-backbone-site/` as a GitHub Pages
-surface, that landing page must remain a **repo-owned** checked-in artifact
-rather than a vague marketing layer. In practice that means:
-
-- the title, primary heading, and metadata lead with `oh-my-cursor`;
-- the landing surface keeps `Docs`, `State Contract`, `References`, and
-  `Benchmark Notes` visibly reachable;
-- any visible sibling link to `oh-my-copilot` stays comparison/context scoped,
-  not canonical or ownership-scoped; and
-- rendered copy must not rewrite `host-product-only` or
-  `unsupported-or-out-of-scope` surfaces as repo-owned capability claims.
-
-The validator at
-[`scripts/validate-pages-surface.sh`](./scripts/validate-pages-surface.sh)
-exists to keep that contract explicit once the Pages app is checked in.
 
 ## Verification
 
-Run from the repository root.
-
-Always-required checks:
+Always-required checks (run from the repository root):
 
 ```bash
+python3 scripts/validate-public-language.py
+python3 scripts/validate-cursor-workflow-artifacts.py
+./scripts/smoke-cursor-workflow-artifacts.sh
 ./scripts/verify-backbone.sh
-./scripts/validate-surface-visibility.sh
-./scripts/validate-pages-surface.sh
-./scripts/validate-state-contract.sh
-./scripts/check-local-plugin-install.sh
-./scripts/check-default-auth.sh
 ```
 
-Optional environment-gated smoke that can strengthen bounded wording to
-`runtime-smoke` when available:
+Optional environment-gated runtime checks (require login + model
+availability):
 
 ```bash
 RUN_CURSOR_AGENT_SMOKE=1 ./scripts/smoke-cursor-agent.sh --run-agent-prompt
+RUN_MCP_BRIDGE_SMOKE=1 ./scripts/smoke-mcp-cursor-state-bridge.sh \
+  --full --jail-escape --from-example --auth
 ```
 
-For the architecture-specific backbone benchmark:
+Backbone benchmark (refreshes
+`benchmark/results/current-{baseline,enhanced}/`):
 
 ```bash
 ./benchmark/quick_test.sh --variant baseline
 RUN_CURSOR_AGENT_SMOKE=1 ./benchmark/quick_test.sh --variant enhanced --run-agent-smoke
 ```
-
-Those runs refresh `benchmark/results/current-baseline/` and
-`benchmark/results/current-enhanced/` respectively, while appending a summary
-row to `benchmark/results/history.md`. The benchmark wrapper also normalizes
-transient `/.omx/team/.../worktrees/...` invocation paths back to the canonical
-repo root before it records checked-in evidence.

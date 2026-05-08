@@ -8,7 +8,7 @@ description: Strategic planning workflow that turns a request into a small, revi
 > **Cursor host note.** This skill is a documentation workflow, not a runtime
 > orchestrator. It lives in `skills/plan/` so a Cursor session can load it on
 > demand. Plans are written to `docs/plans/` (a normal repo path), not to a
-> private `.omc/` state directory. If you need automatic activation, pair this
+> private runtime-state directory. If you need automatic activation, pair this
 > skill with a project rule under `.cursor/rules/*.mdc`.
 
 ## Use when
@@ -74,17 +74,30 @@ description: Strategic planning workflow that turns a request into a small, revi
 - No vague terms without metrics ("fast" -> "p95 < 200 ms").
 - Every risk has a mitigation.
 
+## State sync (optional, via cursor-state-bridge MCP)
+
+When the user wants the plan tracked alongside the workflow-state document,
+hand off to the orchestrator with one of two patterns:
+
+- For a brand-new task, recommend `state_init` with the plan's acceptance
+  criteria and an initial `next_action`.
+- For an existing task, recommend `state_set_phase` to advance to `plan` and
+  `state_history_append` with a one-line summary of the plan's scope.
+
+This skill does not call MCP tools itself; it produces an advisory artifact
+under `docs/plans/` and recommends the next state write to the orchestrator.
+
 ## Boundaries
 
 - Plans live in `docs/plans/` (or wherever the host project conventionally
-  stores planning notes). This skill does not write to `.omc/`, `.cursor/`,
+  stores planning notes). This skill does not write to hidden runtime state,
+  `.cursor/`,
   `.cursor-plugin/`, or anywhere else outside checked-in docs.
 - Plans are advisory artifacts. They do not auto-trigger execution and do not
   promise that any particular Cursor mode (Agent, Manual, Custom) will be
   used. Mode selection stays with the user.
-- This skill does not claim parity with Claude Code's `/plan` or with any
-  multi-agent consensus loop. If you need adversarial review, invoke the
-  `review` skill explicitly as a separate pass.
+- This skill does not claim hidden consensus behavior. If you need adversarial
+   review, invoke the `review` skill explicitly as a separate pass.
 
 ## Stop conditions
 

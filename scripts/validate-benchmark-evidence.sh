@@ -51,10 +51,10 @@ do
   require_file "$path"
 done
 
-grep -Eq 'different, smaller contract' "$ROOT/benchmark/README.md" || fail "benchmark README must keep the smaller-contract wording"
+grep -Eq 'focused Cursor benchmark contract' "$ROOT/benchmark/README.md" || fail "benchmark README must keep the focused-contract wording"
 grep -Eq 'refinement-priority-map\.md' "$ROOT/benchmark/README.md" || fail "benchmark README must mention the refinement-priority map"
 grep -Eq 'plugin-boundary-review\.md' "$ROOT/benchmark/README.md" || fail "benchmark README must mention the plugin-boundary review"
-log "benchmark README describes the current smaller contract and its new proof docs"
+log "benchmark README describes the current focused contract and its proof docs"
 
 python3 - "$ROOT" "$BASELINE_RESULTS" "$BASELINE_EVAL" "$ENHANCED_RESULTS" "$ENHANCED_EVAL" <<'PY'
 from __future__ import annotations

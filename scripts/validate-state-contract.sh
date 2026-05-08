@@ -27,7 +27,7 @@ if (root / ".cursor" / "memories").exists():
     raise SystemExit("FAIL: .cursor/memories should not be checked in for the backbone")
 
 gitignore = (root / ".gitignore").read_text(encoding="utf-8")
-for required in (".cursor/mcp.json", ".cursor/memories/"):
+for required in (".cursor/mcp.json", ".cursor/memories/", ".omc/", ".omx/"):
     if required not in gitignore:
         raise SystemExit(f"FAIL: .gitignore missing {required}")
 print("ok: .gitignore blocks speculative Cursor state files")

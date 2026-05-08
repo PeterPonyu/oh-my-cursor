@@ -8,8 +8,8 @@ aligned with the claim/proof discipline.
 | State family | Ownership class | Current rule |
 | --- | --- | --- |
 | User auth and default model selection | `host-product-only` user environment | Cursor CLI auth/model state lives outside the repo. |
-| Repo guidance, root rules, repo-root plugin files, validators, and benchmark evidence | `repo-owned` | This repo checks in the files that define its backbone and proof surface. |
-| Default MCP config, repo memories, repo-file custom modes, repo-file background-agent files | `unsupported-or-out-of-scope` until deliberately adopted | These are not checked in by the current backbone. |
+| Repo guidance, root rules, hooks, agents, repo-root plugin files, validators, and benchmark evidence | `repo-owned` | This repo checks in the files that define its backbone and proof surface. |
+| Default MCP config, repo memories, custom modes, background-agent files | `unsupported-or-out-of-scope` until deliberately adopted | These are not checked in by the current backbone. |
 
 ## User-level state
 
@@ -30,21 +30,65 @@ The repository currently owns only these checked-in state-like surfaces:
 - `AGENTS.md`
 - `.cursor/rules/*.mdc`
 - `.cursor-plugin/plugin.json`
-- the shipped plugin rule/skill payload that accompanies the manifest
-- bounded documentation
-- local verification/benchmark scripts
+- `.cursor/hooks.json` and `.cursor/hooks/` (`session-bootstrap.py`, `session-summary.py`, `prompt-router.py`, `tool-guard.py`, `state-watcher.py`, `failure-router.py`, `subagent-bootstrap.py`, `subagent-summary.py`, `shell-guard.py`, `shell-debrief.py`, `read-advisor.py`, `claim-guard.py`, `compact-reminder.py`, `stop-gate.py`)
+- `.cursor/agents/` (`orchestrator`, `researcher`, `planner`,
+  `implementer`, `verifier`, `critic`, `code-reviewer`, `debugger`,
+  `tracer`, `security-reviewer`, `explore`, `test-engineer`)
+- `.cursor/state/` workflow-state contract (`workflow-state.schema.json`,
+  `workflow-state.example.json`, `workflow-state.py`, `README.md`)
+- the shipped plugin rule/skill payload that accompanies the manifest, including
+  `skills/phase-controller/SKILL.md`
+- bounded documentation, including `docs/orchestration.md`
+- local verification/benchmark scripts (including
+  `scripts/validate-workflow-state.py`)
 - `apps/cursor-backbone-site/` and `.github/workflows/deploy-pages.yml` only
   when they are actually checked in and locally validated
 - benchmark artifacts under `benchmark/results/current-baseline/` and
-  `benchmark/results/current-enhanced/`, with the benchmark wrapper normalizing
-  transient `/.omx/team/.../worktrees/...` invocation paths back to the
-  canonical repo root before writing checked-in evidence
+  `benchmark/results/current-enhanced/`
 
 Those are the only surfaces this repo should describe as `repo-owned`
 state/proof artifacts today.
 
 If the Pages app/workflow is absent, it remains a planned or missing checked-in
 artifact rather than a current state guarantee.
+
+## Local scratch-state policy
+
+Treat local orchestration scratch directories as workspace-private unless a
+specific artifact is intentionally documented, reviewed, and checked in. Durable
+planning or context notes may be tracked when they are part of a reviewed
+workflow, while session churn remains ignored by default.
+
+`.omcs/` is the oh-my-cursor scratch directory and is gitignored. The MCP
+bridge at `mcp/cursor-state-bridge/` writes its structured trace lane to
+`.omcs/cursor-state-bridge/trace.jsonl` once the trace implementation lands
+in Phase 6 (a path explicitly chosen to avoid colliding with the existing
+hook trace at `.omcs/hook-trace.log`). `.omcs/cursor-state-bridge/` is a
+permitted runtime write target for the bridge — workspace-private,
+gitignored, and **not** a checked-in `repo-owned` surface in its own right.
+
+## History retention
+
+`history[]` grows by one entry per state mutation. To prevent unbounded
+file growth on long-lived tasks, every write path applies a FIFO
+eviction cap (default **1000**) immediately before the atomic
+tmp+rename. The cap is configurable per call via `history_cap` (library
+API and bridge tool params) or `--history-cap N` on the CLI shim, and
+`history_cap=0` opts out of compaction. Eviction preserves timestamp
+monotonicity by retaining the trailing window of the array. Local
+verification: `python3 scripts/validate-workflow-state.py
+--check-history-cap 1000 <path>` enforces the cap and re-checks the
+monotonic invariant.
+
+## Workflow-state contract
+
+The `.cursor/state/workflow-state.schema.json` schema defines the shape of an
+opt-in, file-backed workflow-state document used by the `phase-controller`
+skill and the `stop-gate.py` hook. Documents that follow the schema are the
+only state object hooks may **read**; nothing in this repo writes that state
+automatically. The validator at `scripts/validate-workflow-state.py` keeps the
+contract honest. See [`docs/orchestration.md`](./orchestration.md) for the full
+lifecycle map.
 
 ## Host-product-only state
 
@@ -65,10 +109,9 @@ does **not** check in:
 
 - `.cursor/mcp.json`
 - `.cursor/memories/`
-- repo-file custom mode packaging
-- repo-file background-agent provisioning
-- checked-in custom-agent surfaces
-- checked-in hook manifests
+- custom mode packaging
+- background-agent provisioning
+- unchecked workflow surfaces beyond the hooks and agents shipped here
 
 ## Why this matters
 
@@ -95,3 +138,6 @@ Run:
 ./scripts/check-default-auth.sh
 ./scripts/validate-state-contract.sh
 ```
+
+The validation script keeps this state contract bounded to checked-in proof.
+<!-- end state contract -->

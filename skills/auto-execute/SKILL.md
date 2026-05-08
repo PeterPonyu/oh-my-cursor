@@ -5,14 +5,10 @@ description: Autonomous execution pipeline - expand idea, plan, implement, QA, a
 
 # Auto Execute
 
-> **Cursor host note.** OMC's `autopilot` skill chains analyst, architect,
-> executor, security-reviewer, and code-reviewer sub-agents through hooks.
-> Cursor's checked-in skill model does not document an equivalent
-> repo-checked-in sub-agent primitive, so this adaptation runs the same five
-> phases as **explicit, sequential skill invocations** that the Cursor agent
-> performs in one workspace. Each phase is a real, reproducible artifact
-> (spec, plan, code, test output, review report); there is no hidden hook
-> magic.
+> **Cursor host note.** This is a self-developed five-phase execution pipeline
+> for Cursor workspaces. It uses explicit phase gates and checked-in artifacts
+> rather than hidden runtime assumptions. Each phase produces reproducible
+> evidence: spec, plan, code, test output, and review report.
 
 ## Use when
 
@@ -35,7 +31,7 @@ description: Autonomous execution pipeline - expand idea, plan, implement, QA, a
 |-------|------------------|-----------------|
 | 0. Expand | `deep-interview` (only if input is vague) | `docs/specs/<slug>.md` |
 | 1. Plan | `plan` (direct mode if a spec exists) | `docs/plans/<slug>.md` |
-| 2. Execute | `iterate-loop` against the plan | code changes + `prd.json` |
+| 2. Execute | `iterate-loop` against the plan | code changes + `./prd.json` (workspace root) |
 | 3. QA | run build, lint, typecheck, tests | fresh terminal output |
 | 4. Review | `review` + `security-review` (if relevant) | review reports |
 
@@ -57,7 +53,10 @@ Each phase must complete before the next begins.
    it.
 5. **Phase 4 - Review.** Invoke `review`. If the change touches auth, input
    handling, secrets, or external requests, also invoke `security-review`.
-   Treat any `REQUEST CHANGES` verdict as a regression: fix, re-QA,
+   Map each reviewer's raw verdict to the shared loop gate (see
+   `skills/iterate-loop/SKILL.md` step 7): `APPROVE` / `SAFE TO MERGE` =>
+   `pass`, `COMMENT` / `FIX HIGH+ FIRST` => `comment`, `REQUEST CHANGES` /
+   `DO NOT DEPLOY` => `block`. Any `block` is a regression: fix, re-QA,
    re-review. Cap at three review rounds.
 6. **Stop.** Report:
    - the spec, plan, and PRD paths,
@@ -84,6 +83,22 @@ Each phase must complete before the next begins.
 - Auto-merging or auto-committing - this skill never commits without
   explicit user confirmation.
 
+## State sync (optional, via cursor-state-bridge MCP)
+
+When a `task_id` is in scope, persist phase transitions through the
+`cursor-state-bridge` MCP tools so resume after a session restart can read
+the current position from `.cursor/state/workflow-state.json`:
+
+- `state_init` at the start of Phase 1 to record the task and acceptance
+  criteria.
+- `state_set_phase` at each phase boundary (`research` -> `plan` ->
+  `execute` -> `verify` -> `review` -> `done`).
+- `state_update_acceptance_criterion` whenever a story passes verification.
+- `state_record_failure` if a phase fails and the run must escalate.
+
+The bridge serialises every write through a shared `file_lock`; never edit
+`workflow-state.json` directly.
+
 ## Boundaries
 
 - This skill does not promise resume after the chat ends. If the user
@@ -92,9 +107,7 @@ Each phase must complete before the next begins.
   resumes from the first incomplete phase.
 - It does not invoke external models, MCP servers, or background daemons.
   All work happens through the Cursor agent in the current workspace.
-- It does not claim parity with Claude Code's `autopilot`. The OMC version
-  uses runtime hooks and a Task primitive that Cursor does not document as
-  repo-owned today; this version is a faithful, smaller pipeline that
-  works with Cursor's documented surfaces only.
+- It does not claim hidden orchestration. The workflow is explicit, sequential,
+  and bounded to Cursor surfaces this repo documents and validates.
 - It does not automatically deploy, push, or publish anything. Final
   delivery (commit, PR, deploy) stays with the user.

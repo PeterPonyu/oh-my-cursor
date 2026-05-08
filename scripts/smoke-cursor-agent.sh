@@ -113,8 +113,8 @@ if [[ "$RUN_AGENT_SMOKE" == "1" ]]; then
   }
   printf 'ok: cursor-agent prompt smoke returned CURSOR_AGENT_OK (environment-gated runtime proof)\n'
 
-  task_output="$(run_cursor_prompt "task scenario smoke" "CURSOR_TASK_SCENARIO_OK docs/refinement-priority-map.md docs/plugin-boundary-review.md scripts/validate-benchmark-evidence.sh" "Without editing files or running write commands, identify the repo's refinement priority map doc, plugin boundary review doc, and benchmark evidence validator script. Reply with exactly: CURSOR_TASK_SCENARIO_OK docs/refinement-priority-map.md docs/plugin-boundary-review.md scripts/validate-benchmark-evidence.sh")"
-  printf '%s\n' "$task_output" | grep -Fxq 'CURSOR_TASK_SCENARIO_OK docs/refinement-priority-map.md docs/plugin-boundary-review.md scripts/validate-benchmark-evidence.sh' || {
+  task_output="$(run_cursor_prompt "task scenario smoke" "CURSOR_TASK_SCENARIO_OK docs/archive/refinement-priority-map.md docs/archive/plugin-boundary-review.md scripts/validate-benchmark-evidence.sh" "Without editing files or running write commands, identify the repo's archived refinement priority map doc, archived plugin boundary review doc, and benchmark evidence validator script. Reply with exactly: CURSOR_TASK_SCENARIO_OK docs/archive/refinement-priority-map.md docs/archive/plugin-boundary-review.md scripts/validate-benchmark-evidence.sh")"
+  printf '%s\n' "$task_output" | grep -Fxq 'CURSOR_TASK_SCENARIO_OK docs/archive/refinement-priority-map.md docs/archive/plugin-boundary-review.md scripts/validate-benchmark-evidence.sh' || {
     printf '%s\n' "$task_output" >&2
     echo "FAIL: cursor-agent task scenario smoke missing CURSOR_TASK_SCENARIO_OK" >&2
     exit 1

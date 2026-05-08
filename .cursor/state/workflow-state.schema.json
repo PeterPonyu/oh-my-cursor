@@ -1,0 +1,89 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/PeterPonyu/oh-my-cursor/.cursor/state/workflow-state.schema.json",
+  "title": "oh-my-cursor workflow state",
+  "description": "Repo-owned, file-backed state that lets hooks, skills, and agents share the same view of the current orchestration phase, acceptance criteria, and verification evidence. The state is human-visible and explicitly opt-in. There is no background daemon.",
+  "type": "object",
+  "required": ["task_id", "phase", "status", "acceptance_criteria"],
+  "additionalProperties": false,
+  "properties": {
+    "task_id": {
+      "type": "string",
+      "description": "Stable identifier for the current task or workstream."
+    },
+    "title": {
+      "type": "string",
+      "description": "Short human-readable title for the task."
+    },
+    "phase": {
+      "type": "string",
+      "enum": ["intake", "research", "plan", "execute", "verify", "review", "done", "blocked"],
+      "description": "Current orchestration phase."
+    },
+    "status": {
+      "type": "string",
+      "enum": ["pending", "in_progress", "passed", "failed", "blocked"],
+      "description": "Status of the current phase."
+    },
+    "current_role": {
+      "type": "string",
+      "enum": ["", "orchestrator", "researcher", "planner", "implementer", "verifier", "critic", "debugger", "security-reviewer"],
+      "description": "Optional. Role expected to advance the next step."
+    },
+    "next_action": {
+      "type": "string",
+      "description": "Free-form short hint for the next concrete action a human or agent should take."
+    },
+    "acceptance_criteria": {
+      "type": "array",
+      "minItems": 0,
+      "items": {
+        "type": "object",
+        "required": ["id", "criterion", "status"],
+        "additionalProperties": false,
+        "properties": {
+          "id": { "type": "string" },
+          "criterion": { "type": "string" },
+          "status": {
+            "type": "string",
+            "enum": ["pending", "passed", "failed", "skipped"]
+          },
+          "evidence": {
+            "type": "string",
+            "description": "Reference to a checked-in artifact, a script invocation, or a run output."
+          }
+        }
+      }
+    },
+    "failure": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": ["", "transient", "fixable", "needs_replan", "escalate", "flaky", "regression"]
+        },
+        "message": { "type": "string" },
+        "retry_count": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 3
+        }
+      }
+    },
+    "history": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["phase", "status"],
+        "additionalProperties": false,
+        "properties": {
+          "phase": { "type": "string" },
+          "status": { "type": "string" },
+          "note": { "type": "string" },
+          "at": { "type": "string" }
+        }
+      }
+    }
+  }
+}

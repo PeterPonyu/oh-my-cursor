@@ -6,7 +6,7 @@ HTTP is via `urllib.request`.
 
 ## Layout
 
-```
+```text
 benchmark/runs/
   __init__.py
   recorder.py          # Recorder class, PRICING table
@@ -22,7 +22,7 @@ benchmark/runs/
 
 Each run produces:
 
-```
+```text
 data/<UTC_TS>__<benchmark>__<arm>__<model_flat>__<run_id>/
   manifest.json
   events.jsonl
@@ -44,7 +44,7 @@ from benchmark.runs.anthropic_client import call_anthropic
 
 rec = Recorder(
     benchmark="a1-pilot",
-    arm="with-omc",
+    arm="workflow",
     model="anthropic/claude-haiku-4-5-20251001",
     budget_usd=2.0,
 )
@@ -60,7 +60,7 @@ rec.run_end(status="ok")
 
 ## CLIs
 
-```
+```bash
 python -m benchmark.runs.replay        <run_dir>
 python -m benchmark.runs.summary       <run_dir>
 python -m benchmark.runs.budget_guard  <run_dir>
@@ -81,7 +81,7 @@ python -m benchmark.runs.budget_guard  <run_dir>
 
 ## Pilot
 
-```
+```bash
 python /home/zeyufu/Desktop/oh-my-cursor/benchmark/runs/pilot/run_a1_pilot.py --model auto --limit 1 --arm both
 ```
 
@@ -92,13 +92,14 @@ model label `cursor/auto`, while each per-task `request.json` records
 
 Useful bounded commands:
 
-```
+```bash
 python benchmark/runs/pilot/run_a1_pilot.py --model auto --limit 1 --arm both
 python benchmark/runs/pilot/run_a1_pilot.py --model auto --arm both
 python benchmark/runs/run_a1_full.py --model auto --limit 1 --arm vanilla
 python benchmark/runs/run_a1_full.py --model auto --arm both
 ```
 
-Use `--arm vanilla` or `--arm with-omc` to run one side independently, and
-`--limit N` before full runs when collecting bounded smoke evidence. This is
-Cursor runtime proof (`runtime-smoke`), not a checked-in model capability claim.
+Use the arm values documented by the runner help to run one side independently,
+and `--limit N` before full runs when collecting bounded smoke evidence. This
+is Cursor runtime proof (`runtime-smoke`), not a checked-in model capability
+claim.

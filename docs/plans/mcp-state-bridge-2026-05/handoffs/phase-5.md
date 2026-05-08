@@ -1,0 +1,19 @@
+## Handoff: Phase 5 → Phase 6 (mcp-state-bridge-2026-05)
+- **Decided**: the AST scan walks `ast.Call` nodes and reports whenever a write-shape callable (`write_text`, `write_bytes`, `open`, `json.dump`) carries a string literal matching `\.cursor/state/workflow-state(?:\.[A-Za-z]+)?\.json`. `.omcs/` writes are not flagged at all (implicit allowlist; AC-505).
+- **Decided**: the `--check-shared-lock` mode loads the library via `importlib.util.spec_from_file_location`, then inspects `sys.modules['_locking']` to confirm the source file is `.cursor/state/_locking.py`. This is structural, not behavioural — it asserts there is exactly one source for the lock primitive in the repo.
+- **Decided**: `--self-test` runs entirely inside `tempfile.TemporaryDirectory` and never touches the working tree (V2 contract).
+- **Rejected**: making the AST scan recursive into bridge code paths. The scope is narrow on purpose — hooks are read-only, the bridge is the writer. Extending the scan to bridge files would muddy the contract.
+- **Files (Phase 5)**:
+  - new: `scripts/validate-hook-readonly.py`
+  - patched: `scripts/verify-backbone.sh` (added the validator + `--check-shared-lock` to the runtime chain and to the required-file array), `scripts/validate-surface-visibility.sh` (added the validator to the required-file array), `CHANGELOG.md`, `docs/plans/mcp-state-bridge-2026-05/expected-rename-references.txt`
+- **Acceptance criteria evidenced**:
+  - AC-501: `python3 scripts/validate-hook-readonly.py` exits 0; scans 14 hook files (excluding `_trace.py`); zero offenders.
+  - AC-502: `--check-shared-lock` mode confirms `_locking` resolves to `.cursor/state/_locking.py`, no `.cursor/state/*.py` imports from `mcp/`, bridge has no duplicate `_locking.py`.
+  - AC-503: `verify-backbone.sh` chains both the default scan and `--check-shared-lock` mode; required-file arrays include the validator.
+  - AC-504: `--self-test` detects the synthetic offender (`_evil.py` writing to `.cursor/state/workflow-state.json`) and reports it correctly.
+  - AC-505: `--self-test` confirms `_trace.py` writing to `.omcs/hook-trace.log` is NOT flagged; `git status` shows no working-tree mutations after the self-test.
+- **Remaining for Phase 6**:
+  - Ship `mcp/cursor-state-bridge/_trace.py` writing to `.omcs/cursor-state-bridge/trace.jsonl` (V3 path) with 10 MiB FIFO rotation.
+  - Ship `mcp/cursor-state-bridge/auth.py` (default OFF, opt-in via `OH_MY_CURSOR_MCP_TOKEN`).
+  - Ship `scripts/validate-mcp-trace.py` with `--self-test`.
+  - Add `docs/mcp-auth.md` with the exact framing strings ("defense-in-depth only", "does NOT protect against parent-process compromise").

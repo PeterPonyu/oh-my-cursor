@@ -1,0 +1,15 @@
+## Handoff: Phase 3 → Phase 4 (mcp-state-bridge-2026-05)
+- **Decided**: `_PLACEHOLDER_TOOLS` is now an empty set; the dispatch arm in `server.py` keeps the empty-set check so a future regression that reintroduces a placeholder is centralised.
+- **Decided**: AC↔PRD mapping lives in `docs/PRD.yaml` under a new top-level `mcp_acceptance_criteria` block, parsed by a small stdlib-only YAML scanner in `validate-prd-ac-mapping.py` (no PyYAML dependency).
+- **Decided**: `evidence` on `state_update_acceptance_criterion` is stored verbatim when supplied, preserved when re-passed without it, and defaults to `""` on first insert — schema-faithful, no tightening (R4 / AC-302).
+- **Rejected**: tightening the schema to require `evidence` on transitions out of `pending`. Several plan ACs use it without explicit evidence (e.g. AC-203 = "validate-state-contract green").
+- **Rejected**: making `state_history_append` mutate top-level `phase`/`status` (AC-303 explicitly forbids).
+- **Risks acknowledged**: `validate-prd-ac-mapping.py` will fire false drift if a future plan iteration adds new AC IDs without a matching PRD row; the validator's error message instructs the operator to update both sides.
+- **Files (Phase 3)**:
+  - new: `scripts/validate-prd-ac-mapping.py`, `mcp/cursor-state-bridge/tests/test_acceptance_criteria.py`
+  - patched: `mcp/cursor-state-bridge/state_io.py` (replaced two `NotImplementedError` placeholders with full handlers), `mcp/cursor-state-bridge/server.py` (empty `_PLACEHOLDER_TOOLS`, updated `_FUNCTIONAL_TOOLS`), `mcp/cursor-state-bridge/tests/test_rpc.py` (placeholder test → unknown-tool test), `docs/PRD.yaml` (added `mcp_acceptance_criteria` block with all 40 plan AC IDs), `mcp/cursor-state-bridge/README.md`, `docs/mcp-tool-surface.md`, `CHANGELOG.md`, `docs/plans/mcp-state-bridge-2026-05/expected-rename-references.txt`
+- **Acceptance criteria evidenced**: AC-301 (test_acceptance_criteria covers missing/invalid status), AC-302 (evidence verbatim / preserved / default empty — three sub-cases in one test), AC-303 (state_history_append preserves top-level fields), AC-304 (tools/list shows 6 functional, no `not implemented` errors), AC-305 (`validate-prd-ac-mapping.py` exits 0 on the 40 plan AC IDs).
+- **Remaining for Phase 4**:
+  - Rewire `.cursor/agents/orchestrator.md`, `skills/phase-controller/SKILL.md`, `docs/orchestration.md` so agent-callable surfaces no longer reference `python3 .cursor/state/workflow-state.py ...` directly.
+  - Keep developer-facing docs free to mention the CLI; only agent prompts and skill instructions are gated.
+  - Update `validate-rename-references.py` (or sibling) to express the agent-callable allowlist if needed.

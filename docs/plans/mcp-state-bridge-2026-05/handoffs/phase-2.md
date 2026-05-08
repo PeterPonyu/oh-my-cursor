@@ -1,0 +1,16 @@
+## Handoff: Phase 2 → Phase 3 (mcp-state-bridge-2026-05)
+- **Decided**: ship `_locking.py` at `.cursor/state/_locking.py` (V1 location, NOT under `mcp/`); both CLI shim and bridge import the same module via stable `sys.modules` keys (`_omcs_workflow_state`, `_omcs_locking`).
+- **Decided**: bridge imports the workflow-state library via `importlib.util.spec_from_file_location` (path `.cursor/state/workflow-state.py` is hyphenated, not directly importable).
+- **Decided**: writes use `tmp + os.replace` for atomicity; readers never see partial documents under concurrent writes.
+- **Rejected**: subprocess-shelling out to the CLI from the bridge (zero-subprocess invariant per AC-202).
+- **Rejected**: tightening the schema to require `evidence` on AC entries (R4 + AC-302 keep it OPTIONAL).
+- **Risks acknowledged**: Python 3.12 unittest emits `ResourceWarning: unclosed file` for some fd-keepers in subprocess teardown; tests still report `OK` and exit 0. Cosmetic; cleanup tracked as a low-priority Phase 5 follow-up.
+- **Files (Phase 2)**:
+  - new: `.cursor/state/_locking.py`, `mcp/cursor-state-bridge/state_io.py`, `mcp/cursor-state-bridge/tests/{test_library_api.py, test_locking_concurrent.py, test_jail.py}`
+  - rewritten: `.cursor/state/workflow-state.py` (now CLI shim around library API)
+  - patched: `mcp/cursor-state-bridge/server.py` (dispatch through state_io for 4 functional tools), `mcp/cursor-state-bridge/tests/test_rpc.py` (placeholder test now targets state_history_append), `scripts/validate-workflow-state.py` (`--check-history-monotonic` flag), `mcp/cursor-state-bridge/README.md`, `docs/mcp-tool-surface.md`, `CHANGELOG.md`, `docs/plans/mcp-state-bridge-2026-05/expected-rename-references.txt`
+- **Acceptance criteria evidenced**: AC-201 (library API present), AC-202 (zero subprocess in state_io), AC-203 (CLI shim still works; validate-state-contract green), AC-204 (file_lock used by all writes), AC-205 (validate-workflow-state passes example), AC-206 (test_library_api.py: 6 tests, no Namespace mocks), AC-207 (`_locking.py` imports cleanly on POSIX from `.cursor/state/`), AC-208 (test_locking_concurrent + `--check-history-monotonic`), AC-209 (smoke `--jail-escape` returns -32602).
+- **Remaining for Phase 3**:
+  - Promote `state_update_acceptance_criterion` and `state_history_append` from `-32601` to functional in `state_io.py`.
+  - Map PRD top-level acceptance criteria to `state_update_acceptance_criterion` calls (`docs/PRD.yaml` table); ship `scripts/validate-prd-ac-mapping.py`.
+  - Add `mcp/cursor-state-bridge/tests/test_acceptance_criteria.py`.

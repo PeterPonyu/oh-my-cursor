@@ -1,44 +1,52 @@
 # References
 
-Access date for web sources: **2026-04-22**.
+Access date for web references: **2026-05-06**.
 
 This page is the citation index for public `oh-my-cursor` claims. It separates
 repo-owned proof from host-product documentation so repo wording does not drift
 past its evidence.
 
-## Primary official Cursor sources
+When capability claims change in `AGENTS.md`, `README.md`, `docs/**`, or
+`.cursor/rules/**`, this file must be updated in the same change.
 
-| Source | Supports which claim family here | Ownership / proof ceiling used by this repo |
+## Primary official Cursor references
+
+| Reference | Supports which claim family here | Ownership / proof ceiling used by this repo |
 | --- | --- | --- |
-| [Cursor rules / `AGENTS.md`](https://docs.cursor.com/en/context) | Root `AGENTS.md` and `.cursor/rules` as official instruction surfaces. | Supports `repo-owned` instruction wording at `official-doc`, which this repo strengthens to `checked-in-artifact` only because the files are present and validated locally. |
-| [Using Agent in Cursor CLI](https://docs.cursor.com/en/cli/using) | Cursor CLI reads root `AGENTS.md` / `.cursor/rules`, supports MCP, and behaves as a CLI workspace consumer of repo guidance. | Supports `host-product-only` CLI-behavior wording and repo guidance consumption at `official-doc`. |
-| [Plugins](https://cursor.com/docs/plugins) | Plugin installation, local development via `~/.cursor/plugins/local`, marketplace/team distribution, and high-level plugin packaging behavior. | Supports the repo's local plugin walkthrough and product-level plugin install/distribution wording; checked-in repo ownership still requires local artifacts and validators. |
-| [Plugins Reference](https://cursor.com/docs/reference/plugins) | Plugin manifest shape, component discovery, supported plugin directories/files, and marketplace-manifest rules. | Supports the repo-root `.cursor-plugin/plugin.json` claim and the minimal rule/skill payload at `official-doc`, strengthened to `checked-in-artifact` only because those files now exist locally. |
-| [Model Context Protocol (MCP) for CLI](https://docs.cursor.com/cli/mcp) | Cursor/CLI MCP support, configuration sources, and CLI MCP commands. | Supports `host-product-only` MCP wording at `official-doc`; this repo still does not claim a default repo-owned `.cursor/mcp.json`. |
+| [Cursor rules / `AGENTS.md`](https://docs.cursor.com/en/context) | Root `AGENTS.md` and `.cursor/rules/` as official instruction surfaces. | Supports `repo-owned` instruction wording at `official-doc`, strengthened to `checked-in-artifact` only because the files are present and validated locally. |
+| [Using Agent in Cursor CLI](https://docs.cursor.com/en/cli/using) | Cursor CLI reads root `AGENTS.md` / `.cursor/rules`, supports MCP, and behaves as a CLI workspace consumer of repo guidance. | Supports `host-product-only` CLI behavior and repo guidance consumption at `official-doc`. |
+| [Plugins](https://cursor.com/docs/plugins) | Plugin installation, local development via `~/.cursor/plugins/local`, and high-level plugin packaging behavior. | Supports the local plugin walkthrough and product-level plugin behavior; checked-in repo ownership still requires local artifacts and validators. |
+| [Plugins Reference](https://cursor.com/docs/reference/plugins) | Plugin manifest shape and references to rules, skills, agents, and hooks. | Supports `.cursor-plugin/plugin.json` and its explicit component references at `official-doc`, strengthened to `checked-in-artifact` because those paths exist locally. |
+| [Hooks](https://docs.cursor.com/en/agent/hooks) | Project hook configuration at `.cursor/hooks.json`, trusted-workspace execution, and event-driven hook behavior. | Supports project-hook wording at `official-doc`, strengthened only to `checked-in-artifact` for the manifest and scripts in this repo. |
+| [Subagents](https://docs.cursor.com/en/agent/subagents) | Project agents under `.cursor/agents/*.md` with YAML frontmatter. | Supports project-agent wording at `official-doc`, strengthened to `checked-in-artifact` because the agent files are present and validated locally. |
+| [Skills](https://docs.cursor.com/en/agent/skills) | Skills as reusable Cursor workflow instructions. | Supports checked-in `skills/**/SKILL.md` wording at `official-doc`, strengthened to `checked-in-artifact` for files present in this repo. |
+| [Model Context Protocol (MCP) for CLI](https://docs.cursor.com/cli/mcp) | Cursor/CLI MCP support, configuration references, and CLI MCP commands. | Supports `host-product-only` MCP wording at `official-doc`; this repo still does not claim a default `.cursor/mcp.json`. |
 | [Modes](https://docs.cursor.com/chat/custom-modes) | Agent/Ask/Manual/Custom modes as product capabilities and product-managed configuration. | Supports `host-product-only` mode wording at `official-doc`; this repo does not claim repo-file custom-mode packaging. |
 | [Background Agents](https://docs.cursor.com/background-agents) | Background agents as asynchronous remote product capability. | Supports `host-product-only` background-agent wording at `official-doc`; this repo does not claim repo-file provisioning. |
-| [Plugins, Sandbox Access Controls, and Async Subagents](https://cursor.com/changelog/2-5) | Product awareness for plugins and async subagents, including the surrounding feature family that informs this repo's minimal plugin promotion. | Used for product-awareness and proof ceilings only: this repo treats its repo-root plugin as `repo-owned` only when local checked-in artifacts and validators back the claim. |
+| [Model Context Protocol specification](https://spec.modelcontextprotocol.io/) | JSON-RPC 2.0 wire format, `initialize` / `tools/list` / `tools/call` semantics, transport options. | Supports `repo-owned` `checked-in-artifact` wording for the `mcp/cursor-state-bridge/` server's stdio JSON-RPC implementation; runtime smoke evidence is gated by `RUN_MCP_BRIDGE_SMOKE=1`. |
 
 ## Landing-surface deployment references
 
-| Source | Supports which claim family here | Ownership / proof ceiling used by this repo |
+| Reference | Supports which claim family here | Ownership / proof ceiling used by this repo |
 | --- | --- | --- |
-| [Next.js static exports](https://nextjs.org/docs/app/building-your-application/deploying/static-exports) | `output: 'export'` builds static assets into `out/` for App Router projects. | Supports the deployment mechanics for a future checked-in `apps/cursor-backbone-site/`; repo-owned wording still requires the files and exported output to exist locally. |
-| [GitHub Pages custom workflows](https://docs.github.com/en/pages/getting-started-with-github-pages/using-custom-workflows-with-github-pages) | Official `configure-pages`, `upload-pages-artifact`, and `deploy-pages` workflow path for Pages deployments. | Supports workflow-shape checks for a future repo-owned landing site; it does not by itself prove the repo already ships that workflow. |
+| [Next.js static exports](https://nextjs.org/docs/app/building-your-application/deploying/static-exports) | `output: 'export'` builds static assets into `out/` for App Router projects. | Supports deployment mechanics for `apps/cursor-backbone-site/`; repo-owned wording still requires checked-in files and exported output validation. |
+| [GitHub Pages custom workflows](https://docs.github.com/en/pages/getting-started-with-github-pages/using-custom-workflows-with-github-pages) | Official `configure-pages`, `upload-pages-artifact`, and `deploy-pages` workflow path for Pages deployments. | Supports workflow-shape checks for the repo-owned landing site when the workflow and app artifacts are present. |
 
 ## Claim mapping used by this repo
 
-- Root `AGENTS.md`, `.cursor/rules`, the repo-root plugin manifest, shipped
-  plugin rules/skills, local validators, and checked-in benchmark artifacts are
-  the strongest current **repo-owned** surfaces.
-- Cursor CLI, MCP, modes, and background agents are real Cursor capabilities,
-  but they remain **host-product-only** unless this repo deliberately ships and
+- Root `AGENTS.md`, `.cursor/rules/`, `.cursor/hooks.json`, `.cursor/hooks/`,
+  `.cursor/agents/`, the repo-root plugin manifest, shipped rules/skills,
+  checked-in brand/readme/social assets under `assets/`, the root README image,
+  local validators, and checked-in benchmark artifacts are current
+  **repo-owned** surfaces.
+- Cursor CLI, MCP, custom modes, and background agents are real Cursor
+  capabilities, but they remain **host-product-only** unless this repo ships and
   validates a corresponding checked-in surface.
-- Hook manifests, custom-agent surfaces, repo-file custom-mode packaging, and
-  repo-file background-agent provisioning remain
-  **unsupported-or-out-of-scope** in this repo today.
-- A future checked-in Pages landing site can only be described as
-  **repo-owned** after the app files, deploy workflow, and exported-output
-  validators all exist in this repo.
+- `oh-my-claudecode` concepts referenced by the bridge docs are integration
+  targets, not Cursor-owned behavior; parity claims stay bounded by the local
+  mapping documents and checked-in Cursor artifacts.
+- Repo-file custom-mode packaging, repo-file background-agent provisioning, a
+  default MCP config, and marketplace publication remain outside the
+  current repo contract.
 - Any stronger public wording must be backed by the matching proof class:
   `official-doc`, `checked-in-artifact`, or `runtime-smoke`.

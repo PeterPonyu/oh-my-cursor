@@ -7,20 +7,104 @@ cd "$ROOT"
 log() { printf 'ok: %s\n' "$*"; }
 fail() { printf 'FAIL: %s\n' "$*" >&2; exit 1; }
 
+# ---------------------------------------------------------------------------
+# --self-test mode (AC-110/AC-107): read-only checks, no working-tree mutation
+# ---------------------------------------------------------------------------
+if [[ "${1:-}" == "--self-test" ]]; then
+  echo "self-test: tracked mcp.json detection"
+  if git ls-files .cursor/mcp.json 2>/dev/null | grep -q .; then
+    echo "self-test: real repo has tracked .cursor/mcp.json (unexpected)"; exit 1
+  fi
+  echo "self-test: no tracked .cursor/mcp.json — passes negative case"
+  echo "self-test: .cursor/mcp.example.json present check"
+  [[ -f .cursor/mcp.example.json ]] || { echo "self-test: missing .cursor/mcp.example.json"; exit 1; }
+  echo "VALIDATE_PLUGIN_STRUCTURE_SELF_TEST_OK"
+  exit 0
+fi
+
 required=(
   .cursor-plugin/plugin.json
+    .cursor/hooks.json
+    .cursor/hooks/README.md
+    .cursor/hooks/claim-guard.py
+    .cursor/hooks/stop-gate.py
+    .cursor/state/workflow-state.schema.json
+    .cursor/state/workflow-state.example.json
+    .cursor/state/workflow-state.py
+    .cursor/state/README.md
+    .cursor/agents/orchestrator.md
+    .cursor/agents/verifier.md
+    .cursor/agents/critic.md
+    .cursor/agents/debugger.md
+    .cursor/agents/security-reviewer.md
+    .cursor/agents/planner.md
+    .cursor/agents/researcher.md
+    .cursor/agents/implementer.md
+    .cursor/agents/code-reviewer.md
+    .cursor/agents/explore.md
+    .cursor/agents/test-engineer.md
+    .cursor/agents/tracer.md
+    .cursor/mcp.example.json
   rules/repo-owned-plugin-boundary.mdc
   skills/local-plugin-check/SKILL.md
+  skills/phase-controller/SKILL.md
   docs/local-plugin-verification.md
+  docs/orchestration.md
   CHANGELOG.md
   scripts/install-local-plugin.sh
   scripts/check-local-plugin-install.sh
+    scripts/validate-cursor-workflow-artifacts.py
+    scripts/smoke-cursor-workflow-artifacts.sh
+    scripts/validate-workflow-state.py
+    scripts/workflow-state.py
 )
 
 for path in "${required[@]}"; do
   [[ -f "$path" ]] || fail "missing required plugin file: $path"
   log "$path"
 done
+
+# AC-107: .cursor/mcp.json must never be tracked in git
+if git ls-files .cursor/mcp.json 2>/dev/null | grep -q .; then
+  fail "tracked .cursor/mcp.json is forbidden; use .cursor/mcp.example.json instead"
+fi
+log ".cursor/mcp.json is not tracked (correct)"
+
+contaminated=0
+find .cursor -type d -name "__pycache__" -exec rm -rf {} + 2>/dev/null || true
+find .cursor -name "*.pyc" -delete 2>/dev/null || true
+
+if git ls-files .cursor 2>/dev/null | grep -qE '__pycache__|\.pyc$'; then
+  fail "pycache files are tracked in git — add __pycache__/ and *.pyc to .gitignore, then git rm --cached them"
+  contaminated=1
+fi
+
+if find .cursor/state -name "*.lock" 2>/dev/null | grep -q .; then
+  fail "found *.lock files in .cursor/state/ — remove runtime lock artifacts"
+  contaminated=1
+fi
+
+if [[ -f .cursor/state/workflow-state.json ]]; then
+  fail "found .cursor/state/workflow-state.json — runtime artifact must not be tracked"
+  contaminated=1
+fi
+if [[ -f .cursor/state/active-role.json ]]; then
+  fail "found .cursor/state/active-role.json — runtime artifact must not be tracked"
+  contaminated=1
+fi
+
+if [[ -d .cursor/memories ]]; then
+  fail "found .cursor/memories/ — runtime directory must not be tracked"
+  contaminated=1
+fi
+if [[ -d .cursor/hooks/state ]]; then
+  fail "found .cursor/hooks/state/ — runtime directory must not be tracked"
+  contaminated=1
+fi
+
+if [[ "$contaminated" == "0" ]]; then
+  log "payload is clean: no __pycache__, *.pyc, *.lock, or runtime artifacts in .cursor/"
+fi
 
 command -v python3 >/dev/null 2>&1 || fail "python3 not found"
 
@@ -53,23 +137,37 @@ author = manifest.get("author")
 if not isinstance(author, dict) or not str(author.get("name", "")).strip():
     raise SystemExit("FAIL: plugin manifest must include author.name")
 
+expected_paths = {
+    "rules": "rules",
+    "skills": "skills",
+    "agents": ".cursor/agents",
+    "hooks": ".cursor/hooks.json",
+}
+for key, expected in expected_paths.items():
+    actual = manifest.get(key)
+    if actual != expected:
+        raise SystemExit(f"FAIL: plugin manifest must set {key!r} to {expected!r}, got {actual!r}")
+
 print("ok: plugin manifest fields are present and well-formed")
 PY
 
 rules_count="$(find rules -type f \( -name '*.md' -o -name '*.mdc' -o -name '*.markdown' \) | wc -l | tr -d ' ')"
 skills_count="$(find skills -type f -name 'SKILL.md' | wc -l | tr -d ' ')"
-hooks_count="$(find . -path './.git' -prune -o -name 'hooks.json' -print | wc -l | tr -d ' ')"
-agents_count="$(find . -path './.git' -prune -o -name '*.agent.md' -print | wc -l | tr -d ' ')"
+hooks_count="$(find .cursor -path './.git' -prune -o -name 'hooks.json' -print | wc -l | tr -d ' ')"
+agents_count="$(find .cursor/agents -type f -name '*.md' | wc -l | tr -d ' ')"
 
 [[ "$rules_count" -ge 1 ]] || fail "expected at least one plugin-owned rule"
 [[ "$skills_count" -ge 1 ]] || fail "expected at least one plugin-owned skill"
-[[ "$hooks_count" == "0" ]] || fail "hook manifests remain deferred for this repo"
-[[ "$agents_count" == "0" ]] || fail "custom agent packaging remains deferred for this repo"
+[[ "$hooks_count" == "1" ]] || fail "expected exactly one project hook manifest"
+[[ "$agents_count" -ge 12 ]] || fail "expected at least twelve checked-in project agents"
 
 log "plugin-owned rule count is $rules_count"
 log "plugin-owned skill count is $skills_count"
-log "hooks remain deferred"
-log "custom agents remain deferred"
+log "project hook manifest count is $hooks_count"
+log "checked-in project agent count is $agents_count"
+
+python3 scripts/validate-cursor-workflow-artifacts.py
+python3 scripts/validate-workflow-state.py >/dev/null
 
 grep -q '\.cursor-plugin/plugin.json' README.md || fail "README must mention the repo-root plugin manifest"
 grep -q '~/.cursor/plugins/local/oh-my-cursor' README.md || fail "README must mention the local plugin path"

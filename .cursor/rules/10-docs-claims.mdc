@@ -5,7 +5,10 @@ globs:
   - docs/**/*.md
 ---
 
+# Documentation claims
+
 - Separate confirmed behavior, inference, and future work.
-- When capability claims change, update `docs/references.md` in the same edit.
+- When capability claims change in `AGENTS.md`, `README.md`, `docs/**`, or `.cursor/rules/**`, update `docs/references.md` in the same edit.
 - Use exact, low-drama wording for unproven areas: "not yet proven", "not documented here", or "left opt-in".
-- Avoid importing parity language from other repositories unless a specific Cursor surface truly matches.
+- Avoid comparison framing unless a specific Cursor surface truly matches and the proof class is named.
+- Keep rules-path wording consistent: prefer `.cursor/rules/` as the repo-owned rules path.
