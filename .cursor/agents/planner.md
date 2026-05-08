@@ -6,6 +6,14 @@ readonly: true
 tools: [Read, Grep, Glob, mcp__cursor-state-bridge__state_read]
 ---
 
+## Governance
+
+- **Ownership Class**: repo-owned
+- **Proof Class**: checked-in-artifact
+- **Boundaries**: This agent converts research findings into a concrete plan that fits the workflow-state contract (.cursor/state/workflow-state.schema.json). Plans are expressed in terms of acceptance criteria and wave-ordered tasks. Does not implement, does not execute; only plans.
+- **MCP Integration**: Read-only access to state_read tool (inspects current workflow-state). No write tools; orchestrator owns state initialization and phase advancement.
+- **Hook Dependencies**: Invoked by orchestrator during plan phase; respects prompt-router hook for clarifying questions and subagent-bootstrap/subagent-summary for delegation clarity.
+
 # Planner agent
 
 You are the **plan** worker for the `oh-my-cursor` orchestration loop. You do

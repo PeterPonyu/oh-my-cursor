@@ -5,11 +5,38 @@ description: Socratic ambiguity gating - ask one targeted question at a time unt
 
 # Deep Interview
 
-> **Cursor host note.** This is a conversation pattern, not a stateful loop.
-> Cursor does not (in current verified docs) expose a runtime "interview state"
-> primitive that this repo can own. The skill therefore tracks ambiguity in
-> plain text inside the chat, and writes the final crystallized spec to
-> `docs/specs/<slug>.md` so it survives the session.
+> **Cursor host note.** This is a conversation pattern, not a stateful loop. Cursor does not (in current verified docs) expose a runtime "interview state" primitive that this repo can own. The skill therefore tracks ambiguity in plain text inside the chat, and writes the final crystallized spec to `docs/specs/<slug>.md` so it survives the session.
+
+## Governance
+
+### Ownership Class
+- **repo-owned**: YES — Checked in at `skills/deep-interview/SKILL.md` as a Socratic ambiguity gating workflow.
+- **host-product-only**: NO
+- **unsupported-or-out-of-scope**: NO
+
+### Proof Class
+- **official-doc**: NO — Cursor does not document an interview primitive; this is repo-owned.
+- **checked-in-artifact**: YES — Proof: `skills/deep-interview/SKILL.md`, ambiguity dimensions, clarity scoring, spec template.
+- **runtime-smoke**: NO
+
+### Claim Summary
+This skill provides Socratic ambiguity gating that asks one targeted question at a time until a request is clear enough to act on. Final spec is written to `docs/specs/` as a checked-in artifact. No MCP or hooks required; this is a documentation-first workflow.
+
+## MCP Integration Points
+
+No direct MCP integration. This skill writes specs to `docs/specs/` as checked-in artifacts; state tracking is optional and handled by `phase-controller` or `auto-execute` if needed.
+
+## Hooks Dependencies
+
+No hooks dependencies. This skill runs entirely within the Cursor chat.
+
+## Orchestration Role
+
+- **Lifecycle phase(s)**: intake, research
+- **Invoked by**: `auto-execute` (phase 0), user directly
+- **Invokes**: Writes spec to `docs/specs/<slug>.md`; suggests next skill but does not invoke
+- **State contract**: Writes to `docs/specs/<slug>.md` (checked-in artifact); no workflow-state updates
+- **Failure handling**: If ambiguity threshold not reached after 20 rounds, stops and reports current clarity scores
 
 ## Use when
 

@@ -5,12 +5,38 @@ description: Diagnose Cursor + oh-my-cursor installation health and report what 
 
 # Doctor
 
-> **Cursor host note.** This is a diagnostic skill, not a fixer. It checks
-> the Cursor host configuration (CLI, rules, optional plugin slots) and the
-> oh-my-cursor repo backbone (root files, validators, plugin manifest, the
-> shipped skill set). It does not modify Cursor's installation, does not
-> touch user settings, and does not assume capabilities outside the repo's
-> confirmed-surfaces ledger.
+> **Cursor host note.** This is a diagnostic skill, not a fixer. It checks the Cursor host configuration (CLI, rules, optional plugin slots) and the oh-my-cursor repo backbone (root files, validators, plugin manifest, the shipped skill set). It does not modify Cursor's installation, does not touch user settings, and does not assume capabilities outside the repo's confirmed-surfaces ledger.
+
+## Governance
+
+### Ownership Class
+- **repo-owned**: YES — Checked in at `skills/doctor/SKILL.md` as a diagnostic skill for installation health.
+- **host-product-only**: NO
+- **unsupported-or-out-of-scope**: NO
+
+### Proof Class
+- **official-doc**: NO — Cursor does not document a diagnostic primitive; this is repo-owned.
+- **checked-in-artifact**: YES — Proof: `skills/doctor/SKILL.md`, validators (`verify-backbone.sh`, `validate-surface-visibility.sh`, etc.), skill catalogue check.
+- **runtime-smoke**: YES — Runs validators and checks actual filesystem state; smoke test for repo health.
+
+### Claim Summary
+This skill is a diagnostic-first tool that checks Cursor host configuration, repo backbone, validators, skill catalogue, plugin manifest, and rules sanity. It does not modify anything; it only reports. No MCP or hooks required; this is a read-only diagnostic workflow.
+
+## MCP Integration Points
+
+No direct MCP integration. This skill reads repo artifacts and reports; no state updates.
+
+## Hooks Dependencies
+
+No hooks dependencies. This skill runs entirely within the Cursor chat.
+
+## Orchestration Role
+
+- **Lifecycle phase(s)**: intake
+- **Invoked by**: User, new contributors, before running `iterate-loop` or `auto-execute`
+- **Invokes**: No other skills; runs validators and reports
+- **State contract**: No workflow-state updates; reports to chat
+- **Failure handling**: Reports validator failures; does not auto-fix
 
 ## Use when
 

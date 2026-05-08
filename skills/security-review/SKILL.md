@@ -5,11 +5,38 @@ description: OWASP-aligned security pass for a diff or codebase, with severity r
 
 # Security Review
 
-> **Cursor host note.** This skill runs inside the Cursor agent against the
-> workspace; it does not assume any orchestration primitive Cursor has not
-> documented. Findings are written into the chat (and optionally to
-> `docs/security/<date>-<slug>.md` if the user wants a checked-in record).
-> Pair with the `review` skill for a full quality + security pass.
+> **Cursor host note.** This skill runs inside the Cursor agent against the workspace; it does not assume any orchestration primitive Cursor has not documented. Findings are written into the chat (and optionally to `docs/security/<date>-<slug>.md` if the user wants a checked-in record). Pair with the `review` skill for a full quality + security pass.
+
+## Governance
+
+### Ownership Class
+- **repo-owned**: YES — Checked in at `skills/security-review/SKILL.md` as an OWASP-aligned security pass.
+- **host-product-only**: NO
+- **unsupported-or-out-of-scope**: NO
+
+### Proof Class
+- **official-doc**: NO — Cursor does not document a security review primitive; this is repo-owned.
+- **checked-in-artifact**: YES — Proof: `skills/security-review/SKILL.md`, OWASP Top 10 checklist, severity rubric.
+- **runtime-smoke**: NO
+
+### Claim Summary
+This skill provides an OWASP-aligned security pass for a diff or codebase, with severity ratings and remediation steps. Findings are written to chat and optionally to `docs/security/<date>-<slug>.md`. No MCP or hooks required; this is a documentation-first security review workflow.
+
+## MCP Integration Points
+
+No direct MCP integration. This skill produces security reports written to chat; state tracking is optional and handled by `phase-controller` or `auto-execute` if needed.
+
+## Hooks Dependencies
+
+No hooks dependencies. This skill runs entirely within the Cursor chat.
+
+## Orchestration Role
+
+- **Lifecycle phase(s)**: review
+- **Invoked by**: `iterate-loop` (step 7 if change touches auth/secrets), `auto-execute` (phase 4 if relevant), user directly
+- **Invokes**: No other skills; produces security report
+- **State contract**: No workflow-state updates; reports to chat
+- **Failure handling**: Reports findings with severity; does not auto-fix
 
 ## Use when
 

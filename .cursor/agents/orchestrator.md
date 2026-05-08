@@ -6,6 +6,14 @@ readonly: false
 tools: [Read, Grep, Glob, Edit, Write, MultiEdit, Bash, mcp__cursor-state-bridge__state_read, mcp__cursor-state-bridge__state_init, mcp__cursor-state-bridge__state_set_phase, mcp__cursor-state-bridge__state_record_failure, mcp__cursor-state-bridge__state_update_acceptance_criterion, mcp__cursor-state-bridge__state_history_append]
 ---
 
+## Governance
+
+- **Ownership Class**: repo-owned
+- **Proof Class**: checked-in-artifact
+- **Boundaries**: This agent orchestrates all workflow phases within the repo's checked-in state contract (.cursor/state/workflow-state.json). Phase routing, role coordination, and acceptance-criteria tracking are repo-owned; the actual implementation of each role (research, plan, execute, verify, review) is delegated to role-specific agents.
+- **MCP Integration**: Full write access to all 6 cursor-state-bridge MCP tools (state_init, state_set_phase, state_record_failure, state_update_acceptance_criterion, state_history_append, state_read). MCP bridge is the only sanctioned writer of workflow-state.
+- **Hook Dependencies**: Invoked by orchestrator entry point; triggers subagent-bootstrap, subagent-summary, prompt-router (for intent clarification), state-watcher (phase changes).
+
 # Orchestrator agent
 
 You are the **entry point** for the `oh-my-cursor` orchestration flow. Your job

@@ -5,10 +5,53 @@ description: Orchestration-first entry point. Detect the current workflow phase 
 
 # Phase controller
 
-This is the orchestration-first skill for `oh-my-cursor`. It treats the workflow
-as an explicit state machine that is **file-backed**, **human-visible**, and
-**bounded**. There is no background daemon, hidden queue, or automatic retry;
-each phase advance is an explicit action on a checked-in JSON document.
+> **Cursor host note.** This is the orchestration-first skill for `oh-my-cursor`. It treats the workflow as an explicit state machine that is **file-backed**, **human-visible**, and **bounded**. There is no background daemon, hidden queue, or automatic retry; each phase advance is an explicit action on a checked-in JSON document.
+
+## Governance
+
+### Ownership Class
+- **repo-owned**: YES — This skill is checked in at `skills/phase-controller/SKILL.md` and is the orchestration entry point for the repo's workflow-state contract.
+- **host-product-only**: NO
+- **unsupported-or-out-of-scope**: NO
+
+### Proof Class
+- **official-doc**: NO — Cursor does not document a workflow-state primitive; this is repo-owned.
+- **checked-in-artifact**: YES — Proof: `.cursor/state/workflow-state.schema.json`, `.cursor/agents/orchestrator.md`, `.cursor/hooks.json` (state-watcher, stop-gate hooks), `scripts/validate-workflow-state.py`.
+- **runtime-smoke**: YES (optional) — When `cursor-state-bridge` MCP is installed, bridge tools (`state_init`, `state_set_phase`, etc.) provide runtime proof; default install excludes MCP.
+
+### Claim Summary
+This skill provides the orchestration entry point for `oh-my-cursor` workflows. It reads the checked-in workflow-state document (`.cursor/state/workflow-state.json`), detects the current phase, and routes to the appropriate agent or skill. The state contract is repo-owned and file-backed; writes go through the optional `cursor-state-bridge` MCP server when available, or through direct file updates otherwise. All phases, statuses, and role mappings are defined in the checked-in schema and agent prompts.
+
+## MCP Integration Points
+
+| Tool/Resource | MCP Server | Purpose | Required | Status |
+|---|---|---|---|---|
+| `state_init` | cursor-state-bridge | Initialize workflow-state document | No | optional |
+| `state_set_phase` | cursor-state-bridge | Advance to next phase | No | optional |
+| `state_update_acceptance_criterion` | cursor-state-bridge | Record criterion pass/fail | No | optional |
+| `state_record_failure` | cursor-state-bridge | Log phase failure | No | optional |
+| `state_history_append` | cursor-state-bridge | Append run notes | No | optional |
+| `state_read` | cursor-state-bridge | Read current state | No | optional |
+
+**Note**: MCP bridge is opt-in via `./scripts/install-local-plugin.sh --with-mcp`. Default install uses direct file I/O with `.cursor/state/workflow-state.json`.
+
+## Hooks Dependencies
+
+| Hook Event | Script | Purpose | Dependency |
+|---|---|---|---|
+| `postToolUse` | `state-watcher.py` | Observes tool execution and may trigger state updates | optional |
+| `stop` | `stop-gate.py` | Reads current phase before session stop | optional |
+| `preCompact` | `compact-reminder.py` | Reminds user of current phase before compacting | optional |
+
+**Note**: Hooks are read-only observers; they do not write workflow-state directly. Writes go through MCP bridge or direct file updates.
+
+## Orchestration Role
+
+- **Lifecycle phase(s)**: All phases (intake → research → plan → execute → verify → review → done)
+- **Invoked by**: User at session start, or by `auto-execute`, `iterate-loop` when resuming
+- **Invokes**: Routes to agents (`orchestrator`, `researcher`, `planner`, `implementer`, `verifier`, `critic`, `debugger`, `tracer`) and skills (`plan`, `iterate-loop`, `review`, `debug`, `trace`, etc.)
+- **State contract**: Reads/writes `.cursor/state/workflow-state.json` (or per-task archive at `docs/plans/<task-id>/workflow-state.json`)
+- **Failure handling**: Records failures via `state_record_failure` MCP tool or direct JSON update; routes to `debugger` or `tracer` agents
 
 ## State contract
 

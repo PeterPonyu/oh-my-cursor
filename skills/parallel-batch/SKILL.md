@@ -5,13 +5,38 @@ description: Parallel execution pattern for independent tasks, using the cursor-
 
 # Parallel Batch
 
-> **Cursor host note.** This is a self-developed parallel execution pattern for
-> independent tasks. The verified host primitive for spawning parallel work is
-> the **`cursor-agent` CLI**. This skill expresses parallelism as **N background
-> `cursor-agent` processes**, with an explicit downgrade path to sequential
-> execution when the CLI is not available. Verify against the Cursor CLI version
-> installed on the user's machine (`cursor-agent --version`) before relying on
-> flags.
+> **Cursor host note.** This is a self-developed parallel execution pattern for independent tasks. The verified host primitive for spawning parallel work is the **`cursor-agent` CLI**. This skill expresses parallelism as **N background `cursor-agent` processes**, with an explicit downgrade path to sequential execution when the CLI is not available. Verify against the Cursor CLI version installed on the user's machine (`cursor-agent --version`) before relying on flags.
+
+## Governance
+
+### Ownership Class
+- **repo-owned**: YES — Checked in at `skills/parallel-batch/SKILL.md` as a parallel execution pattern.
+- **host-product-only**: NO
+- **unsupported-or-out-of-scope**: NO
+
+### Proof Class
+- **official-doc**: NO — Cursor does not document a parallel primitive; this is repo-owned.
+- **checked-in-artifact**: YES — Proof: `skills/parallel-batch/SKILL.md`, cursor-agent CLI integration, downgrade path to sequential.
+- **runtime-smoke**: YES (optional) — Requires `cursor-agent` CLI to be installed; downgrades to sequential if not available.
+
+### Claim Summary
+This skill is a self-developed parallel execution pattern for independent tasks using the `cursor-agent` CLI when available, with an explicit downgrade path to sequential execution when the CLI is not available. No MCP or hooks required; this is a CLI-driven workflow.
+
+## MCP Integration Points
+
+No direct MCP integration. This skill spawns background `cursor-agent` processes; state tracking is optional and handled by `phase-controller` if needed.
+
+## Hooks Dependencies
+
+No hooks dependencies. This skill runs entirely within the Cursor chat and spawns background processes.
+
+## Orchestration Role
+
+- **Lifecycle phase(s)**: execute
+- **Invoked by**: User (keyword: 'in parallel', 'fan out', 'ultrawork', 'parallel-batch')
+- **Invokes**: Spawns background `cursor-agent` processes for independent tasks
+- **State contract**: No workflow-state updates; logs to `.cursor-agent-logs/` per-task
+- **Failure handling**: Collects logs from all background processes; reports failures per task
 
 ## Use when
 

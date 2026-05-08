@@ -42,7 +42,7 @@ Each phase advance is an action on a checked-in JSON document that follows
 | Plugin manifest | `.cursor-plugin/plugin.json` | Declares the repo-root plugin and points Cursor at the rules, skills, agents, and hooks payload. |
 | Hooks | `.cursor/hooks.json` plus stdlib-only Python scripts under `.cursor/hooks/` | Fourteen documented Cursor hook events are wired (`sessionStart` → `session-bootstrap.py`; `sessionEnd` → `session-summary.py`; `beforeSubmitPrompt` → `prompt-router.py`; `preToolUse` → `tool-guard.py`; `postToolUse` → `state-watcher.py`; `postToolUseFailure` → `failure-router.py`; `subagentStart` → `subagent-bootstrap.py`; `subagentStop` → `subagent-summary.py`; `beforeShellExecution` → `shell-guard.py`; `afterShellExecution` → `shell-debrief.py`; `beforeReadFile` → `read-advisor.py`; `afterFileEdit` → `claim-guard.py`; `preCompact` → `compact-reminder.py`; `stop` → `stop-gate.py`). All scripts are fail-open, observational unless a tightly bounded severe pattern is detected, and **read** workflow-state — they never write it. |
 | Agents | `.cursor/agents/orchestrator.md`, `researcher.md`, `planner.md`, `implementer.md`, `verifier.md`, `critic.md`, `code-reviewer.md`, `debugger.md`, `tracer.md`, `security-reviewer.md`, `explore.md`, `test-engineer.md` | Role prompts. `orchestrator.md` is the entry point; it routes work to the other roles. Most role agents are read-only; `debugger`, `implementer`, and `orchestrator` may update files only when the requested workflow requires it. |
-| Skills | `skills/phase-controller/SKILL.md`, plus `plan/`, `iterate-loop/`, `review/`, `debug/`, `trace/`, `parallel-batch/`, `auto-execute/`, `security-review/`, `local-plugin-check/`, `deep-interview/`, `doctor/`, `mcp-setup/`, `verify/` | Workflow recipes the user or agent invokes by name. |
+| Skills | `skills/*/SKILL.md` (14 total; see Skills table below) | Workflow recipes the user or agent invokes by name. Invoke by name from agent prompts or user input. |
 | Workflow state | `.cursor/state/workflow-state.schema.json`, `.cursor/state/workflow-state.example.json`, `.cursor/state/README.md` | The shared state contract; file-backed, human-visible, opt-in. |
 | State writer (agent-callable) | `mcp/cursor-state-bridge/` MCP tools (`state_init`, `state_set_phase`, `state_update_acceptance_criterion`, `state_record_failure`, `state_history_append`) | Sole agent-callable writer of `.cursor/state/workflow-state.json` (and per-task variants under `docs/plans/<task-id>/`). Routes through the shared `file_lock` from `.cursor/state/_locking.py`. Opt-in install via `scripts/install-local-plugin.sh --with-mcp`. |
 | State writer (developer-only fallback) | `.cursor/state/workflow-state.py` plus repo wrapper `scripts/workflow-state.py` | Library API + thin CLI shim for developer terminals. Calls the same `init_state` / `set_state` / ... library functions as the bridge so concurrent CLI and bridge writes serialise on the same lock. Not invoked from agent prompts or skills. |
@@ -108,6 +108,44 @@ Developer-only equivalents (not for agents/skills):
 - phase advance: `python3 .cursor/state/workflow-state.py set ... --phase verify --status in_progress`
 - acceptance update: `python3 .cursor/state/workflow-state.py ac ... --id AC-001 --status passed --evidence scripts/check-local-plugin-install.sh`
 - failure record: `python3 .cursor/state/workflow-state.py fail ... --type fixable --message "..."`
+
+## Skills Enumeration (14 repo-owned, checked-in-artifact)
+
+| Skill | Governance | Primary MCP Tools | Invoked When | Phase(s) |
+| --- | --- | --- | --- | --- |
+| phase-controller | repo-owned, checked-in-artifact | state_init, state_set_phase, state_read | Session start or task reassignment | any |
+| plan | repo-owned, checked-in-artifact | None | User requests planning or orchestrator routes to plan phase | plan |
+| iterate-loop | repo-owned, checked-in-artifact | state_record_failure, state_update_acceptance_criterion, state_history_append | Execute phase with multiple acceptance criteria | execute |
+| review | repo-owned, checked-in-artifact | None | Orchestrator routes to review phase | review |
+| debug | repo-owned, checked-in-artifact | None | Failure diagnosis requested or orchestrator routes to debugger agent | failed/execute |
+| trace | repo-owned, checked-in-artifact | state_history_append | Causal investigation requested for complex failures | failed |
+| parallel-batch | repo-owned, checked-in-artifact | None | User requests parallelism or `cursor-agent` CLI available | execute |
+| auto-execute | repo-owned, checked-in-artifact | state_set_phase, state_update_acceptance_criterion | User requests "autopilot" or full pipeline execution | intake→execute→verify→review |
+| security-review | repo-owned, checked-in-artifact | None | Security review requested or auth/secrets/shell changes | review |
+| local-plugin-check | repo-owned, checked-in-artifact | None | User verifies local plugin installation | intake |
+| deep-interview | repo-owned, checked-in-artifact | None | Vague request needs scoping or clarification | intake/research |
+| doctor | repo-owned, checked-in-artifact | None | Diagnostic check of Cursor + repo installation | intake |
+| mcp-setup | repo-owned, checked-in-artifact | None | MCP bridge setup or verification requested | intake |
+| verify | repo-owned, checked-in-artifact | state_update_acceptance_criterion, state_read | Acceptance criteria validation requested | verify |
+
+## Hook → Skill Wiring (14 hooks, state-aware invocation)
+
+| Hook | File | Primary Skill/Agent | Condition | Phases |
+| --- | --- | --- | --- | --- |
+| sessionStart | session-bootstrap.py | phase-controller | Initializes workflow-state; calls orchestrator | any |
+| sessionEnd | session-summary.py | orchestrator | Session shutdown; validates final state | done/blocked |
+| beforeSubmitPrompt | prompt-router.py | orchestrator | Routes vague requests to deep-interview | intake |
+| preToolUse | tool-guard.py | orchestrator | Validates tool allowlist per active role | any |
+| postToolUse | state-watcher.py | orchestrator | Tracks phase state after tool execution | any |
+| postToolUseFailure | failure-router.py | debugger or tracer | Routes failures to diagnosis phase | failed |
+| subagentStart | subagent-bootstrap.py | orchestrator | Validates subagent role scope | any |
+| subagentStop | subagent-summary.py | orchestrator | Validates subagent produced expected output | any |
+| beforeShellExecution | shell-guard.py | orchestrator | Validates shell commands for safety | any |
+| afterShellExecution | shell-debrief.py | orchestrator | Captures shell output for workflow-state | any |
+| beforeReadFile | read-advisor.py | orchestrator | Validates file read scope (read-advisor hook) | research/review |
+| afterFileEdit | claim-guard.py | verifier or critic | Validates edited files match acceptance criteria | execute/verify/review |
+| preCompact | compact-reminder.py | orchestrator | Reminds user to verify acceptance criteria before compact | verify/review |
+| stop | stop-gate.py | orchestrator | Final validation: no pending/failed criteria before stop | done |
 
 ## Boundaries
 

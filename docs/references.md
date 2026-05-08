@@ -50,3 +50,39 @@ When capability claims change in `AGENTS.md`, `README.md`, `docs/**`, or
   current repo contract.
 - Any stronger public wording must be backed by the matching proof class:
   `official-doc`, `checked-in-artifact`, or `runtime-smoke`.
+
+## Repo-Owned Agents Governance (Access date: 2026-05-08)
+
+| Agent | Ownership Class | Proof Class | MCP Access | Primary Role |
+| --- | --- | --- | --- | --- |
+| orchestrator | repo-owned | checked-in-artifact | write (all 6 tools) | Entry point: phase routing + state coordination |
+| researcher | repo-owned | checked-in-artifact | read-only (state_read) | Research phase: fact gathering + gap analysis |
+| planner | repo-owned | checked-in-artifact | read-only + init (state_read, state_set_phase) | Plan phase: acceptance criteria + task waves |
+| implementer | repo-owned | checked-in-artifact | write (phase/criteria/history) | Execute phase: code changes + scope gates |
+| verifier | repo-owned | checked-in-artifact | write (criteria results) | Verify phase: acceptance criterion validation |
+| critic | repo-owned | checked-in-artifact | read-only (state_read) | Review phase: assumption challenge |
+| code-reviewer | repo-owned | checked-in-artifact | read-only (state_read) | Review phase: quality + performance review |
+| debugger | repo-owned | checked-in-artifact | write (failure metadata) | Failure phase: diagnosis + root cause |
+| tracer | repo-owned | checked-in-artifact | write (history notes) | Failure phase: causal investigation |
+| security-reviewer | repo-owned | checked-in-artifact | read-only (state_read) | Review phase: security gate |
+| explore | repo-owned | checked-in-artifact | read-only (state_read) | Research phase: fast codebase mapping |
+| test-engineer | repo-owned | checked-in-artifact | write (phase/criteria) | Verify phase: test strategy + coverage |
+
+## MCP Tool Surface — cursor-state-bridge (Access date: 2026-05-08, Verified: repo-owned, checked-in-artifact)
+
+All tools speak JSON-RPC 2.0 over stdio. No network listener. Runs only when explicitly configured.
+
+| Tool | Purpose | Write Scope | Jail Root | Accessible Phases |
+| --- | --- | --- | --- | --- |
+| state_init | Create workflow-state document | `.cursor/state/workflow-state.json` | `docs/plans/<task-id>/` | intake (orchestrator only) |
+| state_set_phase | Advance workflow phase | `phase` field only | `.cursor/state/` | any (research→plan→execute→verify→review→done, +blocked) |
+| state_update_acceptance_criterion | Record criterion result (passed/failed) | `acceptance_criteria[].status + .evidence` | `.cursor/state/` | verify/review phases |
+| state_record_failure | Record failure metadata (hypothesis, timestamp) | `failure` object | `.cursor/state/` | any phase on error |
+| state_history_append | Append run-level notes | `history[]` | `.cursor/state/` | any phase (audit trail) |
+| state_read | Read current workflow-state | read-only | `.cursor/state/` | all phases (all agents) |
+
+**Error Handling**: All tools return JSON-RPC 2.0 errors with semantic codes. File lock serializes concurrent writes; CLI and MCP bridge share the same lock via `.cursor/state/_locking.py` module cache.
+
+**Token-based Auth** (optional): Not implemented in baseline. Future scope: JWTs for remote agent invocation.
+
+**Validator Integration**: `scripts/validate-mcp-server-structure.py` proves package well-formedness. Smoke test: `scripts/smoke-mcp-cursor-state-bridge.sh` (gated by `RUN_MCP_BRIDGE_SMOKE=1`).

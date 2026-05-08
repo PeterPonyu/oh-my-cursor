@@ -5,12 +5,44 @@ description: Bridge-backed verification that reads workflow-state acceptance cri
 
 # Verify
 
-> **Cursor host note.** This is a verification skill for Cursor workspaces
-> that have opted in to the repo-owned `cursor-state-bridge` MCP server. It
-> reads workflow-state through the bridge, checks acceptance criteria against
-> repo artifacts, and records criterion evidence through bridge tools only.
-> It is not a hidden test runner and it does not edit workflow-state files
-> directly.
+> **Cursor host note.** This is a verification skill for Cursor workspaces that have opted in to the repo-owned `cursor-state-bridge` MCP server. It reads workflow-state through the bridge, checks acceptance criteria against repo artifacts, and records criterion evidence through bridge tools only. It is not a hidden test runner and it does not edit workflow-state files directly.
+
+## Governance
+
+### Ownership Class
+- **repo-owned**: YES — Checked in at `skills/verify/SKILL.md` as a bridge-backed verification workflow.
+- **host-product-only**: NO
+- **unsupported-or-out-of-scope**: NO
+
+### Proof Class
+- **official-doc**: NO — Cursor does not document a verification primitive; this is repo-owned.
+- **checked-in-artifact**: YES — Proof: `skills/verify/SKILL.md`, `.cursor/state/workflow-state.schema.json`, `mcp/cursor-state-bridge/`.
+- **runtime-smoke**: YES (optional) — Requires `cursor-state-bridge` MCP server to be installed and available; default install excludes MCP.
+
+### Claim Summary
+This skill provides bridge-backed verification that reads workflow-state acceptance criteria and writes passed/failed evidence via the MCP bridge. It is not a hidden test runner; all verification is explicit and artifact-backed. Requires the optional `cursor-state-bridge` MCP server to be installed.
+
+## MCP Integration Points
+
+| Tool/Resource | MCP Server | Purpose | Required | Status |
+|---|---|---|---|---|
+| `state_read` | cursor-state-bridge | Read workflow-state and acceptance criteria | Yes | optional |
+| `state_update_acceptance_criterion` | cursor-state-bridge | Record criterion pass/fail with evidence | Yes | optional |
+| `state_history_append` | cursor-state-bridge | Append verification run notes | No | optional |
+
+**Note**: MCP bridge is opt-in via `./scripts/install-local-plugin.sh --with-mcp`. This skill requires the bridge to be installed and available.
+
+## Hooks Dependencies
+
+No hooks dependencies. This skill reads artifacts and updates state through MCP bridge only.
+
+## Orchestration Role
+
+- **Lifecycle phase(s)**: verify
+- **Invoked by**: `iterate-loop` (step 7), `auto-execute` (phase 3), user directly
+- **Invokes**: No other skills; reads artifacts and updates state
+- **State contract**: Reads/writes workflow-state through MCP bridge (`state_read`, `state_update_acceptance_criterion`, `state_history_append`)
+- **Failure handling**: Records failed criteria with evidence; does not auto-retry
 
 ## Use when
 
