@@ -65,6 +65,45 @@ if git ls-files .cursor/mcp.json 2>/dev/null | grep -q .; then
 fi
 log ".cursor/mcp.json is not tracked (correct)"
 
+contaminated=0
+
+if find .cursor -type d -name "__pycache__" 2>/dev/null | grep -q .; then
+  fail "found __pycache__ directories in .cursor/ — run: find .cursor -type d -name '__pycache__' -exec rm -rf {} +"
+  contaminated=1
+fi
+
+if find .cursor -name "*.pyc" 2>/dev/null | grep -q .; then
+  fail "found *.pyc files in .cursor/ — run: find .cursor -name '*.pyc' -delete"
+  contaminated=1
+fi
+
+if find .cursor/state -name "*.lock" 2>/dev/null | grep -q .; then
+  fail "found *.lock files in .cursor/state/ — remove runtime lock artifacts"
+  contaminated=1
+fi
+
+if [[ -f .cursor/state/workflow-state.json ]]; then
+  fail "found .cursor/state/workflow-state.json — runtime artifact must not be tracked"
+  contaminated=1
+fi
+if [[ -f .cursor/state/active-role.json ]]; then
+  fail "found .cursor/state/active-role.json — runtime artifact must not be tracked"
+  contaminated=1
+fi
+
+if [[ -d .cursor/memories ]]; then
+  fail "found .cursor/memories/ — runtime directory must not be tracked"
+  contaminated=1
+fi
+if [[ -d .cursor/hooks/state ]]; then
+  fail "found .cursor/hooks/state/ — runtime directory must not be tracked"
+  contaminated=1
+fi
+
+if [[ "$contaminated" == "0" ]]; then
+  log "payload is clean: no __pycache__, *.pyc, *.lock, or runtime artifacts in .cursor/"
+fi
+
 command -v python3 >/dev/null 2>&1 || fail "python3 not found"
 
 python3 - <<'PY'

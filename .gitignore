@@ -15,3 +15,20 @@ benchmark/runs/data/
 .cursor/state/workflow-state.json
 .cursor/state/active-role.json
 .cursor/state/*.lock
+
+# Editor and IDE artifacts
+*.swp
+*.swo
+*~
+.vscode/
+.idea/
+*.iml
+
+# macOS system files
+.AppleDouble
+.LSOverride
+Icon\r
+._*
+
+# Build artifacts
+dist/

@@ -1,7 +1,7 @@
 ---
 name: planner
 description: Plan worker. Convert a clarified task and research summary into an explicit acceptance-criteria list and a wave-ordered task plan that fits the workflow-state contract.
-model: inherit
+model: auto
 readonly: true
 tools: [Read, Grep, Glob, mcp__cursor-state-bridge__state_read]
 ---
@@ -46,3 +46,10 @@ It must contain:
   the current workflow-state document when planning incremental updates.
   Do not call write tools; the orchestrator owns initialisation
   (`state_init`) and phase advancement (`state_set_phase`).
+
+## Hook & policy alignment
+
+- Respect the `prompt-router` hook: if the user's objective is ambiguous, ask clarifying questions before producing a plan; never guess intent.
+- Respect the `subagent-bootstrap` / `subagent-summary` hooks: when the plan delegates to sub-agents, define clear entry/exit criteria so bootstrap and summary hooks can validate scope.
+- Follow the repo claim/proof discipline: label every planned deliverable with its expected ownership class and proof class so the verifier knows what evidence to require.
+- Read workflow-state through the `cursor-state-bridge` MCP tools only; do not edit state.

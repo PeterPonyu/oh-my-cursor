@@ -82,3 +82,13 @@ validator land together.
 - Keep wording Cursor-native and product-specific.
 - If a surface is ambiguous, fall back to plain repository guidance and scoped
   rules rather than speculative automation.
+
+## Agent model policy
+
+- All checked-in agents under `.cursor/agents/` use `model: auto` so the Cursor
+  host selects the best available model for the role rather than hardcoding a
+  specific family.
+- Do not change an agent to a fixed model unless a reproducible benchmark
+  proves that model is required for the role's accuracy.
+- When documenting agent behavior, describe capabilities and boundaries, not
+  model-lineage expectations.

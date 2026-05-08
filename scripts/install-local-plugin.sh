@@ -114,6 +114,17 @@ copy_minimal_payload() {
   rsync -a \
     -m \
     --delete \
+    --exclude='__pycache__/' \
+    --exclude='*.pyc' \
+    --exclude='*.lock' \
+    --exclude='.DS_Store' \
+    --exclude='*.swp' \
+    --exclude='*~' \
+    --exclude='/.cursor/memories/' \
+    --exclude='/.cursor/mcp.json' \
+    --exclude='/.cursor/state/workflow-state.json' \
+    --exclude='/.cursor/state/active-role.json' \
+    --exclude='/.cursor/hooks/state/' \
     --include='/.cursor-plugin/***' \
     --include='/.cursor/hooks.json' \
     --include='/.cursor/hooks/***' \
