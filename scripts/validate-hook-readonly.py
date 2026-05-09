@@ -162,21 +162,23 @@ def run_check_shared_lock() -> int:
     if not lib_path.is_file():
         _fail(f"workflow-state library missing: {lib_path}")
     spec = importlib.util.spec_from_file_location("_omcs_validate_shared_lock", str(lib_path))
-    if spec is None or spec.loader is None:
+    if spec is None:
         _fail(f"could not build module spec for {lib_path}")
-    module = importlib.util.module_from_spec(spec)
+    if spec.loader is None:  # type: ignore[union-attr]
+        _fail(f"module spec for {lib_path} has no loader")
+    module = importlib.util.module_from_spec(spec)  # type: ignore[arg-type]
     sys.modules["_omcs_validate_shared_lock"] = module
-    spec.loader.exec_module(module)
+    spec.loader.exec_module(module)  # type: ignore[union-attr]
 
     # _locking should now be in sys.modules under its import name.
     locking = sys.modules.get("_locking")
     if locking is None or not hasattr(locking, "file_lock"):
         _fail("workflow-state library did not import a `_locking` module with `file_lock`")
-    if locking.__file__ is None:
+    if locking.__file__ is None:  # type: ignore[union-attr]
         _fail("loaded `_locking` module has no __file__ attribute")
 
     expected_locking = (STATE_DIR / "_locking.py").resolve()
-    actual_locking = Path(locking.__file__).resolve()
+    actual_locking = Path(locking.__file__).resolve()  # type: ignore[union-attr,arg-type]
     if actual_locking != expected_locking:
         _fail(
             f"`_locking` loaded from {actual_locking} but expected {expected_locking}; "

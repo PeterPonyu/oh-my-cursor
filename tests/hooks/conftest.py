@@ -13,8 +13,8 @@ def repo_root() -> Path:
 
 @pytest.fixture(scope="session")
 def hooks_dir(repo_root: Path) -> Path:
-    """Return the .cursor/hooks/ directory path."""
-    path = repo_root / ".cursor" / "hooks"
+    """Return the hooks/ directory path."""
+    path = repo_root / "hooks"
     if not path.is_dir():
         pytest.fail(f"hooks directory missing: {path}")
     return path
@@ -22,7 +22,7 @@ def hooks_dir(repo_root: Path) -> Path:
 
 @pytest.fixture(scope="session")
 def hook_scripts(hooks_dir: Path) -> list[Path]:
-    """Return all .py files in .cursor/hooks/, sorted by name."""
+    """Return all .py files in hooks/, sorted by name."""
     scripts = sorted(hooks_dir.glob("*.py"))
     if not scripts:
         pytest.fail(f"no .py files found in {hooks_dir}")

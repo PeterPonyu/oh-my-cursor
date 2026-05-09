@@ -39,7 +39,7 @@ def _normalize(line: str) -> str:
     import re as _re
     return _re.sub(r'^([^:]+):\d+:', r'\1::', line, count=1)
 
-fixture_lines = sorted(_normalize(l) for l in FIXTURE.read_text(encoding="utf-8").splitlines(keepends=True))
+fixture_lines = sorted(_normalize(line) for line in FIXTURE.read_text(encoding="utf-8").splitlines(keepends=True))
 
 try:
     result = subprocess.check_output(
@@ -71,7 +71,7 @@ except subprocess.CalledProcessError as exc:
     else:
         fail(f"grep failed with exit code {exc.returncode}")
 
-actual_lines = sorted(_normalize(l) for l in grep_text.splitlines(keepends=True))
+actual_lines = sorted(_normalize(line) for line in grep_text.splitlines(keepends=True))
 
 if actual_lines == fixture_lines:
     print("RENAME_REFERENCES_OK")

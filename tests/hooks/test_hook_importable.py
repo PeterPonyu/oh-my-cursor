@@ -9,11 +9,10 @@ import ast
 import py_compile
 import sys
 from pathlib import Path
-from collections.abc import Iterator
 
 
 class TestHookCompile:
-    """Ensure every .cursor/hooks/*.py file is valid Python."""
+    """Ensure every hooks/*.py file is valid Python."""
 
     def test_all_hook_scripts_parse(self, hook_scripts: list[Path]):
         failures = []
@@ -76,7 +75,6 @@ class TestHookImportAttempt:
     def test_hook_scripts_can_be_imported(self, hook_scripts, hooks_dir):
         succeeded = 0
         skipped = 0
-        failures = []
 
         for hook_path in hook_scripts:
             name, ok, reason = self._safe_import_hook(hook_path, hooks_dir)

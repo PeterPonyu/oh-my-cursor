@@ -5,7 +5,6 @@ import json
 import py_compile
 import re
 import shlex
-import sys
 from pathlib import Path
 
 
@@ -89,6 +88,7 @@ def validate_hooks() -> None:
             path = command_path(command)
             if path is None:
                 fail(f"could not identify script path in hook command: {command}")
+            assert path is not None  # type narrow after fail exit
             if not path.is_file():
                 fail(f"hook command path does not exist: {path.relative_to(ROOT)}")
             py_compile.compile(str(path), doraise=True)

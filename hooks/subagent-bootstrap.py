@@ -102,7 +102,7 @@ def main() -> int:
         "permission": "allow",
         "user_message": user_message,
         "subagent_type": subagent_type,
-        "role_prompt": role_prompt_path.relative_to(ROOT).as_posix() if role_prompt_exists else None,
+        "role_prompt": role_prompt_path.relative_to(ROOT).as_posix() if role_prompt_path else None,  # type: ignore[union-attr]
     }
     _trace({
         "hook": "subagent-bootstrap",
