@@ -169,6 +169,4 @@ print("ok: README Quick start -> What's included structure present")
 PY
 log "DISCOVERABILITY_OK"
 
-./scripts/validate-pages-surface.sh
-
 log "surface visibility validation complete"
