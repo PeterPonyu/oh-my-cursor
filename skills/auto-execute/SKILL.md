@@ -84,12 +84,12 @@ Each phase must complete before the next begins.
    lint, typecheck, tests). If anything fails, fix and re-run. Cap at
    five QA cycles; if the same error recurs three times, stop and surface
    it.
-5. **Phase 4 - Review.** Invoke `review`. If the change touches auth, input
+5. **Phase 4 - Review.** Invoke `review` skill, `critic` agent, and `code-reviewer` agent. If the change touches auth, input
    handling, secrets, or external requests, also invoke `security-review`.
    Map each reviewer's raw verdict to the shared loop gate (see
-   `skills/iterate-loop/SKILL.md` step 7): `APPROVE` / `SAFE TO MERGE` =>
-   `pass`, `COMMENT` / `FIX HIGH+ FIRST` => `comment`, `REQUEST CHANGES` /
-   `DO NOT DEPLOY` => `block`. Any `block` is a regression: fix, re-QA,
+   `skills/iterate-loop/SKILL.md` step 7): `APPROVE` / `passed` =>
+   `pass`, `COMMENT` / `comment` => `comment`, `REQUEST CHANGES` /
+   `needs_changes` / `blocking` => `block`. Any `block` is a regression: fix, re-QA,
    re-review. Cap at three review rounds.
 6. **Stop.** Report:
    - the spec, plan, and PRD paths,

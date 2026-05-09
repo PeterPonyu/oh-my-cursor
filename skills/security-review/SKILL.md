@@ -117,7 +117,7 @@ OVERALL ASSESSMENT
 ------------------
 Posture: GOOD | ACCEPTABLE | POOR
 Immediate actions: <list>
-Recommendation: SAFE TO MERGE | FIX HIGH+ FIRST | DO NOT DEPLOY
+Recommendation: APPROVE | COMMENT | REQUEST CHANGES
 ```
 
 ## Remediation priority

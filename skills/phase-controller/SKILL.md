@@ -1,85 +1,15 @@
 ---
 name: phase-controller
-description: Orchestration-first entry point. Detect the current workflow phase from a checked-in state file, route the next step to the right role and skill, and keep acceptance criteria, evidence, and failure handling aligned with the workflow-state contract.
+description: Orchestration-first entry point for oh-my-cursor workflows. Invoke with @phase-controller in the Cursor composer to start or resume a workflow. Detects the current phase from the checked-in workflow-state file, routes the next step to the right role and skill, and keeps acceptance criteria aligned with the repo contract.
 ---
 
 # Phase controller
 
-> **Cursor host note.** This is the orchestration-first skill for `oh-my-cursor`. It treats the workflow as an explicit state machine that is **file-backed**, **human-visible**, and **bounded**. There is no background daemon, hidden queue, or automatic retry; each phase advance is an explicit action on a checked-in JSON document.
-
-## Governance
-
-### Ownership Class
-- **repo-owned**: YES — This skill is checked in at `skills/phase-controller/SKILL.md` and is the orchestration entry point for the repo's workflow-state contract.
-- **host-product-only**: NO
-- **unsupported-or-out-of-scope**: NO
-
-### Proof Class
-- **official-doc**: NO — Cursor does not document a workflow-state primitive; this is repo-owned.
-- **checked-in-artifact**: YES — Proof: `.cursor/state/workflow-state.schema.json`, `.cursor/agents/orchestrator.md`, `.cursor/hooks.json` (state-watcher, stop-gate hooks), `scripts/validate-workflow-state.py`.
-- **runtime-smoke**: YES (optional) — When `cursor-state-bridge` MCP is installed, bridge tools (`state_init`, `state_set_phase`, etc.) provide runtime proof; default install excludes MCP.
-
-### Claim Summary
-This skill provides the orchestration entry point for `oh-my-cursor` workflows. It reads the checked-in workflow-state document (`.cursor/state/workflow-state.json`), detects the current phase, and routes to the appropriate agent or skill. The state contract is repo-owned and file-backed; writes go through the optional `cursor-state-bridge` MCP server when available, or through direct file updates otherwise. All phases, statuses, and role mappings are defined in the checked-in schema and agent prompts.
-
-## MCP Integration Points
-
-| Tool/Resource | MCP Server | Purpose | Required | Status |
-|---|---|---|---|---|
-| `state_init` | cursor-state-bridge | Initialize workflow-state document | No | optional |
-| `state_set_phase` | cursor-state-bridge | Advance to next phase | No | optional |
-| `state_update_acceptance_criterion` | cursor-state-bridge | Record criterion pass/fail | No | optional |
-| `state_record_failure` | cursor-state-bridge | Log phase failure | No | optional |
-| `state_history_append` | cursor-state-bridge | Append run notes | No | optional |
-| `state_read` | cursor-state-bridge | Read current state | No | optional |
-
-**Note**: MCP bridge is opt-in via `./scripts/install-local-plugin.sh --with-mcp`. Default install uses direct file I/O with `.cursor/state/workflow-state.json`.
-
-## Hooks Dependencies
-
-| Hook Event | Script | Purpose | Dependency |
-|---|---|---|---|
-| `postToolUse` | `state-watcher.py` | Observes tool execution and may trigger state updates | optional |
-| `stop` | `stop-gate.py` | Reads current phase before session stop | optional |
-| `preCompact` | `compact-reminder.py` | Reminds user of current phase before compacting | optional |
-
-**Note**: Hooks are read-only observers; they do not write workflow-state directly. Writes go through MCP bridge or direct file updates.
-
-## Orchestration Role
-
-- **Lifecycle phase(s)**: All phases (intake → research → plan → execute → verify → review → done)
-- **Invoked by**: User at session start, or by `auto-execute`, `iterate-loop` when resuming
-- **Invokes**: Routes to agents (`orchestrator`, `researcher`, `planner`, `implementer`, `verifier`, `critic`, `debugger`, `tracer`) and skills (`plan`, `iterate-loop`, `review`, `debug`, `trace`, etc.)
-- **State contract**: Reads/writes `.cursor/state/workflow-state.json` (or per-task archive at `docs/plans/<task-id>/workflow-state.json`)
-- **Failure handling**: Records failures via `state_record_failure` MCP tool or direct JSON update; routes to `debugger` or `tracer` agents
-
-## State contract
-
-The state document follows
-[`.cursor/state/workflow-state.schema.json`](../../.cursor/state/workflow-state.schema.json).
-
-Phases:
-
-```
-intake → research → plan → execute → verify → review → done
-                                              ↘ blocked
-```
-
-Statuses per phase: `pending | in_progress | passed | failed | blocked`.
-
-The entry-point role is `.cursor/agents/orchestrator.md`. Roles routed by this
-controller map to checked-in agents under
-`.cursor/agents/`:
-
-| Phase | Recommended role | Agent prompt |
-| --- | --- | --- |
-| any | orchestrator | `.cursor/agents/orchestrator.md` |
-| research | researcher, explore | `.cursor/agents/researcher.md`, `.cursor/agents/explore.md` |
-| plan | planner | `.cursor/agents/planner.md` |
-| execute | implementer (or skill) | `.cursor/agents/implementer.md` |
-| verify | verifier, test-engineer | `.cursor/agents/verifier.md`, `.cursor/agents/test-engineer.md` |
-| review | critic, security-reviewer, code-reviewer | `.cursor/agents/critic.md`, `.cursor/agents/security-reviewer.md`, `.cursor/agents/code-reviewer.md` |
-| any failure | debugger, tracer | `.cursor/agents/debugger.md`, `.cursor/agents/tracer.md` |
+This is the orchestration-first skill for `oh-my-cursor`. It treats the
+workflow as an explicit state machine that is **file-backed**,
+**human-visible**, and **bounded**. There is no background daemon, hidden
+queue, or automatic retry; each phase advance is an explicit action on a
+checked-in JSON document.
 
 ## When to use
 
@@ -119,67 +49,107 @@ diagnosis-first lane; `trace` is its causal-investigation peer for harder
      evidence is captured.
    - `verify` → invoke the `verifier` agent. It must check evidence, not run
      code itself.
-   - `review` → invoke `critic` **always**; additionally invoke
-     `security-reviewer` when the change touches secrets, auth, supply chain,
-     or external surfaces. Both reviewers' verdicts feed the shared loop gate
-     defined in `skills/iterate-loop/SKILL.md` step 7: `APPROVE` /
-     `SAFE TO MERGE` => `pass`, `COMMENT` / `FIX HIGH+ FIRST` => `comment`,
-     `REQUEST CHANGES` / `DO NOT DEPLOY` => `block`. Advance to `done` only
-     when every reviewer that ran maps to `pass` or `comment`.
+   - `review` → invoke `critic` and `code-reviewer` **always**; additionally
+     invoke `security-reviewer` when the change touches secrets, auth, supply
+     chain, or external surfaces. All reviewers' verdicts feed the shared loop
+     gate defined in `skills/iterate-loop/SKILL.md`: `APPROVE`/`passed` → `pass`,
+     `COMMENT`/`comment` → `comment`, `REQUEST CHANGES`/`needs_changes`/`blocking`
+     → `block`. Advance to `done` only when every reviewer that ran maps to
+     `pass` or `comment`.
    - `done` → set `status=passed` and stop. The `stop-gate.py` hook will use
      this state to confirm closure.
-   - `blocked` → record the blocker, set `failure.type` to one of
-     `transient | fixable | needs_replan | escalate | flaky | regression`, and
-     surface to the user.
-4. **Handle failures explicitly.** When `status=failed`, route to the
-   `debugger` agent first. Record the diagnosis under the failing acceptance
-   criterion before retrying. Cap retries at three (matches the schema bound).
-5. **Update history.** Append a `history` entry on every phase transition with
-   `phase`, `status`, a short `note`, and `at` (ISO date is enough; the schema
-   only requires the field to be a string).
-6. **Keep claims bounded.** Treat each acceptance criterion as a `repo-owned`
-   `checked-in-artifact` claim only when its `evidence` field points to a
-   checked-in file or a reproducible script invocation.
+   - `blocked` → surface the blocking criteria, invoke `debugger` or `tracer`.
+4. **Tighten the acceptance criteria during intake.** Every criterion must name
+   a specific file, test, or observable artifact. Never accept
+   "the code works" as a criterion.
+5. **Keep the state document small.** No inline embeddings of full files or
+   full agent transcripts. Store paths, hashes, and short summaries.
+6. **Before session stop**, check that every acceptance criterion is `passed`
+   or that the phase is `blocked` with an explicit reason. The `stop-gate.py`
+   hook will remind the user.
 
-## Output contract
+## State contract
 
-Each invocation should produce a single JSON object the user can copy into the
-state file:
+The state document follows
+[`.cursor/state/workflow-state.schema.json`](../../.cursor/state/workflow-state.schema.json).
 
-```json
-{
-  "phase": "verify",
-  "status": "in_progress",
-  "current_role": "verifier",
-  "next_action": "run scripts/check-local-plugin-install.sh and mark AC-002",
-  "acceptance_criteria": [
-    {
-      "id": "AC-001",
-      "criterion": "...",
-      "status": "passed",
-      "evidence": "scripts/check-local-plugin-install.sh"
-    }
-  ]
-}
+Phases:
+
+```
+intake → research → plan → execute → verify → review → done
+                                              ↘ blocked
 ```
 
-## Boundaries
+Statuses per phase: `pending | in_progress | passed | failed | blocked`.
 
-- Do not invent agents, phases, or statuses outside the schema.
-- Do not modify state on behalf of the user without showing the proposed
-  document first.
-- Do not claim background execution. The `stop-gate.py` hook only **reads**
-  the state; it never writes it.
-- This skill is the orchestration layer; the actual code edits, builds, and
-  tests still happen in the appropriate worker skill or through the user.
+## Orchestration role
 
-## Local validation
+- **Lifecycle phase(s)**: All phases
+- **Invoked by**: User at session start, or by `auto-execute`, `iterate-loop` when resuming
+- **Invokes**: Routes to agents (orchestrator, researcher, planner, implementer, verifier, critic, debugger, tracer) and skills (plan, iterate-loop, review, debug, trace, etc.)
+- **State contract**: Reads/writes `.cursor/state/workflow-state.json` (or per-task archive at `docs/plans/<task-id>/workflow-state.json`)
+- **Failure handling**: Records failures via `state_record_failure` MCP tool or direct JSON update; routes to debugger or tracer agents
 
-Run from the repo root after editing a state file:
+| Phase | Recommended role | Agent prompt |
+| --- | --- | --- |
+| any | orchestrator | `agents/orchestrator.md` |
+| research | researcher, explore | `agents/researcher.md`, `agents/explore.md` |
+| plan | planner | `agents/planner.md` |
+| execute | implementer (or skill) | `agents/implementer.md` |
+| verify | verifier, test-engineer | `agents/verifier.md`, `agents/test-engineer.md` |
+| review | critic, security-reviewer, code-reviewer | `agents/critic.md`, `agents/security-reviewer.md`, `agents/code-reviewer.md` |
+| any failure | debugger, tracer | `agents/debugger.md`, `agents/tracer.md` |
 
-```bash
-python3 scripts/validate-workflow-state.py path/to/workflow-state.json
-```
+### Team & Sub-agents
 
-The validator confirms the document conforms to the schema, that statuses are
-allowed values, and that `failure.retry_count` stays within the bound.
+The phase controller dispatches work to checked-in agents as **Cursor sub-agents**.
+There is no external team server or background daemon — every agent runs within the
+same Cursor workspace. Each agent has a defined role, tool allowlist, and is
+bootstrapped via the `subagentStart` / `subagentStop` hooks in `hooks/hooks.json`.
+
+- **Bootstrap**: `subagentStart` fires when a sub-agent session opens, injecting
+  the matching `agents/<role>.md` prompt.
+- **Teardown**: `subagentStop` fires at session end with an observational summary;
+  it never consumes the auto-follow-up loop budget.
+- **Platform**: Works on macOS, Linux, and Windows. All agents are invoked as
+  sub-agents within a single Cursor workspace — no multi-window dependency.
+
+Full details in [`docs/team-mode.md`](../../docs/team-mode.md).
+
+## Governance
+
+### Ownership Class
+- **repo-owned**: This skill is checked in at `skills/phase-controller/SKILL.md` and is the orchestration entry point for the repo's workflow-state contract.
+- **host-product-only**: NO
+- **unsupported-or-out-of-scope**: NO
+
+### Proof Class
+- **official-doc**: Cursor does not document a workflow-state primitive; this is repo-owned.
+- **checked-in-artifact**: Proof: `.cursor/state/workflow-state.schema.json`, `agents/orchestrator.md`, `hooks/hooks.json` (state-watcher, stop-gate hooks), `scripts/validate-workflow-state.py`.
+- **runtime-smoke** (optional): When `cursor-state-bridge` MCP is installed, bridge tools provide runtime proof; default install excludes MCP.
+
+### Claim Summary
+This skill provides the orchestration entry point for `oh-my-cursor` workflows. It reads the checked-in workflow-state document, detects the current phase, and routes to the appropriate agent or skill. The state contract is repo-owned and file-backed; writes go through the optional `cursor-state-bridge` MCP server when available, or through the developer-only CLI shim in the scripts directory as a fallback (direct file edits are not recommended after phase controller bootstraps state).
+
+## MCP integration points
+
+| Tool/Resource | MCP Server | Purpose | Required |
+|---|---|---|---|
+| `state_init` | cursor-state-bridge | Initialize workflow-state document | No |
+| `state_set_phase` | cursor-state-bridge | Advance to next phase | No |
+| `state_update_acceptance_criterion` | cursor-state-bridge | Record criterion pass/fail | No |
+| `state_record_failure` | cursor-state-bridge | Log phase failure | No |
+| `state_history_append` | cursor-state-bridge | Append run notes | No |
+| `state_read` | cursor-state-bridge | Read current state | No |
+
+MCP bridge is opt-in via `./scripts/install-local-plugin.sh --with-mcp`. Default install uses direct file I/O with `.cursor/state/workflow-state.json`.
+
+## Hook dependencies
+
+| Hook Event | Script | Purpose |
+|---|---|---|
+| `postToolUse` | `state-watcher.py` | Observes tool execution, validates schema (read-only) |
+| `stop` | `stop-gate.py` | Reads current phase before session stop |
+| `preCompact` | `compact-reminder.py` | Reminds user of current phase before compacting |
+
+Hooks are read-only observers; they do not write workflow-state directly.

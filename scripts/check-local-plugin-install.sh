@@ -88,7 +88,7 @@ if [[ "$WITH_MCP" == "1" ]]; then
   _with_mcp_flag=(--with-mcp)
 fi
 
-"$ROOT/scripts/install-local-plugin.sh" --target-root "$COPY_TARGET" --name "$PLUGIN_NAME" --copy --force "${_with_mcp_flag[@]}" >/dev/null
+"$ROOT/scripts/install-local-plugin.sh" --target-root "$COPY_TARGET" --name "$PLUGIN_NAME" --copy --force "${_with_mcp_flag[@]+"${_with_mcp_flag[@]}"}" >/dev/null
 plugin_path="${COPY_TARGET}/${PLUGIN_NAME}"
 [[ ! -e "$COPY_TARGET/oh-my-copilot-workspace" ]] || fail "copy mode did not remove legacy oh-my-copilot-workspace alias"
 [[ ! -L "$plugin_path" ]] || fail "copy mode unexpectedly created a symlink at $plugin_path"
@@ -117,9 +117,18 @@ plugin_path="${COPY_TARGET}/${PLUGIN_NAME}"
 [[ -f "$plugin_path/.cursor/hooks/compact-reminder.py" ]] || fail "copy mode plugin missing compact-reminder hook"
 [[ -f "$plugin_path/.cursor/hooks/_trace.py" ]] || fail "copy mode plugin missing _trace helper"
 [[ -d "$plugin_path/.cursor/agents" ]] || fail "copy mode plugin missing agents directory"
+[[ -f "$plugin_path/.cursor/agents/code-reviewer.md" ]] || fail "copy mode plugin missing code-reviewer agent"
+[[ -f "$plugin_path/.cursor/agents/critic.md" ]] || fail "copy mode plugin missing critic agent"
+[[ -f "$plugin_path/.cursor/agents/debugger.md" ]] || fail "copy mode plugin missing debugger agent"
+[[ -f "$plugin_path/.cursor/agents/explore.md" ]] || fail "copy mode plugin missing explore agent"
+[[ -f "$plugin_path/.cursor/agents/implementer.md" ]] || fail "copy mode plugin missing implementer agent"
 [[ -f "$plugin_path/.cursor/agents/orchestrator.md" ]] || fail "copy mode plugin missing orchestrator agent"
 [[ -f "$plugin_path/.cursor/agents/planner.md" ]] || fail "copy mode plugin missing planner agent"
 [[ -f "$plugin_path/.cursor/agents/researcher.md" ]] || fail "copy mode plugin missing researcher agent"
+[[ -f "$plugin_path/.cursor/agents/security-reviewer.md" ]] || fail "copy mode plugin missing security-reviewer agent"
+[[ -f "$plugin_path/.cursor/agents/test-engineer.md" ]] || fail "copy mode plugin missing test-engineer agent"
+[[ -f "$plugin_path/.cursor/agents/tracer.md" ]] || fail "copy mode plugin missing tracer agent"
+[[ -f "$plugin_path/.cursor/agents/verifier.md" ]] || fail "copy mode plugin missing verifier agent"
 [[ -d "$plugin_path/.cursor/state" ]] || fail "copy mode plugin missing workflow-state directory"
 [[ -f "$plugin_path/.cursor/state/workflow-state.schema.json" ]] || fail "copy mode plugin missing workflow-state schema"
 [[ -f "$plugin_path/.cursor/state/workflow-state.py" ]] || fail "copy mode plugin missing workflow-state writer"
@@ -129,6 +138,7 @@ plugin_path="${COPY_TARGET}/${PLUGIN_NAME}"
 [[ ! -d "$plugin_path/scripts" ]] || fail "copy mode should not include scripts assets"
 [[ -f "$plugin_path/assets/oh-my-cursor-character.jpg" ]] || fail "copy mode plugin missing character asset"
 [[ -f "$plugin_path/assets/oh-my-cursor-social-preview.jpg" ]] || fail "copy mode plugin missing social preview asset"
+[[ -f "$plugin_path/.cursor/mcp.example.json" ]] || fail "copy mode plugin missing mcp.example.json"
 
 if [[ "$WITH_MCP" != "1" ]]; then
   [[ ! -d "$plugin_path/mcp" ]] || fail "default install must not include mcp/"

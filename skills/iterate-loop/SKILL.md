@@ -96,7 +96,7 @@ with criteria that name a file, a command, or an observable behavior.
 5. **Mark the story `passes: true`** only when every criterion is verified.
    Update `prd.json` on disk.
 6. **Loop back to step 2** until every story is `passes: true`.
-7. **Reviewer pass.** Run the `review` skill (and `security-review` if the
+7. **Reviewer pass.** Run the `review` skill, `critic` agent, `code-reviewer` agent (and `security-review` if the
    change touches auth, input handling, or secrets). Map each reviewer's raw
    verdict to the shared loop gate before deciding to stop:
 
@@ -105,9 +105,13 @@ with criteria that name a file, a command, or an observable behavior.
    | `review` | `APPROVE` | `pass` |
    | `review` | `COMMENT` | `comment` |
    | `review` | `REQUEST CHANGES` | `block` |
-   | `security-review` | `SAFE TO MERGE` | `pass` |
-   | `security-review` | `FIX HIGH+ FIRST` | `comment` |
-   | `security-review` | `DO NOT DEPLOY` | `block` |
+   | `code-reviewer` | `changes_requested: false` (or `verdict: "passed"`) | `pass` |
+   | `code-reviewer` | `severity: "comment"` | `comment` |
+   | `code-reviewer` | `severity: "blocking"` / `verdict: "changes_requested"` | `block` |
+   | `critic` | `severity: "blocking"` | `block` |
+   | `security-review` | `APPROVE` | `pass` |
+   | `security-review` | `COMMENT` | `comment` |
+   | `security-review` | `REQUEST CHANGES` | `block` |
 
    Any `block` is a regression: fix and re-verify, do not override. A `comment`
    is recorded but does not block progression. Stop when **every reviewer that

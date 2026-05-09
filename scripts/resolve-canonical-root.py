@@ -14,10 +14,10 @@ def looks_like_repo_root(path: Path) -> bool:
     )
 
 
-def collapse_omx_team_worktree(path: Path) -> Path | None:
+def collapse_cursor_team_worktree(path: Path) -> Path | None:
     parts = path.resolve().parts
     for idx, part in enumerate(parts):
-        if part != '.omx':
+        if part != '.cursor-worktree':
             continue
         if idx + 3 >= len(parts):
             continue
@@ -48,7 +48,7 @@ def git_toplevel(path: Path) -> Path | None:
 
 def resolve_canonical_root(raw: str) -> Path:
     start = Path(raw).expanduser().resolve()
-    collapsed = collapse_omx_team_worktree(start)
+    collapsed = collapse_cursor_team_worktree(start)
     if collapsed is not None:
         return collapsed
 

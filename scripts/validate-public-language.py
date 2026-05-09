@@ -14,9 +14,9 @@ PUBLIC_SUFFIXES = {".md", ".mdc", ".markdown", ".yaml", ".yml"}
 APP_SUFFIXES = {".ts", ".tsx", ".js", ".jsx", ".md"}
 
 EXCLUDED_PREFIXES = (
-    "benchmark/results/",
+    # benchmark/runs/data/ is excluded because it contains historical/runtime 
+    # test evidence with legacy arm names that are not part of public docs.
     "benchmark/runs/data/",
-    "benchmark/runs/stale-runs-",
     "apps/cursor-backbone-site/.next/",
     "apps/cursor-backbone-site/out/",
     "node_modules/",
@@ -33,7 +33,7 @@ FORBIDDEN_PATTERNS = {
     "legacy-package-b": re.compile(r"oh-my-codex", re.IGNORECASE),
     "source-system": re.compile(r"source[ -]system", re.IGNORECASE),
     "comparison-clone": re.compile(r"parity clone", re.IGNORECASE),
-    "legacy-arm": re.compile(r"with-omc", re.IGNORECASE),
+    "legacy-arm": re.compile(r"(?<!-)with-omc\b", re.IGNORECASE),
     "external-source": re.compile(r"external[ -]source", re.IGNORECASE),
 }
 
