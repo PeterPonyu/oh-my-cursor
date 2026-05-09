@@ -39,7 +39,7 @@ from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[1]
-HOOKS_DIR = ROOT / ".cursor" / "hooks"
+HOOKS_DIR = ROOT / "hooks"
 STATE_DIR = ROOT / ".cursor" / "state"
 BRIDGE_DIR = ROOT / "mcp" / "cursor-state-bridge"
 
