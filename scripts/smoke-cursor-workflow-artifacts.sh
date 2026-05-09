@@ -19,20 +19,20 @@ after_payload='{"event":"afterFileEdit","edited_files":["README.md"]}'
 compact_payload='{"event":"preCompact","trigger":"auto","context_usage_percent":85}'
 stop_payload='{"event":"stop","status":"ok","loop_count":0}'
 
-printf '%s\n' "$session_start_payload"      | python3 .cursor/hooks/session-bootstrap.py    | python3 -m json.tool >/dev/null
-printf '%s\n' "$session_end_payload"        | python3 .cursor/hooks/session-summary.py      | python3 -m json.tool >/dev/null
-printf '%s\n' "$prompt_payload"             | python3 .cursor/hooks/prompt-router.py        | python3 -m json.tool >/dev/null
-printf '%s\n' "$pre_tool_payload"           | python3 .cursor/hooks/tool-guard.py           | python3 -m json.tool >/dev/null
-printf '%s\n' "$post_tool_payload"          | python3 .cursor/hooks/state-watcher.py        | python3 -m json.tool >/dev/null
-printf '%s\n' "$post_tool_failure_payload"  | python3 .cursor/hooks/failure-router.py       | python3 -m json.tool >/dev/null
-printf '%s\n' "$subagent_start_payload"     | python3 .cursor/hooks/subagent-bootstrap.py   | python3 -m json.tool >/dev/null
-printf '%s\n' "$subagent_stop_payload"      | python3 .cursor/hooks/subagent-summary.py     | python3 -m json.tool >/dev/null
-printf '%s\n' "$shell_payload"              | python3 .cursor/hooks/shell-guard.py          | python3 -m json.tool >/dev/null
-printf '%s\n' "$shell_debrief_payload"      | python3 .cursor/hooks/shell-debrief.py        | python3 -m json.tool >/dev/null
-printf '%s\n' "$read_payload"               | python3 .cursor/hooks/read-advisor.py         | python3 -m json.tool >/dev/null
-printf '%s\n' "$after_payload"              | python3 .cursor/hooks/claim-guard.py          | python3 -m json.tool >/dev/null
-printf '%s\n' "$compact_payload"            | python3 .cursor/hooks/compact-reminder.py     | python3 -m json.tool >/dev/null
-printf '%s\n' "$stop_payload"               | python3 .cursor/hooks/stop-gate.py            | python3 -m json.tool >/dev/null
+printf '%s\n' "$session_start_payload"      | python3 hooks/session-bootstrap.py    | python3 -m json.tool >/dev/null
+printf '%s\n' "$session_end_payload"        | python3 hooks/session-summary.py      | python3 -m json.tool >/dev/null
+printf '%s\n' "$prompt_payload"             | python3 hooks/prompt-router.py        | python3 -m json.tool >/dev/null
+printf '%s\n' "$pre_tool_payload"           | python3 hooks/tool-guard.py           | python3 -m json.tool >/dev/null
+printf '%s\n' "$post_tool_payload"          | python3 hooks/state-watcher.py        | python3 -m json.tool >/dev/null
+printf '%s\n' "$post_tool_failure_payload"  | python3 hooks/failure-router.py       | python3 -m json.tool >/dev/null
+printf '%s\n' "$subagent_start_payload"     | python3 hooks/subagent-bootstrap.py   | python3 -m json.tool >/dev/null
+printf '%s\n' "$subagent_stop_payload"      | python3 hooks/subagent-summary.py     | python3 -m json.tool >/dev/null
+printf '%s\n' "$shell_payload"              | python3 hooks/shell-guard.py          | python3 -m json.tool >/dev/null
+printf '%s\n' "$shell_debrief_payload"      | python3 hooks/shell-debrief.py        | python3 -m json.tool >/dev/null
+printf '%s\n' "$read_payload"               | python3 hooks/read-advisor.py         | python3 -m json.tool >/dev/null
+printf '%s\n' "$after_payload"              | python3 hooks/claim-guard.py          | python3 -m json.tool >/dev/null
+printf '%s\n' "$compact_payload"            | python3 hooks/compact-reminder.py     | python3 -m json.tool >/dev/null
+printf '%s\n' "$stop_payload"               | python3 hooks/stop-gate.py            | python3 -m json.tool >/dev/null
 
 python3 scripts/validate-cursor-workflow-artifacts.py
 python3 scripts/validate-workflow-state.py >/dev/null
