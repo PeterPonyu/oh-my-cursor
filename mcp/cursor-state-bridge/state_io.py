@@ -32,7 +32,7 @@ _LOCKING_MODULE_KEY = "_omcs_locking"
 
 
 def _load_workflow_state(_workspace: Path):
-    """Load the vendored workflow-state library from the bridge package.
+    """Load the workflow-state library from .cursor/state/.
 
     Returns the cached module on subsequent calls so the import graph
     stays single-rooted (one ``file_lock`` callable identity).
@@ -40,14 +40,14 @@ def _load_workflow_state(_workspace: Path):
     if _WORKFLOW_STATE_MODULE_KEY in sys.modules:
         return sys.modules[_WORKFLOW_STATE_MODULE_KEY]
 
-    bridge_dir = Path(__file__).resolve().parent
-    state_path = bridge_dir / "_workflow_state.py"
+    state_dir = _workspace / ".cursor" / "state"
+    state_path = state_dir / "workflow-state.py"
     if not state_path.is_file():
         raise RuntimeError(f"workflow-state library not found at {state_path}")
 
-    # Make ``_locking`` importable from the loaded module before we run it.
-    if str(bridge_dir) not in sys.path:
-        sys.path.insert(0, str(bridge_dir))
+    # Make ``_locking`` importable from .cursor/state/ before we exec the module.
+    if str(state_dir) not in sys.path:
+        sys.path.insert(0, str(state_dir))
 
     spec = importlib.util.spec_from_file_location(
         _WORKFLOW_STATE_MODULE_KEY, str(state_path)
