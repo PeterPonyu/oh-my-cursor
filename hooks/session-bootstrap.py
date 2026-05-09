@@ -112,9 +112,9 @@ def main() -> int:
             + "."
         )
         if state_summary.get("failed_criteria"):
-            parts.append("Failed acceptance criteria: " + ", ".join(state_summary["failed_criteria"]) + ".")
+            parts.append("Failed acceptance criteria: " + ", ".join(state_summary["failed_criteria"]) + ".")  # type: ignore[arg-type]
         if state_summary.get("pending_criteria"):
-            parts.append("Pending acceptance criteria: " + ", ".join(state_summary["pending_criteria"]) + ".")
+            parts.append("Pending acceptance criteria: " + ", ".join(state_summary["pending_criteria"]) + ".")  # type: ignore[arg-type]
         if state_summary.get("next_action"):
             parts.append("Recorded next action: " + str(state_summary["next_action"]) + ".")
     else:

@@ -129,8 +129,8 @@ def main() -> int:
         "final_status": final_status,
         "duration_ms": duration_ms,
         "state_loaded": state_summary.get("loaded", False),
-        "pending_criteria": state_summary.get("pending_criteria", [])[:5],
-        "failed_criteria": state_summary.get("failed_criteria", [])[:5],
+        "pending_criteria": state_summary.get("pending_criteria", [])[:5],  # type: ignore[index]
+        "failed_criteria": state_summary.get("failed_criteria", [])[:5],  # type: ignore[index]
     })
     print(json.dumps(output, ensure_ascii=False))
     return 0

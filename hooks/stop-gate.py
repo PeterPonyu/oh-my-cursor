@@ -154,13 +154,13 @@ def main() -> int:
         if state_summary.get("failed_criteria"):
             parts.append(
                 "Workflow state reports failed acceptance criteria: "
-                + ", ".join(state_summary["failed_criteria"])
+                + ", ".join(state_summary["failed_criteria"])  # type: ignore[arg-type]
                 + "."
             )
         if state_summary.get("pending_criteria"):
             parts.append(
                 "Workflow state still has pending acceptance criteria: "
-                + ", ".join(state_summary["pending_criteria"])
+                + ", ".join(state_summary["pending_criteria"])  # type: ignore[arg-type]
                 + "."
             )
         if state_summary.get("next_action"):
@@ -193,8 +193,8 @@ def main() -> int:
         "continue": should_continue,
         "loop_count": loop_count,
         "state_loaded": state_summary.get("loaded", False),
-        "pending_criteria": state_summary.get("pending_criteria", [])[:5],
-        "failed_criteria": state_summary.get("failed_criteria", [])[:5],
+        "pending_criteria": state_summary.get("pending_criteria", [])[:5],  # type: ignore[index]
+        "failed_criteria": state_summary.get("failed_criteria", [])[:5],  # type: ignore[index]
     })
     print(json.dumps(output, ensure_ascii=False))
     return 0

@@ -117,9 +117,9 @@ def main() -> int:
             + "."
         )
         if state_summary.get("failed_criteria"):
-            parts.append("Failed AC: " + ", ".join(state_summary["failed_criteria"]) + ".")
+            parts.append("Failed AC: " + ", ".join(state_summary["failed_criteria"]) + ".")  # type: ignore[arg-type]
         if state_summary.get("pending_criteria"):
-            parts.append("Pending AC: " + ", ".join(state_summary["pending_criteria"]) + ".")
+            parts.append("Pending AC: " + ", ".join(state_summary["pending_criteria"]) + ".")  # type: ignore[arg-type]
         if state_summary.get("next_action"):
             parts.append("Recorded next action: " + str(state_summary["next_action"]) + ".")
     else:
@@ -153,7 +153,7 @@ def main() -> int:
         "trigger": trigger,
         "state_loaded": state_summary.get("loaded", False),
         "phase": state_summary.get("phase"),
-        "pending_criteria": state_summary.get("pending_criteria", [])[:5],
+        "pending_criteria": state_summary.get("pending_criteria", [])[:5],  # type: ignore[index]
     })
     print(json.dumps(output, ensure_ascii=False))
     return 0
