@@ -20,17 +20,18 @@ Cursor-native artifact and proof path exist in this repository.
 | Surface family | Claude Code / OMC reference point | Current Cursor artifact | Status | Proof path / next step |
 | --- | --- | --- | --- | --- |
 | Root policy | `CLAUDE.md`, `AGENTS.md`, OMC operating instructions | `AGENTS.md`, `.cursor/rules/*.md` | Direct local mapping | Existing checked-in files and structure validators. |
-| Orchestrator | Sisyphus / Atlas orchestration | `.cursor/agents/orchestrator.md`, `skills/phase-controller/SKILL.md` | Partial parity | Keep Cursor lifecycle state authoritative. |
-| Research | Explore / Librarian agents | `.cursor/agents/researcher.md`, research portions of `parallel-batch` and `deep-interview` | Partial parity | Do not claim remote-doc lookup behavior unless a Cursor-owned skill/tool implements it. |
-| Planning | Prometheus, ralplan, planner, architect, critic | `.cursor/agents/planner.md`, `skills/plan/`, `skills/deep-interview/` | Partial parity | Consensus planning is a candidate port only with local artifacts. |
-| Implementation | executor, Sisyphus-Junior, autopilot | `.cursor/agents/implementer.md`, `skills/auto-execute/`, `skills/iterate-loop/` | Partial parity | Cursor stop gates and workflow-state transitions define the local contract. |
-| Verification | verifier, review-work, ultraqa | `.cursor/agents/verifier.md`, `skills/review/`, local validators under `scripts/` | Partial parity | Add runtime smokes per feature before claiming stronger proof. |
-| Review / critique | Oracle, Momus, critic, code-reviewer | `.cursor/agents/critic.md`, `.cursor/agents/security-reviewer.md` | Partial parity | Oracle/Momus remain OMC concepts unless Cursor-native prompts are added. |
-| Debug / trace | debugger, tracer, trace skill | `.cursor/agents/debugger.md`, `skills/debug/`, `skills/trace/` | Partial parity | Trace output must stay in Cursor-owned paths. |
-| Security review | security-reviewer | `.cursor/agents/security-reviewer.md`, `skills/security-review/` | Partial parity | Findings must cite local files and validators. |
+| Orchestrator | Sisyphus / Atlas orchestration | `agents/orchestrator.md`, `skills/phase-controller/SKILL.md` | Partial parity | Keep Cursor lifecycle state authoritative. |
+| Research | Explore / Librarian agents | `agents/researcher.md`, research portions of `parallel-batch` and `deep-interview` | Partial parity | Do not claim remote-doc lookup behavior unless a Cursor-owned skill/tool implements it. |
+| Planning | Prometheus, ralplan, planner, architect, critic | `agents/planner.md`, `skills/plan/`, `skills/deep-interview/` | Partial parity | Consensus planning is a candidate port only with local artifacts. |
+| Implementation | executor, Sisyphus-Junior, autopilot | `agents/implementer.md`, `skills/auto-execute/`, `skills/iterate-loop/` | Partial parity | Cursor stop gates and workflow-state transitions define the local contract. |
+| Code review | review-work, code-reviewer | `agents/code-reviewer.md`, `skills/review/` | Partial parity | Severity-rated feedback tied to workflow-state acceptance criteria. |
+| Verification | verifier, review-work, ultraqa | `agents/verifier.md`, `skills/review/`, local validators under `scripts/` | Partial parity | Add runtime smokes per feature before claiming stronger proof. |
+| Review / critique | Oracle, Momus, critic, code-reviewer | `agents/critic.md`, `agents/security-reviewer.md` | Partial parity | Oracle/Momus remain OMC concepts unless Cursor-native prompts are added. |
+| Debug / trace | debugger, tracer, trace skill | `agents/debugger.md`, `skills/debug/`, `skills/trace/` | Partial parity | Trace output must stay in Cursor-owned paths. |
+| Security review | security-reviewer | `agents/security-reviewer.md`, `skills/security-review/` | Partial parity | Findings must cite local files and validators. |
 | Slash commands | `/oh-my-claudecode:*`, `/ralph`, `/ultrawork`, `/review-work` | Cursor skills and agents, no Claude Code slash-command runtime | Unsupported here | Document conceptual mappings only; do not claim execution. |
 | Skills registry | OMC plugin skills | `skills/*/SKILL.md` | Partial parity | Port one skill at a time with local proof. |
-| Hooks | Claude Code hook lifecycle and OMC hook behaviors | `.cursor/hooks.json`, `.cursor/hooks/*.py` | Partial parity | Cursor hook events are host-specific and already checked in. |
+| Hooks | Claude Code hook lifecycle and OMC hook behaviors | `hooks/hooks.json`, `hooks/*.py` | Partial parity | Cursor hook events are host-specific and already checked in. |
 | State | `.omc/state/`, notepad, memory, wiki, trace, session state | `.cursor/state/workflow-state.json`, `active-role.json` | Partial parity | State systems remain independent; no `.omc/state` coupling. |
 | MCP | OMC MCP/tooling surfaces | `mcp/cursor-state-bridge/` | Partial parity | Cursor bridge is intentionally narrow and state-focused. |
 | Team mode | Claude Code / OpenCode team runtime | None beyond conceptual `parallel-batch` skill | Unsupported here | Candidate only if Cursor exposes equivalent project-owned runtime hooks. |

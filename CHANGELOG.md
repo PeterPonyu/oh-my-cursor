@@ -1,5 +1,15 @@
 # Changelog
 
+## 2026-05-09
+
+### v0.5.0 — plugin improvement sweep
+
+- Expanded `.cursor/rules/` coverage with commit-discipline.mdc and error-handling.mdc
+- Added hook test suite under `tests/hooks/` (readonly contract + importability checks)
+- Fixed `scripts/install-local-plugin.sh` to include `.cursor/rules/` in minimal payload (was omitting all `.cursor/rules/*.mdc` files)
+- Refreshed plugin manifest version to 0.5.0
+- All validators pass clean
+
 ## 2026-05-07
 
 ### MCP layer Phase 8 — agent-callable surface contract enforcement

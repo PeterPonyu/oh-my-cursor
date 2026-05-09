@@ -1,6 +1,6 @@
 # References
 
-Access date for web references: **2026-05-06**.
+Access date for web references: **2026-05-09**.
 
 This page is the citation index for public `oh-my-cursor` claims. It separates
 repo-owned proof from host-product documentation so repo wording does not drift
@@ -15,7 +15,9 @@ When capability claims change in `AGENTS.md`, `README.md`, `docs/**`, or
 | --- | --- | --- |
 | [Cursor rules / `AGENTS.md`](https://docs.cursor.com/en/context) | Root `AGENTS.md` and `.cursor/rules/` as official instruction surfaces. | Supports `repo-owned` instruction wording at `official-doc`, strengthened to `checked-in-artifact` only because the files are present and validated locally. |
 | [Using Agent in Cursor CLI](https://docs.cursor.com/en/cli/using) | Cursor CLI reads root `AGENTS.md` / `.cursor/rules`, supports MCP, and behaves as a CLI workspace consumer of repo guidance. | Supports `host-product-only` CLI behavior and repo guidance consumption at `official-doc`. |
-| [Plugins](https://cursor.com/docs/plugins) | Plugin installation, local development via `~/.cursor/plugins/local`, and high-level plugin packaging behavior. | Supports the local plugin walkthrough and product-level plugin behavior; checked-in repo ownership still requires local artifacts and validators. |
+| [Plugins](https://cursor.com/docs/plugins) | Plugin installation, local development via `~/.cursor/plugins/local`, and high-level plugin packaging behavior for repo-root or built payload installs. | Supports the local plugin walkthrough and product-level plugin behavior; checked-in repo ownership still requires local artifacts and validators. |
+| [Orchestrator Role](.cursor/agents/orchestrator.md) | State management and phase advancement. | Supports `repo-owned` orchestrator behavior. Orchestrator owns `state_init` and `state_set_phase` tools. |
+| [Planner Role](.cursor/agents/planner.md) | Task planning and acceptance criteria generation. | Supports `repo-owned` planner behavior. Planner is `readonly: true` and does NOT own phase advancement. |
 | [Plugins Reference](https://cursor.com/docs/reference/plugins) | Plugin manifest shape and references to rules, skills, agents, and hooks. | Supports `.cursor-plugin/plugin.json` and its explicit component references at `official-doc`, strengthened to `checked-in-artifact` because those paths exist locally. |
 | [Hooks](https://docs.cursor.com/en/agent/hooks) | Project hook configuration at `.cursor/hooks.json`, trusted-workspace execution, and event-driven hook behavior. | Supports project-hook wording at `official-doc`, strengthened only to `checked-in-artifact` for the manifest and scripts in this repo. |
 | [Subagents](https://docs.cursor.com/en/agent/subagents) | Project agents under `.cursor/agents/*.md` with YAML frontmatter. | Supports project-agent wording at `official-doc`, strengthened to `checked-in-artifact` because the agent files are present and validated locally. |
@@ -57,16 +59,16 @@ When capability claims change in `AGENTS.md`, `README.md`, `docs/**`, or
 | --- | --- | --- | --- | --- |
 | orchestrator | repo-owned | checked-in-artifact | write (all 6 tools) | Entry point: phase routing + state coordination |
 | researcher | repo-owned | checked-in-artifact | read-only (state_read) | Research phase: fact gathering + gap analysis |
-| planner | repo-owned | checked-in-artifact | read-only + init (state_read, state_set_phase) | Plan phase: acceptance criteria + task waves |
-| implementer | repo-owned | checked-in-artifact | write (phase/criteria/history) | Execute phase: code changes + scope gates |
-| verifier | repo-owned | checked-in-artifact | write (criteria results) | Verify phase: acceptance criterion validation |
+| planner | repo-owned | checked-in-artifact | read-only (state_read) | Plan phase: acceptance criteria + task waves |
+| implementer | repo-owned | checked-in-artifact | read-only (state_read) | Execute phase: code changes + scope gates |
+| verifier | repo-owned | checked-in-artifact | read-only (state_read) | Verify phase: acceptance criterion validation |
 | critic | repo-owned | checked-in-artifact | read-only (state_read) | Review phase: assumption challenge |
 | code-reviewer | repo-owned | checked-in-artifact | read-only (state_read) | Review phase: quality + performance review |
-| debugger | repo-owned | checked-in-artifact | write (failure metadata) | Failure phase: diagnosis + root cause |
-| tracer | repo-owned | checked-in-artifact | write (history notes) | Failure phase: causal investigation |
+| debugger | repo-owned | checked-in-artifact | read-only (state_read) | Failure phase: diagnosis + root cause |
+| tracer | repo-owned | checked-in-artifact | read-only (state_read) | Failure phase: causal investigation |
 | security-reviewer | repo-owned | checked-in-artifact | read-only (state_read) | Review phase: security gate |
 | explore | repo-owned | checked-in-artifact | read-only (state_read) | Research phase: fast codebase mapping |
-| test-engineer | repo-owned | checked-in-artifact | write (phase/criteria) | Verify phase: test strategy + coverage |
+| test-engineer | repo-owned | checked-in-artifact | read-only (state_read) | Verify phase: test strategy + coverage |
 
 ## MCP Tool Surface — cursor-state-bridge (Access date: 2026-05-08, Verified: repo-owned, checked-in-artifact)
 

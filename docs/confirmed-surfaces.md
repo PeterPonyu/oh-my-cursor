@@ -14,9 +14,9 @@ truth:
 | Outcome family | Ownership class | Strongest proof class used here | Current repo position |
 | --- | --- | --- | --- |
 | Root instructions and policy | `repo-owned` | `checked-in-artifact` | This repo ships one root `AGENTS.md` and `.cursor/rules/` guidance. |
-| Project hooks | `repo-owned` in trusted Cursor workspaces | `checked-in-artifact` for files, stronger only with runtime evidence | This repo ships `.cursor/hooks.json` (wiring `sessionStart`, `sessionEnd`, `beforeSubmitPrompt`, `preToolUse`, `postToolUse`, `postToolUseFailure`, `subagentStart`, `subagentStop`, `beforeShellExecution`, `afterShellExecution`, `beforeReadFile`, `afterFileEdit`, `preCompact`, and `stop`) plus stdlib-only hook scripts under `.cursor/hooks/`. |
-| MCP server `cursor-state-bridge` (all eight phases shipped) | `repo-owned` (opt-in install via `--with-mcp`) | `checked-in-artifact` for source + validators; `runtime-smoke` only when `RUN_MCP_BRIDGE_SMOKE=1` is set | This repo ships `mcp/cursor-state-bridge/` as a stdio JSON-RPC 2.0 server with six functional tools (`state_read`, `state_init`, `state_set_phase`, `state_record_failure`, `state_update_acceptance_criterion`, `state_history_append`), plus trace lane, defense-in-depth auth, history FIFO eviction, agent-callable contract enforcement, `scripts/validate-mcp-server-structure.py`, `scripts/smoke-mcp-cursor-state-bridge.sh`, the byte-equal `.cursor/mcp.example.json` template, and tests. The user-environment config file `.cursor/mcp.json` is gitignored and validator-rejected. |
-| Project agents | `repo-owned` | `checked-in-artifact` | This repo ships `.cursor/agents/*.md` with validated YAML frontmatter and concise prompts. |
+| Project hooks | `repo-owned` in trusted Cursor workspaces | `checked-in-artifact` for files, stronger only with runtime evidence | This repo ships `hooks/hooks.json` (wiring `sessionStart`, `sessionEnd`, `beforeSubmitPrompt`, `preToolUse`, `postToolUse`, `postToolUseFailure`, `subagentStart`, `subagentStop`, `beforeShellExecution`, `afterShellExecution`, `beforeReadFile`, `afterFileEdit`, `preCompact`, and `stop`) plus stdlib-only hook scripts under `.cursor/hooks/`. |
+| MCP server `cursor-state-bridge` (all eight phases shipped) | `repo-owned` (opt-in install via `--with-mcp`) | `checked-in-artifact` for source + validators; `runtime-smoke` only when `RUN_MCP_BRIDGE_SMOKE=1` is set | This repo ships `mcp/cursor-state-bridge/` as a stdio JSON-RPC 2.0 server with six functional tools (`state_read`, `state_init`, `state_set_phase`, `state_record_failure`, `state_update_acceptance_criterion`, `state_history_append`), plus trace lane, defense-in-depth auth, history FIFO eviction, agent-callable contract enforcement, `scripts/validate-mcp-server-structure.py`, `scripts/smoke-mcp-cursor-state-bridge.sh`, the byte-equal `mcp.json` template, and tests. The user-environment config file `.cursor/mcp.json` is gitignored and validator-rejected. |
+| Project agents | `repo-owned` | `checked-in-artifact` | This repo ships `agents/*.md` with validated YAML frontmatter and concise prompts. |
 | Repo-root Cursor plugin manifest + bundled payload references | `repo-owned` | `checked-in-artifact` | This repo promotes `.cursor-plugin/plugin.json` plus referenced rules, skills, agents, and hooks into a checked-in plugin surface. |
 | Local plugin load walkthrough | `repo-owned` docs with user-environment verification | `checked-in-artifact` for the walkthrough, stronger only with runtime evidence | This repo documents how to load the local plugin from `~/.cursor/plugins/local` and reload Cursor without pretending the reload step is repo-owned runtime automation. |
 | Pages landing surface and workflow (when checked in) | `repo-owned` only after app + workflow + exported-output proof land together | `checked-in-artifact` once local validators confirm the checked-in app, workflow, and required landing links | A future `apps/cursor-backbone-site/` surface must prove itself as a checked-in artifact before public copy can describe it as repo-owned. |
@@ -42,11 +42,11 @@ Official CLI documentation also says the CLI reads root `AGENTS.md` /
 ## 2. Project hooks are checked-in artifacts here
 
 Official Cursor hook documentation describes project hooks at
-`.cursor/hooks.json` and trusted-workspace execution.
+`hooks/hooks.json` and trusted-workspace execution.
 
 **How this repo uses that evidence:**
 
-- keep `.cursor/hooks.json` at the documented project path;
+- keep `hooks/hooks.json` at the documented project path;
 - keep hook scripts under `.cursor/hooks/`;
 - validate hook command paths and Python compilation; and
 - describe runtime behavior only as far as Cursor execution and local/manual
@@ -55,14 +55,14 @@ Official Cursor hook documentation describes project hooks at
 ## 3. Project agents are checked-in artifacts here
 
 Official Cursor agent documentation describes project agents under
-`.cursor/agents/*.md` with YAML frontmatter.
+`agents/*.md` with YAML frontmatter.
 
 **How this repo uses that evidence:**
 
 - keep all twelve agents (`orchestrator`, `researcher`, `planner`,
   `implementer`, `verifier`, `critic`, `code-reviewer`, `debugger`,
   `tracer`, `security-reviewer`, `explore`, `test-engineer`) under
-  `.cursor/agents/`;
+  `agents/`;
 - validate `name`, `description`, `model`, and `readonly` frontmatter; and
 - keep prompts concise and repository-specific.
 
@@ -156,8 +156,8 @@ Given the ownership and proof boundaries above, the safest starting point for an
 
 1. root `AGENTS.md`;
 2. `.cursor/rules/*.mdc`;
-3. `.cursor/hooks.json` and `.cursor/hooks/`;
-4. `.cursor/agents/*.md`;
+3. `hooks/hooks.json` and `.cursor/hooks/`;
+4. `agents/*.md`;
 5. a small repo-root plugin with reviewable payload references;
 6. documentation that records `repo-owned`, `host-product-only`, and
    `unsupported-or-out-of-scope` clearly;
