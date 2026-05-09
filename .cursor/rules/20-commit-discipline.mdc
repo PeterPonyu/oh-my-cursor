@@ -1,0 +1,14 @@
+---
+description: Git commit standards for the oh-my-cursor plugin
+alwaysApply: true
+---
+
+# Commit discipline
+
+- Make small, atomic commits. One logical change per commit — do not bundle unrelated edits.
+- Use the Conventional Commits format: `feat:`, `fix:`, `docs:`, `refactor:`, `test:`, `chore:`, `style:`, `ci:`, `perf:`.
+- Write commit messages in the imperative mood with a concise summary line (≤ 72 characters) followed by a blank line and optional body paragraphs.
+- Never force push to `main` or `master`. The default branch is protected by convention.
+- Never skip pre-commit hooks (`--no-verify`, `--no-gpg-sign`, etc.) unless the user explicitly requests it.
+- Always run `git status` before committing to confirm the staging area contains exactly the intended changes.
+- For amend commits: only use `--amend` when the last commit was created in the same session, has not been pushed to remote, and the user explicitly requested or approved the amend.
