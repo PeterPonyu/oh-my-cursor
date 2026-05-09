@@ -21,14 +21,18 @@ ALLOWED_PHASES = {"intake", "research", "plan", "execute", "verify", "review", "
 ALLOWED_STATUSES = {"pending", "in_progress", "passed", "failed", "blocked"}
 ALLOWED_ROLES = {
     "",
-    "orchestrator",
-    "researcher",
-    "planner",
-    "implementer",
-    "verifier",
+    "code-reviewer",
     "critic",
     "debugger",
+    "explore",
+    "implementer",
+    "orchestrator",
+    "planner",
+    "researcher",
     "security-reviewer",
+    "test-engineer",
+    "tracer",
+    "verifier",
 }
 ALLOWED_AC_STATUSES = {"pending", "passed", "failed", "skipped"}
 ALLOWED_FAILURE_TYPES = {
@@ -50,10 +54,11 @@ ALLOWED_TOP_KEYS = {
     "acceptance_criteria",
     "failure",
     "history",
+    "tasks",
 }
 ALLOWED_AC_KEYS = {"id", "criterion", "status", "evidence"}
 ALLOWED_FAILURE_KEYS = {"type", "message", "retry_count"}
-ALLOWED_HISTORY_KEYS = {"phase", "status", "note", "at"}
+ALLOWED_HISTORY_KEYS = {"phase", "status", "note", "at", "role"}
 
 
 def fail(message: str) -> None:

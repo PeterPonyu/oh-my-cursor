@@ -98,6 +98,6 @@ Reserved comment markers for runtime injection — do not remove:
 ### State ownership
 
 - Agent-callable writes: cursor-state-bridge MCP tools only
-- Developer CLI writes: `.cursor/state/workflow-state.py` or `scripts/workflow-state.py`
+- Developer CLI writes: `.cursor/state/workflow-state.py`
 - Hook reads: hooks read workflow-state through environment variables or file paths
 - Direct edits to `workflow-state.json`: prohibited from agents and skills

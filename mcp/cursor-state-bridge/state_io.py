@@ -1,12 +1,12 @@
 """Bridge-side state IO that imports the workflow-state library API.
 
-Loads ``.cursor/state/workflow-state.py`` and ``.cursor/state/_locking.py``
-from the active workspace via :mod:`importlib.util` so the bridge and the
-CLI shim share a single implementation of every write path (Phase 2 / R6).
+Loads a vendored copy of ``_workflow_state.py`` and ``_locking.py`` from
+inside the bridge package rather than executing workspace Python.  This
+isolates the bridge from potentially untrusted workspace code while still
+sharing the same API surface.
+
 The loaded modules are cached in ``sys.modules`` under stable keys so
-repeat calls reuse the same module objects (and therefore the same
-``file_lock`` callable identity that Phase 5's
-``validate-hook-readonly.py --check-shared-lock`` will assert).
+repeat calls reuse the same module objects.
 
 This module performs zero ``subprocess`` calls -- the bridge never shells
 out to the CLI.  All write tools route through the library API.
@@ -31,8 +31,8 @@ _LOCKING_MODULE_KEY = "_omcs_locking"
 # ---------------------------------------------------------------------------
 
 
-def _load_workflow_state(workspace: Path):
-    """Load the workflow-state library from the active workspace.
+def _load_workflow_state(_workspace: Path):
+    """Load the vendored workflow-state library from the bridge package.
 
     Returns the cached module on subsequent calls so the import graph
     stays single-rooted (one ``file_lock`` callable identity).
@@ -40,14 +40,14 @@ def _load_workflow_state(workspace: Path):
     if _WORKFLOW_STATE_MODULE_KEY in sys.modules:
         return sys.modules[_WORKFLOW_STATE_MODULE_KEY]
 
-    state_dir = workspace / ".cursor" / "state"
-    state_path = state_dir / "workflow-state.py"
+    bridge_dir = Path(__file__).resolve().parent
+    state_path = bridge_dir / "_workflow_state.py"
     if not state_path.is_file():
         raise RuntimeError(f"workflow-state library not found at {state_path}")
 
     # Make ``_locking`` importable from the loaded module before we run it.
-    if str(state_dir) not in sys.path:
-        sys.path.insert(0, str(state_dir))
+    if str(bridge_dir) not in sys.path:
+        sys.path.insert(0, str(bridge_dir))
 
     spec = importlib.util.spec_from_file_location(
         _WORKFLOW_STATE_MODULE_KEY, str(state_path)

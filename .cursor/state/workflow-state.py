@@ -50,14 +50,18 @@ PHASES = {"intake", "research", "plan", "execute", "verify", "review", "done", "
 STATUSES = {"pending", "in_progress", "passed", "failed", "blocked"}
 ROLES = {
     "",
-    "orchestrator",
-    "researcher",
-    "planner",
-    "implementer",
-    "verifier",
+    "code-reviewer",
     "critic",
     "debugger",
+    "explore",
+    "implementer",
+    "orchestrator",
+    "planner",
+    "researcher",
     "security-reviewer",
+    "test-engineer",
+    "tracer",
+    "verifier",
 }
 AC_STATUSES = {"pending", "passed", "failed", "skipped"}
 FAILURE_TYPES = {
@@ -183,6 +187,8 @@ def init_state(
     written state.
     """
     path = Path(path)
+    if path.exists():
+        raise FileExistsError(f"workflow-state already exists at {path}; use set_state() to mutate, or remove the file first")
     if phase not in PHASES:
         _fail(f"phase must be one of {sorted(PHASES)}")
     if status not in STATUSES:
