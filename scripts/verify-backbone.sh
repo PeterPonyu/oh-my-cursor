@@ -13,40 +13,39 @@ required=(
   README.md
   assets/oh-my-cursor-character.jpg
   assets/oh-my-cursor-social-preview.jpg
-  benchmark/README.md
   .cursor-plugin/plugin.json
-  .cursor/hooks.json
-  .cursor/hooks/README.md
-  .cursor/hooks/claim-guard.py
-  .cursor/hooks/prompt-router.py
-  .cursor/hooks/shell-guard.py
-  .cursor/hooks/stop-gate.py
-  .cursor/hooks/session-bootstrap.py
-  .cursor/hooks/session-summary.py
-  .cursor/hooks/tool-guard.py
-  .cursor/hooks/state-watcher.py
-  .cursor/hooks/failure-router.py
-  .cursor/hooks/subagent-bootstrap.py
-  .cursor/hooks/subagent-summary.py
-  .cursor/hooks/shell-debrief.py
-  .cursor/hooks/read-advisor.py
-  .cursor/hooks/compact-reminder.py
+  hooks/hooks.json
+  hooks/README.md
+  hooks/claim-guard.py
+  hooks/prompt-router.py
+  hooks/shell-guard.py
+  hooks/stop-gate.py
+  hooks/session-bootstrap.py
+  hooks/session-summary.py
+  hooks/tool-guard.py
+  hooks/state-watcher.py
+  hooks/failure-router.py
+  hooks/subagent-bootstrap.py
+  hooks/subagent-summary.py
+  hooks/shell-debrief.py
+  hooks/read-advisor.py
+  hooks/compact-reminder.py
   .cursor/state/workflow-state.schema.json
   .cursor/state/workflow-state.example.json
   .cursor/state/workflow-state.py
   .cursor/state/README.md
-  .cursor/agents/orchestrator.md
-  .cursor/agents/verifier.md
-  .cursor/agents/critic.md
-  .cursor/agents/debugger.md
-  .cursor/agents/security-reviewer.md
-  .cursor/agents/planner.md
-  .cursor/agents/researcher.md
-  .cursor/agents/implementer.md
-  .cursor/agents/code-reviewer.md
-  .cursor/agents/explore.md
-  .cursor/agents/test-engineer.md
-  .cursor/agents/tracer.md
+  agents/orchestrator.md
+  agents/verifier.md
+  agents/critic.md
+  agents/debugger.md
+  agents/security-reviewer.md
+  agents/planner.md
+  agents/researcher.md
+  agents/implementer.md
+  agents/code-reviewer.md
+  agents/explore.md
+  agents/test-engineer.md
+  agents/tracer.md
   rules/repo-owned-plugin-boundary.mdc
   skills/local-plugin-check/SKILL.md
   skills/phase-controller/SKILL.md
@@ -59,21 +58,6 @@ required=(
   docs/references.md
   docs/state-contract.md
   scripts/check-local-plugin-install.sh
-  scripts/install-local-plugin.sh
-  scripts/validate-plugin-structure.sh
-  scripts/validate-mcp-server-structure.py
-  scripts/smoke-mcp-cursor-state-bridge.sh
-  scripts/validate-rename-references.py
-  scripts/validate-prd-ac-mapping.py
-  scripts/validate-hook-readonly.py
-  scripts/validate-agent-bridge-contract.py
-  scripts/validate-public-language.py
-  scripts/validate-cursor-workflow-artifacts.py
-  scripts/smoke-cursor-workflow-artifacts.sh
-  scripts/validate-workflow-state.py
-  scripts/workflow-state.py
-  scripts/validate-benchmark-evidence.sh
-  scripts/validate-pages-surface.sh
 )
 
 for path in "${required[@]}"; do

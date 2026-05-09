@@ -11,35 +11,34 @@ required=(
   AGENTS.md
   CHANGELOG.md
   README.md
-  benchmark/README.md
   .cursor-plugin/plugin.json
-    .cursor/hooks.json
-    .cursor/hooks/README.md
-    .cursor/hooks/claim-guard.py
-    .cursor/hooks/prompt-router.py
-    .cursor/hooks/shell-guard.py
-    .cursor/hooks/stop-gate.py
-    .cursor/hooks/session-bootstrap.py
-    .cursor/hooks/session-summary.py
-    .cursor/hooks/tool-guard.py
-    .cursor/hooks/state-watcher.py
-    .cursor/hooks/failure-router.py
-    .cursor/hooks/subagent-bootstrap.py
-    .cursor/hooks/subagent-summary.py
-    .cursor/hooks/shell-debrief.py
-    .cursor/hooks/read-advisor.py
-    .cursor/hooks/compact-reminder.py
+  hooks/hooks.json
+    hooks/README.md
+    hooks/claim-guard.py
+    hooks/prompt-router.py
+    hooks/shell-guard.py
+    hooks/stop-gate.py
+    hooks/session-bootstrap.py
+    hooks/session-summary.py
+    hooks/tool-guard.py
+    hooks/state-watcher.py
+    hooks/failure-router.py
+    hooks/subagent-bootstrap.py
+    hooks/subagent-summary.py
+    hooks/shell-debrief.py
+    hooks/read-advisor.py
+    hooks/compact-reminder.py
     .cursor/state/workflow-state.schema.json
     .cursor/state/workflow-state.example.json
     .cursor/state/workflow-state.py
     .cursor/state/README.md
-    .cursor/agents/orchestrator.md
-    .cursor/agents/verifier.md
-    .cursor/agents/critic.md
-    .cursor/agents/debugger.md
-    .cursor/agents/security-reviewer.md
-    .cursor/agents/planner.md
-    .cursor/agents/researcher.md
+    agents/orchestrator.md
+    agents/verifier.md
+    agents/critic.md
+    agents/debugger.md
+    agents/security-reviewer.md
+    agents/planner.md
+    agents/researcher.md
   rules/repo-owned-plugin-boundary.mdc
   skills/local-plugin-check/SKILL.md
   skills/phase-controller/SKILL.md
@@ -66,7 +65,6 @@ required=(
     scripts/smoke-cursor-workflow-artifacts.sh
     scripts/validate-workflow-state.py
         scripts/workflow-state.py
-  scripts/validate-pages-surface.sh
   scripts/validate-state-contract.sh
   scripts/smoke-cursor-agent.sh
   scripts/verify-backbone.sh
@@ -77,10 +75,10 @@ for path in "${required[@]}"; do
   log "$path"
 done
 
-agents_count="$(find .cursor/agents -type f -name '*.md' | wc -l | tr -d ' ')"
+agents_count="$(find agents -type f -name '*.md' | wc -l | tr -d ' ')"
 prompts_count="$(find . -path './.git' -prune -o -name '*.prompt.md' -print | wc -l | tr -d ' ')"
 skills_count="$(find . -path './.git' -prune -o -name 'SKILL.md' -print | wc -l | tr -d ' ')"
-hooks_count="$(find .cursor -path './.git' -prune -o -name 'hooks.json' -print | wc -l | tr -d ' ')"
+hooks_count="$(find . -path './.git' -prune -o -name 'hooks.json' -print | wc -l | tr -d ' ')"
 
 [[ "$agents_count" -ge "7" ]] || fail "expected at least seven checked-in project agents"
 [[ "$prompts_count" == "0" ]] || fail "unexpected checked-in prompt files: $prompts_count"
@@ -103,7 +101,6 @@ root = pathlib.Path.cwd().resolve()
 files = [
     root / "AGENTS.md",
     root / "README.md",
-    root / "benchmark" / "README.md",
     *sorted((root / "docs").glob("*.md")),
 ]
 
@@ -146,7 +143,7 @@ if violations:
         + "\n".join(violations)
     )
 
-print("ok: positive overclaim scan stayed clean for README/AGENTS/docs/benchmark notes")
+print("ok: positive overclaim scan stayed clean for README/AGENTS/docs notes")
 PY
 
 ./scripts/validate-plugin-structure.sh
@@ -154,11 +151,8 @@ python3 scripts/validate-public-language.py
 python3 scripts/validate-cursor-workflow-artifacts.py
 grep -q 'AGENTS.md' docs/confirmed-surfaces.md || fail "confirmed surfaces doc must mention AGENTS.md"
 grep -q '\.cursor/rules' docs/confirmed-surfaces.md || fail "confirmed surfaces doc must mention .cursor/rules"
-grep -q '\.cursor/hooks.json' docs/confirmed-surfaces.md || fail "confirmed surfaces doc must mention .cursor/hooks.json"
-grep -q '\.cursor/agents' docs/confirmed-surfaces.md || fail "confirmed surfaces doc must mention .cursor/agents"
-grep -q 'cursor-backbone-site' docs/confirmed-surfaces.md || fail "confirmed surfaces doc must mention the landing-site proof rule"
-grep -Eq 'focused Cursor benchmark contract' benchmark/README.md || fail "benchmark README must describe the focused Cursor benchmark contract"
-grep -Eq 'reporting-comparable' benchmark/README.md || fail "benchmark README must keep reporting-comparable wording"
+grep -q '\.cursor/hooks.json' docs/confirmed-surfaces.md || fail "confirmed surfaces doc must mention hooks.json"
+grep -q '\.cursor/agents' docs/confirmed-surfaces.md || fail "confirmed surfaces doc must mention agents"
 python3 - <<'PY'
 from __future__ import annotations
 import pathlib
