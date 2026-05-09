@@ -70,7 +70,7 @@ grep -q 'host-product-only' README.md || fail "README must keep host-product-onl
 grep -q 'unsupported-or-out-of-scope' README.md || fail "README must keep unsupported-or-out-of-scope vocabulary"
 grep -q 'AGENTS.md' docs/confirmed-surfaces.md || fail "confirmed surfaces doc must mention AGENTS.md"
 grep -q '\.cursor/rules' docs/confirmed-surfaces.md || fail "confirmed surfaces doc must mention .cursor/rules"
-grep -q 'cursor-backbone-site' docs/confirmed-surfaces.md || fail "confirmed surfaces doc must describe the landing-site proof rule"
+# The cursor-backbone-site check removed — site deleted in v0.5.0 migration
 grep -q 'unsupported-or-out-of-scope' docs/archive/fallback-policy.md || fail "fallback policy must keep unsupported-or-out-of-scope wording"
 grep -q 'host-product-only' docs/archive/fallback-policy.md || fail "fallback policy must keep host-product-only wording"
 grep -q 'docs.cursor.com/en/cli/using' docs/references.md || fail "references doc must keep Cursor CLI source link"
