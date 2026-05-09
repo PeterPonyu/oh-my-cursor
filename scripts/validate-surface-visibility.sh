@@ -78,7 +78,7 @@ done
 agents_count="$(find agents -type f -name '*.md' | wc -l | tr -d ' ')"
 prompts_count="$(find . -path './.git' -prune -o -name '*.prompt.md' -print | wc -l | tr -d ' ')"
 skills_count="$(find . -path './.git' -prune -o -name 'SKILL.md' -print | wc -l | tr -d ' ')"
-hooks_count="$(find . -path './.git' -prune -o -name 'hooks.json' -print | wc -l | tr -d ' ')"
+hooks_count="$(find . -path './.git' -prune -o -path './dist' -prune -o -name 'hooks.json' -print | wc -l | tr -d ' ')"
 
 [[ "$agents_count" -ge "7" ]] || fail "expected at least seven checked-in project agents"
 [[ "$prompts_count" == "0" ]] || fail "unexpected checked-in prompt files: $prompts_count"
@@ -151,21 +151,21 @@ python3 scripts/validate-public-language.py
 python3 scripts/validate-cursor-workflow-artifacts.py
 grep -q 'AGENTS.md' docs/confirmed-surfaces.md || fail "confirmed surfaces doc must mention AGENTS.md"
 grep -q '\.cursor/rules' docs/confirmed-surfaces.md || fail "confirmed surfaces doc must mention .cursor/rules"
-grep -q '\.cursor/hooks.json' docs/confirmed-surfaces.md || fail "confirmed surfaces doc must mention hooks.json"
-grep -q '\.cursor/agents' docs/confirmed-surfaces.md || fail "confirmed surfaces doc must mention agents"
+grep -q 'hooks/hooks.json' docs/confirmed-surfaces.md || fail "confirmed surfaces doc must mention hooks/hooks.json"
+grep -q 'agents/' docs/confirmed-surfaces.md || fail "confirmed surfaces doc must mention agents"
 python3 - <<'PY'
 from __future__ import annotations
 import pathlib
 
 text = pathlib.Path("README.md").read_text(encoding="utf-8")
-start = text.find("## Start here")
-end = text.find("## Ownership map", start)
+start = text.find("## Quick start")
+end = text.find("## What's included", start)
 if start == -1 or end == -1:
-    raise SystemExit("FAIL: README is missing the Start here -> Ownership map structure")
+    raise SystemExit("FAIL: README is missing the Quick start -> What's included structure")
 segment = text[start:end]
 required = [
 ]
-print("ok: README Start here -> Ownership map structure present (post-archive: discoverability links no longer required)")
+print("ok: README Quick start -> What's included structure present")
 PY
 log "DISCOVERABILITY_OK"
 
