@@ -25,7 +25,10 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from _trace import trace as _trace  # noqa: E402
 
-ROOT = Path(__file__).resolve().parents[2]
+# Resolve ROOT from environment or workspace, not __file__ (which may be unreliable in hook contexts)
+ROOT = Path(os.environ.get("OH_MY_CURSOR_WORKSPACE", os.getcwd())).resolve()
+if not (ROOT / "hooks").exists() or "plugins/local/oh-my-cursor" in str(ROOT):
+    ROOT = Path(__file__).resolve().parents[1]
 ERROR_STATUSES = {"error", "failed", "failure"}
 
 

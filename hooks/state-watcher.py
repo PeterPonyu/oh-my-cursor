@@ -11,6 +11,7 @@ result and never edits any file.
 from __future__ import annotations
 
 import json
+import os
 import sys
 from pathlib import Path, PurePosixPath
 
@@ -18,7 +19,10 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 from _trace import trace as _trace  # noqa: E402
 from _tool_payload import extract_file_path, extract_tool_name  # noqa: E402
 
-ROOT = Path(__file__).resolve().parents[2]
+# Resolve ROOT from environment or workspace, not __file__ (which may be unreliable in hook contexts)
+ROOT = Path(os.environ.get("OH_MY_CURSOR_WORKSPACE", os.getcwd())).resolve()
+if not (ROOT / "hooks").exists() or "plugins/local/oh-my-cursor" in str(ROOT):
+    ROOT = Path(__file__).resolve().parents[1]
 SCHEMA_PATH = ROOT / ".cursor" / "state" / "workflow-state.schema.json"
 DEFAULT_STATE_PATH = ROOT / ".cursor" / "state" / "workflow-state.json"
 

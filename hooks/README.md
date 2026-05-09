@@ -1,7 +1,7 @@
 # Cursor project hooks
 
 This directory contains repo-owned lifecycle helpers for trusted Cursor
-workspaces. The project hook manifest lives at `.cursor/hooks.json` and points
+workspaces. The project hook manifest lives at `hooks/hooks.json` and points
 to the Python scripts in this directory. Names are short and lifecycle-style:
 
 - `session-bootstrap.py` (event: `sessionStart`) emits a one-shot
@@ -27,11 +27,11 @@ to the Python scripts in this directory. Names are short and lifecycle-style:
   library, surfacing the result as `additional_context`. Read-only.
 - `failure-router.py` (event: `postToolUseFailure`) emits an
   `additional_context` note that routes failures through
-  `.cursor/agents/debugger.md` and recommends recording the failure type
+  `agents/debugger.md` and recommends recording the failure type
   with the workflow-state writer. Observational; never enforces.
 - `subagent-bootstrap.py` (event: `subagentStart`) always allows the
   subagent to start and adds a short `user_message` pointing at the
-  matching `.cursor/agents/<role>.md` prompt when `subagent_type` matches a
+  matching `agents/<role>.md` prompt when `subagent_type` matches a
   checked-in role.
 - `subagent-summary.py` (event: `subagentStop`) emits an observational
   JSON summary of the recorded subagent run and never returns
@@ -93,7 +93,7 @@ hook scripts themselves:
   single-active-subagent record). Provides `set_active_role`,
   `clear_active_role`, and `get_active_role` with shared `file_lock`
   serialisation. Used by `subagent-bootstrap.py`, `subagent-summary.py`,
-  and `tool-guard.py`. Also parses frontmatter from `.cursor/agents/*.md`
+  and `tool-guard.py`. Also parses frontmatter from `agents/*.md`
   role prompts to extract `tools:` allowlists.
 
 ## Opt-in tracing for runtime evidence

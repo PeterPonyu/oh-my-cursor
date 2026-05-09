@@ -25,17 +25,21 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from _trace import trace as _trace  # noqa: E402
 
-ROOT = Path(__file__).resolve().parents[2]
+# Resolve ROOT from environment or workspace, not __file__ (which may be unreliable in hook contexts)
+ROOT = Path(os.environ.get("OH_MY_CURSOR_WORKSPACE", os.getcwd())).resolve()
+if not (ROOT / "hooks").exists() or "plugins/local/oh-my-cursor" in str(ROOT):
+    ROOT = Path(__file__).resolve().parents[1]
 
 SKILL_NAMES = {
     "phase-controller", "plan", "auto-execute", "iterate-loop",
     "parallel-batch", "review", "debug", "trace", "security-review",
-    "deep-interview", "doctor", "local-plugin-check",
+    "deep-interview", "doctor", "local-plugin-check", "verify", "mcp-setup",
 }
 
 AGENT_NAMES = {
     "orchestrator", "researcher", "planner", "implementer", "verifier",
     "critic", "debugger", "security-reviewer",
+    "explore", "code-reviewer", "test-engineer", "tracer",
 }
 
 PHASE_NAMES = {
@@ -166,7 +170,7 @@ def main() -> int:
         parts.append(
             "Agent keywords detected: "
             + ", ".join(matched_agents)
-            + ". Matching role prompts live under .cursor/agents/."
+            + ". Matching role prompts live under agents/."
         )
     if matched_phases:
         parts.append(

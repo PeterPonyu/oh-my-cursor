@@ -3,13 +3,14 @@
 
 Fires before a subagent (Task tool) spawns. The hook always allows the
 subagent to start. When the `subagent_type` matches a checked-in role under
-`.cursor/agents/`, the hook adds a short `user_message` pointing at the
+`agents/`, the hook adds a short `user_message` pointing at the
 matching prompt file so the subagent uses the repo-owned definition rather
 than reinventing one.
 """
 from __future__ import annotations
 
 import json
+import os
 import sys
 from pathlib import Path
 
@@ -17,18 +18,25 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 from _trace import trace as _trace  # noqa: E402
 from _active_role import set_active_role  # noqa: E402
 
-ROOT = Path(__file__).resolve().parents[2]
-AGENTS_DIR = ROOT / ".cursor" / "agents"
+# Resolve ROOT from environment or workspace, not __file__ (which may be unreliable in hook contexts)
+ROOT = Path(os.environ.get("OH_MY_CURSOR_WORKSPACE", os.getcwd())).resolve()
+if not (ROOT / "hooks").exists() or "plugins/local/oh-my-cursor" in str(ROOT):
+    ROOT = Path(__file__).resolve().parents[1]
+AGENTS_DIR = ROOT / "agents"
 
 KNOWN_ROLES = {
-    "orchestrator",
-    "researcher",
-    "planner",
-    "implementer",
-    "verifier",
+    "code-reviewer",
     "critic",
     "debugger",
+    "explore",
+    "implementer",
+    "orchestrator",
+    "planner",
+    "researcher",
     "security-reviewer",
+    "test-engineer",
+    "tracer",
+    "verifier",
 }
 
 
@@ -73,15 +81,18 @@ def main() -> int:
             pass
         user_message = (
             f"Subagent-bootstrap: matched role `{subagent_type}`. "
-            f"Use the checked-in prompt at .cursor/agents/{subagent_type}.md "
-            "and stay within its readonly contract."
+            f"Use the checked-in prompt at agents/{subagent_type}.md"
         )
+        if subagent_type not in ("implementer", "debugger"):
+            user_message += " and stay within its readonly contract."
+        else:
+            user_message += "."
         status = "matched"
     else:
         user_message = (
             "Subagent-bootstrap: no matching repo-owned role prompt for "
             + (f"`{subagent_type}`" if subagent_type else "this subagent")
-            + ". Free-form subagent runs are allowed; check .cursor/agents/ for a closer match."
+            + ". Free-form subagent runs are allowed; check agents/ for a closer match."
         )
         status = "pass"
 

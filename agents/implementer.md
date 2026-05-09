@@ -59,7 +59,7 @@ Edits and new files implementing the next wave. Plus a brief status block:
 
 - Do not run destructive shell operations (`rm -rf`, `git reset --hard`,
   force-push, branch delete) without explicit user confirmation.
-- Do not change `AGENTS.md`, `rules/*.mdc`, or `.cursor/agents/*.md`. Those
+- Do not change `AGENTS.md`, `rules/*.mdc`, or `agents/*.md`. Those
   are policy surfaces owned by the planner and orchestrator passes.
 - Hand off to `verifier` as soon as the next wave is implementable; do not
   wait to batch multiple waves into one verification.

@@ -79,4 +79,4 @@ Return a concise status block:
   `cursor-state-bridge` MCP tools only. Shelling out to a state writer
   CLI from an agent prompt or skill is not allowed.
 - Keep `AGENTS.md` as policy, `rules/*.mdc` as always-on/scoped guidance,
-  `skills/*/SKILL.md` as workflows, and `.cursor/agents/*.md` as role prompts.
+  `skills/*/SKILL.md` as workflows, and `agents/*.md` as role prompts.

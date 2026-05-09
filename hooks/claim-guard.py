@@ -9,6 +9,7 @@ on severe overclaims.
 from __future__ import annotations
 
 import json
+import os
 import re
 import sys
 from pathlib import Path
@@ -17,7 +18,10 @@ from urllib.parse import unquote, urlparse
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from _trace import trace as _trace  # noqa: E402
 
-ROOT = Path(__file__).resolve().parents[2]
+# Resolve ROOT from environment or workspace, not __file__ (which may be unreliable in hook contexts)
+ROOT = Path(os.environ.get("OH_MY_CURSOR_WORKSPACE", os.getcwd())).resolve()
+if not (ROOT / "hooks").exists() or "plugins/local/oh-my-cursor" in str(ROOT):
+    ROOT = Path(__file__).resolve().parents[1]
 
 PUBLIC_ROOT_FILES = {"AGENTS.md", "README.md", "CHANGELOG.md"}
 PUBLIC_PREFIXES = (
@@ -47,7 +51,7 @@ LANGUAGE_PATTERNS = {
     "legacy-package-b": re.compile(r"oh-my-codex", re.IGNORECASE),
     "source-system": re.compile(r"source[ -]system", re.IGNORECASE),
     "comparison-clone": re.compile(r"parity clone", re.IGNORECASE),
-    "legacy-arm": re.compile(r"with-omc", re.IGNORECASE),
+    "legacy-arm": re.compile(r"(?<!-)with-omc\b", re.IGNORECASE),
     "external-source": re.compile(r"external[ -]source", re.IGNORECASE),
 }
 

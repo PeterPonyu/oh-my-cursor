@@ -23,6 +23,7 @@ Stdlib-only.
 from __future__ import annotations
 
 import json
+import os
 import re
 import sys
 from datetime import datetime, timezone
@@ -32,8 +33,10 @@ from typing import Any
 # `_locking.file_lock` lives under `.cursor/state/`; expose it for shared
 # write serialisation. The path math mirrors how the bridge's `state_io.py`
 # locates the same module.
-_HOOKS_DIR = Path(__file__).resolve().parent
-_ROOT = _HOOKS_DIR.parents[1]
+# Resolve _ROOT from environment or workspace, not __file__ (which may be unreliable in hook contexts)
+_ROOT = Path(os.environ.get("OH_MY_CURSOR_WORKSPACE", os.getcwd())).resolve()
+if not (_ROOT / ".cursor" / "hooks").exists() or "plugins/local/oh-my-cursor" in str(_ROOT):
+    _ROOT = Path(__file__).resolve().parents[2]
 _STATE_DIR = _ROOT / ".cursor" / "state"
 if str(_STATE_DIR) not in sys.path:
     sys.path.insert(0, str(_STATE_DIR))

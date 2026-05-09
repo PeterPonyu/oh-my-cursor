@@ -1,0 +1,77 @@
+{
+  "version": 1,
+  "hooks": {
+    "sessionStart": [
+      {
+        "command": "python3 hooks/session-bootstrap.py"
+      }
+    ],
+    "sessionEnd": [
+      {
+        "command": "python3 hooks/session-summary.py"
+      }
+    ],
+    "beforeSubmitPrompt": [
+      {
+        "command": "python3 hooks/prompt-router.py"
+      }
+    ],
+    "preToolUse": [
+      {
+        "command": "python3 hooks/tool-guard.py"
+      }
+    ],
+    "postToolUse": [
+      {
+        "command": "python3 hooks/state-watcher.py"
+      }
+    ],
+    "postToolUseFailure": [
+      {
+        "command": "python3 hooks/failure-router.py"
+      }
+    ],
+    "subagentStart": [
+      {
+        "command": "python3 hooks/subagent-bootstrap.py"
+      }
+    ],
+    "subagentStop": [
+      {
+        "command": "python3 hooks/subagent-summary.py"
+      }
+    ],
+    "beforeShellExecution": [
+      {
+        "command": "python3 hooks/shell-guard.py"
+      }
+    ],
+    "afterShellExecution": [
+      {
+        "command": "python3 hooks/shell-debrief.py"
+      }
+    ],
+    "beforeReadFile": [
+      {
+        "command": "python3 hooks/read-advisor.py"
+      }
+    ],
+    "afterFileEdit": [
+      {
+        "command": "python3 hooks/claim-guard.py"
+      }
+    ],
+    "preCompact": [
+      {
+        "command": "python3 hooks/compact-reminder.py"
+      }
+    ],
+    "stop": [
+      {
+        "command": "python3 hooks/stop-gate.py",
+        "loop_limit": 1,
+        "automatic_followup": false
+      }
+    ]
+  }
+}

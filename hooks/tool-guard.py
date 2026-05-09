@@ -8,7 +8,7 @@ every call. It only sets `permission=ask` when a non-shell editing tool
 helper at `.cursor/state/workflow-state.py`.
 
 The hook never denies a request and never modifies tool input. Shell commands
-are out of scope here; `.cursor/hooks/shell-guard.py` covers `beforeShellExecution`.
+are out of scope here; `hooks/shell-guard.py` covers `beforeShellExecution`.
 """
 from __future__ import annotations
 
@@ -67,7 +67,7 @@ def main() -> int:
         permission = "ask"
         message = (
             f"Tool-guard: active subagent role `{active_role}` declares `readonly: true` "
-            f"in .cursor/agents/{active_role}.md. Edit-class tools require user confirmation. "
+            f"in agents/{active_role}.md. Edit-class tools require user confirmation. "
             "If this edit is intended, approve to proceed; otherwise route the change to a non-readonly role."
         )
         status = "ask"
@@ -75,7 +75,7 @@ def main() -> int:
         permission = "ask"
         message = (
             f"Tool-guard: active subagent role `{active_role}` does not list `{tool_name}` in its "
-            f"`tools:` allowlist (.cursor/agents/{active_role}.md). Approve to proceed or extend the allowlist."
+            f"`tools:` allowlist (agents/{active_role}.md). Approve to proceed or extend the allowlist."
         )
         status = "ask"
     else:
