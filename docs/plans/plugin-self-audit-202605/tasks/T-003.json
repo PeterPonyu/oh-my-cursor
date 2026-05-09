@@ -1,0 +1,12 @@
+{
+  "id": "T-003",
+  "team_id": "plugin-self-audit-202605",
+  "subject": "Critic lane: documentation vs implementation",
+  "description": "Read-only. Compare docs/orchestration.md, docs/multi-state-compat.md, phase-controller skill against actual hooks and workflow-state library. Flag overclaims and inventory mismatches with evidence paths.",
+  "owner": "critic",
+  "status": "completed",
+  "priority": "high",
+  "dependencies": [],
+  "created_at": "2026-05-09T00:00:00Z",
+  "updated_at": "2026-05-09T00:00:00Z"
+}

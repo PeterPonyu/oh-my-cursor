@@ -1,0 +1,14 @@
+{
+  "id": "T-004",
+  "team_id": "audit-team-mode-workflow-policy-202605",
+  "subject": "Hooks inventory: session/shell/subagent/failure/read/claim/compact",
+  "description": "Read-only pass over remaining .cursor/hooks/*.py not covered by T-001: session-bootstrap, session-summary, failure-router, shell-guard, shell-debrief, subagent-bootstrap, subagent-summary, read-advisor, claim-guard, compact-reminder. For each: event, fail-open behavior, whether it reads workflow-state or active-role, and any enforcement vs observation.",
+  "owner": "explore",
+  "status": "pending",
+  "priority": "high",
+  "dependencies": [],
+  "created_at": "2026-05-09T00:00:00Z",
+  "updated_at": "2026-05-09T00:00:00Z",
+  "evidence": "",
+  "notes": ""
+}

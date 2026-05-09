@@ -1,0 +1,15 @@
+{
+  "id": "T-002",
+  "team_id": "audit-team-mode-workflow-policy-202605",
+  "subject": "Security audit of state/team trust boundaries",
+  "description": "Review hooks, MCP bridge writer, and validators for path traversal, containment, injection, and state integrity risks. Provide severity-rated findings and smallest safe fix suggestions.",
+  "owner": "security-reviewer",
+  "status": "pending",
+  "priority": "high",
+  "dependencies": [],
+  "created_at": "2026-05-09T00:00:00Z",
+  "updated_at": "2026-05-09T00:00:00Z",
+  "evidence": "",
+  "notes": ""
+}
+

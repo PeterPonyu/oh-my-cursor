@@ -1,0 +1,14 @@
+{
+  "id": "T-009",
+  "team_id": "audit-team-mode-workflow-policy-202605",
+  "subject": "Root policy docs: AGENTS.md, README, confirmed-surfaces",
+  "description": "Read AGENTS.md, README.md, docs/confirmed-surfaces.md (if present). Map claim/proof wording to team mode + workflow policy; flag anything that implies background workers or repo-provisioned product features without proof.",
+  "owner": "critic",
+  "status": "pending",
+  "priority": "medium",
+  "dependencies": [],
+  "created_at": "2026-05-09T00:00:00Z",
+  "updated_at": "2026-05-09T00:00:00Z",
+  "evidence": "",
+  "notes": ""
+}

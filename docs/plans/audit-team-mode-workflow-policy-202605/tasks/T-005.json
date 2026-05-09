@@ -1,0 +1,14 @@
+{
+  "id": "T-005",
+  "team_id": "audit-team-mode-workflow-policy-202605",
+  "subject": "Validators & smoke scripts vs workflow contract",
+  "description": "Inventory scripts that touch workflow-state or hooks: validate-workflow-state.py, validate-cursor-workflow-artifacts.py, smoke-cursor-workflow-artifacts.sh, validate-state-contract.sh, check-local-plugin-install.sh. Note what each proves vs what docs claim.",
+  "owner": "verifier",
+  "status": "completed",
+  "priority": "high",
+  "dependencies": [],
+  "created_at": "2026-05-09T00:00:00Z",
+  "updated_at": "2026-05-09T07:45:00Z",
+  "evidence": "Fresh runs 2026-05-09: validate-workflow-state.py (OK on example), validate-cursor-workflow-artifacts.py (HOOKS+AGENTS OK), smoke-cursor-workflow-artifacts.sh (failed: .cursor/hooks path missing in repo root), validate-state-contract.sh (OK), check-local-plugin-install.sh (failed on workspace .cursor/state/workflow-state.json present). Structured gaps in T-005-audit notes.",
+  "notes": "Gaps documented: smoke requires post-install layout; validate-workflow-state is shape-only (see docs/multi-state-compat.md); others prove repo boundary/install structure but sensitive to runtime artifacts. All align with repo-owned provability claims."
+}

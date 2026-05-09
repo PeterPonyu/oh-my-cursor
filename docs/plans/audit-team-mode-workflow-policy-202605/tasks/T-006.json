@@ -1,0 +1,14 @@
+{
+  "id": "T-006",
+  "team_id": "audit-team-mode-workflow-policy-202605",
+  "subject": "Agent prompts vs phase-controller role table",
+  "description": "Compare skills/phase-controller/SKILL.md role table to .cursor/agents/*.md frontmatter (readonly, tools, MCP). Flag mismatches, stale paths, or orchestrator-only write claims that conflict with tool-guard behavior.",
+  "owner": "code-reviewer",
+  "status": "completed",
+  "priority": "medium",
+  "dependencies": [],
+  "created_at": "2026-05-09T00:00:00Z",
+  "updated_at": "2026-05-09T11:35:00Z",
+  "evidence": "All 12 agents/*.md frontmatter (readonly, tools: lists, model:auto, MCP state_* access) match the role table in phase-controller/SKILL.md:93-101 and docs/orchestration.md. No stale tool lists or conflicting write claims. One non-blocking stale path: hooks/tool-guard.py:69,78 still references `.cursor/agents/{role}.md` in messages (directory moved to `agents/`). Tool-guard enforcement logic is correct via _active_role.py and matches declared frontmatter.",
+  "notes": "No CRITICAL/HIGH issues; minor documentation path drift only. Verdict: no action required beyond this audit note."
+}

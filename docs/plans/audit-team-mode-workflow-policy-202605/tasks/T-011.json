@@ -1,0 +1,14 @@
+{
+  "id": "T-011",
+  "team_id": "audit-team-mode-workflow-policy-202605",
+  "subject": "tests/hooks coverage vs hook behavior",
+  "description": "If tests/hooks/ exists, list what is tested vs untested hook modules. Recommend minimal tests only if gaps are material to workflow policy.",
+  "owner": "test-engineer",
+  "status": "completed",
+  "priority": "low",
+  "dependencies": [],
+  "created_at": "2026-05-09T00:00:00Z",
+  "updated_at": "2026-05-09T07:35:00Z",
+  "evidence": "tests/hooks/ exists (4 files). 2 test modules:\n- test_hook_importable.py: syntax parse, py_compile, safe import attempt for ALL hook scripts (14 + helpers).\n- test_hook_readonly.py: AST/static scan enforcing no write_text/bytes/json.dump/open-w/Path-write to workflow-state* or docs/plans/ for 11 public hooks (excludes _* helpers).\nconftest provides fixtures for .cursor/hooks (note: source now at root/hooks/).\n\n14 hooks per hooks.json all covered by static/contract tests.\n\nMaterial gaps (affecting workflow policy integrity):\n- ZERO behavioral/functional tests: no verification of hook logic (routing decisions, claim detection, stop limits, failure handling, state transitions).\n- No integration/e2e simulating Cursor events (preToolUse payloads, session lifecycle).\n- Policy enforcement (claim-guard, stop-gate, prompt-router, etc.) is untested at runtime; only static \"no writes\" and \"compiles\" checked.\n- High risk: workflow policy relies entirely on these hooks; absence of logic tests means regressions in core rules go undetected.",
+  "notes": "Static analysis only. Recommend (low prio) adding pytest-mock based unit tests for key behaviors if policy audits expand. No TDD needed here as task is inventory."
+}
