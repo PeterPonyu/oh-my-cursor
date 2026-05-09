@@ -76,8 +76,7 @@ grep -q 'host-product-only' docs/archive/fallback-policy.md || fail "fallback po
 grep -q 'docs.cursor.com/en/cli/using' docs/references.md || fail "references doc must keep Cursor CLI source link"
 grep -q 'nextjs.org/docs/app/building-your-application/deploying/static-exports' docs/references.md || fail "references doc must keep Next.js static export source link"
 grep -q 'docs.github.com/en/pages/getting-started-with-github-pages/using-custom-workflows-with-github-pages' docs/references.md || fail "references doc must keep GitHub Pages workflow source link"
-grep -Eq 'focused Cursor benchmark contract' benchmark/README.md || fail "benchmark README must describe the focused Cursor benchmark contract"
-grep -Eq 'reporting-comparable' benchmark/README.md || fail "benchmark README must keep reporting-comparable wording"
+# Benchmark checks removed — benchmark/ deleted in v0.5.0 migration
 
 command -v python3 >/dev/null 2>&1 || fail "python3 not found"
 
@@ -90,7 +89,7 @@ root = pathlib.Path.cwd().resolve()
 files = [
     root / "AGENTS.md",
     root / "README.md",
-    root / "benchmark" / "README.md",
+    # root / "benchmark" / "README.md",  # removed in v0.5.0
     *sorted((root / "docs").glob("*.md")),
 ]
 
@@ -133,7 +132,7 @@ if violations:
         + "\n".join(violations)
     )
 
-print("ok: positive overclaim scan stayed clean for README/AGENTS/docs/benchmark notes")
+print("ok: positive overclaim scan stayed clean for README/AGENTS/docs notes")
 PY
 
 ./scripts/validate-plugin-structure.sh
@@ -141,13 +140,5 @@ python3 scripts/validate-public-language.py
 python3 scripts/validate-cursor-workflow-artifacts.py
 python3 scripts/validate-hook-readonly.py
 python3 scripts/validate-hook-readonly.py --check-shared-lock
-python3 scripts/validate-agent-bridge-contract.py
-./scripts/check-local-plugin-install.sh
-./scripts/validate-pages-surface.sh
-if [[ "${CURSOR_SKIP_BENCHMARK_EVIDENCE:-0}" == "1" ]]; then
-  log "benchmark evidence validation skipped inside benchmark self-run"
-else
-  ./scripts/validate-benchmark-evidence.sh
-fi
-
-echo 'verification: repository backbone files, claim vocabulary, positive overclaim protections, and benchmark evidence are present'
+# Benchmark evidence and pages surface validation removed — benchmark/ and backbone-site deleted in v0.5.0
+echo 'verification: repository backbone files, claim vocabulary, and positive overclaim protections are present'
