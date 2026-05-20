@@ -39,7 +39,10 @@ checked-in artifacts versus Cursor product capabilities.
   unless documented.
 - Hooks, agents, and workflow-state helpers are repo-owned only to the
   extent represented by `hooks/hooks.json`, `hooks/`,
-  `agents/`, `.cursor/state/`, and their validators.
+  `agents/` (fourteen roles: `orchestrator`, `architect`, `researcher`,
+  `planner`, `implementer`, `qa-tester`, `verifier`, `critic`,
+  `code-reviewer`, `debugger`, `tracer`, `security-reviewer`, `explore`,
+  `test-engineer`), `.cursor/state/`, and their validators.
 - The MCP server at `mcp/cursor-state-bridge/` is `repo-owned` opt-in:
   the default plugin install excludes it; users add it via
   `./scripts/install-local-plugin.sh --with-mcp` using the template at

@@ -18,12 +18,10 @@ import sys
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
+from _repo import resolve_workspace_root  # noqa: E402
 from _trace import trace as _trace  # noqa: E402
 
-# Resolve ROOT from environment or workspace, not __file__ (which may be unreliable in hook contexts)
-ROOT = Path(os.environ.get("OH_MY_CURSOR_WORKSPACE", os.getcwd())).resolve()
-if not (ROOT / ".cursor" / "hooks").exists() or "plugins/local/oh-my-cursor" in str(ROOT):
-    ROOT = Path(__file__).resolve().parents[2]
+ROOT = resolve_workspace_root(__file__)
 
 
 def _read_payload() -> dict:

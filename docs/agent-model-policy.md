@@ -26,10 +26,10 @@ pinning every checked-in subagent to a Composer model would be an overclaim
 without role-specific evidence:
 
 - `explore` and `researcher` benefit from fast, cheap codebase search.
-- `planner`, `critic`, and `security-reviewer` benefit from stronger reasoning.
+- `planner`, `architect`, `critic`, and `security-reviewer` benefit from stronger reasoning.
 - `implementer`, `debugger`, and `test-engineer` need reliable tool use and
   failure recovery.
-- `verifier` and `code-reviewer` need skeptical evidence checking more than
+- `qa-tester`, `verifier`, and `code-reviewer` need skeptical evidence checking more than
   broad generation.
 
 Those are suitability hypotheses. They become policy only after a reproducible
@@ -43,9 +43,11 @@ benchmark shows a fixed model is required for a role.
 | `researcher` | `model: auto` | Fast model acceptable when retrieval is dominant | Search/map benchmark shows equal evidence quality at lower latency or cost. |
 | `explore` | `model: auto` | Fast model often suitable for read-only mapping | File-discovery benchmark returns correct paths with lower latency. |
 | `planner` | `model: auto` | Strong reasoning model may improve acceptance criteria | Planning benchmark produces fewer vague criteria and fewer replan loops. |
+| `architect` | `model: auto` | Strong reasoning model may improve invariant and boundary review | Architecture benchmark catches seeded state/ownership regressions before implementation. |
 | `implementer` | `model: auto` | Agentic model may improve tool use on edits | Patch benchmark passes tests with fewer retries and no scope expansion. |
 | `debugger` | `model: auto` | Strong reasoning model may improve root-cause diagnosis | Failure-reproduction benchmark identifies root cause and minimal fix more often. |
 | `test-engineer` | `model: auto` | Tool-capable model may improve test selection | Test-strategy benchmark catches known regression without deleting or weakening tests. |
+| `qa-tester` | `model: auto` | Tool-capable model may improve bounded runtime QA evidence | Runtime-smoke benchmark runs correct validators and records evidence without editing files. |
 | `verifier` | `model: auto` | Skeptical reasoning matters more than generation | Verification benchmark rejects incomplete work and cites evidence. |
 | `critic` | `model: auto` | Strong reasoning model may improve assumption checks | Review benchmark finds seeded architectural risks without false blocking. |
 | `code-reviewer` | `model: auto` | Strong reasoning model may improve bug finding | Code-review benchmark finds seeded correctness bugs with bounded false positives. |

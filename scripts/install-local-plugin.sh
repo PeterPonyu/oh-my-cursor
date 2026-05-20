@@ -145,8 +145,8 @@ PY
     [[ -e "${src%/}/${required_path}" ]] || fail "prebuilt payload is missing ${required_path}"
   done
 
-  if find "$src" \( -name "__pycache__" -o -name "*.pyc" -o -name "*.lock" \) -print -quit | grep -q .; then
-    fail "prebuilt payload contains dev artifacts (__pycache__, *.pyc, or *.lock)"
+  if find "$src" \( -name "__pycache__" -o -name ".pytest_cache" -o -name "*.pyc" -o -name "*.lock" \) -print -quit | grep -q .; then
+    fail "prebuilt payload contains dev artifacts (__pycache__, .pytest_cache, *.pyc, or *.lock)"
   fi
 
   log "validated prebuilt plugin payload at $src"
@@ -198,14 +198,17 @@ copy_minimal_payload() {
 
   local mcp_includes=()
   if [[ "$WITH_MCP" == "1" ]]; then
-    mcp_includes=(--include='/mcp/' --include='/mcp/***')
+    mcp_includes=(--include='/mcp/' --include='/mcp/***' --include='/mcp.json' --exclude='/mcp/**/tests/**' --exclude='/mcp/cursor-state-bridge/tests/')
   fi
 
   rsync -a \
     -m \
     --delete \
     --exclude='**/__pycache__/' \
+    --exclude='**/.pytest_cache/' \
     --exclude='*.pyc' \
+    --exclude='/mcp/**/tests/**' \
+    --exclude='/mcp/cursor-state-bridge/tests/' \
     --exclude='*.lock' \
     --exclude='.DS_Store' \
     --exclude='*.swp' \
@@ -230,13 +233,12 @@ copy_minimal_payload() {
     --include='/assets/***' \
     --include='/CHANGELOG.md' \
     --include='/LICENSE' \
-    --include='/mcp.json' \
     --include='*/' \
     "${mcp_includes[@]}" \
     --exclude='*' \
     "$src"/ "$dst"/
 
-  find "$dst" -type d -name "__pycache__" -exec rm -rf {} + 2>/dev/null || true
+  find "$dst" -type d \( -name "__pycache__" -o -name ".pytest_cache" \) -exec rm -rf {} + 2>/dev/null || true
 }
 
 do_status() {
@@ -357,13 +359,13 @@ do_watch() {
 
   if [[ "$watch_tool" == "inotifywait" ]]; then
     inotifywait -r -e modify,create,delete,move \
-      --exclude='(__pycache__|\.git|\.omc|\.omcs|\.cursor-worktree|\.sisyphus|node_modules)' \
+      --exclude='(__pycache__|\.pytest_cache|\.git|\.omc|\.omcs|\.cursor-worktree|\.sisyphus|node_modules)' \
       "$ROOT" 2>/dev/null | while read -r _; do
       debounce_reinstall
     done
   else
     # fswatch: cross-platform, prints one path per event
-    fswatch -r --exclude='(__pycache__|\.git|\.omc|\.omcs|\.cursor-worktree|\.sisyphus|node_modules)' \
+    fswatch -r --exclude='(__pycache__|\.pytest_cache|\.git|\.omc|\.omcs|\.cursor-worktree|\.sisyphus|node_modules)' \
       "$ROOT" 2>/dev/null | while read -r _; do
       debounce_reinstall
     done

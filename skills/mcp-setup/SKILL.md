@@ -26,7 +26,12 @@ This skill is a diagnostic-first setup guide for the repo-owned `cursor-state-br
 
 | Tool/Resource | MCP Server | Purpose | Required | Status |
 |---|---|---|---|---|
-| All six tools | cursor-state-bridge | Verified when bridge is installed | No | optional |
+| `state_read` | cursor-state-bridge | Minimum host-exposure check | No | optional |
+| `state_init` | cursor-state-bridge | Verify initialization tool is visible/callable in full smoke | No | optional |
+| `state_set_phase` | cursor-state-bridge | Verify phase transition tool is visible/callable in full smoke | No | optional |
+| `state_record_failure` | cursor-state-bridge | Verify failure-recording tool is visible/callable in full smoke | No | optional |
+| `state_update_acceptance_criterion` | cursor-state-bridge | Verify acceptance evidence tool is visible/callable in full smoke | No | optional |
+| `state_history_append` | cursor-state-bridge | Verify history note tool is visible/callable in full smoke | No | optional |
 
 **Note**: This skill sets up MCP; it does not require MCP to run.
 

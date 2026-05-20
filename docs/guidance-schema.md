@@ -5,7 +5,7 @@ Status: Canonical contract for instruction-surface alignment across oh-my-cursor
 ## Purpose
 
 Define one shared schema that can be applied across:
-- `.cursor/agents/*.md` — agent prompt files
+- `agents/*.md` — agent prompt files
 - `skills/*/SKILL.md` — skill workflow definitions
 - Future team worker surfaces
 - Runtime AGENTS overlays
@@ -55,7 +55,7 @@ This standard is additive and migration-safe: it does not change workflow-state 
 
 ## Agent Compliance
 
-Every `.cursor/agents/*.md` file should contain sections that map to these 6 required areas:
+Every `agents/*.md` file should contain sections that map to these 6 required areas:
 
 | Schema Section | Agent Equivalent | Example |
 |---|---|---|
@@ -92,7 +92,7 @@ Reserved comment markers for runtime injection — do not remove:
 
 - Workflow state: `.cursor/state/workflow-state.json` or `docs/plans/<task-id>/workflow-state.json`
 - Acceptance criteria IDs: stable `AC-NNN` format, never renumbered
-- Agent paths: `.cursor/agents/<name>.md`
+- Agent paths: `agents/<name>.md`
 - Skill paths: `skills/<name>/SKILL.md`
 
 ### State ownership

@@ -58,14 +58,33 @@ if [[ "$RUN_MODEL_SMOKE" != "1" ]]; then
 fi
 
 command -v cursor-agent >/dev/null 2>&1 || { echo "FAIL: cursor-agent not found" >&2; exit 1; }
-MODEL="$(python3 "$ROOT/scripts/resolve-cursor-model.py")"
+MODEL="${CURSOR_SMOKE_MODEL:-}"
+if [[ -z "$MODEL" ]]; then
+  MODEL="$(python3 "$ROOT/scripts/resolve-cursor-model.py")"
+fi
+
+fallback_model() {
+  cursor-agent --list-models 2>/dev/null | python3 -c 'import sys; models=[]
+for raw in sys.stdin:
+    line=raw.strip()
+    lower=line.lower()
+    if not line or lower.startswith("available models") or lower.startswith("no models available"):
+        continue
+    slug=line.split(" - ",1)[0].strip() if " - " in line else line.split()[0]
+    if slug and slug not in models:
+        models.append(slug)
+prefs=("composer-2.5-fast","composer-2.5","auto")
+print(next((p for p in prefs if p in models), models[0] if models else ""))'
+}
 echo "ok: using Cursor role suitability smoke model $MODEL"
 
 all_roles=(
+  architect
   orchestrator
   researcher
   explore
   planner
+  qa-tester
   implementer
   debugger
   test-engineer
@@ -101,8 +120,8 @@ for role in "${roles[@]}"; do
   expected="ROLE_MODEL_SMOKE_OK ${role}"
   prompt="Do not edit files or run shell commands. Read agents/${role}.md conceptually as the role contract. Reply with exactly: ${expected}"
   output=""
-  for attempt in 1 2; do
-    output="$(
+  for attempt in 1 2 3 4 5; do
+    if output="$(
       timeout "$TIMEOUT_SECONDS" cursor-agent \
         -p \
         --output-format text \
@@ -111,10 +130,28 @@ for role in "${roles[@]}"; do
         --trust \
         --workspace "$ROOT" \
         "$prompt" 2>&1
-    )" && break
-    if printf '%s\n' "$output" | grep -Fq 'Cannot use this model:' && [[ "$MODEL" != "auto" ]]; then
-      printf 'bounded: Cursor rejected role smoke model %s for %s; retrying with host-selected auto\n' "$MODEL" "$role" >&2
-      MODEL="auto"
+    )"; then
+      break
+    fi
+    if printf '%s\n' "$output" | grep -Fq 'Cannot use this model:'; then
+      next_model="auto"
+      if [[ "$MODEL" == "auto" ]]; then
+        next_model="$(fallback_model)"
+      fi
+      if [[ -n "$next_model" && "$next_model" != "$MODEL" ]]; then
+        printf 'bounded: Cursor rejected role smoke model %s for %s; retrying with %s\n' "$MODEL" "$role" "$next_model" >&2
+        MODEL="$next_model"
+        continue
+      fi
+      if [[ -z "$next_model" && "$attempt" -lt 5 ]]; then
+        printf 'bounded: Cursor rejected role smoke model %s for %s and model list was unavailable; retrying same model\n' "$MODEL" "$role" >&2
+        sleep "$attempt"
+        continue
+      fi
+    fi
+    if [[ "$attempt" -lt 5 ]] && printf '%s\n' "$output" | grep -Eiq 'Connection lost|Retry attempt|tls handshake eof|stream disconnected|reconnecting|temporarily unavailable|Client network socket disconnected|secure TLS connection|\[aborted\]'; then
+      printf 'bounded: transient cursor-agent failure during role smoke for %s (attempt %s/5), retrying\n' "$role" "$attempt" >&2
+      sleep "$attempt"
       continue
     fi
     printf '%s\n' "$output" >&2

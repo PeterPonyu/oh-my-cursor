@@ -41,7 +41,7 @@ Each phase advance is an action on a schema-bounded JSON document that follows
 | --- | --- | --- |
 | Plugin manifest | `.cursor-plugin/plugin.json` | Declares the repo-root plugin and points Cursor at the rules, skills, agents, and hooks payload. |
 | Hooks | `hooks/hooks.json` plus stdlib-only Python scripts under `hooks/` | Fourteen documented Cursor hook events are wired (`sessionStart` → `session-bootstrap.py`; `sessionEnd` → `session-summary.py`; `beforeSubmitPrompt` → `prompt-router.py`; `preToolUse` → `tool-guard.py`; `postToolUse` → `state-watcher.py`; `postToolUseFailure` → `failure-router.py`; `subagentStart` → `subagent-bootstrap.py`; `subagentStop` → `subagent-summary.py`; `beforeShellExecution` → `shell-guard.py`; `afterShellExecution` → `shell-debrief.py`; `beforeReadFile` → `read-advisor.py`; `afterFileEdit` → `claim-guard.py`; `preCompact` → `compact-reminder.py`; `stop` → `stop-gate.py`). All scripts are fail-open, observational unless a tightly bounded severe pattern is detected, and **read** workflow-state — they never write it. |
-| Agents | `agents/orchestrator.md`, `researcher.md`, `planner.md`, `implementer.md`, `verifier.md`, `critic.md`, `code-reviewer.md`, `debugger.md`, `tracer.md`, `security-reviewer.md`, `explore.md`, `test-engineer.md` | Role prompts. `orchestrator.md` is the entry point; it routes work to the other roles. Most role agents are read-only; `debugger`, `implementer`, and `orchestrator` may update files only when the requested workflow requires it. |
+| Agents | `agents/orchestrator.md`, `architect.md`, `researcher.md`, `planner.md`, `implementer.md`, `qa-tester.md`, `verifier.md`, `critic.md`, `code-reviewer.md`, `debugger.md`, `tracer.md`, `security-reviewer.md`, `explore.md`, `test-engineer.md` | Role prompts. `orchestrator.md` is the entry point; it routes work to the other roles. Most role agents are read-only; `debugger`, `implementer`, `orchestrator`, and `test-engineer` may update files only when the requested workflow requires it, while `qa-tester` may run bounded validation commands without editing files. |
 | Skills | `skills/*/SKILL.md` (14 total; see Skills table below) | Workflow recipes the user or agent invokes by name. Invoke by name from agent prompts or user input. |
 | Workflow state | `.cursor/state/workflow-state.schema.json`, `.cursor/state/workflow-state.example.json`, `.cursor/state/README.md` | The shared state contract; file-backed, human-visible, opt-in. |
 | State writer (agent-callable) | `mcp/cursor-state-bridge/` MCP tools (`state_init`, `state_set_phase`, `state_update_acceptance_criterion`, `state_record_failure`, `state_history_append`) | Sole agent-callable writer of `.cursor/state/workflow-state.json` (and per-task variants under `docs/plans/<task-id>/`). Routes through the shared `file_lock` from `.cursor/state/_locking.py`. Opt-in install via `scripts/install-local-plugin.sh --with-mcp`. |
@@ -56,14 +56,13 @@ Each phase advance is an action on a schema-bounded JSON document that follows
    `python3 scripts/validate-workflow-state.py <path>`.
 2. **Research.** Invoke `agents/researcher.md` (read-only). Capture
    findings into the state's `next_action` and notes; do not start coding.
-3. **Plan.** Invoke `agents/planner.md` or the `plan` skill. Lock in
+3. **Plan.** Invoke `agents/planner.md` or the `plan` skill. For broad or high-risk changes, invoke `agents/architect.md` before execution to check boundaries and invariants. Lock in
    the acceptance-criteria list with stable `id` values.
 4. **Execute.** Use the appropriate worker skill (`auto-execute`,
    `iterate-loop`, etc.). Mark each acceptance criterion as `passed` only when
    evidence is captured (a checked-in artifact path or a reproducible
    command).
-5. **Verify.** Invoke `agents/verifier.md`. The verifier confirms
-   evidence; it does not run new code itself.
+5. **Verify.** Invoke `agents/qa-tester.md` when fresh runtime evidence is needed, then `agents/verifier.md` to gate that evidence. The verifier confirms evidence; it does not run new code itself.
 6. **Review.** Reviewers (`review` skill, `critic` and `code-reviewer` agents,
    plus optional `security-review` skill) run against the changes. Verdicts are
    mapped to a shared loop gate (`pass`, `comment`, `block`) as defined in
@@ -89,7 +88,7 @@ it. A resumed CLI turn can load the local plugin and ask the phase controller to
 continue:
 
 ```bash
-cursor-agent \
+agent \
   --workspace /path/to/workspace \
   --plugin-dir ~/.cursor/plugins/local/oh-my-cursor \
   --model "$MODEL" \
@@ -97,13 +96,17 @@ cursor-agent \
   "Continue with phase-controller from the active workflow-state."
 ```
 
-Use `--resume <chat-id>` instead of `--continue` when targeting a specific
-thread. For scripted turns, pair the same flags with `--print --trust` only when
-the caller intentionally wants non-interactive execution. The plugin then
-contributes repo-owned rules, skills, agents, hooks, and optional
-`cursor-state-bridge` MCP tools to that resumed Cursor session. Subagents remain
-Cursor-managed runs launched by the parent agent; the durable part this repo
-owns is the small workflow-state document and the validation contract around it.
+The Cursor CLI binary is documented as `agent` in current Cursor docs (see
+`docs/references.md`); the legacy alias `cursor-agent` is still understood by
+installs that shipped earlier and is what existing smoke scripts under
+`scripts/` invoke. Use `--resume <chat-id>` instead of `--continue` when
+targeting a specific thread. For scripted turns, pair the same flags with
+`--print --trust` only when the caller intentionally wants non-interactive
+execution. The plugin then contributes repo-owned rules, skills, agents, hooks,
+and optional `cursor-state-bridge` MCP tools to that resumed Cursor session.
+Subagents remain Cursor-managed runs launched by the parent agent; the durable
+part this repo owns is the small workflow-state document and the validation
+contract around it.
 
 This keeps the wording precise:
 
@@ -157,13 +160,13 @@ Developer-only equivalents (not for agents/skills):
 | Skill | Governance | Primary MCP Tools | Invoked When | Phase(s) |
 | --- | --- | --- | --- | --- |
 | phase-controller | repo-owned, checked-in-artifact | state_read, state_init, state_set_phase, state_record_failure, state_update_acceptance_criterion, state_history_append | Session start or task reassignment | any |
-| auto-execute | repo-owned, checked-in-artifact | state_set_phase, state_update_acceptance_criterion | User requests "autopilot" or full pipeline execution | intake→execute→verify→review |
+| auto-execute | repo-owned, checked-in-artifact | state_init, state_set_phase, state_record_failure, state_update_acceptance_criterion | User requests "autopilot" or full pipeline execution | intake→execute→verify→review |
 | debug | repo-owned, checked-in-artifact | state_read, state_record_failure | Debugging requested or failure route selected | blocked/failed |
 | deep-interview | repo-owned, checked-in-artifact | None | Vague request needs scoping or clarification | intake/research |
 | doctor | repo-owned, checked-in-artifact | None | Diagnostic check of Cursor + repo installation | intake |
 | iterate-loop | repo-owned, checked-in-artifact | state_record_failure, state_update_acceptance_criterion, state_history_append | Execute phase with multiple acceptance criteria | execute |
 | local-plugin-check | repo-owned, checked-in-artifact | None | User verifies local plugin installation | intake |
-| mcp-setup | repo-owned, checked-in-artifact | None | MCP bridge setup or verification requested | intake |
+| mcp-setup | repo-owned, checked-in-artifact | state_read, state_init, state_set_phase, state_record_failure, state_update_acceptance_criterion, state_history_append | MCP bridge setup or verification requested | intake |
 | parallel-batch | repo-owned, checked-in-artifact | None | Independent tasks can run as separate CLI parent processes | execute |
 | plan | repo-owned, checked-in-artifact | None | User requests planning or orchestrator routes to plan phase | plan |
 | review | repo-owned, checked-in-artifact | None | Orchestrator routes to review phase | review |
@@ -201,7 +204,7 @@ Checked-in agent files are governed as a role registry:
   role suitability matrix and promotion path;
 - `readonly` is policy, not decoration: read/review roles stay read-only, while
   `orchestrator`, `implementer`, `debugger`, and `test-engineer` are the only
-  writable roles in the baseline;
+  file-editing roles in the baseline; `qa-tester` may run bounded validation commands but must not edit files;
 - `subagentStart` maps host-provided subagent types to those role prompts and
   records the active role for tool guards; and
 - `subagentStop` clears the active role and records an observational summary

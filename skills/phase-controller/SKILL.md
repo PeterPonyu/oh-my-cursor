@@ -52,13 +52,12 @@ justifies pinning them.
      list, then advance to `research`.
    - `research` → invoke the `researcher` agent, capture findings, then advance
      to `plan`.
-   - `plan` → invoke the `planner` agent or the `plan` skill, finalize the
+   - `plan` → invoke the `planner` agent or the `plan` skill, invoke `architect` for broad or high-risk changes, finalize the
      acceptance-criteria list, then advance to `execute`.
    - `execute` → use the appropriate implementation skill (`auto-execute`,
      `iterate-loop`, etc.). Mark each acceptance criterion as `passed` only when
      evidence is captured.
-   - `verify` → invoke the `verifier` agent. It must check evidence, not run
-     code itself.
+   - `verify` → invoke `qa-tester` when runtime proof is needed, then the `verifier` agent. The verifier checks evidence and does not run broad exploratory work.
    - `review` → invoke `critic` and `code-reviewer` **always**; additionally
      invoke `security-reviewer` when the change touches secrets, auth, supply
      chain, or external surfaces. All reviewers' verdicts feed the shared loop
@@ -96,7 +95,7 @@ Statuses per phase: `pending | in_progress | passed | failed | blocked`.
 
 - **Lifecycle phase(s)**: All phases
 - **Invoked by**: User at session start, or by `auto-execute`, `iterate-loop` when resuming
-- **Invokes**: Routes to agents (orchestrator, researcher, planner, implementer, verifier, critic, debugger, tracer) and skills (plan, iterate-loop, review, debug, trace, etc.)
+- **Invokes**: Routes to agents (orchestrator, architect, researcher, planner, implementer, qa-tester, verifier, critic, debugger, tracer) and skills (plan, iterate-loop, review, debug, trace, etc.)
 - **State contract**: Reads `.cursor/state/workflow-state.json` (or per-task archive at `docs/plans/<task-id>/workflow-state.json`); agent-callable writes go through the `cursor-state-bridge` MCP tools when installed.
 - **Failure handling**: Records failures via `state_record_failure` MCP tool when available; otherwise reports the failure route without directly editing workflow-state.
 
@@ -104,9 +103,9 @@ Statuses per phase: `pending | in_progress | passed | failed | blocked`.
 | --- | --- | --- |
 | any | orchestrator | `agents/orchestrator.md` |
 | research | researcher, explore | `agents/researcher.md`, `agents/explore.md` |
-| plan | planner | `agents/planner.md` |
+| plan | planner, architect | `agents/planner.md`, `agents/architect.md` |
 | execute | implementer (or skill) | `agents/implementer.md` |
-| verify | verifier, test-engineer | `agents/verifier.md`, `agents/test-engineer.md` |
+| verify | qa-tester, verifier, test-engineer | `agents/qa-tester.md`, `agents/verifier.md`, `agents/test-engineer.md` |
 | review | critic, security-reviewer, code-reviewer | `agents/critic.md`, `agents/security-reviewer.md`, `agents/code-reviewer.md` |
 | any failure | debugger, tracer | `agents/debugger.md`, `agents/tracer.md` |
 

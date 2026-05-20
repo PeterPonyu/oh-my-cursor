@@ -12,7 +12,7 @@ and trace rotation policy.
 
 ## Why a bridge
 
-Hooks under `.cursor/hooks/` already read workflow-state. The bridge gives
+Hooks under `hooks/` already read workflow-state. The bridge gives
 agents a structured, schema-faithful way to **write** that state without
 shelling out to the writer CLI. The CLI surface at
 `.cursor/state/workflow-state.py` stays in place as a thin shim over a

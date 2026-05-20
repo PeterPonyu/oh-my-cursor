@@ -1,5 +1,60 @@
 # Changelog
 
+## 2026-05-20
+
+### orchestration coverage sweep — architect + qa-tester roles, payload-root resolver, MCP schema lock-down
+
+- `agents/` registry grew from twelve to fourteen roles:
+  - `agents/architect.md` (readonly, `state_read` only) — invariant and
+    boundary review before broad or high-risk implementation; sits between
+    `planner` and `implementer` in the lifecycle.
+  - `agents/qa-tester.md` (readonly, `state_read` +
+    `state_update_acceptance_criterion` + `state_history_append`) — runs
+    bounded validation commands during `verify`/`review` and routes failures
+    to `debugger` instead of fixing them in place.
+- introduced `hooks/_repo.py`, a shared payload-root and workspace-root
+  resolver. Every hook (`session-bootstrap`, `session-summary`,
+  `prompt-router`, `state-watcher`, `stop-gate`, `compact-reminder`,
+  `claim-guard`, `subagent-bootstrap`, `_active_role`, `_trace`) now imports
+  it instead of rolling its own `__file__`-based path math, removing the
+  `.cursor/hooks/` vs `hooks/` ambiguity that survived the path migration.
+- `mcp/cursor-state-bridge/server.py` tightened the JSON-RPC tool schemas:
+  every input now sets `additionalProperties: false` (was `true` for
+  `state_init`), enumerates the optional fields it accepts
+  (`title`, `phase`, `status`, `role`, `next_action`, `scope_per_task`,
+  `note`, `history_cap`), and `state_history_append` now requires
+  `task_id` plus at least one of `event` or `note` via `anyOf`. The visible
+  six-tool surface is unchanged.
+- `scripts/validate-cursor-workflow-artifacts.py` is now the source of
+  truth for agent/skill governance, asserting all 14 agents and 14 skills
+  declare their expected MCP tools and that prompt-router/subagent-bootstrap
+  registries enumerate every role. New `scripts/smoke-workflow-state-completion.sh`
+  exercises the full `qa-tester` evidence path (state writes via the CLI
+  shim, `state-watcher` schema check, `compact-reminder` and `stop-gate`
+  pending-criteria surfacing) without touching the live workspace state.
+- `scripts/smoke-agent-model-suitability.sh` gained five-attempt retry
+  with `CURSOR_SMOKE_MODEL` override and a `cursor-agent --list-models`
+  fallback so the role suitability matrix survives transient CLI errors
+  and per-account model availability differences.
+- `scripts/install-local-plugin.sh`, `scripts/build-dist.sh`, and
+  `scripts/validate-plugin-structure.sh` now strip `.pytest_cache/` and
+  exclude `mcp/**/tests/` from packaging so the shipped local plugin
+  payload stays clean.
+- docs/orchestration.md, README.md, AGENTS.md, docs/confirmed-surfaces.md,
+  docs/references.md, docs/state-contract.md, docs/external-runtime-compatibility.md,
+  docs/agent-model-policy.md, docs/cursor-native-hooks.md,
+  docs/team-orchestration.md, docs/guidance-schema.md, docs/state-boundaries.md,
+  docs/mcp-bridge.md, skills/auto-execute, skills/mcp-setup, and
+  skills/phase-controller were resynced to enumerate fourteen agents,
+  to point at `hooks/` and `agents/` instead of the legacy `.cursor/`
+  paths, and to record the access date `2026-05-20`. README's Hooks,
+  Agents, and Skills rows now enumerate the full surface instead of
+  trailing `and more`. The `agent` Cursor CLI binary is now the
+  documented invocation, with the legacy alias `cursor-agent` called
+  out where existing scripts still use it.
+- removed a 60 MB stray PostScript artifact (`sys`) that had been left
+  at the repo root; the file was never tracked.
+
 ## 2026-05-09
 
 ### v0.5.0 — plugin improvement sweep

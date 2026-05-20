@@ -23,23 +23,24 @@ Stdlib-only.
 from __future__ import annotations
 
 import json
-import os
 import re
 import sys
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from _repo import resolve_repo_root, resolve_workspace_root  # noqa: E402
+
 # `_locking.file_lock` lives under `.cursor/state/`; expose it for shared
 # write serialisation. The path math mirrors how the bridge's `state_io.py`
 # locates the same module.
-# Resolve _ROOT from environment or workspace, not __file__ (which may be unreliable in hook contexts)
-_ROOT = Path(os.environ.get("OH_MY_CURSOR_WORKSPACE", os.getcwd())).resolve()
-if not (_ROOT / ".cursor" / "hooks").exists() or "plugins/local/oh-my-cursor" in str(_ROOT):
-    _ROOT = Path(__file__).resolve().parents[2]
+_PAYLOAD_ROOT = resolve_repo_root(__file__)
+_ROOT = resolve_workspace_root(__file__)
 _STATE_DIR = _ROOT / ".cursor" / "state"
-if str(_STATE_DIR) not in sys.path:
-    sys.path.insert(0, str(_STATE_DIR))
+_LOCKING_DIR = _PAYLOAD_ROOT / ".cursor" / "state"
+if str(_LOCKING_DIR) not in sys.path:
+    sys.path.insert(0, str(_LOCKING_DIR))
 
 try:
     from _locking import file_lock  # type: ignore[import-not-found]
@@ -52,7 +53,7 @@ except ImportError:  # pragma: no cover - degraded mode for non-POSIX hosts
 
 
 ACTIVE_ROLE_PATH = _STATE_DIR / "active-role.json"
-AGENTS_DIR = _ROOT / ".cursor" / "agents"
+AGENTS_DIR = _PAYLOAD_ROOT / "agents"
 
 
 def set_active_role(role: str, *, subagent_id: str = "") -> None:

@@ -31,24 +31,29 @@ required=(
     hooks/_active_role.py
     hooks/_tool_payload.py
     .cursor/mcp.example.json
+    .cursor/state/_locking.py
     .cursor/state/workflow-state.schema.json
     .cursor/state/workflow-state.example.json
     .cursor/state/workflow-state.py
     .cursor/state/README.md
-    agents/orchestrator.md
-    agents/verifier.md
+    agents/architect.md
+    agents/code-reviewer.md
     agents/critic.md
     agents/debugger.md
-    agents/security-reviewer.md
-    agents/planner.md
-    agents/researcher.md
-    agents/implementer.md
-    agents/code-reviewer.md
     agents/explore.md
+    agents/implementer.md
+    agents/orchestrator.md
+    agents/planner.md
+    agents/qa-tester.md
+    agents/researcher.md
+    agents/security-reviewer.md
     agents/test-engineer.md
     agents/tracer.md
+    agents/verifier.md
     mcp.json
   rules/repo-owned-plugin-boundary.mdc
+  .cursor/rules/20-commit-discipline.mdc
+  .cursor/rules/30-error-handling.mdc
   skills/local-plugin-check/SKILL.md
   skills/phase-controller/SKILL.md
   docs/local-plugin-verification.md
@@ -58,6 +63,7 @@ required=(
   scripts/check-local-plugin-install.sh
     scripts/validate-cursor-workflow-artifacts.py
     scripts/smoke-cursor-workflow-artifacts.sh
+    scripts/smoke-workflow-state-completion.sh
     scripts/validate-workflow-state.py
     scripts/workflow-state.py
 )
@@ -78,8 +84,13 @@ find .cursor -type d -name "__pycache__" -exec rm -rf {} + 2>/dev/null || true
 find .cursor -name "*.pyc" -delete 2>/dev/null || true
 find .cursor/state -name "*.lock" -delete 2>/dev/null || true
 
-if git ls-files .cursor 2>/dev/null | grep -qE '__pycache__|\.pyc$'; then
-  fail "pycache files are tracked in git — add __pycache__/ and *.pyc to .gitignore, then git rm --cached them"
+if git ls-files .cursor mcp 2>/dev/null | grep -qE '__pycache__|\.pytest_cache|\.pyc$'; then
+  fail "cache files are tracked in git — add __pycache__/, .pytest_cache/, and *.pyc to .gitignore, then git rm --cached them"
+  contaminated=1
+fi
+
+if find mcp -type d -name ".pytest_cache" 2>/dev/null | grep -q .; then
+  fail "found .pytest_cache under mcp/ — remove local test cache before packaging"
   contaminated=1
 fi
 
@@ -107,7 +118,7 @@ if [[ -d hooks/state ]]; then
 fi
 
 if [[ "$contaminated" == "0" ]]; then
-  log "payload is clean: no __pycache__, *.pyc, *.lock, or runtime artifacts in .cursor/"
+  log "payload is clean: no __pycache__, .pytest_cache, *.pyc, *.lock, or runtime artifacts in .cursor/"
 fi
 
 command -v python3 >/dev/null 2>&1 || fail "python3 not found"
