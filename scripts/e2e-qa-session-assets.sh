@@ -114,7 +114,7 @@ PY
 
 installed="${HOME}/.cursor/plugins/local/oh-my-cursor"
 if [[ -d "$installed" ]]; then
-  python3 - "$installed" <<'PY'
+  installed_check_output="$(python3 - "$installed" <<'PY'
 from __future__ import annotations
 
 import json
@@ -129,6 +129,15 @@ if not str(manifest.get("description", "")).startswith("[OMCS]"):
     raise SystemExit("FAIL: installed local plugin description lacks [OMCS] prefix")
 print("INSTALLED_OMCS_PREFIX_OK")
 PY
+)" || {
+    if [[ "${CHECK_INSTALLED_PLUGIN:-0}" == "1" ]]; then
+      printf '%s\n' "$installed_check_output" >&2
+      exit 1
+    fi
+    warn "installed local plugin prefix check failed; rerun install-local-plugin.sh --force for live-session parity"
+    installed_check_output=""
+  }
+  [[ -z "$installed_check_output" ]] || printf '%s\n' "$installed_check_output"
 else
   warn "local plugin is not installed at $installed; skipped installed-prefix check"
 fi

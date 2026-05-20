@@ -69,7 +69,7 @@ run_cursor_prompt() {
   local attempt output status transient
 
   for ((attempt = 1; attempt <= max_attempts; attempt++)); do
-    output="$(
+    if output="$(
       timeout "$TIMEOUT_SECONDS" cursor-agent \
         -p \
         --output-format text \
@@ -78,8 +78,11 @@ run_cursor_prompt() {
         --trust \
         --workspace "$ROOT" \
         "$prompt" 2>&1
-    )"
-    status=$?
+    )"; then
+      status=0
+    else
+      status=$?
+    fi
 
     if [[ "$status" -eq 0 ]] && printf '%s\n' "$output" | grep -Fxq "$expected"; then
       printf '%s\n' "$output"

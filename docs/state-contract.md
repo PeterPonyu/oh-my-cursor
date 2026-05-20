@@ -8,7 +8,7 @@ aligned with the claim/proof discipline.
 | State family | Ownership class | Current rule |
 | --- | --- | --- |
 | User auth and default model selection | `host-product-only` user environment | Cursor CLI auth/model state lives outside the repo. |
-| Repo guidance, root rules, hooks, agents, repo-root plugin files, validators, and benchmark evidence | `repo-owned` | This repo checks in the files that define its backbone and proof surface. |
+| Repo guidance, root rules, hooks, agents, repo-root plugin files, validators, and optional runtime smokes | `repo-owned` | This repo checks in the files that define its backbone and proof surface. |
 | Default MCP config, repo memories, custom modes, background-agent files | `unsupported-or-out-of-scope` until deliberately adopted | These are not checked in by the current backbone. |
 
 ## User-level state

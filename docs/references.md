@@ -42,8 +42,8 @@ When capability claims change in `AGENTS.md`, `README.md`, `docs/**`, or
 - Root `AGENTS.md`, `.cursor/rules/`, `hooks/hooks.json`, `hooks/`,
   `agents/`, the repo-root plugin manifest, shipped rules/skills,
   checked-in brand/readme/social assets under `assets/`, the root README image,
-  local validators, and checked-in benchmark artifacts are current
-  **repo-owned** surfaces.
+  local validators, and optional runtime smokes are current **repo-owned**
+  proof surfaces.
 - Cursor CLI, MCP, custom modes, and background agents are real Cursor
   capabilities, but they remain **host-product-only** unless this repo ships and
   validates a corresponding checked-in surface.

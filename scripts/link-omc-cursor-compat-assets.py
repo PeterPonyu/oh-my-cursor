@@ -6,6 +6,8 @@ import re
 import shutil
 from pathlib import Path
 
+KEBAB_RE = re.compile(r"[a-z0-9]+(?:-[a-z0-9]+)*")
+
 
 def fail(message: str) -> None:
     raise SystemExit(f"FAIL: {message}")
@@ -63,18 +65,35 @@ def ensure_clean_target(path: Path, force: bool) -> None:
             path.unlink()
 
 
+def normalize_name(raw: str, *, fallback: str) -> str:
+    name = raw or fallback
+    if not name.startswith("omc-"):
+        name = f"omc-{name}"
+    if not KEBAB_RE.fullmatch(name):
+        fail(f"unsafe OMC asset name: {name!r}")
+    return name
+
+
+def child_target(root: Path, name: str) -> Path:
+    root_resolved = root.resolve()
+    target = (root / name).resolve()
+    try:
+        target.relative_to(root_resolved)
+    except ValueError:
+        fail(f"target escapes compatibility root: {target}")
+    return target
+
+
 def copy_skill(source: Path, target_root: Path, force: bool) -> str:
     skill_md = source / "SKILL.md"
     fields, body = parse_frontmatter(skill_md.read_text(encoding="utf-8"))
-    name = fields.get("name") or source.name
-    if not name.startswith("omc-"):
-        name = f"omc-{name}"
+    name = normalize_name(fields.get("name", ""), fallback=source.name)
     fields["name"] = name
     description = fields.get("description") or f"OMC skill {source.name}"
     if not description.startswith("[OMC]"):
         fields["description"] = f"[OMC] {description}"
 
-    target = target_root / name
+    target = child_target(target_root, name)
     ensure_clean_target(target, force)
     shutil.copytree(source, target, symlinks=True)
     (target / "SKILL.md").write_text(render_frontmatter(fields, body), encoding="utf-8")
@@ -83,8 +102,7 @@ def copy_skill(source: Path, target_root: Path, force: bool) -> str:
 
 def copy_agent(source: Path, target_root: Path, force: bool) -> str:
     fields, body = parse_frontmatter(source.read_text(encoding="utf-8"))
-    base_name = fields.get("name") or source.stem
-    name = base_name if base_name.startswith("omc-") else f"omc-{base_name}"
+    name = normalize_name(fields.get("name", ""), fallback=source.stem)
     fields["name"] = name
     description = fields.get("description") or f"OMC agent {source.stem}"
     if not description.startswith("[OMC]"):
@@ -92,7 +110,7 @@ def copy_agent(source: Path, target_root: Path, force: bool) -> str:
     if fields.get("model") and fields["model"] not in {"inherit", "auto"}:
         fields["model"] = "inherit"
 
-    target = target_root / f"{name}.md"
+    target = child_target(target_root, f"{name}.md")
     ensure_clean_target(target, force)
     shutil.copy2(source, target)
     target.write_text(render_frontmatter(fields, body), encoding="utf-8")
