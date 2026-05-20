@@ -1,0 +1,12 @@
+{
+  "id": "T-002",
+  "team_id": "plugin-self-audit-202605",
+  "subject": "Security lane: hooks, bridge, scripts",
+  "description": "Read-only security review of .cursor/hooks/*.py, mcp/cursor-state-bridge/, scripts/*.sh with untrusted input. Severity-rate findings with path:line. No fixes unless explicitly authorized.",
+  "owner": "security-reviewer",
+  "status": "completed",
+  "priority": "high",
+  "dependencies": [],
+  "created_at": "2026-05-09T00:00:00Z",
+  "updated_at": "2026-05-09T00:00:00Z"
+}

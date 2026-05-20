@@ -1,0 +1,14 @@
+{
+  "id": "T-012",
+  "team_id": "audit-team-mode-workflow-policy-202605",
+  "subject": "Workflow-state path resolution across consumers",
+  "description": "Trace OH_MY_CURSOR_WORKFLOW_STATE and default paths in stop-gate.py, prompt-router.py, session-bootstrap.py, session-summary.py, compact-reminder.py vs mcp bridge defaults. Document a single recommended operator setup to avoid split-brain reads.",
+  "owner": "researcher",
+  "status": "pending",
+  "priority": "high",
+  "dependencies": [],
+  "created_at": "2026-05-09T00:00:00Z",
+  "updated_at": "2026-05-09T00:00:00Z",
+  "evidence": "",
+  "notes": ""
+}

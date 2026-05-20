@@ -13,9 +13,9 @@ Usage: scripts/smoke-cursor-agent.sh [--root PATH] [--run-agent-prompt] [--skip-
 Runs direct, CLI-first Cursor smoke checks:
   - cursor-agent presence
   - default auth availability (environment-gated runtime proof)
-  - auto-model availability (environment-gated runtime proof)
-  - optional constrained model-backed prompt smoke using `--model auto`
-  - optional constrained repo task smoke using `--model auto`
+  - configured default model availability (environment-gated runtime proof)
+  - optional constrained model-backed prompt smoke using the configured model
+  - optional constrained repo task smoke using the configured model
 
 Set RUN_CURSOR_AGENT_SMOKE=1 or pass --run-agent-prompt to run the model-backed
 agent smoke. The default mode avoids a network/model request and keeps the
@@ -54,6 +54,12 @@ while (($#)); do
 done
 
 command -v cursor-agent >/dev/null 2>&1 || { echo "FAIL: cursor-agent not found" >&2; exit 1; }
+command -v python3 >/dev/null 2>&1 || { echo "FAIL: python3 not found" >&2; exit 1; }
+
+SMOKE_MODEL="${CURSOR_SMOKE_MODEL:-}"
+if [[ -z "$SMOKE_MODEL" ]]; then
+  SMOKE_MODEL="$(python3 "$ROOT/scripts/resolve-cursor-model.py")"
+fi
 
 run_cursor_prompt() {
   local label="$1"
@@ -63,17 +69,20 @@ run_cursor_prompt() {
   local attempt output status transient
 
   for ((attempt = 1; attempt <= max_attempts; attempt++)); do
-    output="$(
+    if output="$(
       timeout "$TIMEOUT_SECONDS" cursor-agent \
         -p \
         --output-format text \
-        --model auto \
+        --model "$SMOKE_MODEL" \
         --mode ask \
         --trust \
         --workspace "$ROOT" \
         "$prompt" 2>&1
-    )"
-    status=$?
+    )"; then
+      status=0
+    else
+      status=$?
+    fi
 
     if [[ "$status" -eq 0 ]] && printf '%s\n' "$output" | grep -Fxq "$expected"; then
       printf '%s\n' "$output"
@@ -83,6 +92,11 @@ run_cursor_prompt() {
     transient=0
     if printf '%s\n' "$output" | grep -Eiq 'Connection lost|Retry attempt|tls handshake eof|stream disconnected|reconnecting|temporarily unavailable'; then
       transient=1
+    fi
+    if printf '%s\n' "$output" | grep -Fq 'Cannot use this model:' && [[ "$SMOKE_MODEL" != "auto" ]]; then
+      printf 'bounded: Cursor rejected smoke model %s during %s; retrying with host-selected auto\n' "$SMOKE_MODEL" "$label" >&2
+      SMOKE_MODEL="auto"
+      continue
     fi
 
     if [[ "$attempt" -lt "$max_attempts" && "$transient" -eq 1 ]]; then
@@ -105,6 +119,7 @@ else
 fi
 
 if [[ "$RUN_AGENT_SMOKE" == "1" ]]; then
+  printf 'ok: using Cursor smoke model %s\n' "$SMOKE_MODEL"
   output="$(run_cursor_prompt "prompt smoke" "CURSOR_AGENT_OK" "Do not edit files or run shell commands. Reply with exactly: CURSOR_AGENT_OK")"
   printf '%s\n' "$output" | grep -Fxq 'CURSOR_AGENT_OK' || {
     printf '%s\n' "$output" >&2
@@ -113,8 +128,8 @@ if [[ "$RUN_AGENT_SMOKE" == "1" ]]; then
   }
   printf 'ok: cursor-agent prompt smoke returned CURSOR_AGENT_OK (environment-gated runtime proof)\n'
 
-  task_output="$(run_cursor_prompt "task scenario smoke" "CURSOR_TASK_SCENARIO_OK docs/archive/refinement-priority-map.md docs/archive/plugin-boundary-review.md scripts/validate-benchmark-evidence.sh" "Without editing files or running write commands, identify the repo's archived refinement priority map doc, archived plugin boundary review doc, and benchmark evidence validator script. Reply with exactly: CURSOR_TASK_SCENARIO_OK docs/archive/refinement-priority-map.md docs/archive/plugin-boundary-review.md scripts/validate-benchmark-evidence.sh")"
-  printf '%s\n' "$task_output" | grep -Fxq 'CURSOR_TASK_SCENARIO_OK docs/archive/refinement-priority-map.md docs/archive/plugin-boundary-review.md scripts/validate-benchmark-evidence.sh' || {
+  task_output="$(run_cursor_prompt "task scenario smoke" "CURSOR_TASK_SCENARIO_OK docs/archive/refinement-priority-map.md docs/archive/plugin-boundary-review.md scripts/validate-plugin-structure.sh" "Without editing files or running write commands, identify the repo's archived refinement priority map doc, archived plugin boundary review doc, and plugin structure validation script. Reply with exactly: CURSOR_TASK_SCENARIO_OK docs/archive/refinement-priority-map.md docs/archive/plugin-boundary-review.md scripts/validate-plugin-structure.sh")"
+  printf '%s\n' "$task_output" | grep -Fxq 'CURSOR_TASK_SCENARIO_OK docs/archive/refinement-priority-map.md docs/archive/plugin-boundary-review.md scripts/validate-plugin-structure.sh' || {
     printf '%s\n' "$task_output" >&2
     echo "FAIL: cursor-agent task scenario smoke missing CURSOR_TASK_SCENARIO_OK" >&2
     exit 1
@@ -129,7 +144,7 @@ if [[ "$RUN_AGENT_SMOKE" == "1" ]]; then
   }
   printf 'ok: cursor-agent task plan smoke returned CURSOR_TASK_PLAN_OK (environment-gated runtime proof)\n'
 
-  task_command_output="$(run_cursor_prompt "task command smoke" "CURSOR_TASK_COMMAND_OK A" "Without editing files or running write commands, choose the correct rerun path after an enhanced-only task-smoke change. Option A: ./benchmark/quick_test.sh --variant enhanced --run-agent-smoke && ./scripts/validate-benchmark-evidence.sh. Option B: ./benchmark/quick_test.sh --variant baseline && ./scripts/validate-state-contract.sh. Reply with exactly: CURSOR_TASK_COMMAND_OK A")"
+  task_command_output="$(run_cursor_prompt "task command smoke" "CURSOR_TASK_COMMAND_OK A" "Without editing files or running write commands, choose the correct rerun path after a plugin structure change. Option A: ./scripts/validate-plugin-structure.sh && ./scripts/validate-state-contract.sh. Option B: ./scripts/validate-mcp-server-structure.py. Reply with exactly: CURSOR_TASK_COMMAND_OK A")"
   printf '%s\n' "$task_command_output" | grep -Fxq 'CURSOR_TASK_COMMAND_OK A' || {
     printf '%s\n' "$task_command_output" >&2
     echo "FAIL: cursor-agent task command smoke missing CURSOR_TASK_COMMAND_OK" >&2

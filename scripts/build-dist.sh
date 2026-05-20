@@ -65,8 +65,8 @@ fi
 rsync -a \
   -m \
   --delete \
-  --exclude='__pycache__/' \
-  --exclude='*.pyc' \
+    --exclude='**/__pycache__/' \
+    --exclude='*.pyc' \
   --exclude='*.lock' \
   --exclude='.DS_Store' \
   --exclude='*.swp' \
@@ -77,9 +77,9 @@ rsync -a \
   --exclude='/.cursor/state/active-role.json' \
   --exclude='/.cursor/hooks/state/' \
   --include='/.cursor-plugin/***' \
-  --include='/.cursor/hooks.json' \
-  --include='/.cursor/hooks/***' \
-  --include='/.cursor/agents/***' \
+  --include='/.cursor/mcp.example.json' \
+  --include='/hooks/***' \
+  --include='/agents/***' \
   --include='/.cursor/state/***' \
   --include='/rules/***' \
   --include='/skills/***' \
@@ -87,8 +87,9 @@ rsync -a \
   --include='/README.md' \
   --include='/assets/***' \
   --include='/CHANGELOG.md' \
-  --include='/LICENSE' \
-  --include='*/' \
+    --include='/LICENSE' \
+    --include='/mcp.json' \
+    --include='*/' \
   "${mcp_includes[@]}" \
   --exclude='*' \
   "$ROOT"/ "${DIST_DIR}/${PLUGIN_NAME}"/ || fail "rsync failed"
@@ -100,9 +101,13 @@ fi
 file_count=$(find "${DIST_DIR}/${PLUGIN_NAME}" -type f | wc -l | tr -d ' ')
 log "built dist/${PLUGIN_NAME} with ${file_count} files"
 
-[[ "$WITH_MCP" == "1" ]] && log "mcp/ included in payload" || log "mcp/ excluded (use --with-mcp to include)"
+if [[ "$WITH_MCP" == "1" ]]; then
+  log "mcp/ included in payload"
+else
+  log "mcp/ excluded (use --with-mcp to include)"
+fi
 
 cat <<EOF
 next: inspect dist/${PLUGIN_NAME}/
-next: test with: scripts/install-local-plugin.sh --root dist/${PLUGIN_NAME}
+next: install bundled payload with: scripts/install-local-plugin.sh --root dist/${PLUGIN_NAME} --force
 EOF

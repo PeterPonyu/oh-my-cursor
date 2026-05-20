@@ -1,0 +1,15 @@
+{
+  "id": "T-003",
+  "team_id": "audit-team-mode-workflow-policy-202605",
+  "subject": "Critic pass: docs vs implementation drift (team/workflow policy)",
+  "description": "Identify overclaims or mismatches between docs (orchestration, multi-state compat, team orchestration) and actual scripts/validators/skills. Recommend bounded wording fixes per claim/proof discipline.",
+  "owner": "critic",
+  "status": "pending",
+  "priority": "high",
+  "dependencies": [],
+  "created_at": "2026-05-09T00:00:00Z",
+  "updated_at": "2026-05-09T00:00:00Z",
+  "evidence": "",
+  "notes": ""
+}
+

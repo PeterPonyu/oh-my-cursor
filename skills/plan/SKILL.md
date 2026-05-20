@@ -1,15 +1,42 @@
 ---
 name: plan
-description: Strategic planning workflow that turns a request into a small, reviewable Cursor-native plan before any code change.
+description: "[OMCS] Strategic planning workflow that turns a request into a small, reviewable Cursor-native plan before any code change."
 ---
 
 # Plan
 
-> **Cursor host note.** This skill is a documentation workflow, not a runtime
-> orchestrator. It lives in `skills/plan/` so a Cursor session can load it on
-> demand. Plans are written to `docs/plans/` (a normal repo path), not to a
-> private runtime-state directory. If you need automatic activation, pair this
-> skill with a project rule under `.cursor/rules/*.mdc`.
+> **Cursor host note.** This skill is a documentation workflow, not a runtime orchestrator. It lives in `skills/plan/` so a Cursor session can load it on demand. Plans are written to `docs/plans/` (a normal repo path), not to a private runtime-state directory. If you need automatic activation, pair this skill with a project rule under `.cursor/rules/*.mdc`.
+
+## Governance
+
+### Ownership Class
+- **repo-owned**: YES — Checked in at `skills/plan/SKILL.md` as a documentation workflow for Cursor workspaces.
+- **host-product-only**: NO
+- **unsupported-or-out-of-scope**: NO
+
+### Proof Class
+- **official-doc**: NO — Cursor does not document a planning primitive; this is repo-owned.
+- **checked-in-artifact**: YES — Proof: `skills/plan/SKILL.md`, `docs/plans/` directory structure, plan format template.
+- **runtime-smoke**: NO
+
+### Claim Summary
+This skill provides a strategic planning workflow that turns vague requests into small, reviewable plans. Plans are written to `docs/plans/` as checked-in artifacts. No MCP or hooks required; this is a documentation-first workflow that complements `deep-interview` (for ambiguity gating) and feeds into `iterate-loop` or `auto-execute` for execution.
+
+## MCP Integration Points
+
+No direct MCP integration. This skill writes plans to `docs/plans/` as checked-in artifacts; state tracking is optional and handled by `phase-controller` or `auto-execute` if needed.
+
+## Hooks Dependencies
+
+No hooks dependencies. This skill is a documentation workflow that runs entirely within the Cursor chat.
+
+## Orchestration Role
+
+- **Lifecycle phase(s)**: intake, research, plan
+- **Invoked by**: User directly, `auto-execute` (phase 1), `deep-interview` (after ambiguity gating)
+- **Invokes**: Optionally `review` skill for validation; does not invoke other skills
+- **State contract**: Writes to `docs/plans/<slug>.md` (checked-in artifact); no workflow-state updates
+- **Failure handling**: If plan is rejected by user, loop back to step 1 or 2 with feedback
 
 ## Use when
 

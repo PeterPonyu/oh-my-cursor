@@ -1,16 +1,46 @@
 ---
 name: mcp-setup
-description: Setup and verification guide for the cursor-state-bridge MCP server.
+description: "[OMCS] Setup and verification guide for the cursor-state-bridge MCP server."
 ---
 
 # MCP Setup
 
-> **Cursor host note.** This is a diagnostic-first setup guide for the
-> repo-owned `cursor-state-bridge` MCP server. It checks checked-in artifacts,
-> explains the opt-in install path, and verifies the documented six-tool
-> surface when the Cursor host exposes it. It cannot force Cursor to load an
-> MCP server and it does not claim host-product state without evidence from
-> the user's Cursor UI or MCP tool panel.
+> **Cursor host note.** This is a diagnostic-first setup guide for the repo-owned `cursor-state-bridge` MCP server. It checks checked-in artifacts, explains the opt-in install path, and verifies the documented six-tool surface when the Cursor host exposes it. It cannot force Cursor to load an MCP server and it does not claim host-product state without evidence from the user's Cursor UI or MCP tool panel.
+
+## Governance
+
+### Ownership Class
+- **repo-owned**: YES — Checked in at `skills/mcp-setup/SKILL.md` as a diagnostic-first setup guide for the cursor-state-bridge MCP server.
+- **host-product-only**: NO
+- **unsupported-or-out-of-scope**: NO
+
+### Proof Class
+- **official-doc**: NO — Cursor does not document MCP setup; this is repo-owned.
+- **checked-in-artifact**: YES — Proof: `skills/mcp-setup/SKILL.md`, `mcp/cursor-state-bridge/`, `.cursor/mcp.example.json`, validators.
+- **runtime-smoke**: YES (optional) — Runs `validate-mcp-server-structure.py` and smoke test; MCP bridge is opt-in via `--with-mcp` install.
+
+### Claim Summary
+This skill is a diagnostic-first setup guide for the repo-owned `cursor-state-bridge` MCP server. It checks checked-in artifacts, explains the opt-in install path, and verifies the documented six-tool surface when the Cursor host exposes it. No MCP tools required to run this skill; it sets up MCP for other skills.
+
+## MCP Integration Points
+
+| Tool/Resource | MCP Server | Purpose | Required | Status |
+|---|---|---|---|---|
+| All six tools | cursor-state-bridge | Verified when bridge is installed | No | optional |
+
+**Note**: This skill sets up MCP; it does not require MCP to run.
+
+## Hooks Dependencies
+
+No hooks dependencies. This skill runs entirely within the Cursor chat.
+
+## Orchestration Role
+
+- **Lifecycle phase(s)**: intake
+- **Invoked by**: User, `verify` or `auto-execute` when MCP tools are unavailable
+- **Invokes**: No other skills; runs diagnostics and setup steps
+- **State contract**: No workflow-state updates; reports to chat
+- **Failure handling**: Reports missing prerequisites; does not auto-install
 
 ## Use when
 

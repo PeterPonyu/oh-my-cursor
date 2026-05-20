@@ -21,7 +21,7 @@ Mechanically asserts that every agent prompt, skill, and rule file:
 
 Surfaces scanned (all globs):
 
-- ``.cursor/agents/*.md`` (project agents, repo-owned)
+- ``agents/*.md`` (project agents, repo-owned)
 - ``skills/**/SKILL.md`` (plugin-shipped skills)
 - ``rules/**/*.mdc`` (plugin-shipped rules)
 - ``.cursor/rules/**/*.mdc`` (project rules)

@@ -1,14 +1,42 @@
 ---
 name: trace
-description: Evidence-driven causal tracing - explain why an observed result happened by ranking competing hypotheses.
+description: "[OMCS] Evidence-driven causal tracing - explain why an observed result happened by ranking competing hypotheses."
 ---
 
 # Trace
 
-> **Cursor host note.** Trace is a single-agent thinking pattern in this repo.
-> It runs causal lanes sequentially in one chat with explicit lane labels. If
-> you have access to multiple `cursor-agent` invocations, you can run separate
-> lanes in separate terminals and merge the outputs by hand.
+> **Cursor host note.** Trace is a single-agent thinking pattern in this repo. It runs causal lanes sequentially in one chat with explicit lane labels. If you have access to multiple `cursor-agent` invocations, you can run separate lanes in separate terminals and merge the outputs by hand.
+
+## Governance
+
+### Ownership Class
+- **repo-owned**: YES — Checked in at `skills/trace/SKILL.md` as an evidence-driven causal tracing workflow.
+- **host-product-only**: NO
+- **unsupported-or-out-of-scope**: NO
+
+### Proof Class
+- **official-doc**: NO — Cursor does not document a trace primitive; this is repo-owned.
+- **checked-in-artifact**: YES — Proof: `skills/trace/SKILL.md`, tracing contract, evidence hierarchy, output template.
+- **runtime-smoke**: NO
+
+### Claim Summary
+This skill is a single-agent thinking pattern for evidence-driven causal tracing. It explains why an observed result happened by ranking competing hypotheses with explicit evidence lanes. No MCP or hooks required; this is a documentation-first tracing workflow.
+
+## MCP Integration Points
+
+No direct MCP integration. This skill produces trace reports written to chat; state tracking is optional and handled by `phase-controller` if needed.
+
+## Hooks Dependencies
+
+No hooks dependencies. This skill runs entirely within the Cursor chat.
+
+## Orchestration Role
+
+- **Lifecycle phase(s)**: any (failure handling)
+- **Invoked by**: User, `phase-controller` on failure for 'why' questions
+- **Invokes**: No other skills; produces trace report
+- **State contract**: No workflow-state updates; reports to chat
+- **Failure handling**: Explains causal chains; does not auto-fix
 
 ## Use when
 

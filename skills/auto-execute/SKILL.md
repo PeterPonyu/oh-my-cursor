@@ -1,14 +1,47 @@
 ---
 name: auto-execute
-description: Autonomous execution pipeline - expand idea, plan, implement, QA, and review with explicit phase gates.
+description: "[OMCS] Autonomous execution pipeline - expand idea, plan, implement, QA, and review with explicit phase gates."
 ---
 
 # Auto Execute
 
-> **Cursor host note.** This is a self-developed five-phase execution pipeline
-> for Cursor workspaces. It uses explicit phase gates and checked-in artifacts
-> rather than hidden runtime assumptions. Each phase produces reproducible
-> evidence: spec, plan, code, test output, and review report.
+> **Cursor host note.** This is a self-developed five-phase execution pipeline for Cursor workspaces. It uses explicit phase gates and checked-in artifacts rather than hidden runtime assumptions. Each phase produces reproducible evidence: spec, plan, code, test output, and review report.
+
+## Governance
+
+### Ownership Class
+- **repo-owned**: YES — Checked in at `skills/auto-execute/SKILL.md` as a five-phase autonomous execution pipeline.
+- **host-product-only**: NO
+- **unsupported-or-out-of-scope**: NO
+
+### Proof Class
+- **official-doc**: NO — Cursor does not document a five-phase pipeline; this is repo-owned.
+- **checked-in-artifact**: YES — Proof: `skills/auto-execute/SKILL.md`, five-phase pipeline, phase gates, output artifacts.
+- **runtime-smoke**: YES (optional) — When `cursor-state-bridge` MCP is installed, bridge tools provide runtime proof for state tracking; default uses `prd.json` file.
+
+### Claim Summary
+This skill is a self-developed five-phase execution pipeline that expands idea, plans, implements, QAs, and reviews with explicit phase gates. Each phase produces reproducible evidence: spec, plan, code, test output, and review report. MCP bridge is optional for state tracking; default uses `prd.json` file.
+
+## MCP Integration Points
+
+| Tool/Resource | MCP Server | Purpose | Required | Status |
+|---|---|---|---|---|
+| `state_init` | cursor-state-bridge | Initialize workflow-state for the run | No | optional |
+| `state_set_phase` | cursor-state-bridge | Advance between phases | No | optional |
+
+**Note**: MCP bridge is opt-in. Default uses `prd.json` file at workspace root.
+
+## Hooks Dependencies
+
+No hooks dependencies. This skill orchestrates other skills and runs verification commands in the workspace.
+
+## Orchestration Role
+
+- **Lifecycle phase(s)**: all (intake → research → plan → execute → verify → review → done)
+- **Invoked by**: User (keyword: 'autopilot', 'auto execute', 'build me', 'make me', 'handle it all')
+- **Invokes**: `deep-interview`, `plan`, `iterate-loop`, `review`, `security-review`
+- **State contract**: Reads/writes `prd.json` at workspace root; optionally updates workflow-state via MCP bridge
+- **Failure handling**: Caps QA cycles at 5; if same error recurs 3 times, stops and surfaces it
 
 ## Use when
 
@@ -51,12 +84,12 @@ Each phase must complete before the next begins.
    lint, typecheck, tests). If anything fails, fix and re-run. Cap at
    five QA cycles; if the same error recurs three times, stop and surface
    it.
-5. **Phase 4 - Review.** Invoke `review`. If the change touches auth, input
+5. **Phase 4 - Review.** Invoke `review` skill, `critic` agent, and `code-reviewer` agent. If the change touches auth, input
    handling, secrets, or external requests, also invoke `security-review`.
    Map each reviewer's raw verdict to the shared loop gate (see
-   `skills/iterate-loop/SKILL.md` step 7): `APPROVE` / `SAFE TO MERGE` =>
-   `pass`, `COMMENT` / `FIX HIGH+ FIRST` => `comment`, `REQUEST CHANGES` /
-   `DO NOT DEPLOY` => `block`. Any `block` is a regression: fix, re-QA,
+   `skills/iterate-loop/SKILL.md` step 7): `APPROVE` / `passed` =>
+   `pass`, `COMMENT` / `comment` => `comment`, `REQUEST CHANGES` /
+   `needs_changes` / `blocking` => `block`. Any `block` is a regression: fix, re-QA,
    re-review. Cap at three review rounds.
 6. **Stop.** Report:
    - the spec, plan, and PRD paths,

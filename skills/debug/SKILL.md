@@ -1,15 +1,42 @@
 ---
 name: debug
-description: Root-cause analysis with explicit hypotheses, evidence, and the smallest next probe.
+description: "[OMCS] Root-cause analysis with explicit hypotheses, evidence, and the smallest next probe."
 ---
 
 # Debug
 
-> **Cursor host note.** This skill is a thinking discipline, not an
-> orchestration runtime. The Cursor agent uses normal workspace tools (file
-> reads, command execution, `@`-references, terminal output) to gather
-> evidence. There is no hidden state machine; the entire workflow is
-> reproducible from the chat.
+> **Cursor host note.** This skill is a thinking discipline, not an orchestration runtime. The Cursor agent uses normal workspace tools (file reads, command execution, `@`-references, terminal output) to gather evidence. There is no hidden state machine; the entire workflow is reproducible from the chat.
+
+## Governance
+
+### Ownership Class
+- **repo-owned**: YES — Checked in at `skills/debug/SKILL.md` as a root-cause analysis thinking discipline.
+- **host-product-only**: NO
+- **unsupported-or-out-of-scope**: NO
+
+### Proof Class
+- **official-doc**: NO — Cursor does not document a debug primitive; this is repo-owned.
+- **checked-in-artifact**: YES — Proof: `skills/debug/SKILL.md`, evidence hierarchy, output format template.
+- **runtime-smoke**: NO
+
+### Claim Summary
+This skill is a thinking discipline for root-cause analysis with explicit hypotheses, evidence, and the smallest next probe. It uses normal workspace tools (file reads, command execution, terminal output) to gather evidence. No MCP or hooks required; this is a documentation-first debugging workflow.
+
+## MCP Integration Points
+
+No direct MCP integration. This skill produces debug reports written to chat; state tracking is optional and handled by `phase-controller` if needed.
+
+## Hooks Dependencies
+
+No hooks dependencies. This skill runs entirely within the Cursor chat.
+
+## Orchestration Role
+
+- **Lifecycle phase(s)**: any (failure handling)
+- **Invoked by**: User, `phase-controller` on failure, `auto-execute` on QA failure
+- **Invokes**: No other skills; produces debug report
+- **State contract**: No workflow-state updates; reports to chat
+- **Failure handling**: Diagnoses and recommends smallest next probe; does not auto-fix
 
 ## Use when
 

@@ -16,35 +16,38 @@ if [[ "${1:-}" == "--self-test" ]]; then
     echo "self-test: real repo has tracked .cursor/mcp.json (unexpected)"; exit 1
   fi
   echo "self-test: no tracked .cursor/mcp.json — passes negative case"
-  echo "self-test: .cursor/mcp.example.json present check"
-  [[ -f .cursor/mcp.example.json ]] || { echo "self-test: missing .cursor/mcp.example.json"; exit 1; }
+  echo "self-test: mcp.json present check"
+  [[ -f mcp.json ]] || { echo "self-test: missing mcp.json"; exit 1; }
   echo "VALIDATE_PLUGIN_STRUCTURE_SELF_TEST_OK"
   exit 0
 fi
 
 required=(
   .cursor-plugin/plugin.json
-    .cursor/hooks.json
-    .cursor/hooks/README.md
-    .cursor/hooks/claim-guard.py
-    .cursor/hooks/stop-gate.py
+    hooks/hooks.json
+    hooks/README.md
+    hooks/claim-guard.py
+    hooks/stop-gate.py
+    hooks/_active_role.py
+    hooks/_tool_payload.py
+    .cursor/mcp.example.json
     .cursor/state/workflow-state.schema.json
     .cursor/state/workflow-state.example.json
     .cursor/state/workflow-state.py
     .cursor/state/README.md
-    .cursor/agents/orchestrator.md
-    .cursor/agents/verifier.md
-    .cursor/agents/critic.md
-    .cursor/agents/debugger.md
-    .cursor/agents/security-reviewer.md
-    .cursor/agents/planner.md
-    .cursor/agents/researcher.md
-    .cursor/agents/implementer.md
-    .cursor/agents/code-reviewer.md
-    .cursor/agents/explore.md
-    .cursor/agents/test-engineer.md
-    .cursor/agents/tracer.md
-    .cursor/mcp.example.json
+    agents/orchestrator.md
+    agents/verifier.md
+    agents/critic.md
+    agents/debugger.md
+    agents/security-reviewer.md
+    agents/planner.md
+    agents/researcher.md
+    agents/implementer.md
+    agents/code-reviewer.md
+    agents/explore.md
+    agents/test-engineer.md
+    agents/tracer.md
+    mcp.json
   rules/repo-owned-plugin-boundary.mdc
   skills/local-plugin-check/SKILL.md
   skills/phase-controller/SKILL.md
@@ -73,6 +76,7 @@ log ".cursor/mcp.json is not tracked (correct)"
 contaminated=0
 find .cursor -type d -name "__pycache__" -exec rm -rf {} + 2>/dev/null || true
 find .cursor -name "*.pyc" -delete 2>/dev/null || true
+find .cursor/state -name "*.lock" -delete 2>/dev/null || true
 
 if git ls-files .cursor 2>/dev/null | grep -qE '__pycache__|\.pyc$'; then
   fail "pycache files are tracked in git — add __pycache__/ and *.pyc to .gitignore, then git rm --cached them"
@@ -97,8 +101,8 @@ if [[ -d .cursor/memories ]]; then
   fail "found .cursor/memories/ — runtime directory must not be tracked"
   contaminated=1
 fi
-if [[ -d .cursor/hooks/state ]]; then
-  fail "found .cursor/hooks/state/ — runtime directory must not be tracked"
+if [[ -d hooks/state ]]; then
+  fail "found hooks/state/ — runtime directory must not be tracked"
   contaminated=1
 fi
 
@@ -138,23 +142,32 @@ if not isinstance(author, dict) or not str(author.get("name", "")).strip():
     raise SystemExit("FAIL: plugin manifest must include author.name")
 
 expected_paths = {
-    "rules": "rules",
-    "skills": "skills",
-    "agents": ".cursor/agents",
-    "hooks": ".cursor/hooks.json",
+    "mcpServers": "mcp.json",
 }
 for key, expected in expected_paths.items():
     actual = manifest.get(key)
     if actual != expected:
         raise SystemExit(f"FAIL: plugin manifest must set {key!r} to {expected!r}, got {actual!r}")
 
+# rules, skills, agents, hooks use default discovery — warn if overridden
+discovery_defaults = {
+    "rules": "rules",
+    "skills": "skills",
+    "agents": "agents",
+    "hooks": "hooks/hooks.json",
+}
+for key, default in discovery_defaults.items():
+    actual = manifest.get(key)
+    if actual is not None and actual != default:
+        raise SystemExit(f"FAIL: plugin manifest overrides default {key!r} path ({actual!r}); remove override or use default {default!r}")
+
 print("ok: plugin manifest fields are present and well-formed")
 PY
 
 rules_count="$(find rules -type f \( -name '*.md' -o -name '*.mdc' -o -name '*.markdown' \) | wc -l | tr -d ' ')"
 skills_count="$(find skills -type f -name 'SKILL.md' | wc -l | tr -d ' ')"
-hooks_count="$(find .cursor -path './.git' -prune -o -name 'hooks.json' -print | wc -l | tr -d ' ')"
-agents_count="$(find .cursor/agents -type f -name '*.md' | wc -l | tr -d ' ')"
+hooks_count="$(find hooks -maxdepth 1 -name 'hooks.json' | wc -l | tr -d ' ')"
+agents_count="$(find agents -type f -name '*.md' | wc -l | tr -d ' ')"
 
 [[ "$rules_count" -ge 1 ]] || fail "expected at least one plugin-owned rule"
 [[ "$skills_count" -ge 1 ]] || fail "expected at least one plugin-owned skill"

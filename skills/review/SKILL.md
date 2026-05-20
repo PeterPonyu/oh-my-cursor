@@ -1,15 +1,42 @@
 ---
 name: review
-description: Severity-rated code review covering quality, security, performance, and architectural risk.
+description: "[OMCS] Severity-rated code review covering quality, security, performance, and architectural risk."
 ---
 
 # Review
 
-> **Cursor host note.** This is a checklist + report skill that the Cursor
-> agent runs against a diff in the current workspace. It does not spawn
-> sub-agents (Cursor's checked-in skill model does not document a sub-agent
-> primitive this repo can own). If you want a second opinion, run the
-> `review` skill once, then run `security-review` separately, then synthesize.
+> **Cursor host note.** This is a checklist + report skill that the Cursor agent runs against a diff in the current workspace. It does not spawn sub-agents (Cursor's checked-in skill model does not document a sub-agent primitive this repo can own). If you want a second opinion, run the `review` skill once, then run `security-review` separately, then synthesize.
+
+## Governance
+
+### Ownership Class
+- **repo-owned**: YES — Checked in at `skills/review/SKILL.md` as a code review checklist skill.
+- **host-product-only**: NO
+- **unsupported-or-out-of-scope**: NO
+
+### Proof Class
+- **official-doc**: NO — Cursor does not document a review primitive; this is repo-owned.
+- **checked-in-artifact**: YES — Proof: `skills/review/SKILL.md`, review lenses, severity rubric, output format.
+- **runtime-smoke**: NO
+
+### Claim Summary
+This skill provides a severity-rated code review covering quality, security, performance, and architectural risk. It is a checklist + report skill that runs against a diff in the current workspace. No MCP or hooks required; this is a documentation-first review workflow.
+
+## MCP Integration Points
+
+No direct MCP integration. This skill produces review reports written to chat; state tracking is optional and handled by `phase-controller` or `auto-execute` if needed.
+
+## Hooks Dependencies
+
+No hooks dependencies. This skill runs entirely within the Cursor chat.
+
+## Orchestration Role
+
+- **Lifecycle phase(s)**: review
+- **Invoked by**: `iterate-loop` (step 7), `auto-execute` (phase 4), user directly
+- **Invokes**: No other skills; produces review report
+- **State contract**: No workflow-state updates; reports to chat
+- **Failure handling**: Reports findings with severity; does not auto-fix
 
 ## Use when
 

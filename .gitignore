@@ -4,12 +4,19 @@
 .DS_Store
 __pycache__/
 *.pyc
-benchmark/runs/data/
+# benchmark/ removed — separate benchmarking repo if needed
 
 # Local orchestration scratch state (generated per local run; not durable artifacts)
 .omcs/
 .omc/
 .omx/
+.sisyphus/
+.cursor-agent-logs/
+.cursor-worktree/
+
+# Dated working documentation (feature plans/specs; not mature project docs)
+docs/plans/*-20*.md
+docs/specs/*-20*.md
 
 # Runtime workflow-state artifacts (written by hooks/bridge; never durable)
 .cursor/state/workflow-state.json

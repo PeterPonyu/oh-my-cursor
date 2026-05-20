@@ -1,0 +1,55 @@
+{
+  "task_id": "audit-team-mode-workflow-policy-202605",
+  "title": "Team audit: team mode + workflow policy (12 workers)",
+  "phase": "research",
+  "status": "in_progress",
+  "current_role": "orchestrator",
+  "next_action": "Open 12 Composer tabs from README-team-launch.md (T-001..T-012); batch 3-5 at a time. Set OH_MY_CURSOR_WORKFLOW_STATE to this file. Merge findings into docs/audits/team-mode-workflow-policy-audit-2026-05.md; pass AC-003 when all tasks are completed.",
+  "acceptance_criteria": [
+    {
+      "id": "AC-001",
+      "criterion": "Twelve team tasks exist under docs/plans/audit-team-mode-workflow-policy-202605/tasks/ (T-001..T-012) with non-overlapping scopes.",
+      "status": "passed",
+      "evidence": "docs/plans/audit-team-mode-workflow-policy-202605/tasks/T-001.json through T-012.json; README-team-launch.md"
+    },
+    {
+      "id": "AC-002",
+      "criterion": "A persistent audit report maps team mode + workflow policy to concrete repo artifacts and separates repo-owned vs host-product-only surfaces.",
+      "status": "passed",
+      "evidence": "docs/audits/team-mode-workflow-policy-audit-2026-05.md"
+    },
+    {
+      "id": "AC-003",
+      "criterion": "All twelve worker tasks are completed with evidence; findings merged into the persistent audit report.",
+      "status": "pending",
+      "evidence": ""
+    },
+    {
+      "id": "AC-004",
+      "criterion": "Follow-up fixes (if any) are bounded ACs or recommendations without overclaiming; re-run validate-workflow-state.py on this file.",
+      "status": "pending",
+      "evidence": ""
+    }
+  ],
+  "failure": {
+    "type": "",
+    "message": "",
+    "retry_count": 0
+  },
+  "history": [
+    {
+      "phase": "intake",
+      "status": "passed",
+      "role": "orchestrator",
+      "note": "Initialized team audit plan folder and worker task files.",
+      "at": "2026-05-09"
+    },
+    {
+      "phase": "research",
+      "status": "in_progress",
+      "role": "orchestrator",
+      "note": "Scaled team to 12 parallel lanes (T-001..T-012); README-team-launch.md updated.",
+      "at": "2026-05-09"
+    }
+  ]
+}

@@ -1,15 +1,48 @@
 ---
 name: iterate-loop
-description: Persistence pattern - iterate against a small PRD until every acceptance criterion is verified, with a reviewer pass before stopping.
+description: "[OMCS] Persistence pattern - iterate against a small PRD until every acceptance criterion is verified, with a reviewer pass before stopping."
 ---
 
 # Iterate Loop
 
-> **Cursor host note.** This is a self-developed explicit persistence pattern
-> for Cursor workspaces. Persistence comes from a small `prd.json` checked into
-> the workspace and fresh verification evidence, not from implicit continuation.
-> Project hooks may remind the user to verify completion, but this skill remains
-> a disciplined loop rather than a daemon.
+> **Cursor host note.** This is a self-developed explicit persistence pattern for Cursor workspaces. Persistence comes from a small `prd.json` checked into the workspace and fresh verification evidence, not from implicit continuation. Project hooks may remind the user to verify completion, but this skill remains a disciplined loop rather than a daemon.
+
+## Governance
+
+### Ownership Class
+- **repo-owned**: YES — Checked in at `skills/iterate-loop/SKILL.md` as a persistence pattern for Cursor workspaces.
+- **host-product-only**: NO
+- **unsupported-or-out-of-scope**: NO
+
+### Proof Class
+- **official-doc**: NO — Cursor does not document a persistence primitive; this is repo-owned.
+- **checked-in-artifact**: YES — Proof: `skills/iterate-loop/SKILL.md`, `prd.json` schema, `scripts/validate-prd.py`.
+- **runtime-smoke**: YES (optional) — When `cursor-state-bridge` MCP is installed, bridge tools provide runtime proof; default uses `prd.json` file.
+
+### Claim Summary
+This skill provides a persistence pattern that iterates against a small `prd.json` until every acceptance criterion is verified. The PRD is checked in at workspace root; verification evidence is recorded through MCP bridge (optional) or direct file updates. Each story is verified before marking complete, and a reviewer pass is required before stopping.
+
+## MCP Integration Points
+
+| Tool/Resource | MCP Server | Purpose | Required | Status |
+|---|---|---|---|---|
+| `state_record_failure` | cursor-state-bridge | Record story/criterion failure for loop control | No | optional |
+| `state_update_acceptance_criterion` | cursor-state-bridge | Record criterion pass/fail | No | optional |
+| `state_history_append` | cursor-state-bridge | Append verification notes | No | optional |
+
+**Note**: MCP bridge is opt-in. Default uses `prd.json` file at workspace root.
+
+## Hooks Dependencies
+
+No hooks dependencies. This skill reads `prd.json` and runs verification commands in the workspace.
+
+## Orchestration Role
+
+- **Lifecycle phase(s)**: execute, verify, review
+- **Invoked by**: `auto-execute` (phase 2), user directly
+- **Invokes**: `review` skill for reviewer pass (step 7); optionally `security-review` if change touches auth/secrets
+- **State contract**: Reads/writes `prd.json` at workspace root; optionally updates workflow-state via MCP bridge
+- **Failure handling**: If a criterion fails, story stays `passes: false` and loop continues to next story
 
 ## Use when
 
@@ -63,7 +96,7 @@ with criteria that name a file, a command, or an observable behavior.
 5. **Mark the story `passes: true`** only when every criterion is verified.
    Update `prd.json` on disk.
 6. **Loop back to step 2** until every story is `passes: true`.
-7. **Reviewer pass.** Run the `review` skill (and `security-review` if the
+7. **Reviewer pass.** Run the `review` skill, `critic` agent, `code-reviewer` agent (and `security-review` if the
    change touches auth, input handling, or secrets). Map each reviewer's raw
    verdict to the shared loop gate before deciding to stop:
 
@@ -72,9 +105,13 @@ with criteria that name a file, a command, or an observable behavior.
    | `review` | `APPROVE` | `pass` |
    | `review` | `COMMENT` | `comment` |
    | `review` | `REQUEST CHANGES` | `block` |
-   | `security-review` | `SAFE TO MERGE` | `pass` |
-   | `security-review` | `FIX HIGH+ FIRST` | `comment` |
-   | `security-review` | `DO NOT DEPLOY` | `block` |
+   | `code-reviewer` | `changes_requested: false` (or `verdict: "passed"`) | `pass` |
+   | `code-reviewer` | `severity: "comment"` | `comment` |
+   | `code-reviewer` | `severity: "blocking"` / `verdict: "changes_requested"` | `block` |
+   | `critic` | `severity: "blocking"` | `block` |
+   | `security-review` | `APPROVE` | `pass` |
+   | `security-review` | `COMMENT` | `comment` |
+   | `security-review` | `REQUEST CHANGES` | `block` |
 
    Any `block` is a regression: fix and re-verify, do not override. A `comment`
    is recorded but does not block progression. Stop when **every reviewer that

@@ -8,7 +8,7 @@ Usage: scripts/check-default-auth.sh
 Checks the local default Cursor auth/model state used by this machine:
   - cursor-agent is installed
   - cursor-agent whoami succeeds
-  - cursor-agent models includes the `auto` model
+  - cursor-agent models is callable when the account exposes a model list
   - ~/.cursor/cli-config.json contains auth/model state
 USAGE
 }
@@ -33,14 +33,6 @@ printf '%s\n' "$whoami_output"
 printf 'CURSOR_AUTH_OK\n'
 log "default Cursor auth is available"
 
-models_output="$(cursor-agent models 2>&1)" || {
-  printf '%s\n' "$models_output" >&2
-  fail "cursor-agent models failed"
-}
-printf '%s\n' "$models_output" | grep -q '^auto - Auto' || fail "cursor-agent models is missing auto"
-printf 'CURSOR_MODEL_AUTO_OK\n'
-log "cursor-agent exposes the auto model"
-
 python3 - <<'PY'
 from __future__ import annotations
 import json
@@ -57,3 +49,22 @@ if not model.get("modelId"):
 print(f"ok: cursor config auth user is {auth['email']}")
 print(f"ok: cursor config default model is {model['modelId']}")
 PY
+
+configured_model="$(python3 "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/resolve-cursor-model.py")"
+
+models_output="$(cursor-agent models 2>&1)" || {
+  printf '%s\n' "$models_output" >&2
+  fail "cursor-agent models failed"
+}
+if printf '%s\n' "$models_output" | grep -q '^No models available for this account\.'; then
+  printf 'bounded: cursor-agent models returned no account model list; using configured default model %s for CLI smoke\n' "$configured_model"
+elif printf '%s\n' "$models_output" | grep -Fq "$configured_model"; then
+  printf 'CURSOR_MODEL_CONFIGURED_OK\n'
+  log "cursor-agent model list includes configured default model"
+elif printf '%s\n' "$models_output" | grep -q '^auto - Auto'; then
+  printf 'CURSOR_MODEL_AUTO_OK\n'
+  log "cursor-agent exposes the auto model"
+else
+  printf '%s\n' "$models_output" >&2
+  fail "cursor-agent models did not include configured default model or auto"
+fi

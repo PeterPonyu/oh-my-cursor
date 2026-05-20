@@ -55,7 +55,7 @@ features:
       - ship skills/phase-controller/SKILL.md as the orchestration entry skill
       - extend stop-gate.py to surface pending acceptance criteria from an active workflow-state file
       - validate state documents locally with scripts/validate-workflow-state.py
-      - provide .cursor/state/workflow-state.py plus the scripts/workflow-state.py wrapper so users and agents can intentionally create or update local workflow-state JSON files
+      - provide .cursor/state/workflow-state.py so users and agents can intentionally create or update local workflow-state JSON files
   validators:
     goal: Make the new workflow artifacts locally provable.
     requirements:
@@ -81,7 +81,7 @@ acceptance_criteria:
   - scripts/validate-public-language.py prints PUBLIC_LANGUAGE_OK when public text is clean.
   - scripts/validate-cursor-workflow-artifacts.py prints HOOKS_ARTIFACTS_OK and AGENTS_ARTIFACTS_OK when artifacts are valid.
   - scripts/validate-workflow-state.py prints WORKFLOW_STATE_OK for a valid state document.
-  - scripts/workflow-state.py can initialize and update a local workflow-state JSON file.
+  - .cursor/state/workflow-state.py can initialize and update a local workflow-state JSON file.
   - scripts/smoke-cursor-workflow-artifacts.sh exercises both hook scripts and artifact validation.
   - scripts/verify-backbone.sh runs the new validators.
   - Core docs and required skills describe the repository as a self-developed Cursor-native product with artifact-backed proof.

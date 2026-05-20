@@ -1,5 +1,5 @@
 ---
-description: Keep the Oh My Cursor plugin orchestration payload truthful, locally verifiable, and artifact-backed.
+description: "[OMCS] Keep the Oh My Cursor plugin orchestration payload truthful, locally verifiable, and artifact-backed."
 globs:
 	- AGENTS.md
 	- README.md

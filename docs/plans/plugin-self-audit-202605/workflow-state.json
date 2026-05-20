@@ -1,0 +1,62 @@
+{
+  "task_id": "plugin-self-audit-202605",
+  "title": "Self-audit of oh-my-cursor plugin (orchestration, hooks, docs)",
+  "phase": "verify",
+  "status": "in_progress",
+  "current_role": "verifier",
+  "next_action": "Review docs/plans/plugin-self-audit-202605/SYNTHESIS.md and decide whether to open an iterate-loop to apply fixes (hooks path hardening + docs drift corrections).",
+  "acceptance_criteria": [
+    {
+      "id": "AC-001",
+      "criterion": "Topology: skills (14), agents (12), hooks (14 events) inventoried; plugin manifest paths confirmed",
+      "status": "passed",
+      "evidence": "docs/plans/plugin-self-audit-202605/SYNTHESIS.md#1-inventory-skills-agents-hooks-plugin-wiring"
+    },
+    {
+      "id": "AC-002",
+      "criterion": "Security pass: hooks + MCP bridge + shell paths; findings severity-rated with file refs",
+      "status": "passed",
+      "evidence": "docs/plans/plugin-self-audit-202605/SYNTHESIS.md#2-security-findings"
+    },
+    {
+      "id": "AC-003",
+      "criterion": "Claims audit: docs vs AGENTS.md vs code; drift list with smallest fix hints",
+      "status": "passed",
+      "evidence": "docs/plans/plugin-self-audit-202605/SYNTHESIS.md#3-docs--claim-proof-mismatches-audit-risks"
+    },
+    {
+      "id": "AC-004",
+      "criterion": "Validators green: validate-workflow-state, validate-cursor-workflow-artifacts, smoke-cursor-workflow-artifacts",
+      "status": "passed",
+      "evidence": "python3 scripts/validate-cursor-workflow-artifacts.py; ./scripts/smoke-cursor-workflow-artifacts.sh; python3 scripts/validate-workflow-state.py docs/plans/plugin-self-audit-202605/workflow-state.json"
+    }
+  ],
+  "failure": {
+    "type": "",
+    "message": "",
+    "retry_count": 0
+  },
+  "history": [
+    {
+      "phase": "intake",
+      "status": "passed",
+      "role": "orchestrator",
+      "note": "phase-controller: launched composer team self-audit; per-task state and T-001..T-003 created",
+      "at": "2026-05-09"
+    },
+    {
+      "phase": "research",
+      "status": "in_progress",
+      "role": "orchestrator",
+      "note": "routing parallel research lanes via file-backed team tasks",
+      "at": "2026-05-09"
+    },
+    {
+      "phase": "verify",
+      "status": "in_progress",
+      "role": "verifier",
+      "note": "team audit lanes completed; synthesis written; validators run; ready to decide remediation scope",
+      "at": "2026-05-09"
+    }
+  ]
+}

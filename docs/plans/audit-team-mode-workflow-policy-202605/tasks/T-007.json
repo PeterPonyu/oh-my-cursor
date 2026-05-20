@@ -1,0 +1,14 @@
+{
+  "id": "T-007",
+  "team_id": "audit-team-mode-workflow-policy-202605",
+  "subject": "Skills: auto-execute, iterate-loop, verify, plan vs state contract",
+  "description": "Read skills/auto-execute/SKILL.md, skills/iterate-loop/SKILL.md, skills/verify/SKILL.md, skills/plan/SKILL.md. Summarize how each claims to use workflow-state or MCP bridge; note contradictions with docs/orchestration.md or phase-controller.",
+  "owner": "explore",
+  "status": "pending",
+  "priority": "medium",
+  "dependencies": [],
+  "created_at": "2026-05-09T00:00:00Z",
+  "updated_at": "2026-05-09T00:00:00Z",
+  "evidence": "",
+  "notes": ""
+}

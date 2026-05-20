@@ -17,7 +17,6 @@ that have not yet been activated by the user are still considered valid.
 from __future__ import annotations
 
 import json
-import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]

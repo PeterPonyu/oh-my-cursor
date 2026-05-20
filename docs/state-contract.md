@@ -8,7 +8,7 @@ aligned with the claim/proof discipline.
 | State family | Ownership class | Current rule |
 | --- | --- | --- |
 | User auth and default model selection | `host-product-only` user environment | Cursor CLI auth/model state lives outside the repo. |
-| Repo guidance, root rules, hooks, agents, repo-root plugin files, validators, and benchmark evidence | `repo-owned` | This repo checks in the files that define its backbone and proof surface. |
+| Repo guidance, root rules, hooks, agents, repo-root plugin files, validators, and optional runtime smokes | `repo-owned` | This repo checks in the files that define its backbone and proof surface. |
 | Default MCP config, repo memories, custom modes, background-agent files | `unsupported-or-out-of-scope` until deliberately adopted | These are not checked in by the current backbone. |
 
 ## User-level state
@@ -39,12 +39,10 @@ The repository currently owns only these checked-in state-like surfaces:
 - the shipped plugin rule/skill payload that accompanies the manifest, including
   `skills/phase-controller/SKILL.md`
 - bounded documentation, including `docs/orchestration.md`
-- local verification/benchmark scripts (including
+- local validators and optional runtime-smoke scripts (including
   `scripts/validate-workflow-state.py`)
 - `apps/cursor-backbone-site/` and `.github/workflows/deploy-pages.yml` only
   when they are actually checked in and locally validated
-- benchmark artifacts under `benchmark/results/current-baseline/` and
-  `benchmark/results/current-enhanced/`
 
 Those are the only surfaces this repo should describe as `repo-owned`
 state/proof artifacts today.
