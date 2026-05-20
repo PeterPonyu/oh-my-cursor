@@ -7,6 +7,7 @@ import re
 import shlex
 import ast
 from pathlib import Path
+from typing import NoReturn
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -90,7 +91,7 @@ EXPECTED_SKILL_MCP_TOOLS = {
 }
 
 
-def fail(message: str) -> None:
+def fail(message: str) -> NoReturn:
     raise SystemExit(f"FAIL: {message}")
 
 

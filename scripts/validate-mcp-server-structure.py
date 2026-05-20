@@ -12,11 +12,12 @@ import re
 import sys
 import importlib.util
 from pathlib import Path
+from typing import NoReturn
 
 ROOT = Path(__file__).resolve().parent.parent
 
 
-def fail(msg: str) -> None:
+def fail(msg: str) -> NoReturn:
     print(f"FAIL: {msg}", file=sys.stderr)
     sys.exit(1)
 
@@ -133,11 +134,17 @@ spec.loader.exec_module(server_module)
 tools = getattr(server_module, "_TOOLS", None)
 if not isinstance(tools, list):
     fail("server.py must expose _TOOLS as a list")
-schemas = {
-    tool.get("name"): tool.get("inputSchema")
-    for tool in tools
-    if isinstance(tool, dict) and isinstance(tool.get("name"), str)
-}
+schemas: dict[str, dict] = {}
+for tool in tools:
+    if not isinstance(tool, dict):
+        continue
+    name = tool.get("name")
+    if not isinstance(name, str):
+        continue
+    schema = tool.get("inputSchema")
+    if not isinstance(schema, dict):
+        fail(f"tool {name} missing inputSchema dict")
+    schemas[name] = schema
 
 expected_tool_set = set(REQUIRED_TOOL_NAMES)
 if set(schemas) != expected_tool_set:
