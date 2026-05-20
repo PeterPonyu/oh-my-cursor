@@ -39,12 +39,10 @@ The repository currently owns only these checked-in state-like surfaces:
 - the shipped plugin rule/skill payload that accompanies the manifest, including
   `skills/phase-controller/SKILL.md`
 - bounded documentation, including `docs/orchestration.md`
-- local verification/benchmark scripts (including
+- local validators and optional runtime-smoke scripts (including
   `scripts/validate-workflow-state.py`)
 - `apps/cursor-backbone-site/` and `.github/workflows/deploy-pages.yml` only
   when they are actually checked in and locally validated
-- benchmark artifacts under `benchmark/results/current-baseline/` and
-  `benchmark/results/current-enhanced/`
 
 Those are the only surfaces this repo should describe as `repo-owned`
 state/proof artifacts today.

@@ -13,7 +13,7 @@ lifecycle, and where each surface stops being repo-owned.
 - project agents in `agents/`;
 - plugin-owned rules in `rules/`;
 - plugin-owned skills in `skills/`; and
-- bounded validators and benchmark artifacts.
+- bounded validators and optional runtime smokes.
 
 What was missing was a single coordination contract that lets those surfaces
 share a view of the current task. This document is that contract.
