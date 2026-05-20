@@ -1,6 +1,6 @@
 ---
 name: review
-description: Severity-rated code review covering quality, security, performance, and architectural risk.
+description: "[OMCS] Severity-rated code review covering quality, security, performance, and architectural risk."
 ---
 
 # Review

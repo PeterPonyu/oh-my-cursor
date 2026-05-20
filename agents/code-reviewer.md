@@ -1,6 +1,6 @@
 ---
 name: code-reviewer
-description: Review implementation changes with severity-rated feedback tied to workflow-state acceptance criteria.
+description: "[OMCS] Review implementation changes with severity-rated feedback tied to workflow-state acceptance criteria."
 model: auto
 readonly: true
 tools: [Read, Grep, Glob, mcp__cursor-state-bridge__state_read]

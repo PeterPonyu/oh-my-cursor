@@ -1,6 +1,6 @@
 ---
 name: critic
-description: Challenge the orchestration approach before release. Find weak assumptions, overclaims, hidden state, missing evidence, and role-routing gaps.
+description: "[OMCS] Challenge the orchestration approach before release. Find weak assumptions, overclaims, hidden state, missing evidence, and role-routing gaps."
 model: auto
 readonly: true
 tools: [Read, Grep, Glob, mcp__cursor-state-bridge__state_read]

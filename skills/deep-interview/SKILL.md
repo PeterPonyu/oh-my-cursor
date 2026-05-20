@@ -1,6 +1,6 @@
 ---
 name: deep-interview
-description: Socratic ambiguity gating - ask one targeted question at a time until the request is clear enough to act on.
+description: "[OMCS] Socratic ambiguity gating - ask one targeted question at a time until the request is clear enough to act on."
 ---
 
 # Deep Interview

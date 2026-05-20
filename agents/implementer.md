@@ -1,6 +1,6 @@
 ---
 name: implementer
-description: Execute worker. Apply approved plan steps with the smallest viable diff, defer to verifier on completion, and never expand scope.
+description: "[OMCS] Execute worker. Apply approved plan steps with the smallest viable diff, defer to verifier on completion, and never expand scope."
 model: auto
 readonly: false
 tools: [Read, Grep, Glob, Edit, Write, MultiEdit, Bash, mcp__cursor-state-bridge__state_read, mcp__cursor-state-bridge__state_set_phase, mcp__cursor-state-bridge__state_update_acceptance_criterion, mcp__cursor-state-bridge__state_history_append]

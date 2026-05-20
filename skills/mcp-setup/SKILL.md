@@ -1,6 +1,6 @@
 ---
 name: mcp-setup
-description: Setup and verification guide for the cursor-state-bridge MCP server.
+description: "[OMCS] Setup and verification guide for the cursor-state-bridge MCP server."
 ---
 
 # MCP Setup

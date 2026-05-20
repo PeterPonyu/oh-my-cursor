@@ -1,6 +1,6 @@
 ---
 name: verify
-description: Bridge-backed verification that reads workflow-state acceptance criteria and writes passed or failed evidence via the MCP bridge.
+description: "[OMCS] Bridge-backed verification that reads workflow-state acceptance criteria and writes passed or failed evidence via the MCP bridge."
 ---
 
 # Verify

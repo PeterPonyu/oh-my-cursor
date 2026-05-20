@@ -1,6 +1,6 @@
 ---
 name: tracer
-description: Hypothesis-driven causal tracing with competing evidence tracking mapped to workflow-state failures.
+description: "[OMCS] Hypothesis-driven causal tracing with competing evidence tracking mapped to workflow-state failures."
 model: auto
 readonly: true
 tools: [Read, Grep, Glob, mcp__cursor-state-bridge__state_read, mcp__cursor-state-bridge__state_history_append]

@@ -48,6 +48,9 @@ required=(
   docs/archive/fallback-policy.md
   docs/local-plugin-verification.md
   docs/orchestration.md
+  docs/agent-model-policy.md
+  docs/external-runtime-bridge.md
+  docs/external-runtime-compatibility.md
   docs/references.md
   docs/state-contract.md
   scripts/check-local-plugin-install.sh
@@ -60,6 +63,7 @@ required=(
   scripts/validate-prd-ac-mapping.py
   scripts/validate-hook-readonly.py
   scripts/validate-agent-bridge-contract.py
+  scripts/validate-agent-model-policy.py
     scripts/validate-public-language.py
     scripts/validate-cursor-workflow-artifacts.py
     scripts/smoke-cursor-workflow-artifacts.sh
@@ -67,6 +71,8 @@ required=(
         scripts/workflow-state.py
   scripts/validate-state-contract.sh
   scripts/smoke-cursor-agent.sh
+  scripts/resolve-cursor-model.py
+  scripts/smoke-agent-model-suitability.sh
   scripts/verify-backbone.sh
 )
 

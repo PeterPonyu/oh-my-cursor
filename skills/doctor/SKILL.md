@@ -1,6 +1,6 @@
 ---
 name: doctor
-description: Diagnose Cursor + oh-my-cursor installation health and report what is repo-owned, host-product-only, or missing.
+description: "[OMCS] Diagnose Cursor + oh-my-cursor installation health and report what is repo-owned, host-product-only, or missing."
 ---
 
 # Doctor

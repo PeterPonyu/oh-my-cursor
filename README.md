@@ -51,10 +51,11 @@ Verify the install with `scripts/check-local-plugin-install.sh`.
 |------|------|
 | Always-on policy | [`AGENTS.md`](./AGENTS.md) |
 | Orchestration map | [`docs/orchestration.md`](./docs/orchestration.md) |
+| Agent model policy | [`docs/agent-model-policy.md`](./docs/agent-model-policy.md) |
 | State contract | [`docs/state-contract.md`](./docs/state-contract.md) |
 | MCP bridge | [`docs/mcp-bridge.md`](./docs/mcp-bridge.md) |
-| Claude Code bridge | [`docs/claudecode-bridge.md`](./docs/claudecode-bridge.md) |
-| Claude Code parity | [`docs/claudecode-parity-matrix.md`](./docs/claudecode-parity-matrix.md) |
+| External runtime bridge | [`docs/external-runtime-bridge.md`](./docs/external-runtime-bridge.md) |
+| External runtime compatibility | [`docs/external-runtime-compatibility.md`](./docs/external-runtime-compatibility.md) |
 | Acceptance criteria | [`docs/PRD.yaml`](./docs/PRD.yaml) |
 | Change history | [`CHANGELOG.md`](./CHANGELOG.md) |
 | Confirmed surfaces | [`docs/confirmed-surfaces.md`](./docs/confirmed-surfaces.md) |

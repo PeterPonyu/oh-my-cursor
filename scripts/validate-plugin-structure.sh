@@ -30,6 +30,7 @@ required=(
     hooks/stop-gate.py
     hooks/_active_role.py
     hooks/_tool_payload.py
+    .cursor/mcp.example.json
     .cursor/state/workflow-state.schema.json
     .cursor/state/workflow-state.example.json
     .cursor/state/workflow-state.py

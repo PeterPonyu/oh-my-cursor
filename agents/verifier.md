@@ -1,6 +1,6 @@
 ---
 name: verifier
-description: Evidence gate for Oh My Cursor. Validate completed work against workflow-state acceptance criteria, required scripts, and checked-in proof before done.
+description: "[OMCS] Evidence gate for Oh My Cursor. Validate completed work against workflow-state acceptance criteria, required scripts, and checked-in proof before done."
 model: auto
 readonly: true
 tools: [Read, Grep, Glob, Bash, mcp__cursor-state-bridge__state_read, mcp__cursor-state-bridge__state_update_acceptance_criterion]

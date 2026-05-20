@@ -9,6 +9,9 @@ __pycache__/
 # Local orchestration scratch state (generated per local run; not durable artifacts)
 .omcs/
 .omc/
+.omx/
+.sisyphus/
+.cursor-agent-logs/
 .cursor-worktree/
 
 # Dated working documentation (feature plans/specs; not mature project docs)

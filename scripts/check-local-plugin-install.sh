@@ -81,6 +81,10 @@ plugin_path="${SYMLINK_TARGET}/${PLUGIN_NAME}"
 [[ -L "$plugin_path" ]] || fail "symlink mode did not create a symlink at $plugin_path"
 [[ "$(readlink "$plugin_path")" == "$ROOT" ]] || fail "symlink mode did not point at $ROOT"
 [[ -f "$plugin_path/.cursor-plugin/plugin.json" ]] || fail "symlink mode plugin missing manifest"
+if [[ -d "$ROOT/mcp" ]]; then
+  "$ROOT/scripts/install-local-plugin.sh" --target-root "$SYMLINK_TARGET" --name "$PLUGIN_NAME" --symlink --force >/dev/null
+  [[ -d "$ROOT/mcp" ]] || fail "symlink reinstall removed source mcp/ tree"
+fi
 log "symlink mode installs the repo-root plugin correctly"
 
 _with_mcp_flag=()
@@ -99,7 +103,7 @@ plugin_path="${COPY_TARGET}/${PLUGIN_NAME}"
 [[ -f "$plugin_path/rules/repo-owned-plugin-boundary.mdc" ]] || fail "copy mode plugin missing rule file"
 [[ -f "$plugin_path/skills/local-plugin-check/SKILL.md" ]] || fail "copy mode plugin missing skill file"
 [[ -f "$plugin_path/skills/phase-controller/SKILL.md" ]] || fail "copy mode plugin missing phase-controller skill"
-[[ -f "$plugin_path/hooks.json" ]] || fail "copy mode plugin missing hook manifest"
+[[ -f "$plugin_path/hooks/hooks.json" ]] || fail "copy mode plugin missing hook manifest"
 [[ -d "$plugin_path/hooks" ]] || fail "copy mode plugin missing hooks directory"
 [[ -f "$plugin_path/hooks/claim-guard.py" ]] || fail "copy mode plugin missing claim-guard hook"
 [[ -f "$plugin_path/hooks/prompt-router.py" ]] || fail "copy mode plugin missing prompt-router hook"

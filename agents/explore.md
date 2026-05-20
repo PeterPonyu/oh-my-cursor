@@ -1,6 +1,6 @@
 ---
 name: explore
-description: Fast read-only codebase exploration for the orchestration flow. Maps file structures, finds patterns, and feeds researcher with structured findings.
+description: "[OMCS] Fast read-only codebase exploration for the orchestration flow. Maps file structures, finds patterns, and feeds researcher with structured findings."
 model: auto
 readonly: true
 tools: [Read, Grep, Glob, mcp__cursor-state-bridge__state_read]

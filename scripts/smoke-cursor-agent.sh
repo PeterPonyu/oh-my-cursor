@@ -13,9 +13,9 @@ Usage: scripts/smoke-cursor-agent.sh [--root PATH] [--run-agent-prompt] [--skip-
 Runs direct, CLI-first Cursor smoke checks:
   - cursor-agent presence
   - default auth availability (environment-gated runtime proof)
-  - auto-model availability (environment-gated runtime proof)
-  - optional constrained model-backed prompt smoke using `--model auto`
-  - optional constrained repo task smoke using `--model auto`
+  - configured default model availability (environment-gated runtime proof)
+  - optional constrained model-backed prompt smoke using the configured model
+  - optional constrained repo task smoke using the configured model
 
 Set RUN_CURSOR_AGENT_SMOKE=1 or pass --run-agent-prompt to run the model-backed
 agent smoke. The default mode avoids a network/model request and keeps the
@@ -54,6 +54,12 @@ while (($#)); do
 done
 
 command -v cursor-agent >/dev/null 2>&1 || { echo "FAIL: cursor-agent not found" >&2; exit 1; }
+command -v python3 >/dev/null 2>&1 || { echo "FAIL: python3 not found" >&2; exit 1; }
+
+SMOKE_MODEL="${CURSOR_SMOKE_MODEL:-}"
+if [[ -z "$SMOKE_MODEL" ]]; then
+  SMOKE_MODEL="$(python3 "$ROOT/scripts/resolve-cursor-model.py")"
+fi
 
 run_cursor_prompt() {
   local label="$1"
@@ -67,7 +73,7 @@ run_cursor_prompt() {
       timeout "$TIMEOUT_SECONDS" cursor-agent \
         -p \
         --output-format text \
-        --model auto \
+        --model "$SMOKE_MODEL" \
         --mode ask \
         --trust \
         --workspace "$ROOT" \
@@ -83,6 +89,11 @@ run_cursor_prompt() {
     transient=0
     if printf '%s\n' "$output" | grep -Eiq 'Connection lost|Retry attempt|tls handshake eof|stream disconnected|reconnecting|temporarily unavailable'; then
       transient=1
+    fi
+    if printf '%s\n' "$output" | grep -Fq 'Cannot use this model:' && [[ "$SMOKE_MODEL" != "auto" ]]; then
+      printf 'bounded: Cursor rejected smoke model %s during %s; retrying with host-selected auto\n' "$SMOKE_MODEL" "$label" >&2
+      SMOKE_MODEL="auto"
+      continue
     fi
 
     if [[ "$attempt" -lt "$max_attempts" && "$transient" -eq 1 ]]; then
@@ -105,6 +116,7 @@ else
 fi
 
 if [[ "$RUN_AGENT_SMOKE" == "1" ]]; then
+  printf 'ok: using Cursor smoke model %s\n' "$SMOKE_MODEL"
   output="$(run_cursor_prompt "prompt smoke" "CURSOR_AGENT_OK" "Do not edit files or run shell commands. Reply with exactly: CURSOR_AGENT_OK")"
   printf '%s\n' "$output" | grep -Fxq 'CURSOR_AGENT_OK' || {
     printf '%s\n' "$output" >&2

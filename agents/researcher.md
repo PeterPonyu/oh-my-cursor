@@ -1,6 +1,6 @@
 ---
 name: researcher
-description: Research worker. Read repo files and bounded references to summarize what exists, what is missing, and which artifacts a planner can rely on. Read-only.
+description: "[OMCS] Research worker. Read repo files and bounded references to summarize what exists, what is missing, and which artifacts a planner can rely on. Read-only."
 model: auto
 readonly: true
 tools: [Read, Grep, Glob, mcp__cursor-state-bridge__state_read]

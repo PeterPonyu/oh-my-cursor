@@ -1,6 +1,6 @@
 ---
 name: debugger
-description: Failure router for Oh My Cursor. Reproduce failures, diagnose root cause, update failure metadata when requested, and apply the smallest safe fix only when explicitly authorized.
+description: "[OMCS] Failure router for Oh My Cursor. Reproduce failures, diagnose root cause, update failure metadata when requested, and apply the smallest safe fix only when explicitly authorized."
 model: auto
 readonly: false
 tools: [Read, Grep, Glob, Edit, Bash, mcp__cursor-state-bridge__state_read, mcp__cursor-state-bridge__state_record_failure, mcp__cursor-state-bridge__state_history_append]

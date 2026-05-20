@@ -18,11 +18,11 @@ lifecycle, and where each surface stops being repo-owned.
 What was missing was a single coordination contract that lets those surfaces
 share a view of the current task. This document is that contract.
 
-For cross-ecosystem alignment with `oh-my-claudecode`, see the
-[`Claude Code bridge`](./claudecode-bridge.md) and
-[`Claude Code parity matrix`](./claudecode-parity-matrix.md). Those documents
-map concepts without changing this repo's Cursor-owned state or proof
-boundaries.
+For cross-ecosystem alignment with external user assets, see the
+[`external runtime bridge`](./external-runtime-bridge.md) and
+[`external runtime compatibility matrix`](./external-runtime-compatibility.md).
+Those documents map concepts without changing this repo's Cursor-owned state or
+proof boundaries.
 
 ## Lifecycle at a glance
 
@@ -32,7 +32,7 @@ intake → research → plan → execute → verify → review → done
 ```
 
 Phases are explicit. There is no background daemon and no hidden retry loop.
-Each phase advance is an action on a checked-in JSON document that follows
+Each phase advance is an action on a schema-bounded JSON document that follows
 [`.cursor/state/workflow-state.schema.json`](../.cursor/state/workflow-state.schema.json).
 
 ## Repo-owned surfaces in the lifecycle
@@ -72,6 +72,47 @@ Each phase advance is an action on a checked-in JSON document that follows
    active workflow-state file (via the `OH_MY_CURSOR_WORKFLOW_STATE` env var
    or a `workflow_state` field in the stop event) and surfaces any failed or
    pending acceptance criteria so closure is intentional.
+
+## Cursor CLI continuation pattern
+
+Cursor CLI can be the **host-product driver** for a Ralph-like continuation
+loop without turning the plugin itself into a background runner. Resolve the
+local CLI model from the user's Cursor config instead of hardcoding a model ID:
+
+```bash
+MODEL="$(python3 scripts/resolve-cursor-model.py)"
+```
+
+If a particular model is required for a runtime smoke, override with
+`CURSOR_SMOKE_MODEL=<model-id>` and let the smoke prove that the account can use
+it. A resumed CLI turn can load the local plugin and ask the phase controller to
+continue:
+
+```bash
+cursor-agent \
+  --workspace /path/to/workspace \
+  --plugin-dir ~/.cursor/plugins/local/oh-my-cursor \
+  --model "$MODEL" \
+  --continue \
+  "Continue with phase-controller from the active workflow-state."
+```
+
+Use `--resume <chat-id>` instead of `--continue` when targeting a specific
+thread. For scripted turns, pair the same flags with `--print --trust` only when
+the caller intentionally wants non-interactive execution. The plugin then
+contributes repo-owned rules, skills, agents, hooks, and optional
+`cursor-state-bridge` MCP tools to that resumed Cursor session. Subagents remain
+Cursor-managed runs launched by the parent agent; the durable part this repo
+owns is the small workflow-state document and the validation contract around it.
+
+This keeps the wording precise:
+
+- **repo-owned**: role prompts, skills, hook wiring, workflow-state schema,
+  validators, and the optional state bridge;
+- **host-product-only**: CLI model selection, chat resume, subagent execution,
+  and Cloud Agent handoff; and
+- **unsupported here**: a repo-file daemon that keeps local subagents running
+  after the Cursor host session ends.
 
 ## Failure handling
 
@@ -115,44 +156,75 @@ Developer-only equivalents (not for agents/skills):
 
 | Skill | Governance | Primary MCP Tools | Invoked When | Phase(s) |
 | --- | --- | --- | --- | --- |
-| phase-controller | repo-owned, checked-in-artifact | state_init, state_set_phase, state_read | Session start or task reassignment | any |
-| plan | repo-owned, checked-in-artifact | None | User requests planning or orchestrator routes to plan phase | plan |
-| iterate-loop | repo-owned, checked-in-artifact | state_record_failure, state_update_acceptance_criterion, state_history_append | Execute phase with multiple acceptance criteria | execute |
-| review | repo-owned, checked-in-artifact | None | Orchestrator routes to review phase | review |
+| phase-controller | repo-owned, checked-in-artifact | state_read, state_init, state_set_phase, state_record_failure, state_update_acceptance_criterion, state_history_append | Session start or task reassignment | any |
 | auto-execute | repo-owned, checked-in-artifact | state_set_phase, state_update_acceptance_criterion | User requests "autopilot" or full pipeline execution | intake→execute→verify→review |
-| security-review | repo-owned, checked-in-artifact | None | Security review requested or auth/secrets/shell changes | review |
-| code-reviewer | repo-owned, checked-in-artifact | None | Orchestrator routes to review phase | review |
-| local-plugin-check | repo-owned, checked-in-artifact | None | User verifies local plugin installation | intake |
+| debug | repo-owned, checked-in-artifact | state_read, state_record_failure | Debugging requested or failure route selected | blocked/failed |
 | deep-interview | repo-owned, checked-in-artifact | None | Vague request needs scoping or clarification | intake/research |
 | doctor | repo-owned, checked-in-artifact | None | Diagnostic check of Cursor + repo installation | intake |
+| iterate-loop | repo-owned, checked-in-artifact | state_record_failure, state_update_acceptance_criterion, state_history_append | Execute phase with multiple acceptance criteria | execute |
+| local-plugin-check | repo-owned, checked-in-artifact | None | User verifies local plugin installation | intake |
 | mcp-setup | repo-owned, checked-in-artifact | None | MCP bridge setup or verification requested | intake |
+| parallel-batch | repo-owned, checked-in-artifact | None | Independent tasks can run as separate CLI parent processes | execute |
+| plan | repo-owned, checked-in-artifact | None | User requests planning or orchestrator routes to plan phase | plan |
+| review | repo-owned, checked-in-artifact | None | Orchestrator routes to review phase | review |
+| security-review | repo-owned, checked-in-artifact | None | Security review requested or auth/secrets/shell changes | review |
+| trace | repo-owned, checked-in-artifact | state_read | Causal investigation or flow tracing requested | blocked/failed |
 | verify | repo-owned, checked-in-artifact | state_update_acceptance_criterion, state_read | Acceptance criteria validation requested | verify |
 
 ## Hook → Skill Wiring (14 hooks, state-aware invocation)
 
 | Hook | File | Primary Skill/Agent | Condition | Phases |
 | --- | --- | --- | --- | --- |
-| sessionStart | session-bootstrap.py | phase-controller | Initializes workflow-state; calls orchestrator | any |
-| sessionEnd | session-summary.py | orchestrator | Session shutdown; validates final state | done/blocked |
-| beforeSubmitPrompt | prompt-router.py | orchestrator | Routes vague requests to deep-interview | intake |
-| preToolUse | tool-guard.py | orchestrator | Validates tool allowlist per active role | any |
-| postToolUse | state-watcher.py | orchestrator | Tracks phase state after tool execution | any |
-| postToolUseFailure | failure-router.py | debugger or tracer | Routes failures to diagnosis phase | failed |
-| subagentStart | subagent-bootstrap.py | orchestrator | Validates subagent role scope | any |
-| subagentStop | subagent-summary.py | orchestrator | Validates subagent produced expected output | any |
-| beforeShellExecution | shell-guard.py | orchestrator | Validates shell commands for safety | any |
-| afterShellExecution | shell-debrief.py | orchestrator | Captures shell output for workflow-state | any |
-| beforeReadFile | read-advisor.py | orchestrator | Validates file read scope (read-advisor hook) | research/review |
-| afterFileEdit | claim-guard.py | verifier or critic | Validates edited files match acceptance criteria | execute/verify/review |
+| sessionStart | session-bootstrap.py | phase-controller | Surfaces session/workspace context for phase-controller | any |
+| sessionEnd | session-summary.py | orchestrator | Summarizes session shutdown state | done/blocked |
+| beforeSubmitPrompt | prompt-router.py | orchestrator | Surfaces matching skill, agent, and phase hints | intake |
+| preToolUse | tool-guard.py | orchestrator | Checks tool allowlist per active role | any |
+| postToolUse | state-watcher.py | orchestrator | Revalidates workflow-state after explicit state writes | any |
+| postToolUseFailure | failure-router.py | debugger or tracer | Suggests diagnosis routes after tool failure | failed |
+| subagentStart | subagent-bootstrap.py | orchestrator | Matches subagent role scope to checked-in prompts | any |
+| subagentStop | subagent-summary.py | orchestrator | Observes subagent completion summary | any |
+| beforeShellExecution | shell-guard.py | orchestrator | Checks shell commands for safety | any |
+| afterShellExecution | shell-debrief.py | orchestrator | Summarizes shell execution outcome | any |
+| beforeReadFile | read-advisor.py | orchestrator | Advises on file read scope | research/review |
+| afterFileEdit | claim-guard.py | verifier or critic | Checks edited files against claim boundaries | execute/verify/review |
 | preCompact | compact-reminder.py | orchestrator | Reminds user to verify acceptance criteria before compact | verify/review |
 | stop | stop-gate.py | orchestrator | Final validation: no pending/failed criteria before stop | done |
+
+## Governable Agent Start Contract
+
+Checked-in agent files are governed as a role registry:
+
+- every role must live at `agents/<name>.md` and use matching kebab-case
+  `name` frontmatter;
+- every checked-in role keeps `model: auto` until benchmark evidence justifies a
+  pinned model; see [`agent-model-policy.md`](./agent-model-policy.md) for the
+  role suitability matrix and promotion path;
+- `readonly` is policy, not decoration: read/review roles stay read-only, while
+  `orchestrator`, `implementer`, `debugger`, and `test-engineer` are the only
+  writable roles in the baseline;
+- `subagentStart` maps host-provided subagent types to those role prompts and
+  records the active role for tool guards; and
+- `subagentStop` clears the active role and records an observational summary
+  without consuming the follow-up loop budget.
+
+`scripts/validate-cursor-workflow-artifacts.py` is the registry gate. It fails
+if a role file is missing, renamed without matching frontmatter, pinned to a
+non-`auto` model, loses the `[OMCS]` prefix, or drifts from the expected
+readonly policy. `scripts/validate-agent-model-policy.py` adds the model-policy
+gate, and `scripts/smoke-agent-model-suitability.sh` provides an optional
+environment-gated prompt smoke for role/model suitability. The smoke checks a
+small representative role sample by default; use `--all-roles` only for a longer
+benchmark run. Cursor still owns the actual decision to launch a subagent; this
+repo owns the prompt files, role policy, hooks, and validation around that
+launch.
 
 ## Boundaries
 
 - The hooks **read** the state; they never write it.
-- The plugin does not ship a background runner. Long-lived orchestration,
-  cross-session resume, and queued reassignment remain
-  `host-product-only` (Cursor product capabilities) and are out of scope here.
+- The plugin does not ship a background runner. CLI resume, model selection,
+  subagent execution, Cloud Agent handoff, and queued reassignment remain
+  `host-product-only` Cursor capabilities that this repo can guide but not
+  provision as checked-in runtime state.
 - All claims about phases, acceptance criteria, and evidence stay bounded by
   the repo's claim/proof discipline in `AGENTS.md` and `docs/state-contract.md`.
 

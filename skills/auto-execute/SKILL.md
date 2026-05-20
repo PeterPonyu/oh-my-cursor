@@ -1,6 +1,6 @@
 ---
 name: auto-execute
-description: Autonomous execution pipeline - expand idea, plan, implement, QA, and review with explicit phase gates.
+description: "[OMCS] Autonomous execution pipeline - expand idea, plan, implement, QA, and review with explicit phase gates."
 ---
 
 # Auto Execute

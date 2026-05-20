@@ -1,6 +1,6 @@
 ---
 name: planner
-description: Plan worker. Convert a clarified task and research summary into an explicit acceptance-criteria list and a wave-ordered task plan that fits the workflow-state contract.
+description: "[OMCS] Plan worker. Convert a clarified task and research summary into an explicit acceptance-criteria list and a wave-ordered task plan that fits the workflow-state contract."
 model: auto
 readonly: true
 tools: [Read, Grep, Glob, mcp__cursor-state-bridge__state_read]

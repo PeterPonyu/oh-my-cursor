@@ -1,6 +1,6 @@
 ---
 name: trace
-description: Evidence-driven causal tracing - explain why an observed result happened by ranking competing hypotheses.
+description: "[OMCS] Evidence-driven causal tracing - explain why an observed result happened by ranking competing hypotheses."
 ---
 
 # Trace

@@ -40,14 +40,16 @@ should not be relied upon between runs:
 
 ## Usage
 
-1. When starting a non-trivial task, create a state file (for example
-   `docs/plans/<task-id>/workflow-state.json`) that follows the schema.
+1. When starting a non-trivial task, create a state file that follows the
+   schema. Use `.cursor/state/workflow-state.json` only as live runtime state,
+   not as a durable plugin asset; use `docs/plans/<task-id>/workflow-state.json`
+   or a temporary path for validation smokes.
 2. The `phase-controller` skill (`skills/phase-controller/SKILL.md`) describes
    how to advance phases and update acceptance criteria.
 3. Write or update the file intentionally with `.cursor/state/workflow-state.py`
-  (available in the installed plugin payload), the repository wrapper
-  `scripts/workflow-state.py`, or by editing JSON directly when that is
-  clearer.
+   (available in the installed plugin payload), the repository wrapper
+   `scripts/workflow-state.py`, or the `cursor-state-bridge` MCP tools. Avoid
+   direct JSON edits unless the user explicitly approves the exact change.
 4. The `stop-gate.py` hook can read a workflow-state file passed via the
    `OH_MY_CURSOR_WORKFLOW_STATE` environment variable or via a JSON path field
    inside the stop event. When acceptance criteria are still pending, it emits

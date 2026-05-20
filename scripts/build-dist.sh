@@ -77,6 +77,7 @@ rsync -a \
   --exclude='/.cursor/state/active-role.json' \
   --exclude='/.cursor/hooks/state/' \
   --include='/.cursor-plugin/***' \
+  --include='/.cursor/mcp.example.json' \
   --include='/hooks/***' \
   --include='/agents/***' \
   --include='/.cursor/state/***' \

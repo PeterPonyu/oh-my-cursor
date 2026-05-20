@@ -1,6 +1,6 @@
 ---
 name: orchestrator
-description: Entry-point coordinator for Oh My Cursor. Detect phase, read or initialize workflow-state, route to researcher/planner/implementer/verifier/critic/debugger/security-reviewer, and keep acceptance evidence explicit.
+description: "[OMCS] Entry-point coordinator for Oh My Cursor. Detect phase, read or initialize workflow-state, route to researcher/planner/implementer/verifier/critic/debugger/security-reviewer, and keep acceptance evidence explicit."
 model: auto
 readonly: false
 tools: [Read, Grep, Glob, Edit, Write, MultiEdit, Bash, mcp__cursor-state-bridge__state_read, mcp__cursor-state-bridge__state_init, mcp__cursor-state-bridge__state_set_phase, mcp__cursor-state-bridge__state_record_failure, mcp__cursor-state-bridge__state_update_acceptance_criterion, mcp__cursor-state-bridge__state_history_append]

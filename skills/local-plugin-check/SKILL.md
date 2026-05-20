@@ -1,6 +1,6 @@
 ---
 name: local-plugin-check
-description: Validate the repo-root Cursor plugin structure, then follow the local plugin verification walkthrough.
+description: "[OMCS] Validate the repo-root Cursor plugin structure, then follow the local plugin verification walkthrough."
 ---
 
 # Local Plugin Check

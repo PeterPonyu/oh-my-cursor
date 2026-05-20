@@ -1,6 +1,6 @@
 ---
 name: debug
-description: Root-cause analysis with explicit hypotheses, evidence, and the smallest next probe.
+description: "[OMCS] Root-cause analysis with explicit hypotheses, evidence, and the smallest next probe."
 ---
 
 # Debug

@@ -1,6 +1,6 @@
 ---
 name: iterate-loop
-description: Persistence pattern - iterate against a small PRD until every acceptance criterion is verified, with a reviewer pass before stopping.
+description: "[OMCS] Persistence pattern - iterate against a small PRD until every acceptance criterion is verified, with a reviewer pass before stopping."
 ---
 
 # Iterate Loop

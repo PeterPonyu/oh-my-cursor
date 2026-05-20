@@ -136,6 +136,7 @@ PY
     "agents"
     "hooks/hooks.json"
     "hooks"
+    ".cursor/mcp.example.json"
     ".cursor/state"
   )
 
@@ -179,6 +180,10 @@ cleanup_legacy_aliases() {
 
   # Idempotent cleanup of stale mcp/ from a prior --with-mcp install
   if [[ "$WITH_MCP" != "1" ]]; then
+    if [[ -L "${target_root%/}/${PLUGIN_NAME}" ]]; then
+      log "skipped stale mcp/ cleanup for symlink install at ${target_root%/}/${PLUGIN_NAME}"
+      return 0
+    fi
     local stale_mcp="${target_root%/}/${PLUGIN_NAME}/mcp"
     if [[ -d "$stale_mcp" ]]; then
       rm -rf "$stale_mcp"
@@ -211,6 +216,7 @@ copy_minimal_payload() {
     --exclude='/.cursor/state/active-role.json' \
     --exclude='/.cursor/hooks/state/' \
     --include='/.cursor-plugin/***' \
+    --include='/.cursor/mcp.example.json' \
     --include='/hooks/hooks.json' \
     --include='/hooks/***' \
     --include='/agents/***' \

@@ -1,6 +1,6 @@
 ---
 name: phase-controller
-description: Orchestration-first entry point for oh-my-cursor workflows. Invoke with @phase-controller in the Cursor composer to start or resume a workflow. Detects the current phase from the checked-in workflow-state file, routes the next step to the right role and skill, and keeps acceptance criteria aligned with the repo contract.
+description: "[OMCS] Orchestration-first entry point for oh-my-cursor workflows. Invoke with @phase-controller in the Cursor composer to start or resume a workflow. Detects the current phase from the checked-in workflow-state file, routes the next step to the right role and skill, and keeps acceptance criteria aligned with the repo contract."
 ---
 
 # Phase controller
@@ -9,7 +9,7 @@ This is the orchestration-first skill for `oh-my-cursor`. It treats the
 workflow as an explicit state machine that is **file-backed**,
 **human-visible**, and **bounded**. There is no background daemon, hidden
 queue, or automatic retry; each phase advance is an explicit action on a
-checked-in JSON document.
+schema-bounded JSON document.
 
 ## When to use
 
@@ -19,15 +19,25 @@ session. It complements existing skills (`plan`, `iterate-loop`, `review`,
 diagnosis-first lane; `trace` is its causal-investigation peer for harder
 "why did this happen?" questions.
 
+For Cursor CLI runs, this skill is the right re-entry point after
+`cursor-agent --resume <chat-id>` or `cursor-agent --continue`. The parent CLI
+session should resolve its model with `scripts/resolve-cursor-model.py` or an
+explicit `CURSOR_SMOKE_MODEL` override instead of hardcoding a model ID. The
+checked-in role agents still use `model: auto` unless benchmark evidence
+justifies pinning them.
+
 ## Steps
 
-1. **Locate or create the state file.** The canonical location is
+1. **Locate or create the state file.** The live session default is
    `.cursor/state/workflow-state.json`; this is the path that
    `stop-gate.py`, `compact-reminder.py`, `state-watcher.py`, and the
-   default bridge resolver all read. Per-task archives at
+   default bridge resolver read. Packaging validators intentionally fail if a
+   live runtime file is left there, so use a per-task archive or temporary path
+   for smoke tests and remove `.cursor/state/workflow-state.json` before
+   building or validating the plugin payload. Per-task archives at
    `docs/plans/<task-id>/workflow-state.json` are opt-in (pass `task_id`
-   when calling `state_init` to use that subdirectory). Agent-callable
-   writes go through the `cursor-state-bridge` MCP tools (`state_init`,
+   when calling `state_init` to use that subdirectory). Agent-callable writes go
+   through the `cursor-state-bridge` MCP tools (`state_init`,
    `state_set_phase`, `state_update_acceptance_criterion`,
    `state_record_failure`, `state_history_append`, `state_read`); both
    targets share the bridge's `file_lock` invariant. Validate the
@@ -87,8 +97,8 @@ Statuses per phase: `pending | in_progress | passed | failed | blocked`.
 - **Lifecycle phase(s)**: All phases
 - **Invoked by**: User at session start, or by `auto-execute`, `iterate-loop` when resuming
 - **Invokes**: Routes to agents (orchestrator, researcher, planner, implementer, verifier, critic, debugger, tracer) and skills (plan, iterate-loop, review, debug, trace, etc.)
-- **State contract**: Reads/writes `.cursor/state/workflow-state.json` (or per-task archive at `docs/plans/<task-id>/workflow-state.json`)
-- **Failure handling**: Records failures via `state_record_failure` MCP tool or direct JSON update; routes to debugger or tracer agents
+- **State contract**: Reads `.cursor/state/workflow-state.json` (or per-task archive at `docs/plans/<task-id>/workflow-state.json`); agent-callable writes go through the `cursor-state-bridge` MCP tools when installed.
+- **Failure handling**: Records failures via `state_record_failure` MCP tool when available; otherwise reports the failure route without directly editing workflow-state.
 
 | Phase | Recommended role | Agent prompt |
 | --- | --- | --- |
@@ -106,6 +116,9 @@ The phase controller dispatches work to checked-in agents as **Cursor sub-agents
 There is no external team server or background daemon — every agent runs within the
 same Cursor workspace. Each agent has a defined role, tool allowlist, and is
 bootstrapped via the `subagentStart` / `subagentStop` hooks in `hooks/hooks.json`.
+When a CLI parent session is resumed, the phase controller rereads
+workflow-state and delegates the next phase again rather than relying on hidden
+subagent memory.
 
 - **Bootstrap**: `subagentStart` fires when a sub-agent session opens, injecting
   the matching `agents/<role>.md` prompt.
@@ -120,7 +133,7 @@ Full details in [`docs/team-mode.md`](../../docs/team-mode.md).
 
 ### Ownership Class
 - **repo-owned**: This skill is checked in at `skills/phase-controller/SKILL.md` and is the orchestration entry point for the repo's workflow-state contract.
-- **host-product-only**: NO
+- **host-product-only**: Cursor CLI resume, model selection, and subagent execution mentioned by this skill remain host-product capabilities.
 - **unsupported-or-out-of-scope**: NO
 
 ### Proof Class
@@ -129,7 +142,7 @@ Full details in [`docs/team-mode.md`](../../docs/team-mode.md).
 - **runtime-smoke** (optional): When `cursor-state-bridge` MCP is installed, bridge tools provide runtime proof; default install excludes MCP.
 
 ### Claim Summary
-This skill provides the orchestration entry point for `oh-my-cursor` workflows. It reads the checked-in workflow-state document, detects the current phase, and routes to the appropriate agent or skill. The state contract is repo-owned and file-backed; writes go through the optional `cursor-state-bridge` MCP server when available, or through the developer-only CLI shim in the scripts directory as a fallback (direct file edits are not recommended after phase controller bootstraps state).
+This skill provides the orchestration entry point for `oh-my-cursor` workflows. It reads the checked-in workflow-state document, detects the current phase, and routes to the appropriate agent or skill. The state contract is repo-owned and file-backed; agent-callable writes go through the optional `cursor-state-bridge` MCP server when available. If the bridge is unavailable, report the structured update for the user or host to apply; do not use the developer-only CLI shim or direct JSON edits as an agent fallback.
 
 ## MCP integration points
 
@@ -142,7 +155,7 @@ This skill provides the orchestration entry point for `oh-my-cursor` workflows. 
 | `state_history_append` | cursor-state-bridge | Append run notes | No |
 | `state_read` | cursor-state-bridge | Read current state | No |
 
-MCP bridge is opt-in via `./scripts/install-local-plugin.sh --with-mcp`. Default install uses direct file I/O with `.cursor/state/workflow-state.json`.
+MCP bridge is opt-in via `./scripts/install-local-plugin.sh --with-mcp`. When the bridge is not installed, the skill still reads workflow-state and reports the next structured update the user or host should apply; it does not authorize direct JSON edits from an agent.
 
 ## Hook dependencies
 

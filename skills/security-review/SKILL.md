@@ -1,6 +1,6 @@
 ---
 name: security-review
-description: OWASP-aligned security pass for a diff or codebase, with severity ratings and remediation steps.
+description: "[OMCS] OWASP-aligned security pass for a diff or codebase, with severity ratings and remediation steps."
 ---
 
 # Security Review

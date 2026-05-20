@@ -1,6 +1,6 @@
 ---
 name: plan
-description: Strategic planning workflow that turns a request into a small, reviewable Cursor-native plan before any code change.
+description: "[OMCS] Strategic planning workflow that turns a request into a small, reviewable Cursor-native plan before any code change."
 ---
 
 # Plan

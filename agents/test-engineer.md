@@ -1,6 +1,6 @@
 ---
 name: test-engineer
-description: Test strategy, coverage analysis, and test artifact creation aligned with workflow-state acceptance criteria.
+description: "[OMCS] Test strategy, coverage analysis, and test artifact creation aligned with workflow-state acceptance criteria."
 model: auto
 readonly: false
 tools: [Read, Grep, Glob, Edit, Write, mcp__cursor-state-bridge__state_read, mcp__cursor-state-bridge__state_set_phase, mcp__cursor-state-bridge__state_update_acceptance_criterion]

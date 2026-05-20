@@ -129,7 +129,21 @@ def validate_agents() -> None:
     if not agents_dir.is_dir():
         fail("missing agents/ directory")
     agents = sorted(agents_dir.glob("*.md"))
-    expected = {"orchestrator", "verifier", "critic", "debugger", "security-reviewer", "planner", "researcher"}
+    expected_readonly = {
+        "code-reviewer": "true",
+        "critic": "true",
+        "debugger": "false",
+        "explore": "true",
+        "implementer": "false",
+        "orchestrator": "false",
+        "planner": "true",
+        "researcher": "true",
+        "security-reviewer": "true",
+        "test-engineer": "false",
+        "tracer": "true",
+        "verifier": "true",
+    }
+    expected = set(expected_readonly)
     names: set[str] = set()
     for path in agents:
         frontmatter, body = parse_frontmatter(path)
@@ -143,12 +157,21 @@ def validate_agents() -> None:
             fail(f"agent file name must match frontmatter name: {path.name}")
         if frontmatter["readonly"] not in {"true", "false"}:
             fail(f"agent readonly must be true or false: {path.name}")
+        if name in expected_readonly and frontmatter["readonly"] != expected_readonly[name]:
+            fail(f"agent readonly policy drift for {name}: expected {expected_readonly[name]}, got {frontmatter['readonly']}")
+        if frontmatter["model"] != "auto":
+            fail(f"agent model must remain auto unless benchmark evidence updates policy: {path.name}")
+        if not frontmatter["description"].startswith("[OMCS]"):
+            fail(f"agent description must start with [OMCS]: {path.name}")
         if not body:
             fail(f"agent body must not be empty: {path.name}")
         names.add(name)
     missing = expected - names
     if missing:
         fail(f"missing required agents: {sorted(missing)}")
+    extra = names - expected
+    if extra:
+        fail(f"unexpected ungoverned agents: {sorted(extra)}")
     print("AGENTS_ARTIFACTS_OK")
 
 

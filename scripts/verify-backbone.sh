@@ -55,9 +55,17 @@ required=(
   docs/archive/fallback-policy.md
   docs/local-plugin-verification.md
   docs/orchestration.md
+  docs/agent-model-policy.md
+  docs/external-runtime-bridge.md
+  docs/external-runtime-compatibility.md
   docs/references.md
   docs/state-contract.md
   scripts/check-local-plugin-install.sh
+  scripts/e2e-qa-session-assets.sh
+  scripts/link-omc-cursor-compat-assets.py
+  scripts/resolve-cursor-model.py
+  scripts/validate-agent-model-policy.py
+  scripts/smoke-agent-model-suitability.sh
 )
 
 for path in "${required[@]}"; do
@@ -138,7 +146,9 @@ PY
 ./scripts/validate-plugin-structure.sh
 python3 scripts/validate-public-language.py
 python3 scripts/validate-cursor-workflow-artifacts.py
+python3 scripts/validate-agent-model-policy.py
 python3 scripts/validate-hook-readonly.py
 python3 scripts/validate-hook-readonly.py --check-shared-lock
+./scripts/e2e-qa-session-assets.sh
 # Benchmark evidence and pages surface validation removed — benchmark/ and backbone-site deleted in v0.5.0
 echo 'verification: repository backbone files, claim vocabulary, and positive overclaim protections are present'

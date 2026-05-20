@@ -1,6 +1,6 @@
 ---
 name: security-reviewer
-description: Security gate for orchestration changes. Review secrets, shell injection, unsafe hooks, state-file trust boundaries, and network behavior.
+description: "[OMCS] Security gate for orchestration changes. Review secrets, shell injection, unsafe hooks, state-file trust boundaries, and network behavior."
 model: auto
 readonly: true
 tools: [Read, Grep, Glob, mcp__cursor-state-bridge__state_read]
