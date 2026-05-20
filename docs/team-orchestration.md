@@ -41,7 +41,7 @@ Team tasks are stored as individual JSON files under `docs/plans/<team-id>/tasks
   "id": "T-001",
   "team_id": "md-polish-squad",
   "subject": "Polish agent .md files",
-  "description": "Read and refine every .cursor/agents/*.md file...",
+  "description": "Read and refine every agents/*.md file...",
   "owner": "polish-agents",
   "status": "completed",
   "priority": "high",

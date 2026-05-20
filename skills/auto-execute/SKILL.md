@@ -28,8 +28,10 @@ This skill is a self-developed five-phase execution pipeline that expands idea, 
 |---|---|---|---|---|
 | `state_init` | cursor-state-bridge | Initialize workflow-state for the run | No | optional |
 | `state_set_phase` | cursor-state-bridge | Advance between phases | No | optional |
+| `state_update_acceptance_criterion` | cursor-state-bridge | Mirror verified story/criterion evidence | No | optional |
+| `state_record_failure` | cursor-state-bridge | Record phase or QA failure before escalation | No | optional |
 
-**Note**: MCP bridge is opt-in. Default uses `prd.json` file at workspace root.
+**Note**: MCP bridge is opt-in. Default uses `prd.json` file at workspace root. When the bridge is available, these are the only MCP tools this skill should ask the orchestrator to call.
 
 ## Hooks Dependencies
 

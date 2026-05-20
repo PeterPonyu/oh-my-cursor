@@ -28,22 +28,32 @@ required=(
     hooks/shell-debrief.py
     hooks/read-advisor.py
     hooks/compact-reminder.py
+    .cursor/state/_locking.py
     .cursor/state/workflow-state.schema.json
     .cursor/state/workflow-state.example.json
     .cursor/state/workflow-state.py
     .cursor/state/README.md
     agents/orchestrator.md
+    agents/architect.md
     agents/verifier.md
     agents/critic.md
     agents/debugger.md
     agents/security-reviewer.md
     agents/planner.md
     agents/researcher.md
+    agents/implementer.md
+    agents/code-reviewer.md
+    agents/explore.md
+    agents/qa-tester.md
+    agents/test-engineer.md
+    agents/tracer.md
   rules/repo-owned-plugin-boundary.mdc
   skills/local-plugin-check/SKILL.md
   skills/phase-controller/SKILL.md
   .cursor/rules/00-repo-scope.mdc
   .cursor/rules/10-docs-claims.mdc
+  .cursor/rules/20-commit-discipline.mdc
+  .cursor/rules/30-error-handling.mdc
   docs/confirmed-surfaces.md
   docs/archive/fallback-policy.md
   docs/local-plugin-verification.md

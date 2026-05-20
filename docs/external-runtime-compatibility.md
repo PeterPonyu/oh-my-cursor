@@ -26,7 +26,7 @@ proof path exist in this repository.
 | Planning | Planner, architect, critic, ralplan-style loops | `agents/planner.md`, `skills/plan/`, `skills/deep-interview/` | Partial compatibility | Consensus planning is a candidate port only with local artifacts. |
 | Implementation | Executor, autopilot, ralph-style loops | `agents/implementer.md`, `skills/auto-execute/`, `skills/iterate-loop/` | Partial compatibility | Cursor stop gates and workflow-state transitions define the local contract. |
 | Code review | review-work, code-reviewer | `agents/code-reviewer.md`, `skills/review/` | Partial compatibility | Severity-rated feedback tied to workflow-state acceptance criteria. |
-| Verification | verifier, QA lane, ultraqa-style loops | `agents/verifier.md`, `agents/test-engineer.md`, `skills/review/`, local validators under `scripts/` | Partial compatibility | Add runtime smokes per feature before claiming stronger proof. |
+| Verification | verifier, QA lane, ultraqa-style loops | `agents/qa-tester.md`, `agents/verifier.md`, `agents/test-engineer.md`, `skills/review/`, local validators under `scripts/` | Partial compatibility | Add runtime smokes per feature before claiming stronger proof. |
 | Review / critique | Oracle, Momus, critic, code-reviewer | `agents/critic.md`, `agents/security-reviewer.md` | Partial compatibility | External reviewer personas remain external unless Cursor-native prompts are added. |
 | Debug / trace | debugger, tracer, trace skill | `agents/debugger.md`, `skills/debug/`, `skills/trace/` | Partial compatibility | Trace output must stay in Cursor-owned paths. |
 | Security review | security-reviewer | `agents/security-reviewer.md`, `skills/security-review/` | Partial compatibility | Findings must cite local files and validators. |

@@ -38,9 +38,9 @@ Verify the install with `scripts/check-local-plugin-install.sh`.
 
 | Component | Location | Purpose |
 |-----------|----------|---------|
-| **Hooks** (14 events) | `hooks/hooks.json` + `hooks/` | Lifecycle automation: session bootstrap, tool guard, state watcher, stop gate, and more |
-| **Agents** (12 roles) | `agents/` | Orchestrator, researcher, planner, implementer, verifier, debugger, tracer, and more — dispatched as Cursor sub-agents |
-| **Skills** (14 skills) | `skills/` | Phase controller (entry), plan, iterate-loop, review, debug, trace, parallel-batch, auto-execute, security-review, doctor, mcp-setup, verify, and more |
+| **Hooks** (14 events) | `hooks/hooks.json` + `hooks/` | Every documented Cursor hook event is wired: `sessionStart`, `sessionEnd`, `beforeSubmitPrompt`, `preToolUse`, `postToolUse`, `postToolUseFailure`, `subagentStart`, `subagentStop`, `beforeShellExecution`, `afterShellExecution`, `beforeReadFile`, `afterFileEdit`, `preCompact`, and `stop`. All scripts are stdlib-only, fail-open, and read-only against workflow-state |
+| **Agents** (14 roles) | `agents/` | Full role registry — `orchestrator`, `architect`, `researcher`, `planner`, `implementer`, `qa-tester`, `verifier`, `critic`, `code-reviewer`, `debugger`, `tracer`, `security-reviewer`, `explore`, `test-engineer`. All checked-in agents use `model: auto` until benchmark evidence justifies pinning |
+| **Skills** (14 skills) | `skills/` | `phase-controller` (entry), `plan`, `iterate-loop`, `auto-execute`, `review`, `security-review`, `debug`, `trace`, `verify`, `deep-interview`, `doctor`, `local-plugin-check`, `mcp-setup`, `parallel-batch` |
 | **Rules** | `rules/` | Plugin boundary policy |
 | **State contract** | `.cursor/state/` | File-backed workflow state with JSON schema, library, and lock primitive |
 | **MCP bridge** (opt-in) | `mcp/cursor-state-bridge/` | Agent-callable workflow-state writes via JSON-RPC |

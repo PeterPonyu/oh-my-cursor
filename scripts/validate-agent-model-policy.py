@@ -11,10 +11,12 @@ AGENTS = ROOT / "agents"
 
 
 EXPECTED_ROLES = {
+    "architect",
     "orchestrator",
     "researcher",
     "explore",
     "planner",
+    "qa-tester",
     "implementer",
     "debugger",
     "test-engineer",

@@ -21,6 +21,7 @@ ALLOWED_PHASES = {"intake", "research", "plan", "execute", "verify", "review", "
 ALLOWED_STATUSES = {"pending", "in_progress", "passed", "failed", "blocked"}
 ALLOWED_ROLES = {
     "",
+    "architect",
     "code-reviewer",
     "critic",
     "debugger",
@@ -28,6 +29,7 @@ ALLOWED_ROLES = {
     "implementer",
     "orchestrator",
     "planner",
+    "qa-tester",
     "researcher",
     "security-reviewer",
     "test-engineer",

@@ -1,6 +1,6 @@
 # References
 
-Access date for web references: **2026-05-19**.
+Access date for web references: **2026-05-20**.
 
 This page is the citation index for public `oh-my-cursor` claims. It separates
 repo-owned proof from host-product documentation so repo wording does not drift
@@ -74,8 +74,10 @@ When capability claims change in `AGENTS.md`, `README.md`, `docs/**`, or
 | Agent | Ownership Class | Proof Class | MCP Access | Primary Role |
 | --- | --- | --- | --- | --- |
 | orchestrator | repo-owned | checked-in-artifact | `state_read`, `state_init`, `state_set_phase`, `state_record_failure`, `state_update_acceptance_criterion`, `state_history_append` | Entry point: phase routing + state coordination |
+| architect | repo-owned | checked-in-artifact | `state_read` | Plan/review phase: architecture boundary and invariant review |
 | researcher | repo-owned | checked-in-artifact | `state_read` | Research phase: fact gathering + gap analysis |
 | planner | repo-owned | checked-in-artifact | `state_read` | Plan phase: acceptance criteria + task waves |
+| qa-tester | repo-owned | checked-in-artifact | `state_read`, `state_update_acceptance_criterion`, `state_history_append` | Verify phase: bounded runtime QA evidence |
 | implementer | repo-owned | checked-in-artifact | `state_read`, `state_set_phase`, `state_update_acceptance_criterion`, `state_history_append` | Execute phase: code changes + scope gates |
 | verifier | repo-owned | checked-in-artifact | `state_read`, `state_update_acceptance_criterion` | Verify phase: acceptance criterion validation |
 | critic | repo-owned | checked-in-artifact | `state_read` | Review phase: assumption challenge |

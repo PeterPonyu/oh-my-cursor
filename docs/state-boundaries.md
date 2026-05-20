@@ -17,7 +17,7 @@ together with the user's global oh-my-claudecode (OMC) harness. They are
   failure metadata. Schema in `workflow-state.schema.json`.
 - `active-role.json` — single-active-subagent record consulted by
   `tool-guard.py` to enforce per-role tool allowlists declared in
-  `.cursor/agents/*.md` frontmatter.
+  `agents/*.md` frontmatter.
 - `workflow-state.example.json` — reference document; not live state.
 
 ### `.omc/state/` (out of scope)

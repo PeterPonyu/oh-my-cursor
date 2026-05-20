@@ -6,7 +6,7 @@ This page answers: which hooks run on Cursor's native hook API, which run as pyt
 
 ## Install surface
 
-This repo ships `.cursor/hooks.json` which wires fourteen Cursor hook events to stdlib-only Python scripts under `.cursor/hooks/`. The install script copies `.cursor/hooks.json` and `.cursor/hooks/` into `~/.cursor/plugins/local/oh-my-cursor/`.
+This repo ships `hooks/hooks.json` which wires fourteen Cursor hook events to stdlib-only Python scripts under `hooks/`. The install script copies `hooks/hooks.json` and `hooks/` into `~/.cursor/plugins/local/oh-my-cursor/`.
 
 Cursor reads `.cursor/hooks.json` at session start. All hook scripts are fail-open: they observe, log, and warn, but do not block the session unless a tightly bounded severe pattern is detected.
 
@@ -15,13 +15,13 @@ Cursor reads `.cursor/hooks.json` at session start. All hook scripts are fail-op
 | Surface | Owner | Path |
 |---|---|---|
 | Cursor native hooks | Cursor product (host) | `.cursor/hooks.json` |
-| oh-my-cursor hook scripts | repo-owned plugin payload | `.cursor/hooks/*.py` |
+| oh-my-cursor hook scripts | repo-owned plugin payload | `hooks/*.py` |
 | Runtime state (never durable) | local workspace | `.cursor/state/workflow-state.json`, `.cursor/state/active-role.json`, `*.lock` |
 | Agent-callable state writes | cursor-state-bridge MCP | `mcp/cursor-state-bridge/` |
 
 ## Mapping matrix
 
-Fifteen wired hook events (14 Cursor hooks + 1 interop hook) mapped to scripts:
+Fourteen wired Cursor hook events mapped to scripts:
 
 | Cursor Hook Event | Script | Role | Mode |
 |---|---|---|---|
@@ -40,9 +40,6 @@ Fifteen wired hook events (14 Cursor hooks + 1 interop hook) mapped to scripts:
 | `preCompact` | `compact-reminder.py` | Surfaces pending acceptance criteria and active failures before context compaction. | Observational |
 | `stop` | `stop-gate.py` | Checks workflow-state for pending/failed criteria. Emits reminder; does not block. Loop limit: 1. | Observational |
 
-## Interop hook (ohmydoc interop, not in hooks.json)
-
-The `_ohmydoc_interop` hook is defined in `.cursor/hooks.json` to support oh-my-document's interop protocol, but its default command is a no-op.
 
 ## What is NOT native yet
 
@@ -59,6 +56,6 @@ Referenced from `docs/references.md` (Cursor documentation):
 | Capability | Ownership | Cursor Feature | Hook Event |
 |---|---|---|---|
 | Project hooks | host-product-only | `.cursor/hooks.json` | sessionStart..stop |
-| Custom agents | host-product-only | `.cursor/agents/` | subagentStart, subagentStop |
+| Custom agents | host-product-only | `agents/` | subagentStart, subagentStop |
 | Custom modes | host-product-only | Cursor settings UI | N/A (no hook) |
 | Background agents | unsupported-or-out-of-scope | N/A | N/A |

@@ -10,6 +10,7 @@ from __future__ import annotations
 import py_compile
 import re
 import sys
+import importlib.util
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -117,6 +118,107 @@ for tool in REQUIRED_TOOL_NAMES:
         fail(f"server.py does not contain required tool name as string literal: {tool}")
 
 log(f"server.py: all {len(REQUIRED_TOOL_NAMES)} required tool names present")
+
+# ---------------------------------------------------------------------------
+# 5. Tool schemas match the state_io handler parameter contract
+# ---------------------------------------------------------------------------
+
+sys.path.insert(0, str(pkg_dir))
+spec = importlib.util.spec_from_file_location("cursor_state_bridge_server", server_py)
+if spec is None or spec.loader is None:
+    fail("could not load cursor-state-bridge server module for schema validation")
+server_module = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(server_module)
+
+tools = getattr(server_module, "_TOOLS", None)
+if not isinstance(tools, list):
+    fail("server.py must expose _TOOLS as a list")
+schemas = {
+    tool.get("name"): tool.get("inputSchema")
+    for tool in tools
+    if isinstance(tool, dict) and isinstance(tool.get("name"), str)
+}
+
+expected_tool_set = set(REQUIRED_TOOL_NAMES)
+if set(schemas) != expected_tool_set:
+    fail(f"tools/list drift: expected {sorted(expected_tool_set)}, got {sorted(schemas)}")
+functional_tools = getattr(server_module, "_FUNCTIONAL_TOOLS", None)
+if not isinstance(functional_tools, dict):
+    fail("server.py must expose _FUNCTIONAL_TOOLS as a dict")
+if set(functional_tools) != expected_tool_set:
+    fail(f"functional tool map drift: expected {sorted(expected_tool_set)}, got {sorted(functional_tools)}")
+for tool, handler_name in functional_tools.items():
+    if not hasattr(server_module._state_io, handler_name):
+        fail(f"functional tool {tool} maps to missing state_io handler {handler_name}")
+state_handlers = {
+    name for name in dir(server_module._state_io)
+    if name.startswith("state_") and callable(getattr(server_module._state_io, name))
+}
+if state_handlers != expected_tool_set:
+    fail(f"state_io handler drift: expected {sorted(expected_tool_set)}, got {sorted(state_handlers)}")
+capabilities = server_module.Server(str(ROOT))._handle_initialize().get("capabilities")
+if capabilities != {"tools": {}}:
+    fail(f"cursor-state-bridge must advertise only tools capability, got {capabilities!r}")
+
+EXPECTED_SCHEMA_PROPERTIES = {
+    "state_read": {"task_id", "workspace"},
+    "state_init": {
+        "task_id",
+        "plan_id",
+        "title",
+        "phase",
+        "status",
+        "role",
+        "next_action",
+        "scope_per_task",
+        "history_cap",
+    },
+    "state_set_phase": {
+        "task_id",
+        "phase",
+        "status",
+        "role",
+        "next_action",
+        "note",
+        "history_cap",
+    },
+    "state_record_failure": {"task_id", "message", "type", "note", "retry_count", "history_cap"},
+    "state_update_acceptance_criterion": {
+        "task_id",
+        "ac_id",
+        "status",
+        "criterion",
+        "evidence",
+        "note",
+        "history_cap",
+    },
+    "state_history_append": {"task_id", "event", "note", "phase", "status", "history_cap"},
+}
+
+for tool, expected_props in EXPECTED_SCHEMA_PROPERTIES.items():
+    schema = schemas.get(tool)
+    if not isinstance(schema, dict):
+        fail(f"{tool} missing inputSchema")
+    props = schema.get("properties")
+    if not isinstance(props, dict):
+        fail(f"{tool} inputSchema missing properties")
+    actual_props = set(props)
+    if actual_props != expected_props:
+        fail(f"{tool} schema properties drift: expected {sorted(expected_props)}, got {sorted(actual_props)}")
+
+failure_props = schemas["state_record_failure"]["properties"]
+if "phase" in failure_props:
+    fail("state_record_failure schema must not advertise unused phase param")
+if "type" not in failure_props:
+    fail("state_record_failure schema must advertise failure type")
+
+history_schema = schemas["state_history_append"]
+if history_schema.get("required") != ["task_id"]:
+    fail("state_history_append should require task_id and accept event or note")
+if not isinstance(history_schema.get("anyOf"), list):
+    fail("state_history_append should express event/note alias via anyOf")
+
+log("server.py: MCP tool schemas match state_io handler contract")
 
 # ---------------------------------------------------------------------------
 # Done

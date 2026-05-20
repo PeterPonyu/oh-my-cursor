@@ -90,7 +90,7 @@ run_cursor_prompt() {
     fi
 
     transient=0
-    if printf '%s\n' "$output" | grep -Eiq 'Connection lost|Retry attempt|tls handshake eof|stream disconnected|reconnecting|temporarily unavailable'; then
+    if printf '%s\n' "$output" | grep -Eiq 'Connection lost|Retry attempt|tls handshake eof|stream disconnected|reconnecting|temporarily unavailable|Client network socket disconnected|secure TLS connection|\[aborted\]'; then
       transient=1
     fi
     if printf '%s\n' "$output" | grep -Fq 'Cannot use this model:' && [[ "$SMOKE_MODEL" != "auto" ]]; then

@@ -1,6 +1,6 @@
 # Confirmed Cursor-native surfaces
 
-As of **May 6, 2026**, this repository backbone distinguishes three classes of
+As of **2026-05-20**, this repository backbone distinguishes three classes of
 truth:
 
 - **repo-owned** — checked-in surfaces this repo ships and validates;
@@ -14,14 +14,14 @@ truth:
 | Outcome family | Ownership class | Strongest proof class used here | Current repo position |
 | --- | --- | --- | --- |
 | Root instructions and policy | `repo-owned` | `checked-in-artifact` | This repo ships one root `AGENTS.md` and `.cursor/rules/` guidance. |
-| Project hooks | `repo-owned` in trusted Cursor workspaces | `checked-in-artifact` for files, stronger only with runtime evidence | This repo ships `hooks/hooks.json` (wiring `sessionStart`, `sessionEnd`, `beforeSubmitPrompt`, `preToolUse`, `postToolUse`, `postToolUseFailure`, `subagentStart`, `subagentStop`, `beforeShellExecution`, `afterShellExecution`, `beforeReadFile`, `afterFileEdit`, `preCompact`, and `stop`) plus stdlib-only hook scripts under `.cursor/hooks/`. |
-| MCP server `cursor-state-bridge` (all eight phases shipped) | `repo-owned` (opt-in install via `--with-mcp`) | `checked-in-artifact` for source + validators; `runtime-smoke` only when `RUN_MCP_BRIDGE_SMOKE=1` is set | This repo ships `mcp/cursor-state-bridge/` as a stdio JSON-RPC 2.0 server with six functional tools (`state_read`, `state_init`, `state_set_phase`, `state_record_failure`, `state_update_acceptance_criterion`, `state_history_append`), plus trace lane, defense-in-depth auth, history FIFO eviction, agent-callable contract enforcement, `scripts/validate-mcp-server-structure.py`, `scripts/smoke-mcp-cursor-state-bridge.sh`, the byte-equal `mcp.json` template, and tests. The user-environment config file `.cursor/mcp.json` is gitignored and validator-rejected. |
+| Project hooks | `repo-owned` in trusted Cursor workspaces | `checked-in-artifact` for files, stronger only with runtime evidence | This repo ships `hooks/hooks.json` (wiring `sessionStart`, `sessionEnd`, `beforeSubmitPrompt`, `preToolUse`, `postToolUse`, `postToolUseFailure`, `subagentStart`, `subagentStop`, `beforeShellExecution`, `afterShellExecution`, `beforeReadFile`, `afterFileEdit`, `preCompact`, and `stop`) plus stdlib-only hook scripts under `hooks/`. |
+| MCP server `cursor-state-bridge` (six-tool state bridge) | `repo-owned` (opt-in install via `--with-mcp`) | `checked-in-artifact` for source + validators; `runtime-smoke` only when `RUN_MCP_BRIDGE_SMOKE=1` is set | This repo ships `mcp/cursor-state-bridge/` as a stdio JSON-RPC 2.0 server with six functional tools (`state_read`, `state_init`, `state_set_phase`, `state_record_failure`, `state_update_acceptance_criterion`, `state_history_append`), plus trace lane, defense-in-depth auth, history FIFO eviction, agent-callable contract enforcement, `scripts/validate-mcp-server-structure.py`, `scripts/smoke-mcp-cursor-state-bridge.sh`, the byte-equal `mcp.json` template, and tests. The user-environment config file `.cursor/mcp.json` is gitignored and validator-rejected. |
 | Project agents | `repo-owned` | `checked-in-artifact` | This repo ships `agents/*.md` with validated YAML frontmatter and concise prompts. |
 | Repo-root Cursor plugin manifest + bundled payload references | `repo-owned` | `checked-in-artifact` | This repo promotes `.cursor-plugin/plugin.json` plus referenced rules, skills, agents, and hooks into a checked-in plugin surface. |
 | Local plugin load walkthrough | `repo-owned` docs with user-environment verification | `checked-in-artifact` for the walkthrough, stronger only with runtime evidence | This repo documents how to load the local plugin from `~/.cursor/plugins/local` and reload Cursor without pretending the reload step is repo-owned runtime automation. |
 | Pages landing surface and workflow (when checked in) | `repo-owned` only after app + workflow + exported-output proof land together | `checked-in-artifact` once local validators confirm the checked-in app, workflow, and required landing links | A future `apps/cursor-backbone-site/` surface must prove itself as a checked-in artifact before public copy can describe it as repo-owned. |
 | CLI consumption of repo guidance | `host-product-only` consuming repo-owned files | `official-doc` | Cursor CLI is documented to read root `AGENTS.md` / `.cursor/rules`; this repo relies on that documented behavior without inventing extra packaging. |
-| MCP support | `host-product-only` | `official-doc` | Cursor supports MCP, but this repo keeps MCP opt-in until a concrete server and ownership model are chosen. |
+| MCP support | `host-product-only` for host loading; `repo-owned` for the checked-in bridge source | `official-doc` for Cursor MCP support plus `checked-in-artifact` for `mcp/cursor-state-bridge/` | Cursor supports MCP as a host capability. This repo has chosen a narrow opt-in state bridge, but still does not claim a default checked-in `.cursor/mcp.json` user config. |
 | Custom modes | `host-product-only` | `official-doc` | Cursor documents custom modes as product settings/configuration; this repo does not claim a checked-in repo file format for them. |
 | Background agents | `host-product-only` | `official-doc` | Cursor documents background agents as a product feature; this repo does not claim repo-file provisioning for them. |
 | Additional workflow surfaces beyond checked-in hooks and agents | `unsupported-or-out-of-scope` unless separately adopted | Matching proof required | New surfaces only become repo-owned when artifacts, validators, and docs land together. |
@@ -47,7 +47,7 @@ Official Cursor hook documentation describes project hooks at
 **How this repo uses that evidence:**
 
 - keep `hooks/hooks.json` at the documented project path;
-- keep hook scripts under `.cursor/hooks/`;
+- keep hook scripts under `hooks/`;
 - validate hook command paths and Python compilation; and
 - describe runtime behavior only as far as Cursor execution and local/manual
   verification support.
@@ -59,9 +59,9 @@ Official Cursor agent documentation describes project agents under
 
 **How this repo uses that evidence:**
 
-- keep all twelve agents (`orchestrator`, `researcher`, `planner`,
-  `implementer`, `verifier`, `critic`, `code-reviewer`, `debugger`,
-  `tracer`, `security-reviewer`, `explore`, `test-engineer`) under
+- keep all fourteen agents (`orchestrator`, `architect`, `researcher`, `planner`,
+  `implementer`, `qa-tester`, `verifier`, `critic`, `code-reviewer`,
+  `debugger`, `tracer`, `security-reviewer`, `explore`, `test-engineer`) under
   `agents/`;
 - validate `name`, `description`, `model`, and `readonly` frontmatter; and
 - keep prompts concise and repository-specific.
@@ -156,7 +156,7 @@ Given the ownership and proof boundaries above, the safest starting point for an
 
 1. root `AGENTS.md`;
 2. `.cursor/rules/*.mdc`;
-3. `hooks/hooks.json` and `.cursor/hooks/`;
+3. `hooks/hooks.json` and `hooks/`;
 4. `agents/*.md`;
 5. a small repo-root plugin with reviewable payload references;
 6. documentation that records `repo-owned`, `host-product-only`, and

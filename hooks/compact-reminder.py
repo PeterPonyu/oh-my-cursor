@@ -15,9 +15,10 @@ import sys
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
+from _repo import resolve_workspace_root  # noqa: E402
 from _trace import trace as _trace  # noqa: E402
 
-ROOT = Path(__file__).resolve().parents[2]
+ROOT = resolve_workspace_root(__file__)
 
 
 def _read_payload() -> dict:

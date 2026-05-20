@@ -59,14 +59,17 @@ mkdir -p "${DIST_DIR}"
 
 mcp_includes=()
 if [[ "$WITH_MCP" == "1" ]]; then
-  mcp_includes=(--include='/mcp/' --include='/mcp/***')
+  mcp_includes=(--include='/mcp/' --include='/mcp/***' --include='/mcp.json' --exclude='/mcp/**/tests/**' --exclude='/mcp/cursor-state-bridge/tests/')
 fi
 
 rsync -a \
   -m \
   --delete \
     --exclude='**/__pycache__/' \
+    --exclude='**/.pytest_cache/' \
     --exclude='*.pyc' \
+    --exclude='/mcp/**/tests/**' \
+    --exclude='/mcp/cursor-state-bridge/tests/' \
   --exclude='*.lock' \
   --exclude='.DS_Store' \
   --exclude='*.swp' \
@@ -88,14 +91,13 @@ rsync -a \
   --include='/assets/***' \
   --include='/CHANGELOG.md' \
     --include='/LICENSE' \
-    --include='/mcp.json' \
     --include='*/' \
   "${mcp_includes[@]}" \
   --exclude='*' \
   "$ROOT"/ "${DIST_DIR}/${PLUGIN_NAME}"/ || fail "rsync failed"
 
-if find "${DIST_DIR}" -name "__pycache__" -o -name "*.pyc" -o -name "*.lock" | grep -q .; then
-  fail "dist/ contains dev artifacts (__pycache__, *.pyc, or *.lock)"
+if find "${DIST_DIR}" -name "__pycache__" -o -name ".pytest_cache" -o -name "*.pyc" -o -name "*.lock" | grep -q .; then
+  fail "dist/ contains dev artifacts (__pycache__, .pytest_cache, *.pyc, or *.lock)"
 fi
 
 file_count=$(find "${DIST_DIR}/${PLUGIN_NAME}" -type f | wc -l | tr -d ' ')

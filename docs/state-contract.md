@@ -30,10 +30,10 @@ The repository currently owns only these checked-in state-like surfaces:
 - `AGENTS.md`
 - `.cursor/rules/*.mdc`
 - `.cursor-plugin/plugin.json`
-- `.cursor/hooks.json` and `.cursor/hooks/` (`session-bootstrap.py`, `session-summary.py`, `prompt-router.py`, `tool-guard.py`, `state-watcher.py`, `failure-router.py`, `subagent-bootstrap.py`, `subagent-summary.py`, `shell-guard.py`, `shell-debrief.py`, `read-advisor.py`, `claim-guard.py`, `compact-reminder.py`, `stop-gate.py`)
-- `.cursor/agents/` (`orchestrator`, `researcher`, `planner`,
-  `implementer`, `verifier`, `critic`, `code-reviewer`, `debugger`,
-  `tracer`, `security-reviewer`, `explore`, `test-engineer`)
+- `hooks/hooks.json` and `hooks/` (`session-bootstrap.py`, `session-summary.py`, `prompt-router.py`, `tool-guard.py`, `state-watcher.py`, `failure-router.py`, `subagent-bootstrap.py`, `subagent-summary.py`, `shell-guard.py`, `shell-debrief.py`, `read-advisor.py`, `claim-guard.py`, `compact-reminder.py`, `stop-gate.py`)
+- `agents/` (`orchestrator`, `architect`, `researcher`, `planner`,
+  `implementer`, `qa-tester`, `verifier`, `critic`, `code-reviewer`,
+  `debugger`, `tracer`, `security-reviewer`, `explore`, `test-engineer`)
 - `.cursor/state/` workflow-state contract (`workflow-state.schema.json`,
   `workflow-state.example.json`, `workflow-state.py`, `README.md`)
 - the shipped plugin rule/skill payload that accompanies the manifest, including

@@ -32,7 +32,7 @@
     },
     "current_role": {
       "type": "string",
-      "enum": ["", "code-reviewer", "critic", "debugger", "explore", "implementer", "orchestrator", "planner", "researcher", "security-reviewer", "test-engineer", "tracer", "verifier"],
+      "enum": ["", "architect", "code-reviewer", "critic", "debugger", "explore", "implementer", "orchestrator", "planner", "qa-tester", "researcher", "security-reviewer", "test-engineer", "tracer", "verifier"],
       "description": "Optional. Role expected to advance the next step."
     },
     "next_action": {
@@ -93,7 +93,7 @@
         },
         "role": {
           "type": "string",
-          "enum": ["", "code-reviewer", "critic", "debugger", "explore", "implementer", "orchestrator", "planner", "researcher", "security-reviewer", "test-engineer", "tracer", "verifier"]
+          "enum": ["", "architect", "code-reviewer", "critic", "debugger", "explore", "implementer", "orchestrator", "planner", "qa-tester", "researcher", "security-reviewer", "test-engineer", "tracer", "verifier"]
         },
         "note": { "type": "string" },
         "at": { "type": "string" }

@@ -15,6 +15,8 @@ import os
 from datetime import datetime, timezone
 from pathlib import Path
 
+from _repo import resolve_repo_root
+
 
 _TRUE = {"1", "true", "TRUE", "yes", "on"}
 
@@ -27,7 +29,7 @@ def _resolve_log_path() -> Path:
     override = os.environ.get("OH_MY_CURSOR_HOOK_TRACE_FILE", "").strip()
     if override:
         return Path(override).expanduser()
-    repo_root = Path(__file__).resolve().parents[2]
+    repo_root = resolve_repo_root(__file__)
     return repo_root / ".omcs" / "hook-trace.log"
 
 

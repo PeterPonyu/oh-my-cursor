@@ -58,6 +58,7 @@ try:
             "--exclude-dir=.cursor-worktree",
             "--exclude-dir=dist",
             "--exclude-dir=benchmark/runs/data",
+            "--exclude-dir=docs/plans",
             ".",
         ],
         cwd=str(ROOT),
