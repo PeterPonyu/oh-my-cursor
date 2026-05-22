@@ -35,7 +35,8 @@ The repository currently owns only these checked-in state-like surfaces:
   `implementer`, `qa-tester`, `verifier`, `critic`, `code-reviewer`,
   `debugger`, `tracer`, `security-reviewer`, `explore`, `test-engineer`)
 - `.cursor/state/` workflow-state contract (`workflow-state.schema.json`,
-  `workflow-state.example.json`, `workflow-state.py`, `README.md`)
+  `workflow-state.example.json`, compatibility shims, `README.md`) and the
+  packaged implementation at `src/oh_my_cursor/workflow_state/`
 - the shipped plugin rule/skill payload that accompanies the manifest, including
   `skills/phase-controller/SKILL.md`
 - bounded documentation, including `docs/orchestration.md`

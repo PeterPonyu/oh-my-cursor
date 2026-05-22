@@ -6,7 +6,7 @@ together with the user's global oh-my-claudecode (OMC) harness. They are
 
 | Path | Owner | Purpose | Status here |
 | --- | --- | --- | --- |
-| `.cursor/state/` | `oh-my-cursor` (this repo) | Workflow-state contract: phase, status, acceptance criteria, history, plus active subagent role tracking. | First-class. Schema-bounded, read by 14 hooks, written by `workflow-state.py` or the `cursor-state-bridge` MCP tools under a shared `file_lock`. |
+| `.cursor/state/` | `oh-my-cursor` (this repo) | Workflow-state contract: phase, status, acceptance criteria, history, plus active subagent role tracking. | First-class. Schema-bounded, read by 14 hooks, written by the workflow-state package/CLI or the `cursor-state-bridge` MCP tools under a shared `file_lock`. |
 | `.omc/state/` | Global OMC harness (`~/.claude/CLAUDE.md`) | Mission state, subagent tracking, HUD cache, agent replay logs for OMC's runtime. | Out of scope. Not read, written, or contracted by this repo. |
 
 ## What lives where
@@ -40,7 +40,7 @@ port to its internal layout would create a moving target.
   settle the file with `os.replace` before releasing the shared `file_lock`,
   so a hook never observes a partial document.
 - Hooks **never write** workflow state. Writes go through one of two paths:
-  - the library API in `.cursor/state/workflow-state.py` (CLI shim), or
+  - the packaged library API in `src/oh_my_cursor/workflow_state/` through the CLI shim, or
   - the `cursor-state-bridge` MCP tools (agent-callable, lock-shared).
   Both paths import the same `file_lock` callable identity via the
   module-cache trick in `mcp/cursor-state-bridge/state_io.py`.
