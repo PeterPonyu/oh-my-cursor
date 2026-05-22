@@ -33,6 +33,11 @@ required=(
     .cursor/state/workflow-state.example.json
     .cursor/state/workflow-state.py
     .cursor/state/README.md
+    src/oh_my_cursor/__init__.py
+    src/oh_my_cursor/workflow_state/__init__.py
+    src/oh_my_cursor/workflow_state/api.py
+    src/oh_my_cursor/workflow_state/cli.py
+    src/oh_my_cursor/workflow_state/locking.py
     agents/orchestrator.md
     agents/architect.md
     agents/verifier.md

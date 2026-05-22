@@ -16,9 +16,9 @@ alwaysApply: false
 # Repo-owned plugin boundary
 
 - Treat this repository's plugin surface as a checked-in manifest plus explicit
-	references to `rules`, `skills`, `.cursor/agents`, `.cursor/hooks.json`, and
+	references to `rules`, `skills`, `agents/`, `hooks/hooks.json`, and
 	`.cursor/state`.
-- Treat `skills/phase-controller/SKILL.md` and `.cursor/agents/orchestrator.md`
+- Treat `skills/phase-controller/SKILL.md` and `agents/orchestrator.md`
 	as the orchestration entry points. Other skills and agents are workers in
 	that lifecycle.
 - Keep shipped hooks bounded to short lifecycle helpers. `claim-guard.py` and

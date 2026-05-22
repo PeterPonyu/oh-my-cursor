@@ -12,6 +12,7 @@ import sys
 import tempfile
 import unittest
 from pathlib import Path
+from typing import Any, ClassVar
 
 
 BRIDGE_DIR = Path(__file__).resolve().parents[1]
@@ -22,6 +23,8 @@ def _load_jail():
     if str(BRIDGE_DIR) not in sys.path:
         sys.path.insert(0, str(BRIDGE_DIR))
     spec = importlib.util.spec_from_file_location("_omcs_jail_test", str(JAIL_PATH))
+    if spec is None or spec.loader is None:
+        raise RuntimeError(f"could not load jail module: {JAIL_PATH}")
     module = importlib.util.module_from_spec(spec)
     sys.modules["_omcs_jail_test"] = module
     spec.loader.exec_module(module)
@@ -29,6 +32,8 @@ def _load_jail():
 
 
 class TestJail(unittest.TestCase):
+
+    jail: ClassVar[Any]
 
     @classmethod
     def setUpClass(cls) -> None:

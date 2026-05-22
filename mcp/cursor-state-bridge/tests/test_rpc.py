@@ -48,29 +48,34 @@ class BridgeProcess:
             stderr=subprocess.PIPE,
             text=True,
         )
+        if self.proc.stdin is None or self.proc.stdout is None or self.proc.stderr is None:
+            raise RuntimeError("bridge process pipes were not created")
+        self.stdin = self.proc.stdin
+        self.stdout = self.proc.stdout
+        self.stderr = self.proc.stderr
 
     def send(self, request: dict) -> dict:
-        self.proc.stdin.write(json.dumps(request) + "\n")
-        self.proc.stdin.flush()
-        line = self.proc.stdout.readline()
+        self.stdin.write(json.dumps(request) + "\n")
+        self.stdin.flush()
+        line = self.stdout.readline()
         if not line:
-            err = self.proc.stderr.read()
+            err = self.stderr.read()
             raise RuntimeError(f"no response; stderr: {err}")
         return json.loads(line)
 
     def send_raw(self, raw: str) -> dict:
         """Write raw bytes to stdin (for malformed-JSON tests)."""
-        self.proc.stdin.write(raw + "\n")
-        self.proc.stdin.flush()
-        line = self.proc.stdout.readline()
+        self.stdin.write(raw + "\n")
+        self.stdin.flush()
+        line = self.stdout.readline()
         if not line:
-            err = self.proc.stderr.read()
+            err = self.stderr.read()
             raise RuntimeError(f"no response; stderr: {err}")
         return json.loads(line)
 
     def close(self) -> None:
         try:
-            self.proc.stdin.close()
+            self.stdin.close()
             self.proc.wait(timeout=2)
         except Exception:
             self.proc.kill()
@@ -78,7 +83,7 @@ class BridgeProcess:
         finally:
             # Close stdout/stderr handles to silence unittest's
             # ResourceWarning on Python 3.12+.
-            for stream in (self.proc.stdout, self.proc.stderr):
+            for stream in (self.stdout, self.stderr):
                 try:
                     if stream is not None and not stream.closed:
                         stream.close()

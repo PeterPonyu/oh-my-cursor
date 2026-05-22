@@ -13,16 +13,13 @@ export OMCS_COMPLETION_SMOKE_STATE="$state"
 
 python3 - <<'PY_STATE'
 from __future__ import annotations
-import importlib.util
 import os
+import sys
 from pathlib import Path
 root = Path.cwd()
+sys.path.insert(0, str(root / "src"))
+from oh_my_cursor.workflow_state import api as module
 state_path = Path(os.environ["OMCS_COMPLETION_SMOKE_STATE"])
-spec = importlib.util.spec_from_file_location("workflow_state", root / ".cursor" / "state" / "workflow-state.py")
-if spec is None or spec.loader is None:
-    raise SystemExit("FAIL: could not load workflow-state library")
-module = importlib.util.module_from_spec(spec)
-spec.loader.exec_module(module)
 module.init_state(state_path, task_id="omcs-completion-smoke", title="workflow-state completion smoke", phase="verify", status="in_progress", role="qa-tester", next_action="collect runtime evidence")
 module.update_acceptance_criterion(state_path, ac_id="AC-001", criterion="state watcher reports direct workflow-state validation", status="passed", evidence="scripts/smoke-workflow-state-completion.sh:state-watcher")
 module.update_acceptance_criterion(state_path, ac_id="AC-002", criterion="compact and stop hooks surface pending criteria", status="pending")
@@ -62,16 +59,13 @@ JSON
 
 python3 - <<'PY_DONE'
 from __future__ import annotations
-import importlib.util
 import os
+import sys
 from pathlib import Path
 root = Path.cwd()
+sys.path.insert(0, str(root / "src"))
+from oh_my_cursor.workflow_state import api as module
 state_path = Path(os.environ["OMCS_COMPLETION_SMOKE_STATE"])
-spec = importlib.util.spec_from_file_location("workflow_state", root / ".cursor" / "state" / "workflow-state.py")
-if spec is None or spec.loader is None:
-    raise SystemExit("FAIL: could not reload workflow-state library")
-module = importlib.util.module_from_spec(spec)
-spec.loader.exec_module(module)
 module.update_acceptance_criterion(state_path, ac_id="AC-002", criterion="compact and stop hooks surface pending criteria", status="passed", evidence="scripts/smoke-workflow-state-completion.sh:stop-gate")
 module.set_state(state_path, phase="done", status="passed", role="verifier", next_action="stop session", note="completion smoke passed")
 PY_DONE

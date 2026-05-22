@@ -1,46 +1,15 @@
-"""POSIX advisory file lock for shared workflow-state writes.
-
-This is the single source of truth for write serialisation. Both the CLI
-shim at `.cursor/state/workflow-state.py` and the MCP bridge under
-`mcp/cursor-state-bridge/state_io.py` import this module so that
-concurrent writers against the same workflow-state document never
-interleave.
-
-POSIX-only (uses :mod:`fcntl`). A cross-platform replacement is tracked
-as F2 in the consensus plan.
-
-The lock is taken on a sibling `<path>.lock` file so that an atomic
-write-then-rename of the data file does not invalidate the lock holder
-of an in-flight writer.
-"""
+"""Compatibility shim for canonical workflow-state locking."""
 from __future__ import annotations
 
-import fcntl
-import os
-from contextlib import contextmanager
+import importlib
+import sys
 from pathlib import Path
-from typing import Iterator
 
+_SRC_DIR = Path(__file__).resolve().parents[2] / "src"
+if str(_SRC_DIR) not in sys.path:
+    sys.path.insert(0, str(_SRC_DIR))
 
-@contextmanager
-def file_lock(target: Path) -> Iterator[None]:
-    """Acquire an exclusive advisory lock for the lifetime of the ``with`` block.
+_locking = importlib.import_module("oh_my_cursor.workflow_state.locking")
+file_lock = getattr(_locking, "file_lock")
 
-    Parameters
-    ----------
-    target:
-        Path to the data file being protected.  The lock is held on a
-        sibling ``<target>.lock`` file.
-    """
-    target = Path(target)
-    lock_path = Path(str(target) + ".lock")
-    lock_path.parent.mkdir(parents=True, exist_ok=True)
-    fd = os.open(str(lock_path), os.O_RDWR | os.O_CREAT, 0o600)
-    try:
-        fcntl.flock(fd, fcntl.LOCK_EX)
-        try:
-            yield
-        finally:
-            fcntl.flock(fd, fcntl.LOCK_UN)
-    finally:
-        os.close(fd)
+__all__ = ["file_lock"]

@@ -24,7 +24,7 @@ PROOF_PATTERNS = (
     (re.compile(r"\bscripts/check-([A-Za-z0-9_-]+)\.sh\b"), "check"),
     (re.compile(r"\bscripts/verify-([A-Za-z0-9_-]+)\.sh\b"), "verify"),
     (re.compile(r"\bscripts/install-local-plugin\.sh\b"), "installer"),
-    (re.compile(r"\b\.cursor/state/workflow-state\.py\b"), "state-writer"),
+    (re.compile(r"\bscripts/workflow-state\.py\b"), "state-writer"),
     (re.compile(r"\bscripts/workflow-state\.py\b"), "state-writer"),
 )
 

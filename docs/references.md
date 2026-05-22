@@ -40,7 +40,7 @@ When capability claims change in `AGENTS.md`, `README.md`, `docs/**`, or
 ## Claim mapping used by this repo
 
 - Root `AGENTS.md`, `.cursor/rules/`, `hooks/hooks.json`, `hooks/`,
-  `agents/`, the repo-root plugin manifest, shipped rules/skills,
+  `agents/`, the repo-root plugin manifest, shipped `rules/` compatibility policy and skills,
   checked-in brand/readme/social assets under `assets/`, the root README image,
   local validators, and optional runtime smokes are current **repo-owned**
   proof surfaces.
@@ -101,7 +101,7 @@ All tools speak JSON-RPC 2.0 over stdio. No network listener. Runs only when exp
 | state_history_append | Append run-level notes | `history[]` | `.cursor/state/` | any phase (audit trail) |
 | state_read | Read current workflow-state | read-only | `.cursor/state/` | all phases (all agents) |
 
-**Error Handling**: All tools return JSON-RPC 2.0 errors with semantic codes. File lock serializes concurrent writes; CLI and MCP bridge share the same lock via `.cursor/state/_locking.py` module cache.
+**Error Handling**: All tools return JSON-RPC 2.0 errors with semantic codes. File lock serializes concurrent writes; CLI and MCP bridge share the same packaged lock via `src/oh_my_cursor/workflow_state/locking.py`.
 
 **Token-based Auth** (optional): Not implemented in baseline. Future scope: JWTs for remote agent invocation.
 

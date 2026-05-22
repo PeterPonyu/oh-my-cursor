@@ -108,12 +108,14 @@ validate_prebuilt_payload() {
   local manifest="${src%/}/.cursor-plugin/plugin.json"
   [[ -f "$manifest" ]] || fail "prebuilt payload is missing .cursor-plugin/plugin.json"
 
-  python3 - "$manifest" <<'PY'
+  python3 - "$manifest" "$src" <<'PY'
 import json
 import sys
+from pathlib import Path
 
-with open(sys.argv[1], "r", encoding="utf-8") as handle:
-    data = json.load(handle)
+manifest = Path(sys.argv[1])
+root = Path(sys.argv[2])
+data = json.loads(manifest.read_text(encoding="utf-8"))
 
 missing = [
     key for key in ("name", "displayName", "version")
@@ -123,6 +125,14 @@ if missing:
     raise SystemExit(
         "manifest missing required fields: " + ", ".join(missing)
     )
+
+for key in ("rules", "skills", "agents", "hooks", "mcpServers"):
+    value = data.get(key)
+    if value and not (root / value).exists():
+        raise SystemExit(f"manifest {key!r} references missing path: {value}")
+
+if data.get("mcpServers") and not (root / "mcp").is_dir():
+    raise SystemExit("manifest mcpServers is present but mcp/ is missing")
 PY
 
   local required_paths=(
@@ -137,7 +147,9 @@ PY
     "hooks/hooks.json"
     "hooks"
     ".cursor/mcp.example.json"
+    ".cursor/rules"
     ".cursor/state"
+    "src"
   )
 
   local required_path
@@ -217,15 +229,15 @@ copy_minimal_payload() {
     --exclude='/.cursor/mcp.json' \
     --exclude='/.cursor/state/workflow-state.json' \
     --exclude='/.cursor/state/active-role.json' \
-    --exclude='/.cursor/hooks/state/' \
+    --exclude='/hooks/state/' \
     --include='/.cursor-plugin/***' \
     --include='/.cursor/mcp.example.json' \
+    --include='/.cursor/rules/***' \
     --include='/hooks/hooks.json' \
     --include='/hooks/***' \
     --include='/agents/***' \
     --include='/.cursor/state/***' \
-    --exclude='/.cursor/rules/' \
-    --exclude='/.cursor/rules/***' \
+    --include='/src/***' \
     --include='/rules/***' \
     --include='/skills/***' \
     --include='/AGENTS.md' \
@@ -237,6 +249,19 @@ copy_minimal_payload() {
     "${mcp_includes[@]}" \
     --exclude='*' \
     "$src"/ "$dst"/
+
+  if [[ "$WITH_MCP" != "1" ]]; then
+    python3 - "$dst/.cursor-plugin/plugin.json" <<'PY'
+import json
+import sys
+from pathlib import Path
+
+path = Path(sys.argv[1])
+data = json.loads(path.read_text(encoding="utf-8"))
+data.pop("mcpServers", None)
+path.write_text(json.dumps(data, indent=2) + "\n", encoding="utf-8")
+PY
+  fi
 
   find "$dst" -type d \( -name "__pycache__" -o -name ".pytest_cache" \) -exec rm -rf {} + 2>/dev/null || true
 }

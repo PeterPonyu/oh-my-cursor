@@ -55,6 +55,7 @@ ROOT = Path(__file__).resolve().parents[1]
 WRITER_PATH_PATTERNS = (
     re.compile(r"\.cursor/state/workflow-state\.py"),
     re.compile(r"scripts/workflow-state\.py"),
+    re.compile(r"src/oh_my_cursor/workflow_state/(?:api|cli)\.py"),
 )
 # Allowlist: read-only validator at scripts/validate-workflow-state.py.
 READONLY_VALIDATOR_RE = re.compile(r"validate-workflow-state\.py")
@@ -97,7 +98,7 @@ def _ok(message: str) -> None:
 def _agent_callable_files(root: Path) -> list[Path]:
     """Return every file in scope, sorted for deterministic output."""
     files: list[Path] = []
-    files.extend(sorted((root / ".cursor" / "agents").glob("*.md")))
+    files.extend(sorted((root / "agents").glob("*.md")))
     files.extend(sorted((root / "skills").glob("**/SKILL.md")))
     files.extend(sorted((root / "rules").glob("**/*.mdc")))
     files.extend(sorted((root / "rules").glob("**/*.md")))
@@ -225,7 +226,7 @@ _OFFENDER_LEGACY_NAME = textwrap.dedent(
     ---
     name: legacy-name-agent
     ---
-    The omc team will follow this convention.
+    The omx team will follow this convention.
     """
 ).strip() + "\n"
 
@@ -246,7 +247,7 @@ def run_self_test() -> int:
     """Seed offenders + a clean fixture in tempdirs; assert detection."""
     with tempfile.TemporaryDirectory() as td:
         sandbox = Path(td)
-        # Each fixture lives in its own ``.cursor/agents/`` subtree so
+        # Each fixture lives in its own ``agents/`` subtree so
         # ``scan_file`` resolves it as if it were a real agent prompt.
         for name, content, expected_label in (
             ("bypass.md", _OFFENDER_BYPASS, "writer CLI"),

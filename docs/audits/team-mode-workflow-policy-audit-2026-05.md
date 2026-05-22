@@ -31,19 +31,19 @@ their concrete repo-owned artifacts, and calls out policy / enforcement drift.
 
 - **Schema**: `.cursor/state/workflow-state.schema.json`
 - **Local validator**: `scripts/validate-workflow-state.py`
-- **Read-only hook validators**: `.cursor/hooks/state-watcher.py` (observes and
-  validates after edits/writes), `.cursor/hooks/stop-gate.py` (stop reminder),
-  `.cursor/hooks/prompt-router.py` (routing hints + state summary)
+- **Read-only hook validators**: `hooks/state-watcher.py` (observes and
+  validates after edits/writes), `hooks/stop-gate.py` (stop reminder),
+  `hooks/prompt-router.py` (routing hints + state summary)
 - **Write paths**:
   - Agent-callable (opt-in): `mcp/cursor-state-bridge/` (see `docs/orchestration.md`)
-  - Developer terminal fallback: `.cursor/state/workflow-state.py` (see
+  - Developer terminal fallback: `scripts/workflow-state.py` (`.cursor/state/workflow-state.py` compatibility shim) (see
     `.cursor/state/README.md` and `docs/orchestration.md`)
 
 ### Phase routing & roles (repo-owned, checked-in-artifact)
 
 - **Phase controller skill**: `skills/phase-controller/SKILL.md`
-- **Entry-point agent**: `.cursor/agents/orchestrator.md`
-- **Role prompts**: `.cursor/agents/*.md` (planner/implementer/verifier/etc.)
+- **Entry-point agent**: `agents/orchestrator.md`
+- **Role prompts**: `agents/*.md` (planner/implementer/verifier/etc.)
 
 ### Team delivery protocol (repo-owned, checked-in-artifact)
 
@@ -74,9 +74,9 @@ parallel. The current codebase supports two operator-driven options:
 - **No hidden background runner**: stated consistently in `docs/orchestration.md`,
   `skills/phase-controller/SKILL.md`, and `docs/team-orchestration.md`.
 - **State writes are bounded**:
-  - Hooks are read-only observers (`.cursor/hooks/README.md`).
+  - Hooks are read-only observers (`hooks/README.md`).
   - `tool-guard.py` prompts for confirmation on direct edits to
-    `workflow-state.json` (`.cursor/hooks/tool-guard.py`).
+    `workflow-state.json` (`hooks/tool-guard.py`).
 - **Schema shape is enforced; transition semantics are mostly “by convention”**:
   - The validator enforces enums + shape (`scripts/validate-workflow-state.py`).
   - The transition matrix lives as policy text (`docs/multi-state-compat.md`)
@@ -121,4 +121,3 @@ risks and security findings. Relevant excerpts for team mode / workflow policy:
 Lead has performed an initial consolidated research pass covering the scope of all 12 tasks. Worker tabs (if run) can now focus on deeper line-by-line review or security severity rating. Findings above are merged into this persistent audit note as evidence for AC-003.
 
 This research pass was performed while actively using the oh-my-cursor plugin's own workflow-state contract and phase-controller discipline.
-

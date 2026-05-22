@@ -65,7 +65,7 @@ def main() -> int:
         + (f" Tool: {tool_name}." if tool_name else "")
         + (f" Failure type: {failure_type}." if failure_type else ""),
         "Route this failure through agents/debugger.md before retrying.",
-        "Record the failure with .cursor/state/workflow-state.py (or scripts/workflow-state.py) using one of: "
+        "Record the failure with cursor-state-bridge tools or scripts/workflow-state.py using one of: "
         + ", ".join(sorted(FAILURE_TYPES))
         + ".",
     ]

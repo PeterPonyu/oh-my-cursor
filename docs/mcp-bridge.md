@@ -14,9 +14,9 @@ and trace rotation policy.
 
 Hooks under `hooks/` already read workflow-state. The bridge gives
 agents a structured, schema-faithful way to **write** that state without
-shelling out to the writer CLI. The CLI surface at
-`.cursor/state/workflow-state.py` stays in place as a thin shim over a
-shared library API (the Phase 2 refactor) so both writers go through one
+shelling out to the writer CLI. The executable implementation lives at `src/oh_my_cursor/workflow_state/`;
+`.cursor/state/workflow-state.py` stays only as a compatibility shim. The
+bridge imports the packaged API directly so both writers go through one
 implementation and one file lock.
 
 ## Boundary discipline
@@ -54,7 +54,7 @@ template at `.cursor/mcp.example.json`.
 # install opt-in
 ./scripts/install-local-plugin.sh --with-mcp
 
-# template-to-config (one time)
+# template-to-config (one time, from this trusted oh-my-cursor checkout)
 cp .cursor/mcp.example.json .cursor/mcp.json   # edit placeholders if needed
 
 # verify
@@ -64,6 +64,12 @@ RUN_MCP_BRIDGE_SMOKE=1 ./scripts/smoke-mcp-cursor-state-bridge.sh --full --jail-
 
 Reload Cursor; `cursor-state-bridge` appears in the MCP servers panel.
 
+The checked-in templates launch the bridge from the active checkout. Use them
+only when that checkout is the trusted `oh-my-cursor` payload; for any other
+workspace, edit the command path so it points at the trusted plugin checkout or
+installed payload, while `--workspace` continues to point at the target Cursor
+workspace whose state should be read or written.
+
 ## What this bridge is not
 
 - It is not a network server. It does not bind any TCP/UDP socket.
@@ -71,7 +77,6 @@ Reload Cursor; `cursor-state-bridge` appears in the MCP servers panel.
   project-memory tools.
 - It is not a code-execution surface. It does not expose ast-grep, LSP, or
   REPL tools.
-- It is not the only writer. The Phase 2 refactor gives the existing
-  `.cursor/state/workflow-state.py` CLI shim the same library and the same
-  file lock, so a developer running the CLI directly does not race against
-  the bridge.
+- It is not the only writer. The packaged workflow-state API and the compatibility CLI shim share the
+  same file lock, so a developer running the CLI directly does not race
+  against the bridge.

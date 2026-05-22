@@ -1,19 +1,15 @@
-"""Bridge-side state IO that imports the workflow-state library API.
+"""Bridge-side state IO that imports the packaged workflow-state API.
 
-Loads a vendored copy of ``_workflow_state.py`` and ``_locking.py`` from
-inside the bridge package rather than executing workspace Python.  This
-isolates the bridge from potentially untrusted workspace code while still
-sharing the same API surface.
+The bridge writes workspace runtime JSON files, but it executes only the
+package-owned implementation shipped under ``src/oh_my_cursor/workflow_state``.
+It never importlib-loads Python from a workspace ``.cursor/state/`` directory.
 
-The loaded modules are cached in ``sys.modules`` under stable keys so
-repeat calls reuse the same module objects.
-
-This module performs zero ``subprocess`` calls -- the bridge never shells
-out to the CLI.  All write tools route through the library API.
+This module performs zero ``subprocess`` calls -- the bridge never shells out
+to the CLI. All write tools route through the library API.
 """
 from __future__ import annotations
 
-import importlib.util
+import importlib
 import json
 import sys
 from pathlib import Path
@@ -23,40 +19,41 @@ from jail import resolve_jailed
 
 
 _WORKFLOW_STATE_MODULE_KEY = "_omcs_workflow_state"
-_LOCKING_MODULE_KEY = "_omcs_locking"
+
+
+_PAYLOAD_ROOT = Path(__file__).resolve().parents[2]
+_SRC_DIR = _PAYLOAD_ROOT / "src"
 
 
 # ---------------------------------------------------------------------------
-# Library loader (imports `.cursor/state/workflow-state.py` once per process)
+# Library loader (imports package-owned workflow-state API once per process)
 # ---------------------------------------------------------------------------
 
 
 def _load_workflow_state(_workspace: Path):
-    """Load the workflow-state library from .cursor/state/.
+    """Return the packaged workflow-state API module.
 
-    Returns the cached module on subsequent calls so the import graph
-    stays single-rooted (one ``file_lock`` callable identity).
+    ``_workspace`` is accepted for the existing handler contract; the
+    executable implementation is resolved from the shipped payload, not from
+    the runtime workspace.
     """
     if _WORKFLOW_STATE_MODULE_KEY in sys.modules:
         return sys.modules[_WORKFLOW_STATE_MODULE_KEY]
 
-    state_dir = _workspace / ".cursor" / "state"
-    state_path = state_dir / "workflow-state.py"
-    if not state_path.is_file():
-        raise RuntimeError(f"workflow-state library not found at {state_path}")
+    api_path = _SRC_DIR / "oh_my_cursor" / "workflow_state" / "api.py"
+    if not api_path.is_file():
+        raise RuntimeError(f"workflow-state package not found at {api_path}")
+    if str(_SRC_DIR) not in sys.path:
+        sys.path.insert(0, str(_SRC_DIR))
 
-    # Make ``_locking`` importable from .cursor/state/ before we exec the module.
-    if str(state_dir) not in sys.path:
-        sys.path.insert(0, str(state_dir))
-
-    spec = importlib.util.spec_from_file_location(
-        _WORKFLOW_STATE_MODULE_KEY, str(state_path)
-    )
-    if spec is None or spec.loader is None:
-        raise RuntimeError(f"could not build module spec for {state_path}")
-    module = importlib.util.module_from_spec(spec)
+    module = importlib.import_module("oh_my_cursor.workflow_state.api")
+    module_file = getattr(module, "__file__", None)
+    if module_file is None or Path(module_file).resolve() != api_path.resolve():
+        raise RuntimeError(
+            "workflow-state API resolved outside the trusted payload: "
+            f"{module_file!r}; expected {api_path}"
+        )
     sys.modules[_WORKFLOW_STATE_MODULE_KEY] = module
-    spec.loader.exec_module(module)
     return module
 
 

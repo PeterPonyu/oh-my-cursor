@@ -53,7 +53,7 @@ def main() -> int:
         user_message = (
             "Read-advisor: this is a workflow-state document under .cursor/state/. "
             "It is human-visible, schema-bounded (.cursor/state/workflow-state.schema.json), "
-            "and only edited through the writer at .cursor/state/workflow-state.py."
+            "and only edited through cursor-state-bridge tools or the workflow-state CLI."
         )
         status = "advised"
     else:

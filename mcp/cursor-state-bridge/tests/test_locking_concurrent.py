@@ -10,9 +10,9 @@ support is tracked as F2.
 """
 from __future__ import annotations
 
-import importlib.util
 import os
 import subprocess
+import importlib
 import sys
 import tempfile
 import textwrap
@@ -21,20 +21,17 @@ from pathlib import Path
 
 
 REPO_ROOT = Path(__file__).resolve().parents[3]
-STATE_DIR = REPO_ROOT / ".cursor" / "state"
-LIB_PATH = STATE_DIR / "workflow-state.py"
-LIB_AVAILABLE = LIB_PATH.is_file() and (STATE_DIR / "_locking.py").is_file()
+SRC_DIR = REPO_ROOT / "src"
+LIB_PATH = SRC_DIR / "oh_my_cursor" / "workflow_state" / "api.py"
+LOCK_PATH = SRC_DIR / "oh_my_cursor" / "workflow_state" / "locking.py"
+LIB_AVAILABLE = LIB_PATH.is_file() and LOCK_PATH.is_file()
 POSIX_ONLY = os.name == "posix"
 
 
 def _load_library():
-    if str(STATE_DIR) not in sys.path:
-        sys.path.insert(0, str(STATE_DIR))
-    spec = importlib.util.spec_from_file_location("_omcs_wfs_concurrency", str(LIB_PATH))
-    module = importlib.util.module_from_spec(spec)
-    sys.modules["_omcs_wfs_concurrency"] = module
-    spec.loader.exec_module(module)
-    return module
+    if str(SRC_DIR) not in sys.path:
+        sys.path.insert(0, str(SRC_DIR))
+    return importlib.import_module("oh_my_cursor.workflow_state.api")
 
 
 @unittest.skipUnless(LIB_AVAILABLE and POSIX_ONLY, "POSIX-only concurrency test")
@@ -48,12 +45,11 @@ class TestLockingConcurrent(unittest.TestCase):
 
             writer_script = textwrap.dedent(
                 f"""
+                import importlib
                 import sys
-                sys.path.insert(0, {str(STATE_DIR)!r})
-                import importlib.util
-                spec = importlib.util.spec_from_file_location("worker_lib", {str(LIB_PATH)!r})
-                m = importlib.util.module_from_spec(spec)
-                spec.loader.exec_module(m)
+
+                sys.path.insert(0, {str(SRC_DIR)!r})
+                m = importlib.import_module("oh_my_cursor.workflow_state.api")
                 tag = sys.argv[1]
                 for i in range(5):
                     m.set_state({str(path)!r}, status="in_progress", note=f"writer-{{tag}}-iter-{{i}}")

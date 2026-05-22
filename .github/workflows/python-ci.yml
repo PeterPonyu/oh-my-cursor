@@ -9,9 +9,16 @@ on:
       - "hooks/hooks.json"
       - "hooks/**/*.py"
       - "hooks/**/*.md"
+      - "mcp/**"
+      - "mcp.json"
+      - "src/**"
       - ".cursor/rules/**/*.mdc"
+      - ".cursor/mcp.example.json"
+      - "rules/**/*.mdc"
       - ".cursor/state/**"
+      - ".cursor-plugin/plugin.json"
       - "AGENTS.md"
+      - "README.md"
       - "scripts/**/*.py"
       - "scripts/**/*.sh"
       - "skills/**/*.md"
@@ -43,13 +50,16 @@ jobs:
         run: python3 scripts/count_md_files.py docs
 
       - name: Compile Python sources
-        run: python3 -m compileall scripts hooks tests
+        run: python3 -m compileall scripts hooks tests src .cursor/state mcp/cursor-state-bridge
 
       - name: Lint (ruff)
-        run: python3 -m ruff check scripts hooks tests
+        run: python3 -m ruff check scripts hooks tests src .cursor/state mcp/cursor-state-bridge
 
       - name: Typecheck (mypy)
-        run: python3 -m mypy --ignore-missing-imports scripts hooks tests
+        run: |
+          python3 -m mypy --ignore-missing-imports scripts hooks tests src
+          python3 -m mypy --ignore-missing-imports .cursor/state/_locking.py .cursor/state/workflow-state.py
+          (cd mcp/cursor-state-bridge && python3 -m mypy --ignore-missing-imports --explicit-package-bases __main__.py auth.py jail.py server.py state_io.py tests/*.py)
 
       - name: Validate workflow artifacts
         run: |

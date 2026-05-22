@@ -16,13 +16,15 @@ agents in `oh-my-cursor` share. It is intentionally:
   statuses, role names, and evidence shape.
 - `workflow-state.example.json` — Reference document showing how a real task
   state looks. Use it as a template, not as live state.
-- `workflow-state.py` — stdlib-only library API (`init_state`, `set_state`,
-  `update_acceptance_criterion`, `record_failure`, `append_history`,
-  `read_state`) with shared `file_lock` and atomic writes via tmp-file rename.
-  The `cmd_*` argparse shims provide the CLI interface
-  (`python3 .cursor/state/workflow-state.py {init,set,ac,fail}`).
-- `_locking.py` — POSIX `fcntl` advisory `file_lock` context manager used by
-  both the CLI library and the MCP bridge to serialise concurrent writes.
+- `workflow-state.py` — compatibility shim that re-exports the packaged
+  workflow-state API and CLI from `src/oh_my_cursor/workflow_state/`.
+  Direct calls such as `python3 .cursor/state/workflow-state.py init ...`
+  still work for installed payloads.
+- `_locking.py` — compatibility shim that re-exports the canonical POSIX
+  `file_lock` from `src/oh_my_cursor/workflow_state/locking.py`.
+- `src/oh_my_cursor/workflow_state/` — executable implementation for the
+  API (`init_state`, `set_state`, `update_acceptance_criterion`,
+  `record_failure`, `append_history`, `read_state`), CLI, and lock.
 
 ## Runtime artifacts (never durable)
 
@@ -46,9 +48,9 @@ should not be relied upon between runs:
    or a temporary path for validation smokes.
 2. The `phase-controller` skill (`skills/phase-controller/SKILL.md`) describes
    how to advance phases and update acceptance criteria.
-3. Write or update the file intentionally with `.cursor/state/workflow-state.py`
-   (available in the installed plugin payload), the repository wrapper
-   `scripts/workflow-state.py`, or the `cursor-state-bridge` MCP tools. Avoid
+3. Write or update the file intentionally with the `cursor-state-bridge` MCP
+   tools, the repository wrapper `scripts/workflow-state.py`, or the installed
+   compatibility shim `.cursor/state/workflow-state.py`. Avoid
    direct JSON edits unless the user explicitly approves the exact change.
 4. The `stop-gate.py` hook can read a workflow-state file passed via the
    `OH_MY_CURSOR_WORKFLOW_STATE` environment variable or via a JSON path field
@@ -73,7 +75,7 @@ repo.
 
 | Path | Owner | Schema | Hook reads | Hook writes |
 | --- | --- | --- | --- | --- |
-| `.cursor/state/workflow-state.json` | this repo (`oh-my-cursor`) | `workflow-state.schema.json` | yes (14 hooks) | no — only `workflow-state.py` and the bridge write |
+| `.cursor/state/workflow-state.json` | this repo (`oh-my-cursor`) | `workflow-state.schema.json` | yes (14 hooks) | no — only the workflow-state package/CLI and the bridge write |
 | `.cursor/state/active-role.json` | this repo (Stage 4) | single-role record | `tool-guard.py` | `subagent-bootstrap.py` writes; `subagent-summary.py` clears |
 | `.omc/state/*` | the user's global oh-my-claudecode harness | none in this repo | no | no |
 
@@ -93,10 +95,8 @@ scope for the Cursor port's hook layer.
   `workflow-state.json` without going through the bridge. This is acceptable
   for read-only consumers because writers always settle the file via
   `os.replace` before releasing the shared `file_lock`.
-- **All writes go through one of two paths**: the library API in
-  `.cursor/state/workflow-state.py` (CLI shim) or the
-  `cursor-state-bridge` MCP tools (agent-callable). Both share the same
-  `file_lock` callable identity via the module-cache trick in
-  `mcp/cursor-state-bridge/state_io.py:_load_workflow_state`. Direct edits to
+- **All writes go through one of two paths**: the packaged library API in `src/oh_my_cursor/workflow_state/` via the
+  CLI compatibility shim or the `cursor-state-bridge` MCP tools
+  (agent-callable). Both share the same canonical `file_lock` callable. Direct edits to
   `workflow-state.json` are intercepted by `tool-guard.py` and require user
   confirmation.

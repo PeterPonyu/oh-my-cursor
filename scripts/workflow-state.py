@@ -1,12 +1,18 @@
 #!/usr/bin/env python3
-"""Repository wrapper for the shipped workflow-state runtime helper."""
+"""Repository wrapper for the shipped workflow-state CLI."""
 from __future__ import annotations
 
-import runpy
+import importlib
+import sys
 from pathlib import Path
 
+_SRC_DIR = Path(__file__).resolve().parents[1] / "src"
+if str(_SRC_DIR) not in sys.path:
+    sys.path.insert(0, str(_SRC_DIR))
 
-HELPER = Path(__file__).resolve().parents[1] / ".cursor" / "state" / "workflow-state.py"
+_cli = importlib.import_module("oh_my_cursor.workflow_state.cli")
+main = getattr(_cli, "main")
+
 
 if __name__ == "__main__":
-    runpy.run_path(str(HELPER), run_name="__main__")
+    raise SystemExit(main())

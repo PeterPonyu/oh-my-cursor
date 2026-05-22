@@ -1,7 +1,7 @@
 ---
 description: Error handling policy for hooks, scripts, and tool guards
 globs:
-  - .cursor/hooks/**/*.py
+  - hooks/**/*.py
   - scripts/**/*.py
   - scripts/**/*.sh
 ---

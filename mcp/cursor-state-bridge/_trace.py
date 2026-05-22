@@ -2,7 +2,7 @@
 
 Each call appends one JSON line to ``<workspace>/.omcs/cursor-state-bridge/trace.jsonl``
 (V3 path -- distinct from ``.omcs/hook-trace.log``, which is owned by the
-hook trace helper at ``.cursor/hooks/_trace.py``).
+hook trace helper at ``hooks/_trace.py``).
 
 Rotation policy: 10 MiB cap with FIFO eviction.  When a write would push
 the file past the cap, the oldest half of the file is dropped before the
