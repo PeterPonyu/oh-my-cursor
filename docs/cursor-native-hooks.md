@@ -8,13 +8,13 @@ This page answers: which hooks run on Cursor's native hook API, which run as pyt
 
 This repo ships `hooks/hooks.json` which wires fourteen Cursor hook events to stdlib-only Python scripts under `hooks/`. The install script copies `hooks/hooks.json` and `hooks/` into `~/.cursor/plugins/local/oh-my-cursor/`.
 
-Cursor reads `.cursor/hooks.json` at session start. All hook scripts are fail-open: they observe, log, and warn, but do not block the session unless a tightly bounded severe pattern is detected.
+Cursor reads `hooks/hooks.json` at session start. All hook scripts are fail-open: they observe, log, and warn, but do not block the session unless a tightly bounded severe pattern is detected.
 
 ## Ownership split
 
 | Surface | Owner | Path |
 |---|---|---|
-| Cursor native hooks | Cursor product (host) | `.cursor/hooks.json` |
+| Cursor native hooks | Cursor product (host) | `hooks/hooks.json` |
 | oh-my-cursor hook scripts | repo-owned plugin payload | `hooks/*.py` |
 | Runtime state (never durable) | local workspace | `.cursor/state/workflow-state.json`, `.cursor/state/active-role.json`, `*.lock` |
 | Agent-callable state writes | cursor-state-bridge MCP | `mcp/cursor-state-bridge/` |
@@ -55,7 +55,7 @@ Referenced from `docs/references.md` (Cursor documentation):
 
 | Capability | Ownership | Cursor Feature | Hook Event |
 |---|---|---|---|
-| Project hooks | host-product-only | `.cursor/hooks.json` | sessionStart..stop |
+| Project hooks | host-product-only | `hooks/hooks.json` | sessionStart..stop |
 | Custom agents | host-product-only | `agents/` | subagentStart, subagentStop |
 | Custom modes | host-product-only | Cursor settings UI | N/A (no hook) |
 | Background agents | unsupported-or-out-of-scope | N/A | N/A |

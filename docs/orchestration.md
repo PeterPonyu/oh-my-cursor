@@ -44,15 +44,15 @@ Each phase advance is an action on a schema-bounded JSON document that follows
 | Agents | `agents/orchestrator.md`, `architect.md`, `researcher.md`, `planner.md`, `implementer.md`, `qa-tester.md`, `verifier.md`, `critic.md`, `code-reviewer.md`, `debugger.md`, `tracer.md`, `security-reviewer.md`, `explore.md`, `test-engineer.md` | Role prompts. `orchestrator.md` is the entry point; it routes work to the other roles. Most role agents are read-only; `debugger`, `implementer`, `orchestrator`, and `test-engineer` may update files only when the requested workflow requires it, while `qa-tester` may run bounded validation commands without editing files. |
 | Skills | `skills/*/SKILL.md` (14 total; see Skills table below) | Workflow recipes the user or agent invokes by name. Invoke by name from agent prompts or user input. |
 | Workflow state | `.cursor/state/workflow-state.schema.json`, `.cursor/state/workflow-state.example.json`, `.cursor/state/README.md` | The shared state contract; file-backed, human-visible, opt-in. |
-| State writer (agent-callable) | `mcp/cursor-state-bridge/` MCP tools (`state_init`, `state_set_phase`, `state_update_acceptance_criterion`, `state_record_failure`, `state_history_append`) | Sole agent-callable writer of `.cursor/state/workflow-state.json` (and per-task variants under `docs/plans/<task-id>/`). Routes through the shared `file_lock` from `.cursor/state/_locking.py`. Opt-in install via `scripts/install-local-plugin.sh --with-mcp`. |
-| State writer (developer-only fallback) | `.cursor/state/workflow-state.py` | Library API + thin CLI shim for developer terminals. Calls the same `init_state` / `set_state` / ... library functions as the bridge so concurrent CLI and bridge writes serialise on the same lock. Not invoked from agent prompts or skills. |
+| State writer (agent-callable) | `mcp/cursor-state-bridge/` MCP tools (`state_init`, `state_set_phase`, `state_update_acceptance_criterion`, `state_record_failure`, `state_history_append`) | Sole agent-callable writer of `.cursor/state/workflow-state.json` (and per-task variants under `docs/plans/<task-id>/`). Routes through the shared `file_lock` from `src/oh_my_cursor/workflow_state/locking.py`. Opt-in install via `scripts/install-local-plugin.sh --with-mcp`. |
+| State writer (developer-only fallback) | `scripts/workflow-state.py` (`.cursor/state/workflow-state.py` compatibility shim in installed payloads) | CLI wrapper over the packaged workflow-state API for developer terminals. Calls the same `init_state` / `set_state` / ... library functions as the bridge so concurrent CLI and bridge writes serialise on the same lock. Not invoked from agent prompts or skills. |
 | Validators | `scripts/validate-workflow-state.py`, `scripts/validate-cursor-workflow-artifacts.py`, `scripts/smoke-cursor-workflow-artifacts.sh`, `scripts/validate-plugin-structure.sh`, `scripts/check-local-plugin-install.sh`, `scripts/install-local-plugin.sh` | Make the orchestration locally provable and keep the install minimal. |
 
 ## How a task flows
 
 1. **Intake.** Create
    `docs/plans/<task-id>/workflow-state.json` from the example or with
-   `python3 .cursor/state/workflow-state.py init docs/plans/<task-id>/workflow-state.json --task-id <task-id>` in the repo. Validate with
+   `python3 scripts/workflow-state.py init docs/plans/<task-id>/workflow-state.json --task-id <task-id>` in the repo. Validate with
    `python3 scripts/validate-workflow-state.py <path>`.
 2. **Research.** Invoke `agents/researcher.md` (read-only). Capture
    findings into the state's `next_action` and notes; do not start coding.
@@ -138,7 +138,7 @@ Workflow status is written only by an explicit, structured call. Agents and
 skills route through the `cursor-state-bridge` MCP tools (`state_init`,
 `state_set_phase`, `state_update_acceptance_criterion`,
 `state_record_failure`, `state_history_append`); developer terminals can
-also use the CLI shim at `.cursor/state/workflow-state.py`. Both paths
+also use the CLI wrapper at `scripts/workflow-state.py`. Both paths
 share the same library and the same `file_lock`. Hooks do not mutate
 state. Typical write points (agent-callable form via the bridge):
 
@@ -150,10 +150,10 @@ state. Typical write points (agent-callable form via the bridge):
 
 Developer-only equivalents (not for agents/skills):
 
-- task start: `python3 .cursor/state/workflow-state.py init ...`
-- phase advance: `python3 .cursor/state/workflow-state.py set ... --phase verify --status in_progress`
-- acceptance update: `python3 .cursor/state/workflow-state.py ac ... --id AC-001 --status passed --evidence scripts/check-local-plugin-install.sh`
-- failure record: `python3 .cursor/state/workflow-state.py fail ... --type fixable --message "..."`
+- task start: `python3 scripts/workflow-state.py init ...`
+- phase advance: `python3 scripts/workflow-state.py set ... --phase verify --status in_progress`
+- acceptance update: `python3 scripts/workflow-state.py ac ... --id AC-001 --status passed --evidence scripts/check-local-plugin-install.sh`
+- failure record: `python3 scripts/workflow-state.py fail ... --type fixable --message "..."`
 
 ## Skills Enumeration (14 repo-owned, checked-in-artifact)
 
