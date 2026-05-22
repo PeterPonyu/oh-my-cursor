@@ -7,6 +7,8 @@ compatibility shims, hooks, and the MCP bridge.
 from __future__ import annotations
 
 import json
+import os
+import tempfile
 from datetime import date
 from pathlib import Path
 from typing import Any, NoReturn
@@ -78,16 +80,38 @@ def _load_state(path: Path) -> dict[str, Any]:
 def _atomic_write_state(path: Path, state: dict[str, Any]) -> None:
     """Write ``state`` to ``path`` atomically.
 
-    Writes to a sibling ``<path>.tmp`` then ``os.replace``s into place so
-    a concurrent reader never observes a partial document.
+    Writes to a unique sibling temp file then ``os.replace``s into place so
+    a concurrent reader never observes a partial document.  The temp filename
+    is created with ``O_EXCL`` by :func:`tempfile.mkstemp`, so a pre-created
+    workspace symlink cannot redirect the sidecar write outside the state
+    directory.
     """
     path.parent.mkdir(parents=True, exist_ok=True)
-    tmp_path = path.with_suffix(path.suffix + ".tmp")
-    tmp_path.write_text(
-        json.dumps(state, indent=2, ensure_ascii=False) + "\n",
-        encoding="utf-8",
-    )
-    tmp_path.replace(path)
+    legacy_tmp_path = path.with_suffix(path.suffix + ".tmp")
+    if legacy_tmp_path.is_symlink():
+        raise OSError(f"unsafe workflow-state temp symlink: {legacy_tmp_path}")
+    data = json.dumps(state, indent=2, ensure_ascii=False) + "\n"
+    fd = -1
+    tmp_name = ""
+    try:
+        fd, tmp_name = tempfile.mkstemp(
+            prefix=f".{path.name}.",
+            suffix=".tmp",
+            dir=str(path.parent),
+            text=True,
+        )
+        with os.fdopen(fd, "w", encoding="utf-8") as handle:
+            fd = -1
+            handle.write(data)
+        Path(tmp_name).replace(path)
+    finally:
+        if fd >= 0:
+            os.close(fd)
+        if tmp_name:
+            try:
+                Path(tmp_name).unlink()
+            except FileNotFoundError:
+                pass
 
 
 def _push_history(state: dict[str, Any], note: str, *, phase: str | None = None,
@@ -317,5 +341,3 @@ def append_history(
         _compact_history(state, history_cap)
         _atomic_write_state(path, state)
     return state
-
-
