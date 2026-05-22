@@ -36,6 +36,11 @@ required=(
     .cursor/state/workflow-state.example.json
     .cursor/state/workflow-state.py
     .cursor/state/README.md
+    src/oh_my_cursor/__init__.py
+    src/oh_my_cursor/workflow_state/__init__.py
+    src/oh_my_cursor/workflow_state/api.py
+    src/oh_my_cursor/workflow_state/cli.py
+    src/oh_my_cursor/workflow_state/locking.py
     agents/architect.md
     agents/code-reviewer.md
     agents/critic.md
@@ -51,6 +56,8 @@ required=(
     agents/tracer.md
     agents/verifier.md
     mcp.json
+  .cursor/rules/00-repo-scope.mdc
+  .cursor/rules/10-docs-claims.mdc
   rules/repo-owned-plugin-boundary.mdc
   .cursor/rules/20-commit-discipline.mdc
   .cursor/rules/30-error-handling.mdc
@@ -175,17 +182,20 @@ for key, default in discovery_defaults.items():
 print("ok: plugin manifest fields are present and well-formed")
 PY
 
+cursor_rules_count="$(find .cursor/rules -type f \( -name '*.md' -o -name '*.mdc' -o -name '*.markdown' \) | wc -l | tr -d ' ')"
 rules_count="$(find rules -type f \( -name '*.md' -o -name '*.mdc' -o -name '*.markdown' \) | wc -l | tr -d ' ')"
 skills_count="$(find skills -type f -name 'SKILL.md' | wc -l | tr -d ' ')"
 hooks_count="$(find hooks -maxdepth 1 -name 'hooks.json' | wc -l | tr -d ' ')"
 agents_count="$(find agents -type f -name '*.md' | wc -l | tr -d ' ')"
 
-[[ "$rules_count" -ge 1 ]] || fail "expected at least one plugin-owned rule"
+[[ "$cursor_rules_count" -ge 4 ]] || fail "expected the four Cursor workspace rules"
+[[ "$rules_count" -ge 1 ]] || fail "expected at least one plugin-boundary compatibility rule"
 [[ "$skills_count" -ge 1 ]] || fail "expected at least one plugin-owned skill"
 [[ "$hooks_count" == "1" ]] || fail "expected exactly one project hook manifest"
 [[ "$agents_count" -ge 12 ]] || fail "expected at least twelve checked-in project agents"
 
-log "plugin-owned rule count is $rules_count"
+log "Cursor workspace rule count is $cursor_rules_count"
+log "plugin-boundary compatibility rule count is $rules_count"
 log "plugin-owned skill count is $skills_count"
 log "project hook manifest count is $hooks_count"
 log "checked-in project agent count is $agents_count"

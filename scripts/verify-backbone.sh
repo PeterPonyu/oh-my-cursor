@@ -35,6 +35,11 @@ required=(
   .cursor/state/workflow-state.example.json
   .cursor/state/workflow-state.py
   .cursor/state/README.md
+    src/oh_my_cursor/__init__.py
+    src/oh_my_cursor/workflow_state/__init__.py
+    src/oh_my_cursor/workflow_state/api.py
+    src/oh_my_cursor/workflow_state/cli.py
+    src/oh_my_cursor/workflow_state/locking.py
   agents/orchestrator.md
   agents/architect.md
   agents/verifier.md
@@ -153,8 +158,10 @@ python3 scripts/validate-public-language.py
 python3 scripts/validate-cursor-workflow-artifacts.py
 ./scripts/smoke-workflow-state-completion.sh
 python3 scripts/validate-agent-model-policy.py
+python3 scripts/validate-agent-bridge-contract.py
 python3 scripts/validate-hook-readonly.py
 python3 scripts/validate-hook-readonly.py --check-shared-lock
+python3 scripts/validate-mcp-server-structure.py
 ./scripts/e2e-qa-session-assets.sh
 # Benchmark evidence and pages surface validation removed — benchmark/ and backbone-site deleted in v0.5.0
 echo 'verification: repository backbone files, claim vocabulary, and positive overclaim protections are present'
