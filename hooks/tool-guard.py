@@ -4,8 +4,8 @@
 Fires before any tool executes. The hook keeps `permission=allow` for almost
 every call. It only sets `permission=ask` when a non-shell editing tool
 (Write, Edit, MultiEdit, NotebookEdit) targets a file whose basename is
-`workflow-state.json`, so the user can confirm before bypassing the writer
-helper at `.cursor/state/workflow-state.py`.
+`workflow-state.json`, so the user can confirm before bypassing the
+workflow-state CLI or MCP writer helpers with raw JSON edits.
 
 The hook never denies a request and never modifies tool input. Shell commands
 are out of scope here; `hooks/shell-guard.py` covers `beforeShellExecution`.
@@ -58,8 +58,8 @@ def main() -> int:
         permission = "ask"
         message = (
             "Tool-guard observed a direct edit to a workflow-state.json document. "
-            "Prefer the writer helper at .cursor/state/workflow-state.py "
-            "(or scripts/workflow-state.py from the repo root) so phase, "
+            "Prefer the cursor-state-bridge tools or scripts/workflow-state.py "
+            "(the installed `.cursor/state/workflow-state.py` path is a compatibility shim) so phase, "
             "acceptance criteria, and history advance through one bounded path."
         )
         status = "ask"
