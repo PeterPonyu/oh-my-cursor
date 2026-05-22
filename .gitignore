@@ -1,6 +1,6 @@
 .cursor/mcp.json
 .cursor/memories/
-.cursor/hooks/state/
+hooks/state/
 .DS_Store
 __pycache__/
 *.pyc
