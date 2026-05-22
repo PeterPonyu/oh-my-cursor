@@ -8,6 +8,7 @@ from __future__ import annotations
 
 import fcntl
 import os
+import stat
 from contextlib import contextmanager
 from pathlib import Path
 from typing import Iterator
@@ -23,8 +24,14 @@ def file_lock(target: Path) -> Iterator[None]:
     target = Path(target)
     lock_path = Path(str(target) + ".lock")
     lock_path.parent.mkdir(parents=True, exist_ok=True)
-    fd = os.open(str(lock_path), os.O_RDWR | os.O_CREAT, 0o600)
+    flags = os.O_RDWR | os.O_CREAT | getattr(os, "O_NOFOLLOW", 0)
+    fd = os.open(str(lock_path), flags, 0o600)
     try:
+        lock_stat = os.fstat(fd)
+        if not stat.S_ISREG(lock_stat.st_mode):
+            raise OSError(f"lock path is not a regular file: {lock_path}")
+        if lock_stat.st_uid != os.getuid():
+            raise OSError(f"lock path is not owned by the current user: {lock_path}")
         fcntl.flock(fd, fcntl.LOCK_EX)
         try:
             yield

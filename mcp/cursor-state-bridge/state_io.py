@@ -68,9 +68,9 @@ def _resolve_state_path(workspace: Path, task_id: str | None) -> Path:
         target = workspace / "docs" / "plans" / task_id / "workflow-state.json"
     else:
         target = workspace / ".cursor" / "state" / "workflow-state.json"
-    # Validate jail containment before any IO; raises JailError on escape.
-    resolve_jailed(workspace, target)
-    return target
+    # Validate jail containment before any IO and use the resolved path so
+    # writer sidecars are created beside the real jailed state file.
+    return resolve_jailed(workspace, target)
 
 
 def _mcp_text(payload: Any) -> dict[str, Any]:
