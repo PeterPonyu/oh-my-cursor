@@ -227,6 +227,17 @@ if not isinstance(history_schema.get("anyOf"), list):
 
 log("server.py: MCP tool schemas match state_io handler contract")
 
+state_io_py = pkg_dir / "state_io.py"
+state_io_text = state_io_py.read_text(encoding="utf-8")
+if "oh_my_cursor.workflow_state" not in state_io_text:
+    fail("state_io.py must import the packaged workflow-state API")
+if "spec_from_file_location" in state_io_text or "workflow-state.py" in state_io_text:
+    fail("state_io.py must not importlib-load workspace workflow-state.py")
+if "resolved outside the trusted payload" not in state_io_text:
+    fail("state_io.py must verify the packaged workflow-state API provenance")
+log("state_io.py: imports packaged workflow-state API, not workspace Python")
+
+
 # ---------------------------------------------------------------------------
 # Done
 # ---------------------------------------------------------------------------

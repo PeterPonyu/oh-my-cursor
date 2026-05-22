@@ -3,21 +3,19 @@
 
 Phase 5 of mcp-state-bridge-2026-05.  Three modes:
 
-1. **default scan**: AST-walks every ``.cursor/hooks/*.py`` (excluding the
+1. **default scan**: AST-walks every ``hooks/*.py`` (excluding the
    sibling ``_trace.py`` helper) and reports any call whose argument is a
    string literal pointing at ``.cursor/state/workflow-state*.json`` and
    whose method name is a write-shape (``write_text``, ``write_bytes``,
    ``open``, ``json.dump``).  Writes elsewhere -- notably ``.omcs/`` --
    are not flagged at all (implicit allowlist; AC-505).
 
-2. ``--check-shared-lock``: imports the shared library at
-   ``.cursor/state/workflow-state.py`` (which does ``from _locking import
-   file_lock``) and asserts (a) the resulting ``_locking`` module's
-   ``__file__`` resolves to ``.cursor/state/_locking.py``, (b) no module
-   under ``.cursor/state/`` imports anything from ``mcp/``, (c) the
-   bridge does not ship a duplicate ``_locking.py`` of its own.  This is
-   the structural enforcement of "the CLI shim and the bridge share the
-   same lock".
+2. ``--check-shared-lock``: imports the canonical shared library under
+   ``src/oh_my_cursor/workflow_state/`` and asserts (a) the canonical
+   ``file_lock`` resolves to ``src/oh_my_cursor/workflow_state/locking.py``,
+   (b) the legacy ``.cursor/state`` shims re-export that same callable,
+   (c) no module under ``.cursor/state/`` imports anything from ``mcp/``,
+   and (d) the bridge does not ship a duplicate ``_locking.py`` of its own.
 
 3. ``--self-test``: seeds a synthetic offender hook + a synthetic
    ``_trace.py``-style hook inside an isolated
@@ -30,18 +28,25 @@ Stdlib-only.
 from __future__ import annotations
 
 import ast
+import importlib
 import importlib.util
 import re
 import sys
 import tempfile
 import textwrap
 from pathlib import Path
+from typing import NoReturn
 
 
 ROOT = Path(__file__).resolve().parents[1]
 HOOKS_DIR = ROOT / "hooks"
 STATE_DIR = ROOT / ".cursor" / "state"
 BRIDGE_DIR = ROOT / "mcp" / "cursor-state-bridge"
+SRC_DIR = ROOT / "src"
+WORKFLOW_API_PATH = SRC_DIR / "oh_my_cursor" / "workflow_state" / "api.py"
+CANONICAL_LOCKING_PATH = SRC_DIR / "oh_my_cursor" / "workflow_state" / "locking.py"
+WORKFLOW_SHIM_PATH = STATE_DIR / "workflow-state.py"
+LOCKING_SHIM_PATH = STATE_DIR / "_locking.py"
 
 # Match writes to the workflow-state document family.
 STATE_PATH_RE = re.compile(r"\.cursor/state/workflow-state(?:\.[A-Za-z]+)?\.json")
@@ -54,7 +59,7 @@ JSON_WRITE_NAMES = {"dump"}  # json.dump(..., open(path, 'w'))
 TRACE_HELPER_NAME = "_trace.py"
 
 
-def _fail(message: str) -> None:
+def _fail(message: str) -> NoReturn:
     print(f"FAIL: {message}", file=sys.stderr)
     raise SystemExit(1)
 
@@ -149,41 +154,55 @@ _FORBIDDEN_MCP_IMPORT = re.compile(
 )
 
 
+def _load_module_from_path(name: str, path: Path):
+    spec = importlib.util.spec_from_file_location(name, str(path))
+    if spec is None or spec.loader is None:
+        _fail(f"could not build module spec for {path}")
+    module = importlib.util.module_from_spec(spec)
+    sys.modules[name] = module
+    spec.loader.exec_module(module)
+    return module
+
+
 def run_check_shared_lock() -> int:
     if not STATE_DIR.is_dir():
         _fail(f"state directory missing: {STATE_DIR}")
+    if not WORKFLOW_API_PATH.is_file():
+        _fail(f"workflow-state API missing: {WORKFLOW_API_PATH}")
+    if not CANONICAL_LOCKING_PATH.is_file():
+        _fail(f"canonical lock missing: {CANONICAL_LOCKING_PATH}")
+    if not WORKFLOW_SHIM_PATH.is_file():
+        _fail(f"workflow-state compatibility shim missing: {WORKFLOW_SHIM_PATH}")
+    if not LOCKING_SHIM_PATH.is_file():
+        _fail(f"locking compatibility shim missing: {LOCKING_SHIM_PATH}")
 
-    # Make `_locking` importable for the loaded library.
-    if str(STATE_DIR) not in sys.path:
-        sys.path.insert(0, str(STATE_DIR))
+    if str(SRC_DIR) not in sys.path:
+        sys.path.insert(0, str(SRC_DIR))
 
-    # Load the workflow-state library; this triggers `from _locking import file_lock`.
-    lib_path = STATE_DIR / "workflow-state.py"
-    if not lib_path.is_file():
-        _fail(f"workflow-state library missing: {lib_path}")
-    spec = importlib.util.spec_from_file_location("_omcs_validate_shared_lock", str(lib_path))
-    if spec is None:
-        _fail(f"could not build module spec for {lib_path}")
-    if spec.loader is None:  # type: ignore[union-attr]
-        _fail(f"module spec for {lib_path} has no loader")
-    module = importlib.util.module_from_spec(spec)  # type: ignore[arg-type]
-    sys.modules["_omcs_validate_shared_lock"] = module
-    spec.loader.exec_module(module)  # type: ignore[union-attr]
+    try:
+        workflow_api = importlib.import_module("oh_my_cursor.workflow_state.api")
+        workflow_locking = importlib.import_module("oh_my_cursor.workflow_state.locking")
+    except ImportError as exc:
+        _fail(f"could not import packaged workflow-state modules: {exc}")
 
-    # _locking should now be in sys.modules under its import name.
-    locking = sys.modules.get("_locking")
-    if locking is None or not hasattr(locking, "file_lock"):
-        _fail("workflow-state library did not import a `_locking` module with `file_lock`")
-    if locking.__file__ is None:  # type: ignore[union-attr]
-        _fail("loaded `_locking` module has no __file__ attribute")
-
-    expected_locking = (STATE_DIR / "_locking.py").resolve()
-    actual_locking = Path(locking.__file__).resolve()  # type: ignore[union-attr,arg-type]
+    actual_locking = Path(workflow_locking.__file__).resolve()  # type: ignore[arg-type]
+    expected_locking = CANONICAL_LOCKING_PATH.resolve()
     if actual_locking != expected_locking:
         _fail(
-            f"`_locking` loaded from {actual_locking} but expected {expected_locking}; "
-            "the CLI shim and the bridge must source the lock from .cursor/state/_locking.py"
+            f"canonical lock loaded from {actual_locking} but expected {expected_locking}"
         )
+    if getattr(workflow_api, "file_lock", None) is not workflow_locking.file_lock:
+        _fail("workflow-state API and locking module do not share one file_lock callable")
+
+    locking_shim = _load_module_from_path("_omcs_validate_locking_shim", LOCKING_SHIM_PATH)
+    if getattr(locking_shim, "file_lock", None) is not workflow_locking.file_lock:
+        _fail(".cursor/state/_locking.py does not re-export the canonical file_lock")
+
+    workflow_shim = _load_module_from_path("_omcs_validate_workflow_shim", WORKFLOW_SHIM_PATH)
+    if getattr(workflow_shim, "init_state", None) is not workflow_api.init_state:
+        _fail(".cursor/state/workflow-state.py does not re-export canonical init_state")
+    if getattr(workflow_shim, "file_lock", None) is not workflow_locking.file_lock:
+        _fail(".cursor/state/workflow-state.py does not re-export canonical file_lock")
 
     # No module under .cursor/state/ may import from mcp/.
     forbidden: list[str] = []
@@ -194,18 +213,18 @@ def run_check_shared_lock() -> int:
     if forbidden:
         _fail(
             ".cursor/state/ modules import from mcp/: " + ", ".join(forbidden)
-            + "; the dependency direction must be bridge → .cursor/state/, never reverse"
+            + "; the dependency direction must be package/bridge/hooks -> workflow-state, never reverse"
         )
 
-    # Bridge must not ship a duplicate `_locking.py`.
     duplicate = BRIDGE_DIR / "_locking.py"
     if duplicate.is_file():
         _fail(
             f"bridge ships a duplicate {duplicate.relative_to(ROOT)}; "
-            "the lock primitive must live only at .cursor/state/_locking.py (V1)"
+            "the lock primitive must live only at src/oh_my_cursor/workflow_state/locking.py"
         )
 
-    _ok(f"`_locking` sourced from {expected_locking.relative_to(ROOT)}")
+    _ok(f"canonical lock sourced from {expected_locking.relative_to(ROOT)}")
+    _ok(".cursor/state/ compatibility shims re-export the packaged API/lock")
     _ok(".cursor/state/ modules do not import from mcp/")
     _ok("bridge does not ship a duplicate _locking.py")
     print("HOOK_READONLY_SHARED_LOCK_OK")
