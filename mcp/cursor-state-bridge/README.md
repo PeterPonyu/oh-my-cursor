@@ -15,12 +15,10 @@ After Phase 3 all six advertised tools are functional:
 no `-32601` placeholders left for known tools; an unknown tool name
 still returns `-32601` with an `unknown tool:` prefix.
 
-The shared library at `.cursor/state/workflow-state.py` (typed
-`init_state`, `set_state`, `update_acceptance_criterion`,
-`record_failure`, `append_history`, `read_state`) and the POSIX
-`file_lock` shim at `.cursor/state/_locking.py` are imported by both
-the bridge and the CLI shim, so concurrent writers serialise on a
-single advisory lock per state file. `evidence` on
+The shared library lives at `src/oh_my_cursor/workflow_state/`
+(`api.py`, `cli.py`, `locking.py`). The legacy `.cursor/state/workflow-state.py`
+and `.cursor/state/_locking.py` files are compatibility shims, so concurrent
+bridge and CLI writers still serialise on one advisory lock per state file. `evidence` on
 `state_update_acceptance_criterion` stays optional — the schema is not
 tightened.
 
@@ -32,15 +30,20 @@ The package is excluded from the default minimal plugin install. Two steps:
 ./scripts/install-local-plugin.sh --with-mcp
 ```
 
-Then create `.cursor/mcp.json` from the checked-in template:
+Then create `.cursor/mcp.json` from the checked-in template in a trusted
+`oh-my-cursor` checkout or installed payload:
 
 ```bash
 cp .cursor/mcp.example.json .cursor/mcp.json
-# edit ${workspaceFolder} placeholders if needed
+# edit the bridge command path if the target workspace is not this checkout
 ```
 
 `.cursor/mcp.json` stays gitignored. Reload Cursor and the bridge appears
 in the MCP servers panel.
+
+Do not point the bridge command at an arbitrary project workspace. The command
+must resolve to this repo's trusted `mcp/cursor-state-bridge/` payload; the
+`--workspace` argument is the only value that should name the target workspace.
 
 ## Tool surface
 
@@ -100,7 +103,7 @@ the on-disk file satisfies the cap and stays monotonic.
 The bridge writes one JSONL record per JSON-RPC call to
 `.omcs/cursor-state-bridge/trace.jsonl` (dedicated subdirectory —
 non-colliding with `.omcs/hook-trace.log`, which is owned by the hook
-trace helper at `.cursor/hooks/_trace.py`). Each record carries `ts`,
+trace helper at `hooks/_trace.py`). Each record carries `ts`,
 `tool`, `phase`, `result`, `duration_ms`, plus optional `task_id`,
 `error_class`, and `args_digest`. The schema lives at
 `fixtures/trace-schema.json` and is checked by
