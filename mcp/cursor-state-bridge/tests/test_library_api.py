@@ -1,37 +1,47 @@
-"""Library API tests for `.cursor/state/workflow-state.py` (AC-206).
+"""Library API tests for the packaged workflow-state implementation (AC-206).
 
 Covers the six typed entrypoints introduced in Phase 2:
 ``init_state``, ``set_state``, ``update_acceptance_criterion``,
 ``record_failure``, ``append_history``, ``read_state``.
 
-The test loads the library exactly the way the bridge's ``state_io.py``
-does -- via :func:`importlib.util.spec_from_file_location` -- so the
-import path is exercised end-to-end with NO ``argparse.Namespace`` mocks.
+The test imports the packaged API directly and keeps one compatibility
+check for the legacy `.cursor/state/workflow-state.py` shim. No
+``argparse.Namespace`` mocks are used.
 """
 from __future__ import annotations
 
+import importlib
 import importlib.util
 import sys
 import tempfile
 import unittest
 from pathlib import Path
+from typing import Any, ClassVar
 
 
 REPO_ROOT = Path(__file__).resolve().parents[3]
-STATE_DIR = REPO_ROOT / ".cursor" / "state"
-LIB_PATH = STATE_DIR / "workflow-state.py"
+SRC_DIR = REPO_ROOT / "src"
+LEGACY_LIB_PATH = REPO_ROOT / ".cursor" / "state" / "workflow-state.py"
+LIB_PATH = SRC_DIR / "oh_my_cursor" / "workflow_state" / "api.py"
 LIB_AVAILABLE = LIB_PATH.is_file()
 
 
 def _load_library():
-    """Load `.cursor/state/workflow-state.py` as a module (no Namespace mocks)."""
-    # Make the sibling `_locking` module importable from inside the library.
-    if str(STATE_DIR) not in sys.path:
-        sys.path.insert(0, str(STATE_DIR))
-    spec = importlib.util.spec_from_file_location("_omcs_workflow_state_test", str(LIB_PATH))
-    assert spec is not None and spec.loader is not None
+    """Import the packaged workflow-state API (no Namespace mocks)."""
+    if str(SRC_DIR) not in sys.path:
+        sys.path.insert(0, str(SRC_DIR))
+    return importlib.import_module("oh_my_cursor.workflow_state.api")
+
+
+def _load_legacy_shim():
+    """Load the legacy workflow-state shim from its hyphenated file path."""
+    spec = importlib.util.spec_from_file_location(
+        "_legacy_workflow_state_shim", str(LEGACY_LIB_PATH)
+    )
+    if spec is None or spec.loader is None:
+        raise RuntimeError(f"could not load legacy workflow-state shim: {LEGACY_LIB_PATH}")
     module = importlib.util.module_from_spec(spec)
-    sys.modules["_omcs_workflow_state_test"] = module
+    sys.modules[spec.name] = module
     spec.loader.exec_module(module)
     return module
 
@@ -39,6 +49,8 @@ def _load_library():
 @unittest.skipUnless(LIB_AVAILABLE, "workflow-state library not on disk")
 class TestLibraryAPI(unittest.TestCase):
     """Six entrypoints, six dedicated tests, zero argparse mocks."""
+
+    lib: ClassVar[Any]
 
     @classmethod
     def setUpClass(cls) -> None:
@@ -127,6 +139,19 @@ class TestLibraryAPI(unittest.TestCase):
         loaded = self.lib.read_state(self.path)
         self.assertIsInstance(loaded, dict)
         self.assertEqual(loaded["task_id"], "T-006")
+
+    def test_legacy_shim_reexports_package_api(self) -> None:
+        shim = _load_legacy_shim()
+        self.assertIs(shim.init_state, self.lib.init_state)
+        self.assertIs(shim.set_state, self.lib.set_state)
+        self.assertTrue(callable(shim.main))
+
+    def test_legacy_cursor_state_shim_exports_packaged_api(self) -> None:
+        self.assertTrue(LEGACY_LIB_PATH.is_file())
+        shim_globals = {"__file__": str(LEGACY_LIB_PATH), "__name__": "_legacy_workflow_state_test"}
+        exec(LEGACY_LIB_PATH.read_text(encoding="utf-8"), shim_globals)
+        self.assertIs(shim_globals["init_state"], self.lib.init_state)
+        self.assertIs(shim_globals["read_state"], self.lib.read_state)
 
 
 if __name__ == "__main__":

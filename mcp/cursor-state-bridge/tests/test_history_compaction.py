@@ -16,31 +16,29 @@ Covers AC-701..AC-705:
 """
 from __future__ import annotations
 
-import importlib.util
 import json
+import importlib
 import sys
 import tempfile
 import unittest
 from pathlib import Path
+from typing import Any, ClassVar
 
 
 REPO_ROOT = Path(__file__).resolve().parents[3]
-STATE_DIR = REPO_ROOT / ".cursor" / "state"
-LIB_PATH = STATE_DIR / "workflow-state.py"
-LIB_AVAILABLE = LIB_PATH.is_file() and (STATE_DIR / "_locking.py").is_file()
+SRC_DIR = REPO_ROOT / "src"
+LIB_PATH = SRC_DIR / "oh_my_cursor" / "workflow_state" / "api.py"
+LOCK_PATH = SRC_DIR / "oh_my_cursor" / "workflow_state" / "locking.py"
+LIB_AVAILABLE = LIB_PATH.is_file() and LOCK_PATH.is_file()
 
 
 def _load_library():
-    if str(STATE_DIR) not in sys.path:
-        sys.path.insert(0, str(STATE_DIR))
-    spec = importlib.util.spec_from_file_location("_omcs_wfs_compaction", str(LIB_PATH))
-    module = importlib.util.module_from_spec(spec)
-    sys.modules["_omcs_wfs_compaction"] = module
-    spec.loader.exec_module(module)
-    return module
+    if str(SRC_DIR) not in sys.path:
+        sys.path.insert(0, str(SRC_DIR))
+    return importlib.import_module("oh_my_cursor.workflow_state.api")
 
 
-def _seed_synthetic_history(path: Path, library, count: int) -> None:
+def _seed_synthetic_history(path: Path, library: Any, count: int) -> None:
     """Initialise a workflow-state file then back-fill ``history[]`` to ``count`` entries."""
     library.init_state(path, task_id="T-comp")
     state = library.read_state(path)
@@ -64,6 +62,8 @@ def _seed_synthetic_history(path: Path, library, count: int) -> None:
 
 @unittest.skipUnless(LIB_AVAILABLE, "workflow-state library not on disk")
 class TestHistoryCompaction(unittest.TestCase):
+
+    lib: ClassVar[Any]
 
     @classmethod
     def setUpClass(cls) -> None:
