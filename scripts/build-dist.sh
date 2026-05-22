@@ -78,12 +78,14 @@ rsync -a \
   --exclude='/.cursor/mcp.json' \
   --exclude='/.cursor/state/workflow-state.json' \
   --exclude='/.cursor/state/active-role.json' \
-  --exclude='/.cursor/hooks/state/' \
+  --exclude='/hooks/state/' \
   --include='/.cursor-plugin/***' \
   --include='/.cursor/mcp.example.json' \
+  --include='/.cursor/rules/***' \
   --include='/hooks/***' \
   --include='/agents/***' \
   --include='/.cursor/state/***' \
+  --include='/src/***' \
   --include='/rules/***' \
   --include='/skills/***' \
   --include='/AGENTS.md' \
@@ -95,6 +97,19 @@ rsync -a \
   "${mcp_includes[@]}" \
   --exclude='*' \
   "$ROOT"/ "${DIST_DIR}/${PLUGIN_NAME}"/ || fail "rsync failed"
+
+if [[ "$WITH_MCP" != "1" ]]; then
+  python3 - "${DIST_DIR}/${PLUGIN_NAME}/.cursor-plugin/plugin.json" <<'PY'
+import json
+import sys
+from pathlib import Path
+
+path = Path(sys.argv[1])
+data = json.loads(path.read_text(encoding="utf-8"))
+data.pop("mcpServers", None)
+path.write_text(json.dumps(data, indent=2) + "\n", encoding="utf-8")
+PY
+fi
 
 if find "${DIST_DIR}" -name "__pycache__" -o -name ".pytest_cache" -o -name "*.pyc" -o -name "*.lock" | grep -q .; then
   fail "dist/ contains dev artifacts (__pycache__, .pytest_cache, *.pyc, or *.lock)"
