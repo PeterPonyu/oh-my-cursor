@@ -22,6 +22,7 @@ Stdlib-only.
 """
 from __future__ import annotations
 
+import importlib
 import json
 import re
 import sys
@@ -32,18 +33,18 @@ from typing import Any
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from _repo import resolve_repo_root, resolve_workspace_root  # noqa: E402
 
-# `_locking.file_lock` lives under `.cursor/state/`; expose it for shared
-# write serialisation. The path math mirrors how the bridge's `state_io.py`
-# locates the same module.
+# `file_lock` lives in the shipped workflow-state package; `.cursor/state/`
+# remains the runtime JSON directory only.
 _PAYLOAD_ROOT = resolve_repo_root(__file__)
 _ROOT = resolve_workspace_root(__file__)
 _STATE_DIR = _ROOT / ".cursor" / "state"
-_LOCKING_DIR = _PAYLOAD_ROOT / ".cursor" / "state"
-if str(_LOCKING_DIR) not in sys.path:
-    sys.path.insert(0, str(_LOCKING_DIR))
+_SRC_DIR = _PAYLOAD_ROOT / "src"
+if str(_SRC_DIR) not in sys.path:
+    sys.path.insert(0, str(_SRC_DIR))
 
 try:
-    from _locking import file_lock  # type: ignore[import-not-found]
+    _locking = importlib.import_module("oh_my_cursor.workflow_state.locking")
+    file_lock = getattr(_locking, "file_lock")
 except ImportError:  # pragma: no cover - degraded mode for non-POSIX hosts
     from contextlib import contextmanager
 

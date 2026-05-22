@@ -128,7 +128,7 @@ def main() -> int:
             "Compact-reminder: no active workflow-state document was reachable at "
             ".cursor/state/workflow-state.json or via override. If a task is in "
             "flight, run `state_init` through the cursor-state-bridge MCP server "
-            "(or `python3 .cursor/state/workflow-state.py init ...`) before the "
+            "(or `python3 scripts/workflow-state.py init ...` from the repo root) before the "
             "next compaction so the post-compact summary keeps the orchestration "
             "anchors."
         )
