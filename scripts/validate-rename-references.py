@@ -14,12 +14,13 @@ import difflib
 import subprocess
 import sys
 from pathlib import Path
+from typing import NoReturn
 
 ROOT = Path(__file__).resolve().parent.parent
 FIXTURE = ROOT / "docs" / "plans" / "mcp-state-bridge-2026-05" / "expected-rename-references.txt"
 
 
-def fail(msg: str) -> None:
+def fail(msg: str) -> NoReturn:
     print(f"FAIL: {msg}", file=sys.stderr)
     sys.exit(1)
 

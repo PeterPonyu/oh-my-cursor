@@ -189,7 +189,11 @@ def validate_hooks() -> None:
         entries = list(iter_hook_entries(hooks.get(event)))
         if not entries:
             fail(f"missing hook event {event}")
-        commands = [entry.get("command") for entry in entries if isinstance(entry.get("command"), str)]
+        commands: list[str] = []
+        for entry in entries:
+            command = entry.get("command") if isinstance(entry, dict) else None
+            if isinstance(command, str):
+                commands.append(command)
         if not any(expected_script in command for command in commands):
             fail(f"{event} must call {expected_script}")
         for command in commands:

@@ -12,6 +12,7 @@ from __future__ import annotations
 import json
 import sys
 from pathlib import Path
+from typing import NoReturn
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -63,7 +64,7 @@ ALLOWED_FAILURE_KEYS = {"type", "message", "retry_count"}
 ALLOWED_HISTORY_KEYS = {"phase", "status", "note", "at", "role"}
 
 
-def fail(message: str) -> None:
+def fail(message: str) -> NoReturn:
     print(f"FAIL: {message}", file=sys.stderr)
     raise SystemExit(1)
 
