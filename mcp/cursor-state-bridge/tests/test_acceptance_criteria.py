@@ -21,21 +21,15 @@ from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parents[3]
 BRIDGE_MAIN = REPO_ROOT / "mcp" / "cursor-state-bridge" / "__main__.py"
-STATE_LIB = REPO_ROOT / ".cursor" / "state" / "workflow-state.py"
-LOCK_LIB = REPO_ROOT / ".cursor" / "state" / "_locking.py"
+STATE_LIB = REPO_ROOT / "src" / "oh_my_cursor" / "workflow_state" / "api.py"
+LOCK_LIB = REPO_ROOT / "src" / "oh_my_cursor" / "workflow_state" / "locking.py"
 BRIDGE_AVAILABLE = BRIDGE_MAIN.is_file() and STATE_LIB.is_file() and LOCK_LIB.is_file()
 
 
 class BridgeProcess:
-    """Spawn the bridge against a temp workspace populated with copies of the library."""
+    """Spawn the bridge against a temp workspace."""
 
     def __init__(self, workspace: Path) -> None:
-        # Workspace must contain its own copy of the workflow-state library
-        # so the bridge can importlib-load it from <workspace>/.cursor/state/.
-        state_dir = workspace / ".cursor" / "state"
-        state_dir.mkdir(parents=True, exist_ok=True)
-        (state_dir / "workflow-state.py").write_text(STATE_LIB.read_text(encoding="utf-8"), encoding="utf-8")
-        (state_dir / "_locking.py").write_text(LOCK_LIB.read_text(encoding="utf-8"), encoding="utf-8")
         (workspace / "docs" / "plans" / "T1").mkdir(parents=True, exist_ok=True)
 
         self.proc = subprocess.Popen(
@@ -45,6 +39,11 @@ class BridgeProcess:
             stderr=subprocess.PIPE,
             text=True,
         )
+        if self.proc.stdin is None or self.proc.stdout is None or self.proc.stderr is None:
+            raise RuntimeError("bridge process pipes were not created")
+        self.stdin = self.proc.stdin
+        self.stdout = self.proc.stdout
+        self.stderr = self.proc.stderr
 
     def call(self, name: str, arguments: dict, req_id: int = 1) -> dict:
         req = {"jsonrpc": "2.0", "id": req_id, "method": "tools/call",
@@ -55,23 +54,23 @@ class BridgeProcess:
         return self._send({"jsonrpc": "2.0", "id": req_id, "method": "tools/list", "params": {}})
 
     def _send(self, req: dict) -> dict:
-        self.proc.stdin.write(json.dumps(req) + "\n")
-        self.proc.stdin.flush()
-        line = self.proc.stdout.readline()
+        self.stdin.write(json.dumps(req) + "\n")
+        self.stdin.flush()
+        line = self.stdout.readline()
         if not line:
-            err = self.proc.stderr.read()
+            err = self.stderr.read()
             raise RuntimeError(f"no response; stderr: {err}")
         return json.loads(line)
 
     def close(self) -> None:
         try:
-            self.proc.stdin.close()
+            self.stdin.close()
             self.proc.wait(timeout=2)
         except Exception:
             self.proc.kill()
             self.proc.wait(timeout=2)
         finally:
-            for stream in (self.proc.stdout, self.proc.stderr):
+            for stream in (self.stdout, self.stderr):
                 try:
                     if stream is not None and not stream.closed:
                         stream.close()
@@ -85,6 +84,12 @@ class TestAcceptanceCriteria(unittest.TestCase):
     def setUp(self) -> None:
         self._tmpdir = tempfile.TemporaryDirectory()
         self.workspace = Path(self._tmpdir.name)
+        workspace_state = self.workspace / ".cursor" / "state"
+        workspace_state.mkdir(parents=True, exist_ok=True)
+        (workspace_state / "workflow-state.py").write_text(
+            "raise RuntimeError('workspace workflow-state.py must not execute')\n",
+            encoding="utf-8",
+        )
         self.bridge = BridgeProcess(self.workspace)
         # Initialise the per-task state file the AC tools will mutate.
         resp = self.bridge.call("state_init", {"task_id": "T1", "title": "phase3 test"})
