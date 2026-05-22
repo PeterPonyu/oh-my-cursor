@@ -39,7 +39,7 @@ not tightened by the tool.
 | Phase | Tools shipped | Acceptance criteria | Status |
 | --- | --- | --- | --- |
 | 1 (PR1) | `state_read` (functional); other 5 advertised but `-32601` | AC-101..AC-110 | shipped |
-| 2 | locking shim + library refactor at `.cursor/state/_locking.py` and `.cursor/state/workflow-state.py`; `state_init`, `state_set_phase`, `state_record_failure` promoted to functional | AC-201..AC-209 | shipped |
+| 2 | canonical library at `src/oh_my_cursor/workflow_state/` with `.cursor/state/` compatibility shims; `state_init`, `state_set_phase`, `state_record_failure` promoted to functional | AC-201..AC-209 | shipped |
 | 3 | `state_update_acceptance_criterion`, `state_history_append` promoted; full six-tool functional surface; `validate-prd-ac-mapping.py` ships the AC↔PRD index | AC-301..AC-305 | shipped |
 | 4–8 | agent-callable grep gate, hook read-only validation, shared-lock verification, trace lane, defense-in-depth auth, history FIFO eviction, surface contract enforcement | AC-401..AC-805 | shipped |
 
