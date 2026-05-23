@@ -138,6 +138,9 @@ function parseValue(raw: string): any {
 
 export function parseAgentFrontmatter(role: string): Record<string, any> {
   if (!role) return {};
+  if (role.includes('/') || role.includes('\\') || role.includes('..')) {
+    return {};
+  }
   const agentFile = path.join(AGENTS_DIR, `${role}.md`);
   try {
     if (!fs.existsSync(agentFile)) {

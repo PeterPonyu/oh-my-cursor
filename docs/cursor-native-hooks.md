@@ -15,7 +15,7 @@ Cursor reads `hooks/hooks.json` at session start. All hook scripts are fail-open
 | Surface | Owner | Path |
 |---|---|---|
 | Cursor native hooks | Cursor product (host) | `hooks/hooks.json` |
-| oh-my-cursor hook scripts | repo-owned plugin payload | `hooks/*.py` |
+| oh-my-cursor hook scripts | repo-owned plugin payload | `hooks/*.ts` |
 | Runtime state (never durable) | local workspace | `.cursor/state/workflow-state.json`, `.cursor/state/active-role.json`, `*.lock` |
 | Agent-callable state writes | cursor-state-bridge MCP | `mcp/cursor-state-bridge/` |
 
@@ -25,20 +25,20 @@ Fourteen wired Cursor hook events mapped to scripts:
 
 | Cursor Hook Event | Script | Role | Mode |
 |---|---|---|---|
-| `sessionStart` | `session-bootstrap.py` | Confirms workspace state, loaded rules, active workflow-state file. | Observational |
-| `sessionEnd` | `session-summary.py` | Summarizes session activity and acceptance-criteria status. | Observational |
-| `beforeSubmitPrompt` | `prompt-router.py` | Detects ambiguous prompts, suggests clarification before routing. | Observational (warn) |
-| `preToolUse` | `tool-guard.py` | Enforces tool allowlists per active role; blocks disallowed tools. | Active (may block) |
-| `postToolUse` | `state-watcher.py` | Reads workflow-state after tool use; flags stale or contradictory state. | Observational |
-| `postToolUseFailure` | `failure-router.py` | Routes failures to debugger or tracer based on failure type. | Observational (route) |
-| `subagentStart` | `subagent-bootstrap.py` | Records active subagent role in `active-role.json`. Tool-guard reads this. | Writer (state) |
-| `subagentStop` | `subagent-summary.py` | Clears active-role on subagent completion. | Writer (state) |
-| `beforeShellExecution` | `shell-guard.py` | Warns on destructive shell patterns (`rm -rf`, force-push). | Observational (warn) |
-| `afterShellExecution` | `shell-debrief.py` | Logs shell command outcomes for traceability. | Observational |
-| `beforeReadFile` | `read-advisor.py` | Suggests skipping when a file is already in context or unchanged. | Advisory |
-| `afterFileEdit` | `claim-guard.py` | Scans edits for claim inflation (upgrading host-product-only → repo-owned). | Observational (warn) |
-| `preCompact` | `compact-reminder.py` | Surfaces pending acceptance criteria and active failures before context compaction. | Observational |
-| `stop` | `stop-gate.py` | Checks workflow-state for pending/failed criteria. Emits reminder; does not block. Loop limit: 1. | Observational |
+| `sessionStart` | `session-bootstrap.ts` | Confirms workspace state, loaded rules, active workflow-state file. | Observational |
+| `sessionEnd` | `session-summary.ts` | Summarizes session activity and acceptance-criteria status. | Observational |
+| `beforeSubmitPrompt` | `prompt-router.ts` | Detects ambiguous prompts, suggests clarification before routing. | Observational (warn) |
+| `preToolUse` | `tool-guard.ts` | Enforces tool allowlists per active role; blocks disallowed tools. | Active (may block) |
+| `postToolUse` | `state-watcher.ts` | Reads workflow-state after tool use; flags stale or contradictory state. | Observational |
+| `postToolUseFailure` | `failure-router.ts` | Routes failures to debugger or tracer based on failure type. | Observational (route) |
+| `subagentStart` | `subagent-bootstrap.ts` | Records active subagent role in `active-role.json`. Tool-guard reads this. | Writer (state) |
+| `subagentStop` | `subagent-summary.ts` | Clears active-role on subagent completion. | Writer (state) |
+| `beforeShellExecution` | `shell-guard.ts` | Warns on destructive shell patterns (`rm -rf`, force-push). | Observational (warn) |
+| `afterShellExecution` | `shell-debrief.ts` | Logs shell command outcomes for traceability. | Observational |
+| `beforeReadFile` | `read-advisor.ts` | Suggests skipping when a file is already in context or unchanged. | Advisory |
+| `afterFileEdit` | `claim-guard.ts` | Scans edits for claim inflation (upgrading host-product-only → repo-owned). | Observational (warn) |
+| `preCompact` | `compact-reminder.ts` | Surfaces pending acceptance criteria and active failures before context compaction. | Observational |
+| `stop` | `stop-gate.ts` | Checks workflow-state for pending/failed criteria. Emits reminder; does not block. Loop limit: 1. | Observational |
 
 
 ## What is NOT native yet

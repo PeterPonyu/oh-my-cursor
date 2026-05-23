@@ -31,13 +31,13 @@ proof path exist in this repository.
 | Debug / trace | debugger, tracer, trace skill | `agents/debugger.md`, `skills/debug/`, `skills/trace/` | Partial compatibility | Trace output must stay in Cursor-owned paths. |
 | Security review | security-reviewer | `agents/security-reviewer.md`, `skills/security-review/` | Partial compatibility | Findings must cite local files and validators. |
 | Slash commands | `/ralph`, `/ultrawork`, `/review-work`, and other external commands | Cursor skills and agents, no external slash-command runtime | Unsupported here | Document conceptual mappings only; do not claim execution. |
-| Skills registry | Claude and Codex user skills | `skills/*/SKILL.md` plus host-discovered compatibility directories | Partial compatibility | Treat `~/.claude/skills/` and `~/.codex/skills/` as peer user-asset sources; use `scripts/link-omc-cursor-compat-assets.py` when OMC assets exist only in a Claude plugin cache; port one skill at a time into OMCS only with local proof. |
-| Hooks | External hook lifecycle and behaviors | `hooks/hooks.json`, `hooks/*.py` | Partial compatibility | Cursor hook events are host-specific and already checked in. |
+| Skills registry | Claude and Codex user skills | `skills/*/SKILL.md` plus host-discovered compatibility directories | Partial compatibility | Treat `~/.claude/skills/` and `~/.codex/skills/` as peer user-asset sources; use `scripts/link-omc-cursor-compat-assets.ts` when OMC assets exist only in a Claude plugin cache; port one skill at a time into OMCS only with local proof. |
+| Hooks | External hook lifecycle and behaviors | `hooks/hooks.json`, `hooks/*.ts` | Partial compatibility | Cursor hook events are host-specific and already checked in. |
 | State | `.omc/state/`, `.codex/` runtime state, notepad, memory, wiki, trace, session state | `.cursor/state/workflow-state.json`, `active-role.json` | Partial compatibility | State systems remain independent; no `.omc/state` or `.codex/` coupling. |
 | MCP | External MCP/tooling surfaces | `mcp/cursor-state-bridge/` | Partial compatibility | Cursor bridge is intentionally narrow and state-focused. |
 | Team mode | External team runtime | None beyond conceptual `parallel-batch` skill | Unsupported here | Candidate only if Cursor exposes equivalent project-owned runtime hooks. |
 | Multi-model routing | External category/model routing | None | Host-product-only / unsupported here | Avoid provider claims unless Cursor-owned config and docs support them. |
-| Install / doctor | External setup, doctor, plugin install | `scripts/install-local-plugin.sh`, `skills/local-plugin-check/`, `skills/doctor/` | Partial compatibility | Cursor install proof stops at local plugin artifacts and user-guided host steps. |
+| Install / doctor | External setup, doctor, plugin install | `scripts/install-local-plugin.ts`, `skills/local-plugin-check/`, `skills/doctor/` | Partial compatibility | Cursor install proof stops at local plugin artifacts and user-guided host steps. |
 | Sync / migration | External migration and sync docs | This matrix plus bridge spec | Candidate port | Add migration docs only after specific workflows are selected. |
 
 ## High-Value Candidate Ports

@@ -85,6 +85,7 @@ function resolveStatePath(payload: any): string | null {
   if (typeof payloadPath === 'string') {
     candidates.push(payloadPath);
   }
+  candidates.push(path.join(WORKSPACE_ROOT, '.cursor', 'state', 'workflow-state.json'));
 
   for (const raw of candidates) {
     try {

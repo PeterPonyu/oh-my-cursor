@@ -40,20 +40,20 @@ Each phase advance is an action on a schema-bounded JSON document that follows
 | Surface | File(s) | Role in the lifecycle |
 | --- | --- | --- |
 | Plugin manifest | `.cursor-plugin/plugin.json` | Declares the repo-root plugin and points Cursor at the rules, skills, agents, and hooks payload. |
-| Hooks | `hooks/hooks.json` plus stdlib-only Python scripts under `hooks/` | Fourteen documented Cursor hook events are wired (`sessionStart` → `session-bootstrap.py`; `sessionEnd` → `session-summary.py`; `beforeSubmitPrompt` → `prompt-router.py`; `preToolUse` → `tool-guard.py`; `postToolUse` → `state-watcher.py`; `postToolUseFailure` → `failure-router.py`; `subagentStart` → `subagent-bootstrap.py`; `subagentStop` → `subagent-summary.py`; `beforeShellExecution` → `shell-guard.py`; `afterShellExecution` → `shell-debrief.py`; `beforeReadFile` → `read-advisor.py`; `afterFileEdit` → `claim-guard.py`; `preCompact` → `compact-reminder.py`; `stop` → `stop-gate.py`). All scripts are fail-open, observational unless a tightly bounded severe pattern is detected, and **read** workflow-state — they never write it. |
+| Hooks | `hooks/hooks.json` plus stdlib-only TypeScript scripts under `hooks/` | Fourteen documented Cursor hook events are wired (`sessionStart` → `session-bootstrap.ts`; `sessionEnd` → `session-summary.ts`; `beforeSubmitPrompt` → `prompt-router.ts`; `preToolUse` → `tool-guard.ts`; `postToolUse` → `state-watcher.ts`; `postToolUseFailure` → `failure-router.ts`; `subagentStart` → `subagent-bootstrap.ts`; `subagentStop` → `subagent-summary.ts`; `beforeShellExecution` → `shell-guard.ts`; `afterShellExecution` → `shell-debrief.ts`; `beforeReadFile` → `read-advisor.ts`; `afterFileEdit` → `claim-guard.ts`; `preCompact` → `compact-reminder.ts`; `stop` → `stop-gate.ts`). All scripts are fail-open, observational unless a tightly bounded severe pattern is detected, and **read** workflow-state — they never write it. |
 | Agents | `agents/orchestrator.md`, `architect.md`, `researcher.md`, `planner.md`, `implementer.md`, `qa-tester.md`, `verifier.md`, `critic.md`, `code-reviewer.md`, `debugger.md`, `tracer.md`, `security-reviewer.md`, `explore.md`, `test-engineer.md` | Role prompts. `orchestrator.md` is the entry point; it routes work to the other roles. Most role agents are read-only; `debugger`, `implementer`, `orchestrator`, and `test-engineer` may update files only when the requested workflow requires it, while `qa-tester` may run bounded validation commands without editing files. |
 | Skills | `skills/*/SKILL.md` (14 total; see Skills table below) | Workflow recipes the user or agent invokes by name. Invoke by name from agent prompts or user input. |
 | Workflow state | `.cursor/state/workflow-state.schema.json`, `.cursor/state/workflow-state.example.json`, `.cursor/state/README.md` | The shared state contract; file-backed, human-visible, opt-in. |
-| State writer (agent-callable) | `mcp/cursor-state-bridge/` MCP tools (`state_init`, `state_set_phase`, `state_update_acceptance_criterion`, `state_record_failure`, `state_history_append`) | Sole agent-callable writer of `.cursor/state/workflow-state.json` (and per-task variants under `docs/plans/<task-id>/`). Routes through the shared `file_lock` from `src/oh_my_cursor/workflow_state/locking.py`. Opt-in install via `scripts/install-local-plugin.sh --with-mcp`. |
-| State writer (developer-only fallback) | `scripts/workflow-state.py` (`.cursor/state/workflow-state.py` compatibility shim in installed payloads) | CLI wrapper over the packaged workflow-state API for developer terminals. Calls the same `init_state` / `set_state` / ... library functions as the bridge so concurrent CLI and bridge writes serialise on the same lock. Not invoked from agent prompts or skills. |
-| Validators | `scripts/validate-workflow-state.py`, `scripts/validate-cursor-workflow-artifacts.py`, `scripts/smoke-cursor-workflow-artifacts.sh`, `scripts/validate-plugin-structure.sh`, `scripts/check-local-plugin-install.sh`, `scripts/install-local-plugin.sh` | Make the orchestration locally provable and keep the install minimal. |
+| State writer (agent-callable) | `mcp/cursor-state-bridge/` MCP tools (`state_init`, `state_set_phase`, `state_update_acceptance_criterion`, `state_record_failure`, `state_history_append`) | Sole agent-callable writer of `.cursor/state/workflow-state.json` (and per-task variants under `docs/plans/<task-id>/`). Routes through the shared `file_lock` from `src/oh_my_cursor/workflow_state/locking.ts`. Opt-in install via `scripts/install-local-plugin.ts --with-mcp`. |
+| State writer (developer-only fallback) | `scripts/workflow-state.ts` (`.cursor/state/workflow-state.ts` compatibility shim in installed payloads) | CLI wrapper over the packaged workflow-state API for developer terminals. Calls the same `init_state` / `set_state` / ... library functions as the bridge so concurrent CLI and bridge writes serialise on the same lock. Not invoked from agent prompts or skills. |
+| Validators | `scripts/validate-workflow-state.ts`, `scripts/validate-cursor-workflow-artifacts.ts`, `scripts/smoke-cursor-workflow-artifacts.ts`, `scripts/validate-plugin-structure.ts`, `scripts/check-local-plugin-install.ts`, `scripts/install-local-plugin.ts` | Make the orchestration locally provable and keep the install minimal. |
 
 ## How a task flows
 
 1. **Intake.** Create
    `docs/plans/<task-id>/workflow-state.json` from the example or with
-   `python3 scripts/workflow-state.py init docs/plans/<task-id>/workflow-state.json --task-id <task-id>` in the repo. Validate with
-   `python3 scripts/validate-workflow-state.py <path>`.
+   `node --experimental-strip-types scripts/workflow-state.ts init docs/plans/<task-id>/workflow-state.json --task-id <task-id>` in the repo. Validate with
+   `node --experimental-strip-types scripts/validate-workflow-state.ts <path>`.
 2. **Research.** Invoke `agents/researcher.md` (read-only). Capture
    findings into the state's `next_action` and notes; do not start coding.
 3. **Plan.** Invoke `agents/planner.md` or the `plan` skill. For broad or high-risk changes, invoke `agents/architect.md` before execution to check boundaries and invariants. Lock in
@@ -67,7 +67,7 @@ Each phase advance is an action on a schema-bounded JSON document that follows
    plus optional `security-review` skill) run against the changes. Verdicts are
    mapped to a shared loop gate (`pass`, `comment`, `block`) as defined in
    `skills/iterate-loop/SKILL.md`.
-7. **Stop.** When you stop the session, the `stop-gate.py` hook reads the
+7. **Stop.** When you stop the session, the `stop-gate.ts` hook reads the
    active workflow-state file (via the `OH_MY_CURSOR_WORKFLOW_STATE` env var
    or a `workflow_state` field in the stop event) and surfaces any failed or
    pending acceptance criteria so closure is intentional.
@@ -79,7 +79,7 @@ loop without turning the plugin itself into a background runner. Resolve the
 local CLI model from the user's Cursor config instead of hardcoding a model ID:
 
 ```bash
-MODEL="$(python3 scripts/resolve-cursor-model.py)"
+MODEL="$(node --experimental-strip-types scripts/resolve-cursor-model.ts)"
 ```
 
 If a particular model is required for a runtime smoke, override with
@@ -138,22 +138,22 @@ Workflow status is written only by an explicit, structured call. Agents and
 skills route through the `cursor-state-bridge` MCP tools (`state_init`,
 `state_set_phase`, `state_update_acceptance_criterion`,
 `state_record_failure`, `state_history_append`); developer terminals can
-also use the CLI wrapper at `scripts/workflow-state.py`. Both paths
+also use the CLI wrapper at `scripts/workflow-state.ts`. Both paths
 share the same library and the same `file_lock`. Hooks do not mutate
 state. Typical write points (agent-callable form via the bridge):
 
 - task start: `state_init { task_id, title?, phase?, ... }`
 - phase advance: `state_set_phase { task_id, phase: "verify", status: "in_progress" }`
-- acceptance update: `state_update_acceptance_criterion { task_id, ac_id: "AC-001", status: "passed", evidence: "scripts/check-local-plugin-install.sh" }`
+- acceptance update: `state_update_acceptance_criterion { task_id, ac_id: "AC-001", status: "passed", evidence: "scripts/check-local-plugin-install.ts" }`
 - failure record: `state_record_failure { task_id, type: "fixable", message: "..." }`
 - history note: `state_history_append { task_id, note: "..." }`
 
 Developer-only equivalents (not for agents/skills):
 
-- task start: `python3 scripts/workflow-state.py init ...`
-- phase advance: `python3 scripts/workflow-state.py set ... --phase verify --status in_progress`
-- acceptance update: `python3 scripts/workflow-state.py ac ... --id AC-001 --status passed --evidence scripts/check-local-plugin-install.sh`
-- failure record: `python3 scripts/workflow-state.py fail ... --type fixable --message "..."`
+- task start: `node --experimental-strip-types scripts/workflow-state.ts init ...`
+- phase advance: `node --experimental-strip-types scripts/workflow-state.ts set ... --phase verify --status in_progress`
+- acceptance update: `node --experimental-strip-types scripts/workflow-state.ts ac ... --id AC-001 --status passed --evidence scripts/check-local-plugin-install.ts`
+- failure record: `node --experimental-strip-types scripts/workflow-state.ts fail ... --type fixable --message "..."`
 
 ## Skills Enumeration (15 repo-owned, checked-in-artifact)
 
@@ -179,20 +179,20 @@ Developer-only equivalents (not for agents/skills):
 
 | Hook | File | Primary Skill/Agent | Condition | Phases |
 | --- | --- | --- | --- | --- |
-| sessionStart | session-bootstrap.py | phase-controller | Surfaces session/workspace context for phase-controller | any |
-| sessionEnd | session-summary.py | orchestrator | Summarizes session shutdown state | done/blocked |
-| beforeSubmitPrompt | prompt-router.py | orchestrator | Surfaces matching skill, agent, and phase hints | intake |
-| preToolUse | tool-guard.py | orchestrator | Checks tool allowlist per active role | any |
-| postToolUse | state-watcher.py | orchestrator | Revalidates workflow-state after explicit state writes | any |
-| postToolUseFailure | failure-router.py | debugger or tracer | Suggests diagnosis routes after tool failure | failed |
-| subagentStart | subagent-bootstrap.py | orchestrator | Matches subagent role scope to checked-in prompts | any |
-| subagentStop | subagent-summary.py | orchestrator | Observes subagent completion summary | any |
-| beforeShellExecution | shell-guard.py | orchestrator | Checks shell commands for safety | any |
-| afterShellExecution | shell-debrief.py | orchestrator | Summarizes shell execution outcome | any |
-| beforeReadFile | read-advisor.py | orchestrator | Advises on file read scope | research/review |
-| afterFileEdit | claim-guard.py | verifier or critic | Checks edited files against claim boundaries | execute/verify/review |
-| preCompact | compact-reminder.py | orchestrator | Reminds user to verify acceptance criteria before compact | verify/review |
-| stop | stop-gate.py | orchestrator | Final validation: no pending/failed criteria before stop | done |
+| sessionStart | session-bootstrap.ts | phase-controller | Surfaces session/workspace context for phase-controller | any |
+| sessionEnd | session-summary.ts | orchestrator | Summarizes session shutdown state | done/blocked |
+| beforeSubmitPrompt | prompt-router.ts | orchestrator | Surfaces matching skill, agent, and phase hints | intake |
+| preToolUse | tool-guard.ts | orchestrator | Checks tool allowlist per active role | any |
+| postToolUse | state-watcher.ts | orchestrator | Revalidates workflow-state after explicit state writes | any |
+| postToolUseFailure | failure-router.ts | debugger or tracer | Suggests diagnosis routes after tool failure | failed |
+| subagentStart | subagent-bootstrap.ts | orchestrator | Matches subagent role scope to checked-in prompts | any |
+| subagentStop | subagent-summary.ts | orchestrator | Observes subagent completion summary | any |
+| beforeShellExecution | shell-guard.ts | orchestrator | Checks shell commands for safety | any |
+| afterShellExecution | shell-debrief.ts | orchestrator | Summarizes shell execution outcome | any |
+| beforeReadFile | read-advisor.ts | orchestrator | Advises on file read scope | research/review |
+| afterFileEdit | claim-guard.ts | verifier or critic | Checks edited files against claim boundaries | execute/verify/review |
+| preCompact | compact-reminder.ts | orchestrator | Reminds user to verify acceptance criteria before compact | verify/review |
+| stop | stop-gate.ts | orchestrator | Final validation: no pending/failed criteria before stop | done |
 
 ## Governable Agent Start Contract
 
@@ -211,11 +211,11 @@ Checked-in agent files are governed as a role registry:
 - `subagentStop` clears the active role and records an observational summary
   without consuming the follow-up loop budget.
 
-`scripts/validate-cursor-workflow-artifacts.py` is the registry gate. It fails
+`scripts/validate-cursor-workflow-artifacts.ts` is the registry gate. It fails
 if a role file is missing, renamed without matching frontmatter, pinned to a
 non-`auto` model, loses the `[OMCS]` prefix, or drifts from the expected
-readonly policy. `scripts/validate-agent-model-policy.py` adds the model-policy
-gate, and `scripts/smoke-agent-model-suitability.sh` provides an optional
+readonly policy. `scripts/validate-agent-model-policy.ts` adds the model-policy
+gate, and `scripts/smoke-agent-model-suitability.ts` provides an optional
 environment-gated prompt smoke for role/model suitability. The smoke checks a
 small representative role sample by default; use `--all-roles` only for a longer
 benchmark run. Cursor still owns the actual decision to launch a subagent; this
@@ -235,10 +235,10 @@ launch.
 ## Local validation
 
 ```bash
-python3 scripts/validate-workflow-state.py
-python3 scripts/validate-cursor-workflow-artifacts.py
-./scripts/smoke-cursor-workflow-artifacts.sh
-./scripts/check-local-plugin-install.sh
+node --experimental-strip-types scripts/validate-workflow-state.ts
+node --experimental-strip-types scripts/validate-cursor-workflow-artifacts.ts
+node --experimental-strip-types scripts/smoke-cursor-workflow-artifacts.ts
+node --experimental-strip-types scripts/check-local-plugin-install.ts
 ```
 
 These four commands are enough to confirm the orchestration surface is

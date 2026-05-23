@@ -68,7 +68,7 @@ function resolveBridgeCall(toolName: string, payload: any): [string, string] {
     }
   }
   const taskId = typeof argumentsObj?.task_id === 'string' ? argumentsObj.task_id : '';
-  if (taskId) {
+  if (taskId && /^[a-zA-Z0-9_-]+$/.test(taskId)) {
     return [inner, path.join(WORKSPACE_ROOT, 'docs', 'plans', taskId, 'workflow-state.json')];
   }
   return [inner, DEFAULT_STATE_PATH];
