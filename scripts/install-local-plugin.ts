@@ -92,7 +92,12 @@ function shouldCopy(relPath: string, withMcpOption: boolean): boolean {
     parts.includes('.git') ||
     parts.includes('.omc') ||
     parts.includes('.omcs') ||
-    parts.includes('node_modules')
+    parts.includes('node_modules') ||
+    parts.includes('benchmark') ||
+    parts.includes('apps') ||
+    parts.includes('docs') ||
+    parts.includes('scripts') ||
+    parts.includes('tests')
   ) {
     return false;
   }
