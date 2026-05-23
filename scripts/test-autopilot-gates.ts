@@ -44,6 +44,7 @@ function runAutopilot(statePath: string, stepLimit: number): { success: boolean;
 }
 
 try {
+  process.env.OH_MY_CURSOR_MOCK_AGENT = '1';
   console.log('Running Consensus Gate & Bounded Autopilot tests...');
 
   // --- PART 1: Test Consensus Gate ---
@@ -168,6 +169,51 @@ try {
   }
   if (fs.existsSync(CANCEL_FILE)) {
     throw new Error('Scenario 2C failed: cancel token file was not consumed/deleted');
+  }
+
+  // Scenario 2D: Task failure triggers rollback execution
+  const tempRollbackFile = path.join(ROOT, 'temp_rolled_back.txt');
+  if (fs.existsSync(tempRollbackFile)) {
+    try { fs.unlinkSync(tempRollbackFile); } catch {}
+  }
+  
+  fs.writeFileSync(TEMP_STATE, JSON.stringify({
+    task_id: "T-TEST",
+    phase: "execute",
+    status: "in_progress",
+    history: [],
+    tasks: [
+      { 
+        id: "T-1", 
+        status: "pending", 
+        role: "verifier", 
+        prompt: "verify failure trigger",
+        verification_command: "node -e 'process.exit(1)'",
+        rollback_plan: `node -e 'const fs = require(\"fs\"); fs.writeFileSync(\"${tempRollbackFile.replace(/\\/g, '\\\\')}\", \"rolled back\", \"utf-8\");'`
+      }
+    ]
+  }, null, 2));
+
+  apiRes = runAutopilot(TEMP_STATE, 5);
+  console.log('Scenario 2D (Rollback Trigger) Success:', !apiRes.success);
+  console.log('Rollback File Exists:', fs.existsSync(tempRollbackFile));
+  
+  if (apiRes.success) {
+    throw new Error('Scenario 2D failed: expected autopilot to fail, but it returned success');
+  }
+  if (!fs.existsSync(tempRollbackFile)) {
+    throw new Error('Scenario 2D failed: rollback command did not execute/create temp file');
+  }
+  
+  if (fs.existsSync(tempRollbackFile)) {
+    try { fs.unlinkSync(tempRollbackFile); } catch {}
+  }
+
+  const resultingState = JSON.parse(fs.readFileSync(TEMP_STATE, 'utf-8'));
+  const rollbackLogged = resultingState.history.some((h: any) => h.note.includes('Executed rollback plan'));
+  console.log('Rollback Logged in History:', rollbackLogged);
+  if (!rollbackLogged) {
+    throw new Error('Scenario 2D failed: rollback action was not logged in state history');
   }
 
   console.log('All Consensus Gate & Autopilot tests passed successfully!');

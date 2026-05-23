@@ -95,6 +95,41 @@ function updateWorkflowStatus(filePath: string, phase: string, status: string, n
   });
 }
 
+function executeRollback(task: Task, statePath: string, phase: string) {
+  if (task.rollback_plan) {
+    console.log(`ok: Initiating rollback plan for task ${task.id}: ${task.rollback_plan}`);
+    const logDir = resolveConfig(ROOT).logDir;
+    fs.mkdirSync(logDir, { recursive: true });
+    const logFile = path.join(logDir, `rollback-${task.id}.log`);
+    
+    try {
+      const output = execSync(task.rollback_plan, { cwd: ROOT, encoding: 'utf-8' });
+      fs.writeFileSync(logFile, output, 'utf-8');
+      console.log(`ok: Rollback completed successfully for task ${task.id}. Logs written to ${logFile}`);
+      
+      updateWorkflowStatus(
+        statePath,
+        phase,
+        'blocked',
+        `Task ${task.id} failed. Executed rollback plan: ${task.rollback_plan}`
+      );
+    } catch (err: any) {
+      const errorMsg = err.stdout || err.message || String(err);
+      fs.writeFileSync(logFile, errorMsg, 'utf-8');
+      console.error(`FAIL: Rollback command failed for task ${task.id}: ${err.message}`);
+      
+      updateWorkflowStatus(
+        statePath,
+        phase,
+        'blocked',
+        `Task ${task.id} failed. Rollback execution failed: ${task.rollback_plan}`
+      );
+    }
+  } else {
+    updateWorkflowStatus(statePath, phase, 'blocked', `Task ${task.id} failed.`);
+  }
+}
+
 function checkCancelToken(): boolean {
   const cancelDir = path.join(ROOT, '.omcs');
   const cancelFile = path.join(cancelDir, 'cancel');
@@ -248,6 +283,14 @@ async function main() {
       const prompt = `You are acting as the specialized '${nextTask.role}' agent. Perform the following task: ${nextTask.prompt}`;
 
       const code = await new Promise<number>((resolve) => {
+        if (process.env.OH_MY_CURSOR_MOCK_AGENT === '1') {
+          console.log(`ok: Mock agent execution for task ${nextTask.id}`);
+          setTimeout(() => {
+            resolve(0);
+          }, 50);
+          return;
+        }
+
         const child = spawn('cursor-agent', [
           '-p',
           '--output-format', 'text',
@@ -282,14 +325,14 @@ async function main() {
           } catch (err: any) {
             console.error(`FAIL: Verification failed for task ${nextTask.id}: ${err.message}`);
             updateTaskStatus(statePath, nextTask.id, 'failed', `Verification failed for task ${nextTask.id}`);
-            updateWorkflowStatus(statePath, phase, 'blocked', `Task ${nextTask.id} verification failed`);
+            executeRollback(nextTask, statePath, phase);
             process.exit(1);
           }
         }
       } else {
         console.error(`FAIL: Task ${nextTask.id} failed with exit code ${code}.`);
         updateTaskStatus(statePath, nextTask.id, 'failed', `Task ${nextTask.id} execution failed`);
-        updateWorkflowStatus(statePath, phase, 'blocked', `Task ${nextTask.id} failed`);
+        executeRollback(nextTask, statePath, phase);
         process.exit(1);
       }
     } else {
@@ -302,6 +345,14 @@ async function main() {
       const prompt = `You are acting as the specialized '${currentRole}' agent. Resolve/advance phase '${phase}' for task '${state.task_id || 'unspecified'}'.`;
 
       const code = await new Promise<number>((resolve) => {
+        if (process.env.OH_MY_CURSOR_MOCK_AGENT === '1') {
+          console.log(`ok: Mock agent execution for phase transition: ${currentRole}`);
+          setTimeout(() => {
+            resolve(0);
+          }, 50);
+          return;
+        }
+
         const child = spawn('cursor-agent', [
           '-p',
           '--output-format', 'text',
