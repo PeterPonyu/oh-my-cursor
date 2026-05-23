@@ -106,3 +106,12 @@ All tools speak JSON-RPC 2.0 over stdio. No network listener. Runs only when exp
 **Token-based Auth** (optional): Not implemented in baseline. Future scope: JWTs for remote agent invocation.
 
 **Validator Integration**: `scripts/validate-mcp-server-structure.ts` proves package well-formedness. Smoke test: `scripts/smoke-mcp-cursor-state-bridge.ts` (gated by `RUN_MCP_BRIDGE_SMOKE=1`).
+
+## Third-party recipe references (Access date: 2026-05-23)
+
+| Reference | Purpose in Recipes | Link |
+| --- | --- | --- |
+| Exa MCP Server | Semantic web search integration details | [exa/mcp-server](https://github.com/exa-labs/exa-mcp-server) |
+| Context7 MCP Server | Documentation search integration details | [context7/mcp-server](https://github.com/context7/mcp-server) |
+| Grep.app MCP Server | GitHub public code search integration | [grep-app/mcp-server](https://github.com/grep-app/mcp-server) |
+| AST-Grep | Structural search and refactoring patterns | [ast-grep](https://ast-grep.github.io/) |

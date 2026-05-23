@@ -48,6 +48,13 @@ background daemon.
 6. **Stop cleanly.** Before final delivery, ensure `stop-gate.py` would see no
    pending or failed criteria.
 
+## Virtual-Team Orchestration & Safety Guidelines
+
+To coordinate virtual-team lanes effectively:
+- **Dependency Flow**: Validate that tasks are executed in sequence based on their defined dependencies. Do not route to `implementer` if prerequisite tasks are incomplete or unverified.
+- **Safety Gate Review**: If any task touches security-sensitive areas (such as lifecycle hooks in `hooks/`, local plugin config in `.cursor-plugin/`, or auth patterns), you must route to `security-reviewer` for validation prior to verification.
+- **Error & Rollback Handling**: If a test regression or tool failure is reported via `state_record_failure`, immediately suspend forward execution and route to `debugger` or `tracer` to establish a clean rollback or fix plan.
+
 ## Output
 
 Return a concise status block:

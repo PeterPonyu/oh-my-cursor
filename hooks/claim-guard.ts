@@ -1,3 +1,4 @@
+import * as crypto from 'node:crypto';
 import * as fs from 'node:fs';
 import * as path from 'node:path';
 import * as process from 'node:process';
@@ -28,6 +29,12 @@ const EXCLUDED_PREFIXES = [
 ];
 
 const PUBLIC_SUFFIXES = new Set(['.md', '.mdc', '.markdown', '.yaml', '.yml', '.tsx', '.ts', '.jsx', '.js']);
+
+const SAFETY_SUFFIXES = new Set([
+  '.ts', '.tsx', '.js', '.jsx', '.json', '.md', '.mdc', '.markdown',
+  '.yaml', '.yml', '.css', '.html', '.sh', '.py', '.txt', '.jsonld', '.jsonc',
+  '.c', '.cpp', '.h', '.hpp', '.go', '.rs', '.java', '.kt', '.rb', '.php'
+]);
 
 const LANGUAGE_PATTERNS: Record<string, RegExp> = {
   'legacy-short-name-b': /(?<![A-Za-z0-9])omx(?![A-Za-z0-9])/i,
@@ -188,6 +195,130 @@ function scanFile(relPath: string): any[] {
   }
 }
 
+function isNontrivialLine(line: string): boolean {
+  const trimmed = line.trim();
+  if (!trimmed) return false;
+  if (trimmed.length < 6) return false;
+  
+  if (trimmed.startsWith('//') || trimmed.startsWith('#') || trimmed.startsWith('*') || trimmed.startsWith('/*')) {
+    return false;
+  }
+  
+  const singleChars = /^[{}()\[\];,]+$/;
+  if (singleChars.test(trimmed)) return false;
+  
+  if (trimmed.startsWith('import ') || trimmed.startsWith('export ') || (trimmed.startsWith('const ') && trimmed.includes('require('))) {
+    return false;
+  }
+  
+  return true;
+}
+
+function scanFileSafety(relPath: string): any[] {
+  const issues: any[] = [];
+  try {
+    const fullPath = path.resolve(WORKSPACE_ROOT, relPath);
+    if (!fs.existsSync(fullPath) || !fs.statSync(fullPath).isFile()) {
+      return [];
+    }
+    
+    const ext = path.extname(relPath).toLowerCase();
+    if (!SAFETY_SUFFIXES.has(ext)) {
+      return [];
+    }
+    
+    const content = fs.readFileSync(fullPath, 'utf-8');
+    const lines = content.split(/\r?\n/);
+    
+    // 1. Git conflict markers
+    for (let lineNo = 1; lineNo <= lines.length; lineNo++) {
+      const line = lines[lineNo - 1];
+      if (line.startsWith('<<<<<<<') || line.startsWith('>>>>>>>')) {
+        issues.push({
+          file: relPath.replace(/\\/g, '/'),
+          line: lineNo,
+          severity: 'severe',
+          rule: 'safety-conflict-marker',
+          message: `Git conflict marker detected: ${line.trim()}`,
+        });
+      }
+    }
+
+    // 2. Duplicate adjacent lines
+    for (let lineNo = 2; lineNo <= lines.length; lineNo++) {
+      const current = lines[lineNo - 1].trim();
+      const previous = lines[lineNo - 2].trim();
+      if (current === previous && isNontrivialLine(current)) {
+        issues.push({
+          file: relPath.replace(/\\/g, '/'),
+          line: lineNo,
+          severity: 'warning',
+          rule: 'safety-duplicate-line',
+          message: `Adjacent duplicate line detected: "${current}"`,
+        });
+      }
+    }
+
+    // 3. Duplicate contiguous blocks (hashing sliding windows of N lines)
+    const nonTrivial: { lineNo: number; text: string }[] = [];
+    for (let i = 0; i < lines.length; i++) {
+      const lineText = lines[i].trim();
+      if (isNontrivialLine(lineText)) {
+        nonTrivial.push({ lineNo: i + 1, text: lineText });
+      }
+    }
+
+    const M = 4;
+    if (nonTrivial.length >= M * 2) {
+      const seenBlocks = new Map<string, number[]>();
+      
+      for (let i = 0; i <= nonTrivial.length - M; i++) {
+        const block = nonTrivial.slice(i, i + M);
+        const jointText = block.map(item => item.text).join('\n');
+        const hash = crypto.createHash('sha256').update(jointText).digest('hex');
+        
+        const indices = seenBlocks.get(hash);
+        if (indices) {
+          indices.push(i);
+        } else {
+          seenBlocks.set(hash, [i]);
+        }
+      }
+
+      const reportedStartLines = new Set<number>();
+      for (const [hash, indices] of seenBlocks.entries()) {
+        if (indices.length > 1) {
+          for (let k = 1; k < indices.length; k++) {
+            const prevIndex = indices[0];
+            const currIndex = indices[k];
+            
+            if (currIndex - prevIndex >= M) {
+              const startLine1 = nonTrivial[prevIndex].lineNo;
+              const endLine1 = nonTrivial[prevIndex + M - 1].lineNo;
+              const startLine2 = nonTrivial[currIndex].lineNo;
+              const endLine2 = nonTrivial[currIndex + M - 1].lineNo;
+              
+              if (!reportedStartLines.has(startLine2)) {
+                reportedStartLines.add(startLine2);
+                issues.push({
+                  file: relPath.replace(/\\/g, '/'),
+                  line: startLine2,
+                  severity: 'warning',
+                  rule: 'safety-duplicate-block',
+                  message: `Duplicate code block detected: lines ${startLine2}-${endLine2} match lines ${startLine1}-${endLine1}. Verify edit alignment.`,
+                });
+              }
+            }
+          }
+        }
+      }
+    }
+  } catch {
+    // fail-safe
+  }
+  return issues;
+}
+
 function main(): number {
   const payload = readPayload();
   if (payload?._invalid_json) {
@@ -214,6 +345,7 @@ function main(): number {
   const issues: any[] = [];
   for (const relPath of relPaths) {
     issues.push(...scanFile(relPath));
+    issues.push(...scanFileSafety(relPath));
   }
 
   const severeCount = issues.filter(issue => issue.severity === 'severe').length;
@@ -230,11 +362,11 @@ function main(): number {
   };
 
   if (severeCount > 0) {
-    output.message = 'Severe unsupported runtime claim detected; review before continuing.';
+    output.message = 'Severe unsupported runtime claim or safety issue detected; review before continuing.';
   } else if (warningCount > 0) {
-    output.message = 'Public wording warning detected; keep product posture artifact-backed.';
+    output.message = 'Public wording warning or code safety issue detected; review edits.';
   } else {
-    output.message = 'Claim/proof audit passed.';
+    output.message = 'Claim/proof and safety audit passed.';
   }
 
   trace({
