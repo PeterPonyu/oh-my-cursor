@@ -101,6 +101,7 @@ function main() {
     'scripts/smoke-agent-model-suitability.ts',
     'scripts/verify-backbone.ts',
     'scripts/run-team-coordinator.ts',
+    'scripts/refine-branding.ts',
   ];
 
   for (const f of requiredPaths) {

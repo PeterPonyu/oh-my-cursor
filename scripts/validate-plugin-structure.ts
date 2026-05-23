@@ -97,6 +97,7 @@ function main() {
     'scripts/validate-workflow-state.ts',
     'scripts/workflow-state.ts',
     'scripts/run-team-coordinator.ts',
+    'scripts/refine-branding.ts',
   ];
 
   for (const f of required) {

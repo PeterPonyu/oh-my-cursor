@@ -87,6 +87,7 @@ const required = [
   'scripts/validate-agent-model-policy.ts',
   'scripts/smoke-agent-model-suitability.ts',
   'scripts/run-team-coordinator.ts',
+  'scripts/refine-branding.ts',
 ];
 
 function main() {
