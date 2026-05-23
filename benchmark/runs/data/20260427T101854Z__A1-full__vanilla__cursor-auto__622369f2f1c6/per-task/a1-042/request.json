@@ -1,0 +1,6 @@
+{
+  "backend": "cursor_cli",
+  "model": "cursor/auto",
+  "prompt": "Design a loop that drives a TypeScript repo from 312 type errors to 0 across many iterations, with story-level acceptance criteria per error cluster. Required: PRD shape with task-specific (not generic) acceptance criteria, fresh verification per iteration, idempotence under partial fixes, stop condition for both success and fundamental issues, max-iter cap, and a separate reviewer pass before declaring done.",
+  "workdir": "/tmp/cursor-vanilla-m8jr3pc3"
+}

@@ -1,0 +1,12 @@
+{
+  "model": "anthropic/claude-haiku-4-5-20251001",
+  "tokens": {
+    "input": 10,
+    "output": 1268,
+    "cache_read": 31053,
+    "cache_write": 3686
+  },
+  "cost_usd": 0.014063,
+  "wallclock_ms": 16344,
+  "stop_reason": "end_turn"
+}

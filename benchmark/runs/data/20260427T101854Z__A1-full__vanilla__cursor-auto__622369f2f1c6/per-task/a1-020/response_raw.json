@@ -1,0 +1,16 @@
+{
+  "type": "result",
+  "subtype": "success",
+  "is_error": false,
+  "duration_ms": 13578,
+  "duration_api_ms": 13578,
+  "result": "| OWASP Class | Severity | Attack Scenario | Line Cited | Remediation |\n|---|---|---|---|---|\n| **A02:2021 – Cryptographic Failures** (CWE-327: Broken/Risky Crypto, CWE-916: Insufficient Password Hashing) | **High** | If the user table is leaked (SQLi, backup exposure, insider, logs), attacker can crack `md5` password hashes very quickly using GPUs/rainbow tables. Because there is no per-password salt and MD5 is fast, reused/common passwords fall almost immediately, enabling account takeover and credential stuffing elsewhere. | `3` | Replace `hashlib.md5` with a password hashing KDF designed for credentials: **Argon2id** (preferred), or **bcrypt/scrypt/PBKDF2** with strong cost settings. Use a unique random salt per password (handled by modern libs), optionally add a server-side pepper, and store algorithm+params with the hash for future rehashing. |\n\nQuick secure Python direction (example): use `argon2-cffi` (`PasswordHasher`) and verify with constant-time library APIs rather than manual hash comparisons.",
+  "session_id": "c6c72354-7631-4ac1-9017-2b999bb315f5",
+  "request_id": "49ffb869-bd68-4928-b19b-e136524ca1c0",
+  "usage": {
+    "inputTokens": 895,
+    "outputTokens": 336,
+    "cacheReadTokens": 11776,
+    "cacheWriteTokens": 0
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "type": "result",
+  "subtype": "success",
+  "is_error": false,
+  "duration_ms": 8010,
+  "duration_api_ms": 8010,
+  "result": "Most likely causes (highest base-rate first), with the fastest single check for each:\n\n1. **Pytest is slow/hanging during test collection (import-time side effects).**  \n   Common when a module does network calls, DB connections, heavy startup, or blocking code at import time.\n   - **Fast diagnostic:** `pytest --collect-only -vv -s`\n\n2. **A plugin is blocking startup/collection (autoloaded third-party plugin conflict).**  \n   Very common in environments with many installed plugins (`pytest-*` packages).\n   - **Fast diagnostic:** `PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 pytest -vv -s`\n\n3. **A test (often async/thread/process) deadlocks or waits forever.**  \n   Typical with unjoined threads, hanging fixtures, event-loop misuse, or subprocess waits.\n   - **Fast diagnostic:** `pytest -vv -s --maxfail=1 --durations=10`\n\nIf you want, I can also give a 60-second triage sequence to run these in order and interpret results quickly.",
+  "session_id": "17275742-b355-42c9-b880-13f57c5e79a4",
+  "request_id": "f57fb6dd-6d1e-47de-a8ad-170f0b645f1e",
+  "usage": {
+    "inputTokens": 859,
+    "outputTokens": 254,
+    "cacheReadTokens": 11776,
+    "cacheWriteTokens": 0
+  }
+}

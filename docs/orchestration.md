@@ -155,7 +155,7 @@ Developer-only equivalents (not for agents/skills):
 - acceptance update: `python3 scripts/workflow-state.py ac ... --id AC-001 --status passed --evidence scripts/check-local-plugin-install.sh`
 - failure record: `python3 scripts/workflow-state.py fail ... --type fixable --message "..."`
 
-## Skills Enumeration (14 repo-owned, checked-in-artifact)
+## Skills Enumeration (15 repo-owned, checked-in-artifact)
 
 | Skill | Governance | Primary MCP Tools | Invoked When | Phase(s) |
 | --- | --- | --- | --- | --- |
@@ -171,6 +171,7 @@ Developer-only equivalents (not for agents/skills):
 | plan | repo-owned, checked-in-artifact | None | User requests planning or orchestrator routes to plan phase | plan |
 | review | repo-owned, checked-in-artifact | None | Orchestrator routes to review phase | review |
 | security-review | repo-owned, checked-in-artifact | None | Security review requested or auth/secrets/shell changes | review |
+| team-controller | repo-owned, checked-in-artifact | None | Orchestrating concurrent agent execution lanes across independent tasks | execute/verify |
 | trace | repo-owned, checked-in-artifact | state_read | Causal investigation or flow tracing requested | blocked/failed |
 | verify | repo-owned, checked-in-artifact | state_update_acceptance_criterion, state_read | Acceptance criteria validation requested | verify |
 

@@ -1,0 +1,16 @@
+{
+  "type": "result",
+  "subtype": "success",
+  "is_error": false,
+  "duration_ms": 12250,
+  "duration_api_ms": 12250,
+  "result": "- **High** — `4-5, 8-9: Cache lookups can fail for logically same user`\n  - **Issue:** `get()` and `put()` create new `User` instances as keys, but `User` uses default identity-based `equals/hashCode`.\n  - **Root cause:** `HashMap` key matching depends on `equals/hashCode`; without overrides, two `User(userId, region)` objects are never equal unless same instance.\n  - **Smallest fix:** Implement `equals()` and `hashCode()` in `User` using `userId` and `region` (or switch key type to a stable value key like concatenated string/record key).\n\n- **Medium** — `5, 9: Stored byte[] can be mutated externally`\n  - **Issue:** `put()` stores the caller’s array reference; `get()` returns internal array reference. Callers can mutate cache contents accidentally.\n  - **Root cause:** `byte[]` is mutable and references are shared directly.\n  - **Smallest fix:** Defensive copy on both boundaries:\n    - in `put`: `store.put(k, Arrays.copyOf(data, data.length))`\n    - in `get`: return `v == null ? null : Arrays.copyOf(v, v.length)`",
+  "session_id": "18d9063e-31dd-4352-a724-029b616682e0",
+  "request_id": "c0f4b6c0-78ac-4d1a-91a3-2cc504fbb73d",
+  "usage": {
+    "inputTokens": 976,
+    "outputTokens": 368,
+    "cacheReadTokens": 11776,
+    "cacheWriteTokens": 0
+  }
+}

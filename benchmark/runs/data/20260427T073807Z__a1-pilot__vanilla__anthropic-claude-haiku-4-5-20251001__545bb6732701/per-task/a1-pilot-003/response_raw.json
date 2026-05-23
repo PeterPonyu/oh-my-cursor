@@ -1,0 +1,59 @@
+{
+  "type": "result",
+  "subtype": "success",
+  "is_error": false,
+  "api_error_status": null,
+  "duration_ms": 13534,
+  "duration_api_ms": 13422,
+  "num_turns": 1,
+  "result": "# Top 3 Root Causes of Pytest Hanging (Ranked by Base Rate)\n\n## 1. **Stdin/Input Waiting** (~45% base rate)\nTest code or an imported module is reading from stdin, waiting for user input, or a breakpoint/debugger is active.\n\n**Fastest diagnostic:**\n```bash\ntimeout 5 pytest -x --tb=line < /dev/null 2>&1 | head -50\n```\nIf this unblocks immediately, stdin was the culprit.\n\n---\n\n## 2. **Infinite Loop or Deadlock in Test Code** (~30% base rate)\nTest function or fixture contains an infinite loop, thread deadlock, or async/await deadlock.\n\n**Fastest diagnostic:**\n```bash\ntimeout 10 pytest -v --tb=short 2>&1 &\nsleep 6 && kill -QUIT $! 2>/dev/null; wait\n```\nTimeout kills it after 10s; `QUIT` signal dumps Python stack trace showing where it's stuck.\n\n---\n\n## 3. **Subprocess or External Service Blocking** (~20% base rate)\nTest spawns a subprocess/server that never completes, or test waits for unreachable external service (database, API, etc.).\n\n**Fastest diagnostic:**\n```bash\ntimeout 10 pytest -v 2>&1 &\nsleep 2 && lsof -p $(pgrep -f 'pytest') | grep -E 'sock|TCP|PIPE'\nwait\n```\nShows open sockets, pipes, or file handles while pytest hangs—reveals what it's blocked on.\n\n---\n\n## Quick Triage Flow\n\nRun these in order (each takes <15s):\n\n1. `timeout 5 pytest -x < /dev/null` → hangs? → **Not stdin**\n2. `timeout 10 pytest -v 2>&1 | tail -20` → hangs? → Run the stack-dump command for #2\n3. `timeout 10 pytest -v & sleep 2 && lsof -p $(pgrep pytest)` → reveals process state for #3\n\nWhich symptom matches—any output before hang, or truly silent?",
+  "stop_reason": "end_turn",
+  "session_id": "f852ea11-8c62-4e1d-b93d-a4a0621e46f8",
+  "total_cost_usd": 0.0140628,
+  "usage": {
+    "input_tokens": 10,
+    "cache_creation_input_tokens": 3686,
+    "cache_read_input_tokens": 31053,
+    "output_tokens": 1268,
+    "server_tool_use": {
+      "web_search_requests": 0,
+      "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+      "ephemeral_1h_input_tokens": 3686,
+      "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "",
+    "iterations": [
+      {
+        "input_tokens": 10,
+        "output_tokens": 1268,
+        "cache_read_input_tokens": 31053,
+        "cache_creation_input_tokens": 3686,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 3686
+        },
+        "type": "message"
+      }
+    ],
+    "speed": "standard"
+  },
+  "modelUsage": {
+    "claude-haiku-4-5-20251001": {
+      "inputTokens": 10,
+      "outputTokens": 1268,
+      "cacheReadInputTokens": 31053,
+      "cacheCreationInputTokens": 3686,
+      "webSearchRequests": 0,
+      "costUSD": 0.0140628,
+      "contextWindow": 200000,
+      "maxOutputTokens": 32000
+    }
+  },
+  "permission_denials": [],
+  "terminal_reason": "completed",
+  "fast_mode_state": "off",
+  "uuid": "40e1522d-6b96-446c-973e-cc6fa9319e00"
+}

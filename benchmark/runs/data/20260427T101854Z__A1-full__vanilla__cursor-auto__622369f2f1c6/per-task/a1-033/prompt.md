@@ -1,0 +1,3 @@
+## User prompt
+
+Observation: a payment-confirm webhook fails ~2% of the time with 'signature mismatch' but only between 02:00 and 03:00 UTC; the rest of the day it is clean. Trace the cause. Required: 3 deliberately different hypotheses, evidence-for/against per lane, ranked by evidence strength, rebuttal round, critical unknown, single discriminating probe.

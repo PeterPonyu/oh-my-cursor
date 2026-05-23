@@ -1,0 +1,3 @@
+## User prompt
+
+Auto-execute end-to-end: add a server-side feature flag system (env-var driven) and gate one existing endpoint behind it. Output explicit phases (expansion, planning, execution, QA, review, cleanup), per-phase verification criteria, the bounded QA retry budget, and what triggers escalation rather than another retry.

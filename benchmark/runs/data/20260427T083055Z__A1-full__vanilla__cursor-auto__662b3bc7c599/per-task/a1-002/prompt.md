@@ -1,0 +1,3 @@
+## User prompt
+
+Plan a 5-step refactor to convert a React class-based component tree (Header, Sidebar, MainView) to functional components with hooks. Output: numbered steps with per-step file scope and a rollback note for each.

@@ -1,0 +1,6 @@
+{
+  "backend": "cursor_cli",
+  "model": "cursor/auto",
+  "prompt": "Review this Python snippet for bugs. Output severity-rated findings with line references and the smallest fix.\n\n```python\n 1 def load_users(path):\n 2     f = open(path)\n 3     data = json.load(f)\n 4     users = [User(**row) for row in data if row['active']]\n 5     return users\n```",
+  "workdir": "/tmp/cursor-vanilla-m8jr3pc3"
+}

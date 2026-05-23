@@ -1,0 +1,16 @@
+{
+  "type": "result",
+  "subtype": "success",
+  "is_error": false,
+  "duration_ms": 12463,
+  "duration_api_ms": 12463,
+  "result": "I’ll run this as a deep-interview gating pass: I’m going to restate your goal, score four clarity dimensions, then ask one focused question on the weakest area without suggesting any architecture.You want to **modernize a legacy Java monolith** in a way that reduces risk and makes the system more sustainable, but the term “modernize” is currently broad and could mean different outcomes.\n\n- **Intent clarity**: 0.75 — clear that change is desired, but core business motivation is still high-level.\n- **Outcome clarity**: 0.45 — target end-state is ambiguous (performance, delivery speed, reliability, maintainability, etc.).\n- **Scope clarity**: 0.40 — unclear whether this is selective modernization or full-system transformation.\n- **Constraint clarity**: 0.55 — likely constraints exist (team, timeline, uptime, compliance), but not yet explicit.\n\nLowest-scoring dimension: **Scope clarity (0.40)**.\n\n**Focused question:**  \nWhat exact portion of the monolith must be modernized first, and what is explicitly out of scope for this first phase?",
+  "session_id": "59bd7e24-0401-4eb4-8daa-55eeed3700c4",
+  "request_id": "f0703f17-1d89-4816-9a4e-32d73e850911",
+  "usage": {
+    "inputTokens": 9049,
+    "outputTokens": 377,
+    "cacheReadTokens": 23552,
+    "cacheWriteTokens": 0
+  }
+}

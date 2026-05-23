@@ -1,0 +1,6 @@
+{
+  "backend": "cursor_cli",
+  "model": "cursor/auto",
+  "prompt": "Review this Go snippet. Report severity-rated findings with file:line (use the line numbers shown), root cause, and smallest fix.\n\n```go\n 1 func processAll(items []Item) []Result {\n 2   var results []Result\n 3   var wg sync.WaitGroup\n 4   for _, it := range items {\n 5     wg.Add(1)\n 6     go func() {\n 7       defer wg.Done()\n 8       results = append(results, process(it))\n 9     }()\n10   }\n11   wg.Wait()\n12   return results\n13 }\n```",
+  "workdir": "/tmp/cursor-vanilla-m8jr3pc3"
+}

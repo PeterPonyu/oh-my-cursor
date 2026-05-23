@@ -1,0 +1,16 @@
+{
+  "type": "result",
+  "subtype": "success",
+  "is_error": false,
+  "duration_ms": 9076,
+  "duration_api_ms": 9076,
+  "result": "- **MEDIUM** — `addItem` mutates the input array in place (`list.push(item)`), which can cause hidden side effects if callers expect an immutable helper.  \n  Issue line: **2**\n\n- **LOW** — No validation that `list` is actually an array; passing `null`, `undefined`, or a non-array value will throw at runtime on `.push`.  \n  Issue line: **2**\n\n- **LOW** — `defaults` is being reused and accumulated globally; if this is intended as a reusable “default template,” it will keep growing across calls instead of staying constant.  \n  Issue lines: **5–7**\n\nIf you want, I can provide a safer immutable version (`return [...list, item]`) plus basic input guards.",
+  "session_id": "d1ab462b-5951-46a5-93f5-e29dff3eaa54",
+  "request_id": "c86a5eeb-a0bb-4b94-bc3e-5bf54a6c87e1",
+  "usage": {
+    "inputTokens": 888,
+    "outputTokens": 307,
+    "cacheReadTokens": 11776,
+    "cacheWriteTokens": 0
+  }
+}

@@ -1,0 +1,3 @@
+## User prompt
+
+You must add an SPDX license header to 18 Python files (paths src/pkg/a.py ... src/pkg/r.py). Plan the batched edit. Output: the exact header pattern, per-file scope, conflict-avoidance for files that may already have a header, and per-file verification after the batch.

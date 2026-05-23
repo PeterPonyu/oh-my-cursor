@@ -1,0 +1,16 @@
+{
+  "type": "result",
+  "subtype": "success",
+  "is_error": false,
+  "duration_ms": 7000,
+  "duration_api_ms": 7000,
+  "result": "- **CRITICAL** — `line 3` uses `urls.forEach(async ...)`, but `forEach` does not await async callbacks, so `line 7` returns before any fetch completes (often `[]`), and rejections become unobserved.\n  - **Smallest fix:** await all promises from `map` (or use `for...of` + `await`).\n\n```typescript\nasync function fetchAll(urls: string[]): Promise<string[]> {\n  return Promise.all(\n    urls.map(async (url) => {\n      const r = await fetch(url);\n      return r.text();\n    })\n  );\n}\n```\n\nThis preserves input order, waits for completion, and correctly propagates errors.",
+  "session_id": "1b877643-2dd9-4ec7-a9d8-f3dde7ca92b8",
+  "request_id": "93d2585d-010f-4a3c-9ebe-9af603191c27",
+  "usage": {
+    "inputTokens": 917,
+    "outputTokens": 211,
+    "cacheReadTokens": 11776,
+    "cacheWriteTokens": 0
+  }
+}

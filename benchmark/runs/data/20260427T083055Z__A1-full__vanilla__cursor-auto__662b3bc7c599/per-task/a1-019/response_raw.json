@@ -1,0 +1,16 @@
+{
+  "type": "result",
+  "subtype": "success",
+  "is_error": false,
+  "duration_ms": 8274,
+  "duration_api_ms": 8274,
+  "result": "- **OWASP class:** `A03:2021 – Injection` (SQL Injection)  \n- **Severity:** `High`  \n- **Attack scenario:** An attacker supplies a crafted `name` like `\"' OR '1'='1\"` (or DB-specific payloads such as `'; DROP TABLE users; --`) so the concatenated SQL changes meaning, bypasses intended filtering, and can expose or modify data.  \n- **file:line:** `snippet.py:2` (dynamic SQL string concatenation)  \n- **Remediation:** Use parameterized queries/prepared statements, never string concatenation for SQL. Also apply least-privileged DB credentials and (optionally) input allowlisting for expected username format.\n\n```python\ndef get_user(name):\n    q = \"SELECT * FROM users WHERE name = ?\"\n    return db.execute(q, (name,)).fetchone()\n```\n\n(Placeholder style may vary by driver, e.g. `%s`, `:name`, `$1`.)",
+  "session_id": "22b71690-774f-43d0-a6a6-81112a9cd6aa",
+  "request_id": "9de32322-00bc-466c-98e9-cf76ac1af24e",
+  "usage": {
+    "inputTokens": 884,
+    "outputTokens": 267,
+    "cacheReadTokens": 11776,
+    "cacheWriteTokens": 0
+  }
+}

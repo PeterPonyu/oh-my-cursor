@@ -1,0 +1,6 @@
+{
+  "backend": "cursor_cli",
+  "model": "cursor/auto",
+  "prompt": "A user reports `npm install` works but `npm test` says 'jest: command not found'. Run a doctor-style diagnosis: ordered checks (project layout, lockfile, node_modules state, PATH, jest install location), pass criterion per check, and what fix to recommend per failure mode. Do NOT auto-apply destructive fixes — confirm-first for anything that deletes.",
+  "workdir": "/home/zeyufu/Desktop/oh-my-cursor"
+}

@@ -1,0 +1,16 @@
+{
+  "type": "result",
+  "subtype": "success",
+  "is_error": false,
+  "duration_ms": 12998,
+  "duration_api_ms": 12998,
+  "result": "I’ll run a quick structured interview setup and start by scoring clarity so we can ask the highest-leverage first question.Great—let’s start the interview with a clarity baseline.\n\n- **Intent clarity (why this matters now):** **0.45 / 1.00**\n- **Outcome clarity (what decision/action analytics must enable):** **0.30 / 1.00**\n- **Scope clarity (which teams/funnels/customers/time horizon):** **0.25 / 1.00**\n- **Success clarity (how we’ll know analytics is “good enough”):** **0.20 / 1.00**\n\n**Highest-leverage first question:**  \nWhat is the **single most important business decision** you want analytics to improve in the next 90 days?",
+  "session_id": "a7ebf049-f457-4e55-9fb5-0264bf297488",
+  "request_id": "24bbed8b-f1de-4345-8d7c-f0049dacce94",
+  "usage": {
+    "inputTokens": 7456,
+    "outputTokens": 349,
+    "cacheReadTokens": 26752,
+    "cacheWriteTokens": 0
+  }
+}

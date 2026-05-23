@@ -1,0 +1,6 @@
+{
+  "backend": "cursor_cli",
+  "model": "cursor/auto",
+  "prompt": "A developer reports their Kubernetes pod is stuck in `CrashLoopBackOff` after a deploy. Run a doctor-style diagnosis: ordered checks (pod events, container logs current+previous, image pullable, env/secrets present, readiness vs liveness probe, resource limits), pass criterion per check, recommended fix per failure mode. No destructive auto-fix; flag any check that would mutate cluster state.",
+  "workdir": "/home/zeyufu/Desktop/oh-my-cursor"
+}

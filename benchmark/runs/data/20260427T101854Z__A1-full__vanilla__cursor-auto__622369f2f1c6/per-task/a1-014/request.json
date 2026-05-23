@@ -1,0 +1,6 @@
+{
+  "backend": "cursor_cli",
+  "model": "cursor/auto",
+  "prompt": "Review for bugs and rate by severity (CRITICAL/HIGH/MEDIUM/LOW). Cite the issue line.\n\n```javascript\nfunction addItem(list, item) {\n  list.push(item);\n  return list;\n}\nconst defaults = [];\naddItem(defaults, 'a');\naddItem(defaults, 'b');\n```",
+  "workdir": "/tmp/cursor-vanilla-m8jr3pc3"
+}

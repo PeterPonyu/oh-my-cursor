@@ -1,0 +1,3 @@
+## User prompt
+
+Auto-execute end-to-end: add a `GET /healthz` endpoint to a FastAPI service that returns `{status: 'ok', version: '<git-sha>'}`. Output the phases (expansion, planning, execution, QA, review, cleanup), each with explicit gate criteria and verification commands before phase advance. Call out when review must be in a separate context.

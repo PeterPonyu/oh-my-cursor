@@ -1,0 +1,59 @@
+{
+  "type": "result",
+  "subtype": "success",
+  "is_error": false,
+  "api_error_status": null,
+  "duration_ms": 16942,
+  "duration_api_ms": 16838,
+  "num_turns": 1,
+  "result": "# DEBUG REPORT: Pytest Hangs (No Output)\n\nThis is a classic hang signature. Here are the **top 3 root causes by base rate**, with the fastest diagnostic for each:\n\n---\n\n## Ranking by Likelihood\n\n### 1. **Deadlock in test code or fixtures** (40% base rate)\nFixtures waiting on each other, tests with circular dependencies, or concurrency issues (threads/subprocesses).\n\n**Fastest diagnostic:**\n```bash\ntimeout 30 pytest -v --tb=short 2>&1 | head -50\n```\n- Shows which test is stuck before timeout.\n- If it hangs before any test runs, the issue is in collection or session-scoped fixtures.\n\n---\n\n### 2. **Test code reading from stdin** (30% base rate)\nCode calls `input()` or reads stdin without redirection. Very common in automation/CI contexts where stdin is closed.\n\n**Fastest diagnostic:**\n```bash\npytest < /dev/null -v\n```\n- If it passes, stdin was the problem.\n- Also check: `grep -r \"input(\" tests/` to find culprits.\n\n---\n\n### 3. **Fixture teardown/cleanup hanging** (20% base rate)\nFixtures not cleaning up: unclosed database connections, lingering servers, orphaned processes, or file locks.\n\n**Fastest diagnostic:**\n```bash\ntimeout 30 pytest --setup-show -v 2>&1 | tail -20\n```\n- Shows fixture lifecycle; the last output is the hung fixture.\n- Or isolate: `pytest -k test_name --setup-show` on a single test.\n\n---\n\n## Secondary checks (if above don't reveal it)\n\n| Cause | Command |\n|-------|---------|\n| Pytest plugin blocking | `pytest --collect-only -v` (collection-only, no execution) |\n| Infinite loop in test | `pytest -v -x` (stop on first failure) then manually inspect that test |\n| Network/file I/O timeout | `timeout 30 pytest -v --timeout=10` (requires `pip install pytest-timeout`) |\n\n---\n\n## Next step\n\nRun **diagnostic #2 first** (stdin), then **#1** (timeout), then show me the output. Which test name appears last?",
+  "stop_reason": "end_turn",
+  "session_id": "b705881b-ae5e-48f3-9214-ad73509a7c22",
+  "total_cost_usd": 0.016068449999999998,
+  "usage": {
+    "input_tokens": 10,
+    "cache_creation_input_tokens": 4395,
+    "cache_read_input_tokens": 31047,
+    "output_tokens": 1492,
+    "server_tool_use": {
+      "web_search_requests": 0,
+      "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+      "ephemeral_1h_input_tokens": 4395,
+      "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "",
+    "iterations": [
+      {
+        "input_tokens": 10,
+        "output_tokens": 1492,
+        "cache_read_input_tokens": 31047,
+        "cache_creation_input_tokens": 4395,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 4395
+        },
+        "type": "message"
+      }
+    ],
+    "speed": "standard"
+  },
+  "modelUsage": {
+    "claude-haiku-4-5-20251001": {
+      "inputTokens": 10,
+      "outputTokens": 1492,
+      "cacheReadInputTokens": 31047,
+      "cacheCreationInputTokens": 4395,
+      "webSearchRequests": 0,
+      "costUSD": 0.016068449999999998,
+      "contextWindow": 200000,
+      "maxOutputTokens": 32000
+    }
+  },
+  "permission_denials": [],
+  "terminal_reason": "completed",
+  "fast_mode_state": "off",
+  "uuid": "f3466da6-85e4-49a3-a7c3-8f68c7d584fc"
+}

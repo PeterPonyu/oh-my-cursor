@@ -1,0 +1,243 @@
+[2026-04-27T09:00:45.078918Z] run_start
+  benchmark=A1-full arm=with-omc model=cursor/auto budget=$5.0
+[2026-04-27T09:00:45.079011Z] task_start task=a1-001  prompt_chars=163
+[2026-04-27T09:00:45.079055Z] request task=a1-001  keys=['backend', 'model', 'prompt', 'workdir']
+[2026-04-27T09:01:07.600730Z] response task=a1-001  in=2959 out=646 cost=$0.021409 ms=22521 stop=None
+[2026-04-27T09:01:07.600754Z] task_end task=a1-001  status=ok
+[2026-04-27T09:01:07.600814Z] task_start task=a1-002  prompt_chars=211
+[2026-04-27T09:01:07.600860Z] request task=a1-002  keys=['backend', 'model', 'prompt', 'workdir']
+[2026-04-27T09:01:25.746643Z] response task=a1-002  in=3085 out=675 cost=$0.02249 ms=18145 stop=None
+[2026-04-27T09:01:25.746668Z] task_end task=a1-002  status=ok
+[2026-04-27T09:01:25.746736Z] task_start task=a1-003  prompt_chars=299
+[2026-04-27T09:01:25.746789Z] request task=a1-003  keys=['backend', 'model', 'prompt', 'workdir']
+[2026-04-27T09:02:02.810576Z] response task=a1-003  in=5328 out=1698 cost=$0.049518 ms=37063 stop=None
+[2026-04-27T09:02:02.810601Z] task_end task=a1-003  status=ok
+[2026-04-27T09:02:02.810663Z] task_start task=a1-004  prompt_chars=217
+[2026-04-27T09:02:02.810709Z] request task=a1-004  keys=['backend', 'model', 'prompt', 'workdir']
+[2026-04-27T09:02:36.788724Z] response task=a1-004  in=144 out=1768 cost=$0.030946 ms=33977 stop=None
+[2026-04-27T09:02:36.788748Z] task_end task=a1-004  status=ok
+[2026-04-27T09:02:36.788814Z] task_start task=a1-005  prompt_chars=274
+[2026-04-27T09:02:36.788862Z] request task=a1-005  keys=['backend', 'model', 'prompt', 'workdir']
+[2026-04-27T09:03:18.618587Z] response task=a1-005  in=5408 out=1731 cost=$0.050215 ms=41829 stop=None
+[2026-04-27T09:03:18.618611Z] task_end task=a1-005  status=ok
+[2026-04-27T09:03:18.618675Z] task_start task=a1-006  prompt_chars=262
+[2026-04-27T09:03:18.618723Z] request task=a1-006  keys=['backend', 'model', 'prompt', 'workdir']
+[2026-04-27T09:03:57.575861Z] response task=a1-006  in=10296 out=1688 cost=$0.061277 ms=38956 stop=None
+[2026-04-27T09:03:57.575894Z] task_end task=a1-006  status=ok
+[2026-04-27T09:03:57.575978Z] task_start task=a1-007  prompt_chars=106
+[2026-04-27T09:03:57.576040Z] request task=a1-007  keys=['backend', 'model', 'prompt', 'workdir']
+[2026-04-27T09:04:28.244099Z] response task=a1-007  in=11417 out=1186 cost=$0.069321 ms=30667 stop=None
+[2026-04-27T09:04:28.244123Z] task_end task=a1-007  status=ok
+[2026-04-27T09:04:28.244191Z] task_start task=a1-008  prompt_chars=79
+[2026-04-27T09:04:28.244243Z] request task=a1-008  keys=['backend', 'model', 'prompt', 'workdir']
+[2026-04-27T09:04:43.091381Z] response task=a1-008  in=7437 out=376 cost=$0.035977 ms=14846 stop=None
+[2026-04-27T09:04:43.091412Z] task_end task=a1-008  status=ok
+[2026-04-27T09:04:43.091499Z] task_start task=a1-009  prompt_chars=200
+[2026-04-27T09:04:43.091562Z] request task=a1-009  keys=['backend', 'model', 'prompt', 'workdir']
+[2026-04-27T09:04:59.218300Z] response task=a1-009  in=7468 out=440 cost=$0.03703 ms=16126 stop=None
+[2026-04-27T09:04:59.218330Z] task_end task=a1-009  status=ok
+[2026-04-27T09:04:59.218423Z] task_start task=a1-010  prompt_chars=209
+[2026-04-27T09:04:59.218488Z] request task=a1-010  keys=['backend', 'model', 'prompt', 'workdir']
+[2026-04-27T09:05:15.611117Z] response task=a1-010  in=7456 out=349 cost=$0.035629 ms=16392 stop=None
+[2026-04-27T09:05:15.611147Z] task_end task=a1-010  status=ok
+[2026-04-27T09:05:15.611243Z] task_start task=a1-011  prompt_chars=195
+[2026-04-27T09:05:15.611307Z] request task=a1-011  keys=['backend', 'model', 'prompt', 'workdir']
+[2026-04-27T09:08:15.644594Z] error task=a1-011  error=cursor-agent timed out after 180.0s (workdir=/home/zeyufu/Desktop/oh-my-cursor)
+[2026-04-27T09:08:15.644678Z] task_end task=a1-011  status=error
+[2026-04-27T09:08:15.644848Z] task_start task=a1-012  prompt_chars=274
+[2026-04-27T09:08:15.644937Z] request task=a1-012  keys=['backend', 'model', 'prompt', 'workdir']
+[2026-04-27T09:08:19.926153Z] error task=a1-012  error=cursor-agent returned empty stdout (exit=1). stderr='Error: [aborted] Client network socket disconnected before secure TLS connection was established\n'
+[2026-04-27T09:08:19.926234Z] task_end task=a1-012  status=error
+[2026-04-27T09:08:19.926361Z] task_start task=a1-013  prompt_chars=134
+[2026-04-27T09:08:19.926433Z] request task=a1-013  keys=['backend', 'model', 'prompt', 'workdir']
+[2026-04-27T09:08:23.823751Z] error task=a1-013  error=cursor-agent returned empty stdout (exit=1). stderr='Error: [aborted] Client network socket disconnected before secure TLS connection was established\n'
+[2026-04-27T09:08:23.823830Z] task_end task=a1-013  status=error
+[2026-04-27T09:08:23.823956Z] task_start task=a1-014  prompt_chars=240
+[2026-04-27T09:08:23.824023Z] request task=a1-014  keys=['backend', 'model', 'prompt', 'workdir']
+[2026-04-27T09:08:27.937838Z] error task=a1-014  error=cursor-agent returned empty stdout (exit=1). stderr='Error: [aborted] Client network socket disconnected before secure TLS connection was established\n'
+[2026-04-27T09:08:27.937907Z] task_end task=a1-014  status=error
+[2026-04-27T09:08:27.938037Z] task_start task=a1-015  prompt_chars=436
+[2026-04-27T09:08:27.938106Z] request task=a1-015  keys=['backend', 'model', 'prompt', 'workdir']
+[2026-04-27T09:08:31.698530Z] error task=a1-015  error=cursor-agent returned empty stdout (exit=1). stderr='Error: [aborted] Client network socket disconnected before secure TLS connection was established\n'
+[2026-04-27T09:08:31.698598Z] task_end task=a1-015  status=error
+[2026-04-27T09:08:31.698732Z] task_start task=a1-016  prompt_chars=281
+[2026-04-27T09:08:31.698797Z] request task=a1-016  keys=['backend', 'model', 'prompt', 'workdir']
+[2026-04-27T09:08:36.366451Z] error task=a1-016  error=cursor-agent returned empty stdout (exit=1). stderr='Error: [aborted] Client network socket disconnected before secure TLS connection was established\n'
+[2026-04-27T09:08:36.366536Z] task_end task=a1-016  status=error
+[2026-04-27T09:08:36.366714Z] task_start task=a1-017  prompt_chars=376
+[2026-04-27T09:08:36.366808Z] request task=a1-017  keys=['backend', 'model', 'prompt', 'workdir']
+[2026-04-27T09:08:39.906740Z] error task=a1-017  error=cursor-agent returned empty stdout (exit=1). stderr='Error: [aborted] Client network socket disconnected before secure TLS connection was established\n'
+[2026-04-27T09:08:39.906819Z] task_end task=a1-017  status=error
+[2026-04-27T09:08:39.906978Z] task_start task=a1-018  prompt_chars=574
+[2026-04-27T09:08:39.907072Z] request task=a1-018  keys=['backend', 'model', 'prompt', 'workdir']
+[2026-04-27T09:08:43.178820Z] error task=a1-018  error=cursor-agent returned empty stdout (exit=1). stderr='Error: [aborted] Client network socket disconnected before secure TLS connection was established\n'
+[2026-04-27T09:08:43.178893Z] task_end task=a1-018  status=error
+[2026-04-27T09:08:43.179024Z] task_start task=a1-019  prompt_chars=243
+[2026-04-27T09:08:43.179092Z] request task=a1-019  keys=['backend', 'model', 'prompt', 'workdir']
+[2026-04-27T09:08:47.536876Z] error task=a1-019  error=cursor-agent returned empty stdout (exit=1). stderr='Error: [aborted] Client network socket disconnected before secure TLS connection was established\n'
+[2026-04-27T09:08:47.536946Z] task_end task=a1-019  status=error
+[2026-04-27T09:08:47.537078Z] task_start task=a1-020  prompt_chars=288
+[2026-04-27T09:08:47.537145Z] request task=a1-020  keys=['backend', 'model', 'prompt', 'workdir']
+[2026-04-27T09:08:51.267529Z] error task=a1-020  error=cursor-agent returned empty stdout (exit=1). stderr='Error: [aborted] Client network socket disconnected before secure TLS connection was established\n'
+[2026-04-27T09:08:51.267604Z] task_end task=a1-020  status=error
+[2026-04-27T09:08:51.267772Z] task_start task=a1-021  prompt_chars=264
+[2026-04-27T09:08:51.267860Z] request task=a1-021  keys=['backend', 'model', 'prompt', 'workdir']
+[2026-04-27T09:08:55.519495Z] error task=a1-021  error=cursor-agent returned empty stdout (exit=1). stderr='Error: [aborted] Client network socket disconnected before secure TLS connection was established\n'
+[2026-04-27T09:08:55.519575Z] task_end task=a1-021  status=error
+[2026-04-27T09:08:55.519733Z] task_start task=a1-022  prompt_chars=257
+[2026-04-27T09:08:55.519818Z] request task=a1-022  keys=['backend', 'model', 'prompt', 'workdir']
+[2026-04-27T09:08:59.699231Z] error task=a1-022  error=cursor-agent returned empty stdout (exit=1). stderr='Error: [aborted] Client network socket disconnected before secure TLS connection was established\n'
+[2026-04-27T09:08:59.699295Z] task_end task=a1-022  status=error
+[2026-04-27T09:08:59.699433Z] task_start task=a1-023  prompt_chars=174
+[2026-04-27T09:08:59.699500Z] request task=a1-023  keys=['backend', 'model', 'prompt', 'workdir']
+[2026-04-27T09:09:03.473828Z] error task=a1-023  error=cursor-agent returned empty stdout (exit=1). stderr='Error: [aborted] Client network socket disconnected before secure TLS connection was established\n'
+[2026-04-27T09:09:03.473902Z] task_end task=a1-023  status=error
+[2026-04-27T09:09:03.474038Z] task_start task=a1-024  prompt_chars=473
+[2026-04-27T09:09:03.474107Z] request task=a1-024  keys=['backend', 'model', 'prompt', 'workdir']
+[2026-04-27T09:09:07.450746Z] error task=a1-024  error=cursor-agent returned empty stdout (exit=1). stderr='Error: [aborted] Client network socket disconnected before secure TLS connection was established\n'
+[2026-04-27T09:09:07.450820Z] task_end task=a1-024  status=error
+[2026-04-27T09:09:07.450949Z] task_start task=a1-025  prompt_chars=251
+[2026-04-27T09:09:07.451019Z] request task=a1-025  keys=['backend', 'model', 'prompt', 'workdir']
+[2026-04-27T09:09:11.487736Z] error task=a1-025  error=cursor-agent returned empty stdout (exit=1). stderr='Error: [aborted] Client network socket disconnected before secure TLS connection was established\n'
+[2026-04-27T09:09:11.487803Z] task_end task=a1-025  status=error
+[2026-04-27T09:09:11.487930Z] task_start task=a1-026  prompt_chars=228
+[2026-04-27T09:09:11.487996Z] request task=a1-026  keys=['backend', 'model', 'prompt', 'workdir']
+[2026-04-27T09:09:15.279321Z] error task=a1-026  error=cursor-agent returned empty stdout (exit=1). stderr='Error: [aborted] Client network socket disconnected before secure TLS connection was established\n'
+[2026-04-27T09:09:15.279403Z] task_end task=a1-026  status=error
+[2026-04-27T09:09:15.279532Z] task_start task=a1-027  prompt_chars=253
+[2026-04-27T09:09:15.279598Z] request task=a1-027  keys=['backend', 'model', 'prompt', 'workdir']
+[2026-04-27T09:09:19.723435Z] error task=a1-027  error=cursor-agent returned empty stdout (exit=1). stderr='Error: [aborted] Client network socket disconnected before secure TLS connection was established\n'
+[2026-04-27T09:09:19.723524Z] task_end task=a1-027  status=error
+[2026-04-27T09:09:19.723688Z] task_start task=a1-028  prompt_chars=242
+[2026-04-27T09:09:19.723777Z] request task=a1-028  keys=['backend', 'model', 'prompt', 'workdir']
+[2026-04-27T09:09:23.572342Z] error task=a1-028  error=cursor-agent returned empty stdout (exit=1). stderr='Error: [aborted] Client network socket disconnected before secure TLS connection was established\n'
+[2026-04-27T09:09:23.572413Z] task_end task=a1-028  status=error
+[2026-04-27T09:09:23.572541Z] task_start task=a1-029  prompt_chars=279
+[2026-04-27T09:09:23.572608Z] request task=a1-029  keys=['backend', 'model', 'prompt', 'workdir']
+[2026-04-27T09:09:28.051977Z] error task=a1-029  error=cursor-agent returned empty stdout (exit=1). stderr='Error: [aborted] Client network socket disconnected before secure TLS connection was established\n'
+[2026-04-27T09:09:28.052048Z] task_end task=a1-029  status=error
+[2026-04-27T09:09:28.052177Z] task_start task=a1-030  prompt_chars=305
+[2026-04-27T09:09:28.052244Z] request task=a1-030  keys=['backend', 'model', 'prompt', 'workdir']
+[2026-04-27T09:09:32.084526Z] error task=a1-030  error=cursor-agent returned empty stdout (exit=1). stderr='Error: [aborted] Client network socket disconnected before secure TLS connection was established\n'
+[2026-04-27T09:09:32.084600Z] task_end task=a1-030  status=error
+[2026-04-27T09:09:32.084742Z] task_start task=a1-031  prompt_chars=377
+[2026-04-27T09:09:32.084812Z] request task=a1-031  keys=['backend', 'model', 'prompt', 'workdir']
+[2026-04-27T09:09:36.099439Z] error task=a1-031  error=cursor-agent returned empty stdout (exit=1). stderr='Error: [aborted] Client network socket disconnected before secure TLS connection was established\n'
+[2026-04-27T09:09:36.099507Z] task_end task=a1-031  status=error
+[2026-04-27T09:09:36.099640Z] task_start task=a1-032  prompt_chars=311
+[2026-04-27T09:09:36.099707Z] request task=a1-032  keys=['backend', 'model', 'prompt', 'workdir']
+[2026-04-27T09:09:39.615694Z] error task=a1-032  error=cursor-agent returned empty stdout (exit=1). stderr='Error: [aborted] Client network socket disconnected before secure TLS connection was established\n'
+[2026-04-27T09:09:39.615762Z] task_end task=a1-032  status=error
+[2026-04-27T09:09:39.615891Z] task_start task=a1-033  prompt_chars=344
+[2026-04-27T09:09:39.615962Z] request task=a1-033  keys=['backend', 'model', 'prompt', 'workdir']
+[2026-04-27T09:09:44.142067Z] error task=a1-033  error=cursor-agent returned empty stdout (exit=1). stderr='Error: [aborted] Client network socket disconnected before secure TLS connection was established\n'
+[2026-04-27T09:09:44.142135Z] task_end task=a1-033  status=error
+[2026-04-27T09:09:44.142271Z] task_start task=a1-034  prompt_chars=328
+[2026-04-27T09:09:44.142342Z] request task=a1-034  keys=['backend', 'model', 'prompt', 'workdir']
+[2026-04-27T09:09:47.943976Z] error task=a1-034  error=cursor-agent returned empty stdout (exit=1). stderr='Error: [aborted] Client network socket disconnected before secure TLS connection was established\n'
+[2026-04-27T09:09:47.944050Z] task_end task=a1-034  status=error
+[2026-04-27T09:09:47.944188Z] task_start task=a1-035  prompt_chars=351
+[2026-04-27T09:09:47.944258Z] request task=a1-035  keys=['backend', 'model', 'prompt', 'workdir']
+[2026-04-27T09:09:51.692259Z] error task=a1-035  error=cursor-agent returned empty stdout (exit=1). stderr='Error: [aborted] Client network socket disconnected before secure TLS connection was established\n'
+[2026-04-27T09:09:51.692321Z] task_end task=a1-035  status=error
+[2026-04-27T09:09:51.692446Z] task_start task=a1-036  prompt_chars=479
+[2026-04-27T09:09:51.692517Z] request task=a1-036  keys=['backend', 'model', 'prompt', 'workdir']
+[2026-04-27T09:09:55.183389Z] error task=a1-036  error=cursor-agent returned empty stdout (exit=1). stderr='Error: [aborted] Client network socket disconnected before secure TLS connection was established\n'
+[2026-04-27T09:09:55.183465Z] task_end task=a1-036  status=error
+[2026-04-27T09:09:55.183629Z] task_start task=a1-037  prompt_chars=253
+[2026-04-27T09:09:55.183715Z] request task=a1-037  keys=['backend', 'model', 'prompt', 'workdir']
+[2026-04-27T09:09:59.493720Z] error task=a1-037  error=cursor-agent returned empty stdout (exit=1). stderr='Error: [aborted] Client network socket disconnected before secure TLS connection was established\n'
+[2026-04-27T09:09:59.493787Z] task_end task=a1-037  status=error
+[2026-04-27T09:09:59.493921Z] task_start task=a1-038  prompt_chars=244
+[2026-04-27T09:09:59.493986Z] request task=a1-038  keys=['backend', 'model', 'prompt', 'workdir']
+[2026-04-27T09:10:04.028712Z] error task=a1-038  error=cursor-agent returned empty stdout (exit=1). stderr='Error: [aborted] Client network socket disconnected before secure TLS connection was established\n'
+[2026-04-27T09:10:04.028791Z] task_end task=a1-038  status=error
+[2026-04-27T09:10:04.028925Z] task_start task=a1-039  prompt_chars=373
+[2026-04-27T09:10:04.028991Z] request task=a1-039  keys=['backend', 'model', 'prompt', 'workdir']
+[2026-04-27T09:10:07.771158Z] error task=a1-039  error=cursor-agent returned empty stdout (exit=1). stderr='Error: [aborted] Client network socket disconnected before secure TLS connection was established\n'
+[2026-04-27T09:10:07.771224Z] task_end task=a1-039  status=error
+[2026-04-27T09:10:07.771351Z] task_start task=a1-040  prompt_chars=321
+[2026-04-27T09:10:07.771424Z] request task=a1-040  keys=['backend', 'model', 'prompt', 'workdir']
+[2026-04-27T09:10:11.627400Z] error task=a1-040  error=cursor-agent returned empty stdout (exit=1). stderr='Error: [aborted] Client network socket disconnected before secure TLS connection was established\n'
+[2026-04-27T09:10:11.627476Z] task_end task=a1-040  status=error
+[2026-04-27T09:10:11.627639Z] task_start task=a1-041  prompt_chars=347
+[2026-04-27T09:10:11.627727Z] request task=a1-041  keys=['backend', 'model', 'prompt', 'workdir']
+[2026-04-27T09:10:15.971583Z] error task=a1-041  error=cursor-agent returned empty stdout (exit=1). stderr='Error: [aborted] Client network socket disconnected before secure TLS connection was established\n'
+[2026-04-27T09:10:15.971653Z] task_end task=a1-041  status=error
+[2026-04-27T09:10:15.971780Z] task_start task=a1-042  prompt_chars=412
+[2026-04-27T09:10:15.971844Z] request task=a1-042  keys=['backend', 'model', 'prompt', 'workdir']
+[2026-04-27T09:10:20.005379Z] error task=a1-042  error=cursor-agent returned empty stdout (exit=1). stderr='Error: [aborted] Client network socket disconnected before secure TLS connection was established\n'
+[2026-04-27T09:10:20.005448Z] task_end task=a1-042  status=error
+[2026-04-27T09:10:20.005576Z] task_start task=a1-043  prompt_chars=282
+[2026-04-27T09:10:20.005643Z] request task=a1-043  keys=['backend', 'model', 'prompt', 'workdir']
+[2026-04-27T09:10:23.424999Z] error task=a1-043  error=cursor-agent returned empty stdout (exit=1). stderr='Error: [aborted] Client network socket disconnected before secure TLS connection was established\n'
+[2026-04-27T09:10:23.425075Z] task_end task=a1-043  status=error
+[2026-04-27T09:10:23.425205Z] task_start task=a1-044  prompt_chars=270
+[2026-04-27T09:10:23.425278Z] request task=a1-044  keys=['backend', 'model', 'prompt', 'workdir']
+[2026-04-27T09:10:27.022705Z] error task=a1-044  error=cursor-agent returned empty stdout (exit=1). stderr='Error: [aborted] Client network socket disconnected before secure TLS connection was established\n'
+[2026-04-27T09:10:27.022774Z] task_end task=a1-044  status=error
+[2026-04-27T09:10:27.022908Z] task_start task=a1-045  prompt_chars=337
+[2026-04-27T09:10:27.022977Z] request task=a1-045  keys=['backend', 'model', 'prompt', 'workdir']
+[2026-04-27T09:10:30.931724Z] error task=a1-045  error=cursor-agent returned empty stdout (exit=1). stderr='Error: [aborted] Client network socket disconnected before secure TLS connection was established\n'
+[2026-04-27T09:10:30.931787Z] task_end task=a1-045  status=error
+[2026-04-27T09:10:30.931911Z] task_start task=a1-046  prompt_chars=319
+[2026-04-27T09:10:30.931978Z] request task=a1-046  keys=['backend', 'model', 'prompt', 'workdir']
+[2026-04-27T09:10:35.292772Z] error task=a1-046  error=cursor-agent returned empty stdout (exit=1). stderr='Error: [aborted] Client network socket disconnected before secure TLS connection was established\n'
+[2026-04-27T09:10:35.292841Z] task_end task=a1-046  status=error
+[2026-04-27T09:10:35.292970Z] task_start task=a1-047  prompt_chars=321
+[2026-04-27T09:10:35.293036Z] request task=a1-047  keys=['backend', 'model', 'prompt', 'workdir']
+[2026-04-27T09:10:38.487433Z] error task=a1-047  error=cursor-agent returned empty stdout (exit=1). stderr='Error: [aborted] Client network socket disconnected before secure TLS connection was established\n'
+[2026-04-27T09:10:38.487506Z] task_end task=a1-047  status=error
+[2026-04-27T09:10:38.487654Z] task_start task=a1-048  prompt_chars=417
+[2026-04-27T09:10:38.487727Z] request task=a1-048  keys=['backend', 'model', 'prompt', 'workdir']
+[2026-04-27T09:10:42.422609Z] error task=a1-048  error=cursor-agent returned empty stdout (exit=1). stderr='Error: [aborted] Client network socket disconnected before secure TLS connection was established\n'
+[2026-04-27T09:10:42.422686Z] task_end task=a1-048  status=error
+[2026-04-27T09:10:42.422850Z] task_start task=a1-049  prompt_chars=308
+[2026-04-27T09:10:42.422938Z] request task=a1-049  keys=['backend', 'model', 'prompt', 'workdir']
+[2026-04-27T09:10:46.842821Z] error task=a1-049  error=cursor-agent returned empty stdout (exit=1). stderr='Error: [aborted] Client network socket disconnected before secure TLS connection was established\n'
+[2026-04-27T09:10:46.842900Z] task_end task=a1-049  status=error
+[2026-04-27T09:10:46.843062Z] task_start task=a1-050  prompt_chars=334
+[2026-04-27T09:10:46.843151Z] request task=a1-050  keys=['backend', 'model', 'prompt', 'workdir']
+[2026-04-27T09:10:50.681245Z] error task=a1-050  error=cursor-agent returned empty stdout (exit=1). stderr='Error: [aborted] Client network socket disconnected before secure TLS connection was established\n'
+[2026-04-27T09:10:50.681314Z] task_end task=a1-050  status=error
+[2026-04-27T09:10:50.681459Z] task_start task=a1-051  prompt_chars=317
+[2026-04-27T09:10:50.681528Z] request task=a1-051  keys=['backend', 'model', 'prompt', 'workdir']
+[2026-04-27T09:10:54.648529Z] error task=a1-051  error=cursor-agent returned empty stdout (exit=1). stderr='Error: [aborted] Client network socket disconnected before secure TLS connection was established\n'
+[2026-04-27T09:10:54.648605Z] task_end task=a1-051  status=error
+[2026-04-27T09:10:54.648766Z] task_start task=a1-052  prompt_chars=355
+[2026-04-27T09:10:54.648855Z] request task=a1-052  keys=['backend', 'model', 'prompt', 'workdir']
+[2026-04-27T09:10:59.332457Z] error task=a1-052  error=cursor-agent returned empty stdout (exit=1). stderr='Error: [aborted] Client network socket disconnected before secure TLS connection was established\n'
+[2026-04-27T09:10:59.332529Z] task_end task=a1-052  status=error
+[2026-04-27T09:10:59.332661Z] task_start task=a1-053  prompt_chars=350
+[2026-04-27T09:10:59.332728Z] request task=a1-053  keys=['backend', 'model', 'prompt', 'workdir']
+[2026-04-27T09:11:03.414458Z] error task=a1-053  error=cursor-agent returned empty stdout (exit=1). stderr='Error: [aborted] Client network socket disconnected before secure TLS connection was established\n'
+[2026-04-27T09:11:03.414538Z] task_end task=a1-053  status=error
+[2026-04-27T09:11:03.414698Z] task_start task=a1-054  prompt_chars=403
+[2026-04-27T09:11:03.414787Z] request task=a1-054  keys=['backend', 'model', 'prompt', 'workdir']
+[2026-04-27T09:11:07.918793Z] error task=a1-054  error=cursor-agent returned empty stdout (exit=1). stderr='Error: [aborted] Client network socket disconnected before secure TLS connection was established\n'
+[2026-04-27T09:11:07.918869Z] task_end task=a1-054  status=error
+[2026-04-27T09:11:07.919006Z] task_start task=a1-055  prompt_chars=352
+[2026-04-27T09:11:07.919079Z] request task=a1-055  keys=['backend', 'model', 'prompt', 'workdir']
+[2026-04-27T09:11:11.699680Z] error task=a1-055  error=cursor-agent returned empty stdout (exit=1). stderr='Error: [aborted] Client network socket disconnected before secure TLS connection was established\n'
+[2026-04-27T09:11:11.699757Z] task_end task=a1-055  status=error
+[2026-04-27T09:11:11.699925Z] task_start task=a1-056  prompt_chars=333
+[2026-04-27T09:11:11.700012Z] request task=a1-056  keys=['backend', 'model', 'prompt', 'workdir']
+[2026-04-27T09:11:15.952330Z] error task=a1-056  error=cursor-agent returned empty stdout (exit=1). stderr='Error: [aborted] Client network socket disconnected before secure TLS connection was established\n'
+[2026-04-27T09:11:15.952414Z] task_end task=a1-056  status=error
+[2026-04-27T09:11:15.952547Z] task_start task=a1-057  prompt_chars=374
+[2026-04-27T09:11:15.952613Z] request task=a1-057  keys=['backend', 'model', 'prompt', 'workdir']
+[2026-04-27T09:11:19.436292Z] error task=a1-057  error=cursor-agent returned empty stdout (exit=1). stderr='Error: [aborted] Client network socket disconnected before secure TLS connection was established\n'
+[2026-04-27T09:11:19.436365Z] task_end task=a1-057  status=error
+[2026-04-27T09:11:19.436506Z] task_start task=a1-058  prompt_chars=359
+[2026-04-27T09:11:19.436575Z] request task=a1-058  keys=['backend', 'model', 'prompt', 'workdir']
+[2026-04-27T09:11:23.272011Z] error task=a1-058  error=cursor-agent returned empty stdout (exit=1). stderr='Error: [aborted] Client network socket disconnected before secure TLS connection was established\n'
+[2026-04-27T09:11:23.272078Z] task_end task=a1-058  status=error
+[2026-04-27T09:11:23.272205Z] task_start task=a1-059  prompt_chars=395
+[2026-04-27T09:11:23.272270Z] request task=a1-059  keys=['backend', 'model', 'prompt', 'workdir']
+[2026-04-27T09:11:27.778168Z] error task=a1-059  error=cursor-agent returned empty stdout (exit=1). stderr='Error: [aborted] Client network socket disconnected before secure TLS connection was established\n'
+[2026-04-27T09:11:27.778233Z] task_end task=a1-059  status=error
+[2026-04-27T09:11:27.778365Z] task_start task=a1-060  prompt_chars=550
+[2026-04-27T09:11:27.778442Z] request task=a1-060  keys=['backend', 'model', 'prompt', 'workdir']
+[2026-04-27T09:11:31.146495Z] error task=a1-060  error=cursor-agent returned empty stdout (exit=1). stderr='Error: [aborted] Client network socket disconnected before secure TLS connection was established\n'
+[2026-04-27T09:11:31.146567Z] task_end task=a1-060  status=error
+[2026-04-27T09:11:31.146604Z] run_end  status=ok totals={'n_tasks': 60, 'n_responses': 10, 'n_errors': 50, 'n_fallback_events': 0, 'tokens_in': 60998, 'tokens_out': 10557, 'cost_usd': 0.41381, 'wallclock_seconds': 646.068}

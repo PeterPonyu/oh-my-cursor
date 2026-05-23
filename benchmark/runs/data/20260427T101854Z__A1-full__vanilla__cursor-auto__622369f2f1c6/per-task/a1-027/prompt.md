@@ -1,0 +1,3 @@
+## User prompt
+
+Symptom: a Jest test passes locally but fails ~10% of the time in CI with 'expected 3 received 2'. Output: restated failure, 3 ranked hypotheses with confidence, evidence-for/against per hypothesis, current best explanation, and the smallest next probe.

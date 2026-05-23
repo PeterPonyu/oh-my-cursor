@@ -1,0 +1,16 @@
+{
+  "type": "result",
+  "subtype": "success",
+  "is_error": false,
+  "duration_ms": 12089,
+  "duration_api_ms": 12089,
+  "result": "- **High — concurrent unsynchronized writes to `results` cause data race and possible slice corruption** (`snippet.go:8`)  \n  **Root cause:** multiple goroutines call `append` on the same slice header/backing array without synchronization. `append` mutates length/capacity and may reallocate, which is not safe concurrently.  \n  **Smallest fix:** guard `append` with a `sync.Mutex` (or collect via channel, then append on one goroutine).\n\n- **High — loop variable capture bug can process wrong item** (`snippet.go:4-8`)  \n  **Root cause:** the goroutine closes over loop variable `it`; by the time it runs, `it` may have advanced, so many goroutines may process the same/final item.  \n  **Smallest fix:** pass `it` as a parameter to the goroutine (`go func(it Item) { ... }(it)`).\n\n- **Low — output order is nondeterministic** (`snippet.go:8`)  \n  **Root cause:** concurrent appends complete in arbitrary order, so `results` does not preserve input order.  \n  **Smallest fix:** preallocate `results` to `len(items)` and write by index (`results[i] = process(it)`), with `i` and `it` passed into the goroutine.\n\nMinimal safe version:\n\n```go\nfunc processAll(items []Item) []Result {\n\tresults := make([]Result, len(items))\n\tvar wg sync.WaitGroup\n\n\tfor i, it := range items {\n\t\twg.Add(1)\n\t\tgo func(i int, it Item) {\n\t\t\tdefer wg.Done()\n\t\t\tresults[i] = process(it)\n\t\t}(i, it)\n\t}\n\n\twg.Wait()\n\treturn results\n}\n```\n\nThis removes both the race on `append` and the loop-capture bug, while preserving order.",
+  "session_id": "a5c7253f-329e-44ab-be5a-4a053cd34b61",
+  "request_id": "9ab198c5-ca68-40b6-b704-682d5f55dfb0",
+  "usage": {
+    "inputTokens": 219,
+    "outputTokens": 480,
+    "cacheReadTokens": 13312,
+    "cacheWriteTokens": 0
+  }
+}

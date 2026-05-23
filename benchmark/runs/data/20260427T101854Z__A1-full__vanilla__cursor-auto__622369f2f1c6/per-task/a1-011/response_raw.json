@@ -1,0 +1,16 @@
+{
+  "type": "result",
+  "subtype": "success",
+  "is_error": false,
+  "duration_ms": 11438,
+  "duration_api_ms": 11438,
+  "result": "To make “add AI to my CRM” actionable without jumping into code, the prompt is still underspecified in several critical dimensions.\n\n- **Scope ambiguity:** “AI” could mean lead scoring, email drafting, call transcription/summarization, chatbot support, churn prediction, workflow automation, or all of these.\n- **System boundary ambiguity:** unclear whether your CRM is a commercial platform (e.g., Salesforce/HubSpot) vs a custom app, which changes integration options, constraints, and effort.\n- **Data/access ambiguity:** unknown what customer data is available, where it lives, and what fields/events the AI can legally and technically use.\n- **Success criteria ambiguity:** no target outcomes (e.g., increase conversion, reduce response time, improve rep productivity) or measurable KPI threshold.\n- **Operational constraints ambiguity:** missing privacy/compliance requirements, budget, timeline, model hosting preference (vendor API vs self-hosted), and acceptable failure modes.\n\nAssumptions I cannot resolve from your prompt:\n\n- You want a **production** capability, not just a prototype/demo.\n- You’re open to **third-party AI services**.\n- You have permission to use CRM/customer data for AI features.\n- You want AI to support **sales workflows** first (not service/marketing).\n- You need recommendations that are **implementation-agnostic** (no code).\n\n**One targeted question:**  \nWhat is the single highest-value CRM workflow you want AI to improve first (e.g., lead qualification, follow-up email drafting, meeting note summarization, next-best-action recommendations)?",
+  "session_id": "723dbfab-0c70-47fd-97a9-5f805f84fc81",
+  "request_id": "b361e602-f99f-4204-abff-6e03dbc3e20b",
+  "usage": {
+    "inputTokens": 862,
+    "outputTokens": 357,
+    "cacheReadTokens": 11776,
+    "cacheWriteTokens": 0
+  }
+}

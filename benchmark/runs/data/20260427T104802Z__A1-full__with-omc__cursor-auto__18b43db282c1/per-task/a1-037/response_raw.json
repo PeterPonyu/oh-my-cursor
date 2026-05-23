@@ -1,0 +1,16 @@
+{
+  "type": "result",
+  "subtype": "success",
+  "is_error": false,
+  "duration_ms": 11181,
+  "duration_api_ms": 11181,
+  "result": "Use a **bounded retry harness** around the flaky test, with strict safety checks:\n\n- **Stop condition**\n  - Exit immediately on first confirmed pass (`exit code 0` + expected success marker in output).\n  - Also stop when attempts reach cap or a non-retriable error appears (e.g., compile failure, missing dependency, test-discovery error).\n\n- **Idempotence guarantee**\n  - Each attempt runs in an isolated, resettable context:\n    - fresh test process,\n    - deterministic seed/config where possible,\n    - cleanup/reset hooks before each run (temp dirs, DB fixtures, mocks, ports).\n  - No cross-attempt mutation is allowed to influence outcome.\n\n- **Max-iteration cap**\n  - Hard cap like `N=5` (or time-budget cap, e.g. `<=10 min`, whichever hits first).\n  - Example with 85% pass rate: failure across 5 independent tries is `0.15^5 ≈ 0.0076%`, usually enough for CI stabilization without infinite retries.\n\n- **Observable success signal**\n  - Treat success as a machine-checkable composite signal:\n    - test runner exit code `0`,\n    - target test name reported as `PASSED`,\n    - optional artifact/metric check (e.g., expected log line or snapshot file generated).\n  - Avoid “no crash” as success; require explicit positive proof.\n\n- **Why it is safe to run repeatedly**\n  - Bounded (cannot loop forever),\n  - isolated attempts (no accumulating state),\n  - explicit retry policy (only retriable failure classes),\n  - auditable logs per attempt (`attempt #`, reason, duration, final verdict),\n  - deterministic cleanup on every iteration and on exit.\n\nIf useful, I can also give you a drop-in pseudocode/shell template for CI (`bash`, `pytest`, `jest`, etc.).",
+  "session_id": "1b34d400-eed0-4495-8878-b2299ea467f4",
+  "request_id": "4669c9eb-c2e5-40fd-bce7-b90d5273f04d",
+  "usage": {
+    "inputTokens": 151,
+    "outputTokens": 409,
+    "cacheReadTokens": 13312,
+    "cacheWriteTokens": 0
+  }
+}

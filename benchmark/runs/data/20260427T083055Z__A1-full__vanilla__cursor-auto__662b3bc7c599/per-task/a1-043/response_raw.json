@@ -1,0 +1,16 @@
+{
+  "type": "result",
+  "subtype": "success",
+  "is_error": false,
+  "duration_ms": 15854,
+  "duration_api_ms": 15854,
+  "result": "Use one codemod-style rename pattern and constrain it to import specifiers only.\n\n## Single Pattern Definition\n\n- **Match (regex):** `\\boldUtil\\b`\n- **Replacement:** `newUtil`\n- **Apply only inside import clauses**, specifically:\n  - `import { ..., oldUtil, ... } from '...'`\n  - `import { oldUtil as alias } from '...'` (becomes `newUtil as alias`)\n  - `import oldUtil from '...'` (default import symbol rename)\n- **Do not apply** outside import declarations in this batch (usage-site renames can be a follow-up if needed).\n\n## Per-File Scope (12 files)\n\n- `a/x.ts`\n- `a/y.ts`\n- `a/z.ts`\n- `a/a.ts`\n- `a/b.ts`\n- `a/c.ts`\n- `a/d.ts`\n- `a/e.ts`\n- `a/f.ts`\n- `a/g.ts`\n- `a/h.ts`\n- `a/l.ts`\n\n(If your actual 12-file list differs, keep the same pattern but limit edits to that explicit list only.)\n\n## Conflict-Avoidance Reasoning\n\n- Restricting edits to **import declarations** avoids accidental changes to:\n  - string literals (`\"oldUtil\"`)\n  - comments/docs\n  - object keys/types named `oldUtil`\n  - unrelated local variables/functions also named `oldUtil`\n- Constraining to an explicit 12-file path list prevents cross-package drift in a monorepo.\n- Renaming imported symbol while preserving aliases (`newUtil as alias`) avoids API/usage breakage where local alias names are intentional.\n- Running a post-batch unresolved-symbol/typecheck command catches any places where import rename requires usage rename or export updates.\n\n## Verification Command After Batch\n\n```bash\nrg -n \"\\boldUtil\\b\" a/x.ts a/y.ts a/z.ts a/a.ts a/b.ts a/c.ts a/d.ts a/e.ts a/f.ts a/g.ts a/h.ts a/l.ts && pnpm -r typecheck\n```\n\n- `rg` ensures no `oldUtil` remains in the target files.\n- `pnpm -r typecheck` validates monorepo-wide TS integrity after the rename.",
+  "session_id": "5f7a8954-1b4c-4d36-9f32-1486fcb3e69b",
+  "request_id": "cb191c42-db47-4055-90f5-c812b2e0e9d9",
+  "usage": {
+    "inputTokens": 891,
+    "outputTokens": 726,
+    "cacheReadTokens": 11776,
+    "cacheWriteTokens": 0
+  }
+}

@@ -1,0 +1,3 @@
+## User prompt
+
+Auto-execute end-to-end: build a small CLI that takes a directory and prints the count of `.md` files. Output the explicit phases (expansion, planning, execution, QA, review, cleanup) and per-phase gate criteria — each phase must have a verification step before the next phase begins. Do not collapse phases.

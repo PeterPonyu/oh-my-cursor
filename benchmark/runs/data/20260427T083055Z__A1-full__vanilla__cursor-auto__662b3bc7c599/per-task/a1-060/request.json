@@ -1,0 +1,6 @@
+{
+  "backend": "cursor_cli",
+  "model": "cursor/auto",
+  "prompt": "A user reports the CLI tool they installed has 'inconsistent behavior' — sometimes commands work, sometimes they hit 'command not found' or 'config missing'. Run a structured doctor diagnosis: ordered checks (binary on PATH and which copy, version, config-dir presence and ownership, config-file schema match, plugin/skill registration, hook directory state, validation script results if any), pass criterion per check, status (OK/WARN/CRITICAL) per check, recommended fixes ranked by safety, and explicit confirm-first rule for anything destructive.",
+  "workdir": "/tmp/cursor-vanilla-597mqx8a"
+}

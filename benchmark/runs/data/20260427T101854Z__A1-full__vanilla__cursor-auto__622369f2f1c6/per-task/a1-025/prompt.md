@@ -1,0 +1,3 @@
+## User prompt
+
+A user reports: 'My pytest run hangs forever, no output, no error.' Generate the top 3 most likely root causes ranked by base rate. For each: confidence level, the cheapest diagnostic command, and how to discriminate it from the next-best alternative.

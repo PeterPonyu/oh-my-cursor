@@ -1,9 +1,10 @@
 {
   "mcpServers": {
     "cursor-state-bridge": {
-      "command": "python3",
+      "command": "node",
       "args": [
-        "${workspaceFolder}/mcp/cursor-state-bridge/__main__.py",
+        "--experimental-strip-types",
+        "${workspaceFolder}/mcp/cursor-state-bridge/index.ts",
         "--workspace",
         "${workspaceFolder}"
       ]

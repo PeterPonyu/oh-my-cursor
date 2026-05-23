@@ -1,0 +1,16 @@
+{
+  "type": "result",
+  "subtype": "success",
+  "is_error": false,
+  "duration_ms": 11520,
+  "duration_api_ms": 11520,
+  "result": "Use a **time-bounded, lease-based reconciler** that runs every `N` seconds and only touches jobs that are truly stale.\n\n- **Core loop**\n  - Select candidate rows from `pending_jobs` where `status = 'pending'` and `updated_at < now() - stuck_threshold` (or `lease_expires_at < now()` if you use leases).\n  - Claim rows atomically (e.g., `SELECT ... FOR UPDATE SKIP LOCKED`), bump `reconcile_attempts`, set a new lease/version, and enqueue.\n  - Commit transaction; emit metrics/events; repeat until stop condition.\n\n- **Stop condition**\n  - End current cycle when either:\n    - no more eligible rows are returned, **or**\n    - cycle wall-clock budget is reached (e.g., 2s of a 10s interval), **or**\n    - max-iteration cap is hit.\n\n- **Idempotence requirement**\n  - Re-enqueue must be safe if done multiple times:\n    - include deterministic dedupe key (`job_id` + `version`),\n    - queue consumer must ignore already-processed versions,\n    - DB update and enqueue should be coupled via outbox/transactional publish (or at least version check on consume).\n\n- **Max-iteration cap per cycle**\n  - Hard cap both by rows and batches, e.g.:\n    - `batch_size = 200`\n    - `max_batches_per_cycle = 10`\n    - max rows touched per cycle = `2000`\n  - Prevents one cycle from monopolizing DB/queue.\n\n- **Observable success signal**\n  - Emit and alert on:\n    - `reconciler.reenqueued_count`\n    - `reconciler.stuck_backlog` (eligible stuck rows)\n    - `reconciler.oldest_stuck_age_seconds`\n    - `reconciler.cycle_duration_ms` and `error_count`\n  - Success = backlog and oldest age trend down after each cycle.\n\n- **Fallback for repeat failures**\n  - If `reconcile_attempts >= K` (e.g., 5), stop normal re-enqueue:\n    - move row to `quarantine_jobs` / set `status='poisoned'`,\n    - attach last error + timestamps,\n    - trigger alert/ticket for manual triage or specialized handler.\n  - Optionally apply exponential backoff before quarantine to reduce hot-loop retries.\n\nIf you want, I can also provide concrete SQL + pseudocode for Postgres (with `SKIP LOCKED` and an outbox pattern).",
+  "session_id": "ab563564-7c89-4352-977f-b583161d9b37",
+  "request_id": "60ee02c8-aeac-4f75-bff1-c9d1f7aabf53",
+  "usage": {
+    "inputTokens": 870,
+    "outputTokens": 565,
+    "cacheReadTokens": 11776,
+    "cacheWriteTokens": 0
+  }
+}

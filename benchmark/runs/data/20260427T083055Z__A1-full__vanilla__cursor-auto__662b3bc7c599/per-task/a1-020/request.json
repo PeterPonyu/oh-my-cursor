@@ -1,0 +1,6 @@
+{
+  "backend": "cursor_cli",
+  "model": "cursor/auto",
+  "prompt": "Security-review this snippet. Output OWASP class, severity, attack scenario, line cited, and remediation.\n\n```python\n1 import hashlib\n2 def store_password(user, pw):\n3     h = hashlib.md5(pw.encode()).hexdigest()\n4     db.execute('UPDATE users SET pw_hash=? WHERE id=?', (h, user.id))\n```",
+  "workdir": "/tmp/cursor-vanilla-597mqx8a"
+}

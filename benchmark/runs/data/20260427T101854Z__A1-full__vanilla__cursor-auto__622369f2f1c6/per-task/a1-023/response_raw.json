@@ -1,0 +1,16 @@
+{
+  "type": "result",
+  "subtype": "success",
+  "is_error": false,
+  "duration_ms": 8815,
+  "duration_api_ms": 8815,
+  "result": "- **Finding:** Unsafe deserialization via `pickle.loads` on untrusted input  \n- **OWASP class:** `A08:2021 - Software and Data Integrity Failures` (Insecure Deserialization)  \n- **Severity:** **Critical**  \n- **Line:** `3` (`return pickle.loads(blob)`)\n\n- **Attack scenario:**  \n  An attacker sends a crafted `blob` containing a malicious pickle payload. During `pickle.loads`, Python can execute attacker-controlled code (`__reduce__`/gadget chain), leading to remote code execution on the server, data theft, or full host compromise.\n\n- **Remediation:**  \n  - Do **not** use `pickle` for untrusted/user-controlled data.  \n  - Replace with a safe format like `json` (or `msgpack` with strict schema validation).  \n  - Validate structure and types before use (e.g., schema checks with `pydantic`/`jsonschema`).  \n  - If legacy pickle must be supported temporarily, only accept blobs from a strictly trusted source and protect with strong authenticity checks (e.g., HMAC/signatures), but migration off pickle is the real fix.\n\nSafer pattern:\n\n```python\nimport json\n\ndef load_session(blob: bytes):\n    data = json.loads(blob.decode(\"utf-8\"))\n    # validate expected keys/types here\n    return data\n```",
+  "session_id": "fd44d2e9-0c07-4aae-8c81-2ac1bc951580",
+  "request_id": "b20e0ef2-f3d1-48aa-a4fd-834d38e7fd70",
+  "usage": {
+    "inputTokens": 862,
+    "outputTokens": 356,
+    "cacheReadTokens": 11776,
+    "cacheWriteTokens": 0
+  }
+}

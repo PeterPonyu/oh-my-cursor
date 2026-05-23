@@ -1,0 +1,3 @@
+## User prompt
+
+Design a reconciliation loop that periodically scans a `pending_jobs` table and re-enqueues stuck rows. Output: stop condition, idempotence requirement, max-iteration cap per cycle, observable success signal, and a fallback for repeat failures.

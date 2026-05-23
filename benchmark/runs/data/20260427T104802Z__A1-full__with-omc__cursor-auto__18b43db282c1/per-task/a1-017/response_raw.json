@@ -1,0 +1,16 @@
+{
+  "type": "result",
+  "subtype": "success",
+  "is_error": false,
+  "duration_ms": 8042,
+  "duration_api_ms": 8042,
+  "result": "- **HIGH** — `fetchAll` returns before any `fetch` completes (`line 3` + `line 7`).  \n  `Array.forEach` does not await async callbacks, so `results` is usually returned empty.\n\n- **LOW** — `results.push(...)` inside async callbacks can produce completion-order rather than input-order (`line 5`).  \n  If response times differ, pushes happen as requests finish.\n\nSmallest safe fix is to await all promises directly and return them in input order:\n\n```typescript\nasync function fetchAll(urls: string[]): Promise<string[]> {\n  return Promise.all(\n    urls.map(async (url) => {\n      const r = await fetch(url);\n      return r.text();\n    })\n  );\n}\n```\n\nThis fixes both timing and ordering correctness.",
+  "session_id": "3513067f-95b5-4229-a33e-d6e8df1ff66a",
+  "request_id": "23f94090-0826-4256-b2b8-9e56a4940e4d",
+  "usage": {
+    "inputTokens": 191,
+    "outputTokens": 233,
+    "cacheReadTokens": 13312,
+    "cacheWriteTokens": 0
+  }
+}

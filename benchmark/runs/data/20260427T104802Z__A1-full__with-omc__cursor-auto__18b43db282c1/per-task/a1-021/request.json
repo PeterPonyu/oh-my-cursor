@@ -1,0 +1,6 @@
+{
+  "backend": "cursor_cli",
+  "model": "cursor/auto",
+  "prompt": "Security-review this Express handler. Output: OWASP class, severity, attack scenario, line, remediation.\n\n```javascript\n1 app.get('/fetch', async (req, res) => {\n2   const url = req.query.url;\n3   const r = await fetch(url);\n4   res.send(await r.text());\n5 });\n```",
+  "workdir": "/home/zeyufu/Desktop/oh-my-cursor"
+}

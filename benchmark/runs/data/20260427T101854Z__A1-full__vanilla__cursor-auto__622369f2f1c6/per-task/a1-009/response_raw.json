@@ -1,0 +1,16 @@
+{
+  "type": "result",
+  "subtype": "success",
+  "is_error": false,
+  "duration_ms": 11091,
+  "duration_api_ms": 11091,
+  "result": "To add search well, these are the key assumptions/ambiguities I’d want to resolve first:\n\n- **Search target**: what entities are searchable (products only, or also categories/brands/content)?\n- **Query semantics**: exact match vs partial, typo tolerance, stemming/synonyms, multilingual handling.\n- **Ranking goals**: relevance only vs business signals (popularity, margin, inventory, promotions, personalization).\n- **Filters/facets**: which dimensions must be filterable and how they interact with ranking.\n- **Latency/SLA**: acceptable response time and traffic scale (QPS, catalog size, update frequency).\n- **Data freshness**: near-real-time indexing vs batch updates.\n- **UI/UX scope**: autocomplete, suggestions, “no results” behavior, pagination/infinite scroll.\n- **Access control**: any role/region/tenant visibility constraints.\n- **Observability**: metrics for success (CTR, conversion, zero-result rate) and feedback loop.\n- **Build vs buy constraints**: stack preferences, budget, ops ownership, compliance limits.\n\nThe weakest dimension is usually **ranking intent**, because everything else depends on what “good results” means.\n\n**Focused question #1:**  \nWhen a user searches, what should determine result order first: textual relevance, business priorities (e.g., promoted/high-margin/in-stock), or user personalization?",
+  "session_id": "e64bbf7f-8129-4e7e-b697-6f87d461f579",
+  "request_id": "60851e2e-ed2f-436b-a98c-76940d8dbb41",
+  "usage": {
+    "inputTokens": 857,
+    "outputTokens": 365,
+    "cacheReadTokens": 11776,
+    "cacheWriteTokens": 0
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "type": "result",
+  "subtype": "success",
+  "is_error": false,
+  "duration_ms": 11200,
+  "duration_api_ms": 11200,
+  "result": "Understood — I’ll run this as a deep-interview gating pass and start by loading the deep-interview skill so I can follow its exact format, then I’ll give you the concise scoring and one focused question only.You want to transform a legacy Java monolith so it is easier to evolve, operate, and sustain over time, while reducing the risks that come with aging structure and practices.\n\n- **Intent clarity:** 0.75 (the motivation is clear at a high level: “modernize”)\n- **Outcome clarity:** 0.35 (target end-state is not yet concrete)\n- **Scope clarity:** 0.40 (“monolith” is broad; boundaries are undefined)\n- **Success criteria clarity:** 0.30 (no measurable definition of “modernized” yet)\n\nLowest-scoring dimension: **Success criteria clarity (0.30)**\n\nSingle focused question:  \nWhat are the top 2-3 measurable indicators that would make you say, with confidence, “this monolith is modernized enough for phase one”?",
+  "session_id": "e1d5d48f-99cf-4251-b3d4-610f45a92637",
+  "request_id": "dfe2a076-8c08-465c-9f1f-8d0998f08ee9",
+  "usage": {
+    "inputTokens": 8172,
+    "outputTokens": 373,
+    "cacheReadTokens": 24448,
+    "cacheWriteTokens": 0
+  }
+}

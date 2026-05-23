@@ -1,0 +1,16 @@
+{
+  "type": "result",
+  "subtype": "success",
+  "is_error": false,
+  "duration_ms": 7718,
+  "duration_api_ms": 7718,
+  "result": "## Findings\n\n- **Medium** — `divide(a, b)` can raise `ZeroDivisionError` when `b == 0`, which may crash callers if not explicitly handled.\n\n## Smallest Fix\n\n```python\ndef divide(a, b):\n    if b == 0:\n        return None  # or raise ValueError(\"b must not be 0\")\n    return a / b\n```\n\n## Notes\n\n- Returning `None` is the smallest non-crashing change, but it changes return semantics.\n- If you want stricter behavior, replace with `raise ValueError(\"b must not be 0\")` for clearer error handling.",
+  "session_id": "485845c3-6070-4859-8b8d-61ae555d6a81",
+  "request_id": "27fc7140-81ae-4fa5-9920-c9980e9aaee7",
+  "usage": {
+    "inputTokens": 855,
+    "outputTokens": 156,
+    "cacheReadTokens": 11776,
+    "cacheWriteTokens": 0
+  }
+}

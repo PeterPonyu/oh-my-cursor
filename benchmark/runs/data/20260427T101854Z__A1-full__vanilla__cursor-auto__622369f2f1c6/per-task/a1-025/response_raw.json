@@ -1,0 +1,16 @@
+{
+  "type": "result",
+  "subtype": "success",
+  "is_error": false,
+  "duration_ms": 12048,
+  "duration_api_ms": 12048,
+  "result": "Most likely causes for **“`pytest` hangs forever with no output/error”**, ranked by base rate:\n\n1. **A test (or fixture/import) is blocking on I/O or waiting indefinitely**\n- **Why high base rate:** Very common with network calls, `subprocess` waits, DB connections, `input()`, sleeps/retries, or deadlocked locks/events.\n- **Confidence:** **High**\n- **Cheapest diagnostic command:**  \n  - `pytest -vv -s --setup-show --maxfail=1`\n- **How to distinguish from #2:**  \n  - If you see collection/setup progress and then it stops at a specific test/fixture, this is likely test/runtime blocking.  \n  - If it never gets past “collecting …”, #2 is more likely.\n\n2. **Hang during test collection due to import-time side effects**\n- **Why high base rate:** Common when module import starts app servers, opens sockets, does heavy initialization, or runs top-level code with waits.\n- **Confidence:** **Medium-High**\n- **Cheapest diagnostic command:**  \n  - `pytest --collect-only -vv`\n- **How to distinguish from #3:**  \n  - If `--collect-only` itself hangs, it’s usually import/collection side effects.  \n  - If collection finishes fast but normal run hangs later, think plugins/concurrency (#3) or blocking test code (#1).\n\n3. **Pytest plugin/concurrency interaction deadlock (xdist, asyncio, coverage, custom plugins)**\n- **Why medium base rate:** Less common than #1/#2, but very frequent in larger stacks using many plugins.\n- **Confidence:** **Medium**\n- **Cheapest diagnostic command:**  \n  - `pytest -p no:all -p pytest_cov` *(or simply start with `pytest -p no:all` to test bare core)*  \n  - Practical simpler first cut: `pytest -q -p no:xdist -p no:asyncio`\n- **How to distinguish from #1:**  \n  - If disabling plugins makes hang disappear without changing tests, plugin interaction is likely.  \n  - If hang persists even with minimal plugins, it’s more likely blocking test code/fixtures (#1).\n\nQuick triage order I’d run:\n1) `pytest --collect-only -vv`  \n2) `pytest -vv -s --setup-show --maxfail=1`  \n3) `pytest -q -p no:xdist -p no:asyncio` (or broader plugin disable)",
+  "session_id": "94e91ff7-2c8d-4229-8adf-39840fe41730",
+  "request_id": "2a9bc5ae-125e-41fe-9bb7-f38b2caf3f8c",
+  "usage": {
+    "inputTokens": 875,
+    "outputTokens": 570,
+    "cacheReadTokens": 11776,
+    "cacheWriteTokens": 0
+  }
+}

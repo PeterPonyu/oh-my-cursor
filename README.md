@@ -21,18 +21,18 @@ The plugin is rooted at `.cursor-plugin/plugin.json` and installs to
 
 ```bash
 # Install from the repo root (copy mode — minimal runtime payload)
-./scripts/install-local-plugin.sh
+node --experimental-strip-types scripts/install-local-plugin.ts
 
 # Or with the opt-in MCP bridge for agent-callable state writes
-./scripts/install-local-plugin.sh --with-mcp
+node --experimental-strip-types scripts/install-local-plugin.ts --with-mcp
 
 # Symlink mode for live development (changes visible after reload)
-./scripts/install-local-plugin.sh --symlink
+node --experimental-strip-types scripts/install-local-plugin.ts --symlink
 ```
 
 After install, reload Cursor (**Developer: Reload Window**).
 
-Verify the install with `scripts/check-local-plugin-install.sh`.
+Verify the install with `node --experimental-strip-types scripts/check-local-plugin-install.ts`.
 
 ## What's included
 

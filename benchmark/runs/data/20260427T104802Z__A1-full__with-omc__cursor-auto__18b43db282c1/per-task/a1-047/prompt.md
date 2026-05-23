@@ -1,0 +1,3 @@
+## User prompt
+
+Rename a config key `db.host` to `database.host` across 20 YAML files in `config/`. Plan the batched edit. Output: single-pattern definition (not a regex that overmatches), per-file scope, conflict-avoidance for files already using the new key, and a verification command that proves no occurrence of the old key remains.

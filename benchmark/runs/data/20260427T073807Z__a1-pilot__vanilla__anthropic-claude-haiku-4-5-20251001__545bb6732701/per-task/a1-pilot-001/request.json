@@ -1,0 +1,11 @@
+{
+  "model": "anthropic/claude-haiku-4-5-20251001",
+  "max_tokens": 1024,
+  "temperature": 0.2,
+  "messages": [
+    {
+      "role": "user",
+      "content": "Plan a 4-step migration to add OAuth login to a Flask app that currently uses session cookies. Output: numbered steps with each step's file scope and rollback consideration."
+    }
+  ]
+}

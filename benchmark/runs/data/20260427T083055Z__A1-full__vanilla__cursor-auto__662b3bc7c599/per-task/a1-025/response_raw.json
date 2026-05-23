@@ -1,0 +1,16 @@
+{
+  "type": "result",
+  "subtype": "success",
+  "is_error": false,
+  "duration_ms": 13782,
+  "duration_api_ms": 13782,
+  "result": "Most likely causes by **base rate** for “`pytest` hangs forever with no output/error”:\n\n1. **Collection/import side effect is blocking (network call, DB init, subprocess, sleep)**\n   - **Confidence:** High (~55%)\n   - **Cheapest diagnostic command:**  \n     `pytest --collect-only -vv -s`\n   - **How to discriminate from #2:**  \n     If it hangs during collection (before “collected X items”), this is usually import-time/collection code.  \n     If collection completes and hang starts only after tests begin, #2 is more likely.\n\n2. **A fixture or setup is waiting indefinitely (session/module fixture, teardown deadlock, external service wait)**\n   - **Confidence:** Medium-High (~30%)\n   - **Cheapest diagnostic command:**  \n     `pytest -vv -s --setup-show --maxfail=1`\n   - **How to discriminate from #3:**  \n     If output stops at a specific fixture/setup step, it’s fixture/setup logic.  \n     If the run only hangs with parallelization/plugins enabled (and not in plain mode), #3 is more likely.\n\n3. **Plugin/parallelization interaction deadlock (e.g., `xdist`, asyncio plugin mode, coverage plugin hooks)**\n   - **Confidence:** Medium (~15%)\n   - **Cheapest diagnostic command:**  \n     `pytest -vv -s -p no:all`\n   - **How to discriminate from #1:**  \n     If `-p no:all` runs (or at least produces progress) but normal run hangs, plugin interference is likely.  \n     If both hang at collection/import, revert to #1 (import-time blocking).\n\nQuick triage sequence (fastest): run `--collect-only`, then `--setup-show`, then `-p no:all`. This usually isolates the class of failure in a few minutes.",
+  "session_id": "da2bde20-168a-4bf9-aa2b-d9c38f1b0df7",
+  "request_id": "da8b6c0e-7737-4ca4-a7c8-c556c327a0b9",
+  "usage": {
+    "inputTokens": 875,
+    "outputTokens": 444,
+    "cacheReadTokens": 11776,
+    "cacheWriteTokens": 0
+  }
+}

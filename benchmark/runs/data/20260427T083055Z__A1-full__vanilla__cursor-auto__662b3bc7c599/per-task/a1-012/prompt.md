@@ -1,0 +1,3 @@
+## User prompt
+
+We want to 'modernize' a legacy Java monolith. Treat this as a deep-interview gating exercise: restate the idea, list four clarity dimensions with provisional scores, identify the lowest-scoring dimension, and produce a single focused question. Do not propose architectures.

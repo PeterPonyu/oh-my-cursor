@@ -1,0 +1,6 @@
+{
+  "backend": "cursor_cli",
+  "model": "cursor/auto",
+  "prompt": "Review this snippet for bugs:\n\n```python\ndef divide(a, b):\n    return a / b\n```\nReport: severity-rated findings with the smallest fix.",
+  "workdir": "/tmp/cursor-vanilla-m8jr3pc3"
+}

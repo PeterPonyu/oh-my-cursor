@@ -1,0 +1,2 @@
+run_id,benchmark,arm,model,n_tasks,total_tokens_in,total_tokens_out,total_cost_usd,wallclock_seconds,n_errors
+545bb6732701,a1-pilot,vanilla,anthropic/claude-haiku-4-5-20251001,3,30,3663,0.041462,47.426,0

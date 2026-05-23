@@ -1,0 +1,16 @@
+{
+  "type": "result",
+  "subtype": "success",
+  "is_error": false,
+  "duration_ms": 29623,
+  "duration_api_ms": 29623,
+  "result": "I’ll quickly scan `config/` to identify the exact 20 YAML files that still contain `db.host`, then I’ll give you a precise batch-edit plan with a safe match pattern, conflict handling for files already using `database.host`, and a verification command.I hit a path mismatch (`config/` doesn’t exist at the current workspace root), so I’m locating where your project files are first, then I’ll produce the exact scoped plan.Use this as a **safe batched plan**.\n\n### 1) Single-pattern definition (precise, non-overmatching)\n\n- **Match only YAML key lines** where the key is exactly `db.host`:\n  - Pattern: `^[[:space:]]*db\\.host[[:space:]]*:`\n- This avoids touching:\n  - values like `url: \"db.host:5432\"`\n  - comments\n  - unrelated keys like `db.hostname`\n\nFor replacement, keep indentation and spacing:\n- Replace `^([[:space:]]*)db\\.host([[:space:]]*:)`\n- With `\\1database.host\\2`\n\n---\n\n### 2) Per-file scope (exact 20-file target set)\n\nBuild the scope first, and freeze it before editing:\n\n```bash\nmapfile -t TARGET_FILES < <(\n  rg -l --glob '*.yml' --glob '*.yaml' '^[[:space:]]*db\\.host[[:space:]]*:' config | sort\n)\n\nprintf '%s\\n' \"${TARGET_FILES[@]}\"\necho \"count=${#TARGET_FILES[@]}\"\n```\n\n- Require `count=20` before proceeding.\n- This gives explicit per-file scope (one path per line).\n\n---\n\n### 3) Conflict-avoidance (files already containing `database.host`)\n\nBefore replacing, split files into:\n- **safe**: has old key, does not already have new key\n- **conflict**: has both old and new keys (skip auto-edit)\n\n```bash\nSAFE_FILES=()\nCONFLICT_FILES=()\n\nfor f in \"${TARGET_FILES[@]}\"; do\n  if rg -q '^[[:space:]]*database\\.host[[:space:]]*:' \"$f\"; then\n    CONFLICT_FILES+=(\"$f\")\n  else\n    SAFE_FILES+=(\"$f\")\n  fi\ndone\n\nprintf 'SAFE (%d)\\n' \"${#SAFE_FILES[@]}\"\nprintf '%s\\n' \"${SAFE_FILES[@]}\"\nprintf 'CONFLICT (%d)\\n' \"${#CONFLICT_FILES[@]}\"\nprintf '%s\\n' \"${CONFLICT_FILES[@]}\"\n```\n\nThen edit only `SAFE_FILES`:\n\n```bash\nfor f in \"${SAFE_FILES[@]}\"; do\n  perl -i -pe 's/^([[:space:]]*)db\\.host([[:space:]]*:)/$1database.host$2/' \"$f\"\ndone\n```\n\n---\n\n### 4) Verification command (prove old key is gone)\n\nRun this after edits:\n\n```bash\nrg -n --glob '*.yml' --glob '*.yaml' '^[[:space:]]*db\\.host[[:space:]]*:' config && echo \"FAIL: old key remains\" || echo \"PASS: no db.host key remains\"\n```\n\nOptional stricter proof (also show new-key presence count):\n\n```bash\necho \"old_key_count=$(rg -c --glob '*.yml' --glob '*.yaml' '^[[:space:]]*db\\.host[[:space:]]*:' config | awk -F: '{s+=$2} END {print s+0}')\"\necho \"new_key_count=$(rg -c --glob '*.yml' --glob '*.yaml' '^[[:space:]]*database\\.host[[:space:]]*:' config | awk -F: '{s+=$2} END {print s+0}')\"\n```\n\nIf you want, I can convert this into a single idempotent bash script that exits non-zero on any conflict or leftover `db.host`.",
+  "session_id": "3b134436-5e2f-4487-bf73-d649ad3e4b1c",
+  "request_id": "1d14c06c-9155-4964-94f3-d41cbc90db9d",
+  "usage": {
+    "inputTokens": 1458,
+    "outputTokens": 1602,
+    "cacheReadTokens": 37632,
+    "cacheWriteTokens": 0
+  }
+}

@@ -1,0 +1,7 @@
+[2026-04-28T07:45:10.080415Z] run_start
+  benchmark=a1-pilot arm=with-omc model=cursor/auto budget=$2.0
+[2026-04-28T07:45:10.080558Z] task_start task=a1-pilot-001  prompt_chars=173
+[2026-04-28T07:45:10.080631Z] request task=a1-pilot-001  keys=['backend', 'cmd', 'model', 'model_arg', 'prompt', 'workdir']
+[2026-04-28T07:45:31.608265Z] response task=a1-pilot-001  in=3154 out=513 cost=$0.020075 ms=21527 stop=None
+[2026-04-28T07:45:31.608290Z] task_end task=a1-pilot-001  status=ok
+[2026-04-28T07:45:31.608307Z] run_end  status=ok totals={'n_tasks': 1, 'n_responses': 1, 'n_errors': 0, 'n_fallback_events': 0, 'tokens_in': 3154, 'tokens_out': 513, 'cost_usd': 0.020075, 'wallclock_seconds': 21.528}

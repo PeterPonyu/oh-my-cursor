@@ -1,0 +1,16 @@
+{
+  "type": "result",
+  "subtype": "success",
+  "is_error": false,
+  "duration_ms": 19038,
+  "duration_api_ms": 19038,
+  "result": "I’ll draft a concrete 4-step migration plan with file-by-file scope and rollback notes, and I’ll quickly check the planning skill guidance first so the structure matches your requested output.1. **Introduce OAuth plumbing behind a feature flag**  \n   - **File scope:** `config.py` (OAuth client ID/secret, redirect URI, provider discovery URL, `ENABLE_OAUTH_LOGIN`), `.env.example` (new env vars), and app factory (`app/__init__.py`) to initialize OAuth client.  \n   - **Rollback consideration:** Keep existing session auth as default path; disable via `ENABLE_OAUTH_LOGIN=false` and redeploy without schema changes.\n\n2. **Add OAuth login/callback routes while preserving current session semantics**  \n   - **File scope:** `app/auth/routes.py` (or equivalent auth blueprint) for `/login/oauth` and `/auth/callback`, plus `app/templates/login.html` to add “Sign in with <Provider>” button guarded by flag.  \n   - **Rollback consideration:** Routes are additive; remove/hide OAuth button and route registration to instantly revert UX to username/password-only login.\n\n3. **Map OAuth identity to local users and session creation**  \n   - **File scope:** `app/models.py` (or `app/models/user.py`) to add provider fields (e.g., `oauth_provider`, `oauth_sub`), migration file under `migrations/versions/`, and `app/auth/service.py` to upsert/link users then create the same Flask session cookie flow used today.  \n   - **Rollback consideration:** Use a non-destructive migration (nullable columns, no drops). If rollback needed, stop using new fields first, then run a down migration only after confirming no active dependencies.\n\n4. **Harden, test, and phase rollout**  \n   - **File scope:** `tests/auth/test_oauth.py` (success/failure/csrf-state tests), `tests/integration/test_login_flow.py`, and deployment config (`docker-compose.yml`, CI secrets, or platform env settings) for secure secrets and callback URLs.  \n   - **Rollback consideration:** Release in stages (dev → staging → partial prod), monitor auth error rate, and keep a one-click rollback playbook: disable feature flag + revert env vars to restore legacy session login immediately.",
+  "session_id": "6f8f059e-c37d-4ca4-a88c-353031e0dd30",
+  "request_id": "9dbc7d12-7c5b-499d-8a69-eebad99f77df",
+  "usage": {
+    "inputTokens": 9564,
+    "outputTokens": 638,
+    "cacheReadTokens": 18944,
+    "cacheWriteTokens": 0
+  }
+}

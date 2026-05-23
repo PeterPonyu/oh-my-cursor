@@ -1,0 +1,3 @@
+## User prompt
+
+Plan a backwards-compatible schema migration to split a `users` table into `users` + `user_profiles` in a Postgres-backed Django app with 10M rows. Output: numbered steps, expand/contract phases, file scope (models, migrations, callers), and rollback consideration per step.

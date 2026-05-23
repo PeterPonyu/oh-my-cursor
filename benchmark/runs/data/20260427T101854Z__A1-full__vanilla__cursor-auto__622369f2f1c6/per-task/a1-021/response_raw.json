@@ -1,0 +1,16 @@
+{
+  "type": "result",
+  "subtype": "success",
+  "is_error": false,
+  "duration_ms": 12787,
+  "duration_api_ms": 12787,
+  "result": "- **OWASP class:** A10:2021 – Server-Side Request Forgery (SSRF)  \n  **Severity:** High  \n  **Attack scenario:** An attacker supplies `?url=http://169.254.169.254/latest/meta-data/...` (or internal host like `http://localhost:...`) so the server fetches internal/cloud metadata endpoints and returns sensitive data to the attacker.  \n  **Line:** `3` (tainted `url` from line `2` flows directly into `fetch`)  \n  **Remediation:** Strictly validate and allowlist destinations (scheme/host/port), block private/internal IP ranges and link-local addresses, normalize and re-resolve DNS to prevent bypass, and enforce outbound network egress controls.\n\n- **OWASP class:** A01:2021 – Broken Access Control (proxying internal resources)  \n  **Severity:** High (context-dependent)  \n  **Attack scenario:** Endpoint acts as an open proxy; unauthenticated users can access resources only the backend can reach (intranet/admin services), bypassing perimeter controls.  \n  **Line:** `1-4`  \n  **Remediation:** Require authN/authZ for this capability, constrain reachable targets to a minimal business allowlist, and disable generic URL fetching for untrusted users.\n\n- **OWASP class:** A05:2021 – Security Misconfiguration (missing resource limits)  \n  **Severity:** Medium  \n  **Attack scenario:** Attacker points to a very large/slow response; server reads full body via `r.text()` causing memory/CPU exhaustion (DoS).  \n  **Line:** `4`  \n  **Remediation:** Add request timeout, max response size, streaming with limits, abort controller, and rate limiting.\n\n- **OWASP class:** A09:2021 – Security Logging and Monitoring Failures (if unmonitored)  \n  **Severity:** Medium  \n  **Attack scenario:** SSRF probing attempts (`127.0.0.1`, metadata IPs, unusual ports) go undetected without logging/alerting.  \n  **Line:** `1-4`  \n  **Remediation:** Log target URL decisions (sanitized), blocked attempts, response metadata, and alert on internal-IP/DNS-rebind patterns.",
+  "session_id": "21295733-ccb6-4789-a6b5-5e450d0c31af",
+  "request_id": "5d771148-8d69-49dd-b97d-ae6b68bcde50",
+  "usage": {
+    "inputTokens": 890,
+    "outputTokens": 510,
+    "cacheReadTokens": 11776,
+    "cacheWriteTokens": 0
+  }
+}

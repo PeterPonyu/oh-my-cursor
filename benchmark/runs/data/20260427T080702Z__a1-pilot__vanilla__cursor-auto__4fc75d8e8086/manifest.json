@@ -1,0 +1,23 @@
+{
+  "run_id": "4fc75d8e8086",
+  "benchmark": "a1-pilot",
+  "arm": "vanilla",
+  "model": "cursor/auto",
+  "fallback_model": null,
+  "budget_usd": 2.0,
+  "started_at": "20260427T080702Z",
+  "status": "ok",
+  "totals": {
+    "n_tasks": 3,
+    "n_responses": 3,
+    "n_errors": 0,
+    "n_fallback_events": 0,
+    "tokens_in": 12679,
+    "tokens_out": 1026,
+    "tokens_cache_read": 41088,
+    "tokens_cache_write": 0,
+    "cost_usd": 0.065753,
+    "wallclock_seconds": 45.453
+  },
+  "run_dir": "/home/zeyufu/Desktop/oh-my-cursor/benchmark/runs/data/20260427T080702Z__a1-pilot__vanilla__cursor-auto__4fc75d8e8086"
+}

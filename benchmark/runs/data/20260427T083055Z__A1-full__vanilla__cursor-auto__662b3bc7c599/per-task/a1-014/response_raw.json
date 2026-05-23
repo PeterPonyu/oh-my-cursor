@@ -1,0 +1,16 @@
+{
+  "type": "result",
+  "subtype": "success",
+  "is_error": false,
+  "duration_ms": 14560,
+  "duration_api_ms": 14560,
+  "result": "- **LOW** — `addItem` mutates its input array via `list.push(item)` (line 2), so callers sharing the same array (`defaults` on lines 5–7) get side effects. This is fine if mutation is intended, but it can cause subtle bugs if callers expect an immutable helper.\n\nNo CRITICAL/HIGH/MEDIUM issues found in this snippet.",
+  "session_id": "5063788b-6c81-4689-b2b6-1c1ac355f3a5",
+  "request_id": "4b1740ee-3908-4010-9d2f-c8a1e455645b",
+  "usage": {
+    "inputTokens": 888,
+    "outputTokens": 224,
+    "cacheReadTokens": 11776,
+    "cacheWriteTokens": 0
+  }
+}

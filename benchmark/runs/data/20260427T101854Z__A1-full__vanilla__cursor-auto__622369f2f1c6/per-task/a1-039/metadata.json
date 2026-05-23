@@ -1,0 +1,12 @@
+{
+  "model": "cursor/auto",
+  "tokens": {
+    "input": 896,
+    "output": 939,
+    "cache_read": 11776,
+    "cache_write": 0
+  },
+  "cost_usd": 0.020306,
+  "wallclock_ms": 23514,
+  "stop_reason": null
+}

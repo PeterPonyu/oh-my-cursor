@@ -1,0 +1,16 @@
+{
+  "type": "result",
+  "subtype": "success",
+  "is_error": false,
+  "duration_ms": 10260,
+  "duration_api_ms": 10260,
+  "result": "Most likely causes (ranked by base rate) and the fastest one-liner to check each:\n\n1. **Pytest is collecting/running way too much (wrong rootdir, huge tree, network mounts, or `testpaths` misconfig)**\n   - Fast diagnostic:  \n     ```bash\n     pytest --collect-only -q\n     ```\n   - If this itself appears to “hang”, collection scope is the problem.\n\n2. **A fixture blocks before test output (session/module fixture waiting on DB, HTTP, Docker, subprocess, etc.)**\n   - Fast diagnostic:  \n     ```bash\n     pytest -vv -s --setup-show -x\n     ```\n   - This shows fixture setup progression so you can see the exact fixture where it stops.\n\n3. **A plugin/import side effect deadlocks or stalls startup (e.g., `conftest.py`, `pytest.ini` plugins, coverage, asyncio/gevent interactions)**\n   - Fast diagnostic:  \n     ```bash\n     PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 pytest -q\n     ```\n   - If this runs, re-enable plugins incrementally to find the blocker.\n\nIf you want, I can give you a **30-second triage sequence** that combines these into the minimum number of runs.",
+  "session_id": "49edd21c-e696-4862-8281-c07c5ece3757",
+  "request_id": "5bcf5f40-1ce1-48b4-8e90-748b71298ade",
+  "usage": {
+    "inputTokens": 136,
+    "outputTokens": 279,
+    "cacheReadTokens": 13312,
+    "cacheWriteTokens": 0
+  }
+}

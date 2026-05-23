@@ -1,0 +1,16 @@
+{
+  "type": "result",
+  "subtype": "success",
+  "is_error": false,
+  "duration_ms": 9784,
+  "duration_api_ms": 9784,
+  "result": "“Add AI to my CRM” is too underspecified to choose a safe implementation path yet.\n\nAmbiguities I can’t resolve from your prompt:\n- **Primary outcome**: whether you want AI for lead scoring, email drafting, call summaries, forecasting, support triage, data enrichment, chatbot, or all of these.\n- **User/workflow scope**: who uses it (sales reps, managers, support) and at which exact step in the CRM workflow.\n- **Data boundaries**: what customer data the AI may access, and what must be excluded for compliance/privacy.\n- **Success criteria**: what metric defines success (time saved, conversion lift, response quality, forecast accuracy, etc.).\n- **Operational constraints**: acceptable latency, budget per user/request, and required reliability/SLA.\n- **Risk controls**: approval gates, auditability, human-in-the-loop requirements, and fallback behavior on low confidence.\n- **Technical context**: CRM platform, existing architecture, and whether external model providers are allowed.\n\nAssumptions I cannot safely make:\n- That “AI” means generative text rather than predictive analytics or automation.\n- That you can send CRM data to third-party LLM APIs.\n- That your team accepts non-deterministic outputs in customer-facing flows.\n- That your existing CRM has extension points where AI can run in-line.\n- That you want broad AI rollout instead of one constrained, high-ROI pilot.\n\nWhat is the single highest-impact AI use case you want in the CRM first (e.g., lead scoring, email drafting, meeting/call summarization, next-best-action recommendations, or support reply generation)?",
+  "session_id": "f51357d4-b08e-4cca-b774-a89363618686",
+  "request_id": "73f2ace0-95a4-4da7-aeef-74015522cae5",
+  "usage": {
+    "inputTokens": 136,
+    "outputTokens": 375,
+    "cacheReadTokens": 13312,
+    "cacheWriteTokens": 0
+  }
+}

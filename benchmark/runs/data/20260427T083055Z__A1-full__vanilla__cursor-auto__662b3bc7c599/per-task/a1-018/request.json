@@ -1,0 +1,6 @@
+{
+  "backend": "cursor_cli",
+  "model": "cursor/auto",
+  "prompt": "Review for bugs. Output severity-rated findings, line:issue, root cause, and the smallest fix. Do not refactor stylistically — only flag correctness issues.\n\n```java\n 1 public class Cache {\n 2   private Map<User, byte[]> store = new HashMap<>();\n 3   public byte[] get(String userId, String region) {\n 4     User k = new User(userId, region);\n 5     return store.get(k);\n 6   }\n 7   public void put(String userId, String region, byte[] data) {\n 8     User k = new User(userId, region);\n 9     store.put(k, data);\n10   }\n11 }\n12 // User does not override equals/hashCode.\n```",
+  "workdir": "/tmp/cursor-vanilla-597mqx8a"
+}

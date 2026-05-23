@@ -1,0 +1,16 @@
+{
+  "type": "result",
+  "subtype": "success",
+  "is_error": false,
+  "duration_ms": 12680,
+  "duration_api_ms": 12680,
+  "result": "You want to improve speed, but first align on what “faster” should mean for your app and users. I’ll run a quick clarification pass to narrow this into concrete performance goals before touching code.When people say “make it faster,” they usually mean one of a few different things:\n\n- pages load faster (initial render)\n- interactions feel instant (click/search/type latency)\n- app stays smooth (no jank/frame drops)\n- backend/API responds faster\n- it handles more users without slowing down\n\nTo lock this down, first question:\n\n**What’s the most painful “slow” moment right now, from a real user’s perspective?**  \n(Example: “dashboard takes 6s to first content,” “search feels laggy after typing,” “checkout spinner lasts too long,” etc.)\n\nOnce you answer that, I’ll narrow it into concrete success metrics and scope before we write any code.",
+  "session_id": "6f5c12c2-9ce6-4aa0-ae21-723e8fb2c1fb",
+  "request_id": "a7c91d77-e6ca-4876-af57-cf831451bf82",
+  "usage": {
+    "inputTokens": 8120,
+    "outputTokens": 425,
+    "cacheReadTokens": 24448,
+    "cacheWriteTokens": 0
+  }
+}

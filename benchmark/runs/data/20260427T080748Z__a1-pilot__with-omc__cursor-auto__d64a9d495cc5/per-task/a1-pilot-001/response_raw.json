@@ -1,0 +1,16 @@
+{
+  "type": "result",
+  "subtype": "success",
+  "is_error": false,
+  "duration_ms": 18553,
+  "duration_api_ms": 18553,
+  "result": "1. **Introduce OAuth config + dependency plumbing**  \n   - **What to do:** Add an OAuth client library (e.g., `Authlib`), define provider settings (client ID/secret, auth/token URLs, redirect URI), and load them from environment variables. Keep existing session auth untouched for now.  \n   - **File scope:** `requirements.txt` (or `pyproject.toml`), app config module (e.g., `config.py`), `.env.example`, deployment/env docs.  \n   - **Rollback consideration:** Safe to revert by removing the new dependency and config keys; no user-facing behavior changes yet.\n\n2. **Add OAuth routes and callback handling behind a feature flag**  \n   - **What to do:** Implement `/auth/login` (redirect to provider) and `/auth/callback` (exchange code, validate token/user info), then create/update local user session on success. Gate new endpoints/UI entry behind `OAUTH_ENABLED` so password/session login remains primary.  \n   - **File scope:** auth blueprint/routes (e.g., `auth/routes.py`), app factory/router registration (e.g., `app/__init__.py`), login template/button (e.g., `templates/login.html`).  \n   - **Rollback consideration:** Disable `OAUTH_ENABLED` to instantly fall back to legacy login without code removal.\n\n3. **Map OAuth identities to local users and harden session/security behavior**  \n   - **What to do:** Add user identity linkage (provider + subject ID), first-login provisioning rules, and conflict handling for existing accounts. Ensure session fixation protection, CSRF/state validation, secure cookie settings, and clear error paths.  \n   - **File scope:** models/migrations (e.g., `models.py`, Alembic migration), auth service layer (e.g., `auth/service.py`), security utilities/middleware, error templates/messages.  \n   - **Rollback consideration:** Keep schema migration reversible (drop nullable OAuth columns/table link on downgrade). If issues occur, keep OAuth disabled and continue using existing session login.\n\n4. **Cutover, test, and monitor with staged rollout**  \n   - **What to do:** Add tests (unit + integration for callback, token failure, account linking), update runbooks, and enable OAuth gradually (internal users → percentage rollout → full). Keep legacy login available for one release window, then deprecate if stable.  \n   - **File scope:** test suite (`tests/auth/test_oauth.py`, fixtures), CI config, operational docs (`README`, `docs/auth.md`), feature flag/default env config.  \n   - **Rollback consideration:** Immediate rollback via feature flag + provider credential disable; preserve legacy login path until post-stabilization metrics (login success rate, error rate) are acceptable.",
+  "session_id": "d444685d-14b6-4920-badc-dee733ad1275",
+  "request_id": "740d25e9-2c65-4461-8d6f-041a35810917",
+  "usage": {
+    "inputTokens": 2961,
+    "outputTokens": 604,
+    "cacheReadTokens": 9472,
+    "cacheWriteTokens": 0
+  }
+}

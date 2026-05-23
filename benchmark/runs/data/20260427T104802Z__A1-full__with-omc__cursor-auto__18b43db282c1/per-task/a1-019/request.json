@@ -1,0 +1,6 @@
+{
+  "backend": "cursor_cli",
+  "model": "cursor/auto",
+  "prompt": "Security-review this snippet. Output the OWASP class, severity, attack scenario, file:line, and remediation.\n\n```python\n1 def get_user(name):\n2     q = \"SELECT * FROM users WHERE name = '\" + name + \"'\"\n3     return db.execute(q).fetchone()\n```",
+  "workdir": "/home/zeyufu/Desktop/oh-my-cursor"
+}

@@ -1,0 +1,242 @@
+{"ts": "2026-04-27T10:18:54.024132Z", "event": "run_start", "run_id": "622369f2f1c6", "benchmark": "A1-full", "arm": "vanilla", "model": "cursor/auto", "fallback_model": null, "budget_usd": 5.0, "started_at": "20260427T101854Z"}
+{"ts": "2026-04-27T10:18:54.024294Z", "event": "task_start", "task_id": "a1-001", "prompt_chars": 163, "metadata": {"skill": "plan", "arm_kind": "vanilla", "cwd": "/tmp/cursor-vanilla-m8jr3pc3"}}
+{"ts": "2026-04-27T10:18:54.024366Z", "event": "request", "task_id": "a1-001", "payload_keys": ["backend", "model", "prompt", "workdir"]}
+{"ts": "2026-04-27T10:19:16.219471Z", "event": "response", "task_id": "a1-001", "tokens": {"input": 2149, "output": 542, "cache_read": 9472, "cache_write": 0}, "cost_usd": 0.017419, "wallclock_ms": 22194, "stop_reason": null}
+{"ts": "2026-04-27T10:19:16.219507Z", "event": "task_end", "task_id": "a1-001", "status": "ok"}
+{"ts": "2026-04-27T10:19:16.219610Z", "event": "task_start", "task_id": "a1-002", "prompt_chars": 211, "metadata": {"skill": "plan", "arm_kind": "vanilla", "cwd": "/tmp/cursor-vanilla-m8jr3pc3"}}
+{"ts": "2026-04-27T10:19:16.219694Z", "event": "request", "task_id": "a1-002", "payload_keys": ["backend", "model", "prompt", "workdir"]}
+{"ts": "2026-04-27T10:19:37.451827Z", "event": "response", "task_id": "a1-002", "tokens": {"input": 2275, "output": 737, "cache_read": 10368, "cache_write": 0}, "cost_usd": 0.02099, "wallclock_ms": 21231, "stop_reason": null}
+{"ts": "2026-04-27T10:19:37.451859Z", "event": "task_end", "task_id": "a1-002", "status": "ok"}
+{"ts": "2026-04-27T10:19:37.451945Z", "event": "task_start", "task_id": "a1-003", "prompt_chars": 299, "metadata": {"skill": "plan", "arm_kind": "vanilla", "cwd": "/tmp/cursor-vanilla-m8jr3pc3"}}
+{"ts": "2026-04-27T10:19:37.452008Z", "event": "request", "task_id": "a1-003", "payload_keys": ["backend", "model", "prompt", "workdir"]}
+{"ts": "2026-04-27T10:20:17.689625Z", "event": "response", "task_id": "a1-003", "tokens": {"input": 6113, "output": 1401, "cache_read": 24448, "cache_write": 0}, "cost_usd": 0.046688, "wallclock_ms": 40237, "stop_reason": null}
+{"ts": "2026-04-27T10:20:17.689657Z", "event": "task_end", "task_id": "a1-003", "status": "ok"}
+{"ts": "2026-04-27T10:20:17.689756Z", "event": "task_start", "task_id": "a1-004", "prompt_chars": 217, "metadata": {"skill": "plan", "arm_kind": "vanilla", "cwd": "/tmp/cursor-vanilla-m8jr3pc3"}}
+{"ts": "2026-04-27T10:20:17.689823Z", "event": "request", "task_id": "a1-004", "payload_keys": ["backend", "model", "prompt", "workdir"]}
+{"ts": "2026-04-27T10:20:53.771907Z", "event": "response", "task_id": "a1-004", "tokens": {"input": 6084, "output": 1697, "cache_read": 24448, "cache_write": 0}, "cost_usd": 0.051041, "wallclock_ms": 36081, "stop_reason": null}
+{"ts": "2026-04-27T10:20:53.771939Z", "event": "task_end", "task_id": "a1-004", "status": "ok"}
+{"ts": "2026-04-27T10:20:53.772025Z", "event": "task_start", "task_id": "a1-005", "prompt_chars": 274, "metadata": {"skill": "plan", "arm_kind": "vanilla", "cwd": "/tmp/cursor-vanilla-m8jr3pc3"}}
+{"ts": "2026-04-27T10:20:53.772089Z", "event": "request", "task_id": "a1-005", "payload_keys": ["backend", "model", "prompt", "workdir"]}
+{"ts": "2026-04-27T10:21:31.010798Z", "event": "response", "task_id": "a1-005", "tokens": {"input": 882, "output": 1708, "cache_read": 11776, "cache_write": 0}, "cost_usd": 0.031799, "wallclock_ms": 37238, "stop_reason": null}
+{"ts": "2026-04-27T10:21:31.010830Z", "event": "task_end", "task_id": "a1-005", "status": "ok"}
+{"ts": "2026-04-27T10:21:31.010916Z", "event": "task_start", "task_id": "a1-006", "prompt_chars": 262, "metadata": {"skill": "plan", "arm_kind": "vanilla", "cwd": "/tmp/cursor-vanilla-m8jr3pc3"}}
+{"ts": "2026-04-27T10:21:31.010979Z", "event": "request", "task_id": "a1-006", "payload_keys": ["backend", "model", "prompt", "workdir"]}
+{"ts": "2026-04-27T10:22:12.792611Z", "event": "response", "task_id": "a1-006", "tokens": {"input": 15174, "output": 2036, "cache_read": 15360, "cache_write": 0}, "cost_usd": 0.08067, "wallclock_ms": 41781, "stop_reason": null}
+{"ts": "2026-04-27T10:22:12.792637Z", "event": "task_end", "task_id": "a1-006", "status": "ok"}
+{"ts": "2026-04-27T10:22:12.792705Z", "event": "task_start", "task_id": "a1-007", "prompt_chars": 106, "metadata": {"skill": "deep-interview", "arm_kind": "vanilla", "cwd": "/tmp/cursor-vanilla-m8jr3pc3"}}
+{"ts": "2026-04-27T10:22:12.792753Z", "event": "request", "task_id": "a1-007", "payload_keys": ["backend", "model", "prompt", "workdir"]}
+{"ts": "2026-04-27T10:22:34.326637Z", "event": "response", "task_id": "a1-007", "tokens": {"input": 6065, "output": 762, "cache_read": 24448, "cache_write": 0}, "cost_usd": 0.036959, "wallclock_ms": 21533, "stop_reason": null}
+{"ts": "2026-04-27T10:22:34.326663Z", "event": "task_end", "task_id": "a1-007", "status": "ok"}
+{"ts": "2026-04-27T10:22:34.326730Z", "event": "task_start", "task_id": "a1-008", "prompt_chars": 79, "metadata": {"skill": "deep-interview", "arm_kind": "vanilla", "cwd": "/tmp/cursor-vanilla-m8jr3pc3"}}
+{"ts": "2026-04-27T10:22:34.326778Z", "event": "request", "task_id": "a1-008", "payload_keys": ["backend", "model", "prompt", "workdir"]}
+{"ts": "2026-04-27T10:22:47.973798Z", "event": "response", "task_id": "a1-008", "tokens": {"input": 9031, "output": 403, "cache_read": 23552, "cache_write": 0}, "cost_usd": 0.040204, "wallclock_ms": 13646, "stop_reason": null}
+{"ts": "2026-04-27T10:22:47.973829Z", "event": "task_end", "task_id": "a1-008", "status": "ok"}
+{"ts": "2026-04-27T10:22:47.973915Z", "event": "task_start", "task_id": "a1-009", "prompt_chars": 200, "metadata": {"skill": "deep-interview", "arm_kind": "vanilla", "cwd": "/tmp/cursor-vanilla-m8jr3pc3"}}
+{"ts": "2026-04-27T10:22:47.973979Z", "event": "request", "task_id": "a1-009", "payload_keys": ["backend", "model", "prompt", "workdir"]}
+{"ts": "2026-04-27T10:23:02.396691Z", "event": "response", "task_id": "a1-009", "tokens": {"input": 857, "output": 365, "cache_read": 11776, "cache_write": 0}, "cost_usd": 0.011579, "wallclock_ms": 14422, "stop_reason": null}
+{"ts": "2026-04-27T10:23:02.396718Z", "event": "task_end", "task_id": "a1-009", "status": "ok"}
+{"ts": "2026-04-27T10:23:02.396789Z", "event": "task_start", "task_id": "a1-010", "prompt_chars": 209, "metadata": {"skill": "deep-interview", "arm_kind": "vanilla", "cwd": "/tmp/cursor-vanilla-m8jr3pc3"}}
+{"ts": "2026-04-27T10:23:02.396840Z", "event": "request", "task_id": "a1-010", "payload_keys": ["backend", "model", "prompt", "workdir"]}
+{"ts": "2026-04-27T10:23:14.649751Z", "event": "response", "task_id": "a1-010", "tokens": {"input": 864, "output": 220, "cache_read": 11776, "cache_write": 0}, "cost_usd": 0.009425, "wallclock_ms": 12252, "stop_reason": null}
+{"ts": "2026-04-27T10:23:14.649775Z", "event": "task_end", "task_id": "a1-010", "status": "ok"}
+{"ts": "2026-04-27T10:23:14.649843Z", "event": "task_start", "task_id": "a1-011", "prompt_chars": 195, "metadata": {"skill": "deep-interview", "arm_kind": "vanilla", "cwd": "/tmp/cursor-vanilla-m8jr3pc3"}}
+{"ts": "2026-04-27T10:23:14.649888Z", "event": "request", "task_id": "a1-011", "payload_keys": ["backend", "model", "prompt", "workdir"]}
+{"ts": "2026-04-27T10:23:29.524512Z", "event": "response", "task_id": "a1-011", "tokens": {"input": 862, "output": 357, "cache_read": 11776, "cache_write": 0}, "cost_usd": 0.011474, "wallclock_ms": 14874, "stop_reason": null}
+{"ts": "2026-04-27T10:23:29.524543Z", "event": "task_end", "task_id": "a1-011", "status": "ok"}
+{"ts": "2026-04-27T10:23:29.524630Z", "event": "task_start", "task_id": "a1-012", "prompt_chars": 274, "metadata": {"skill": "deep-interview", "arm_kind": "vanilla", "cwd": "/tmp/cursor-vanilla-m8jr3pc3"}}
+{"ts": "2026-04-27T10:23:29.524693Z", "event": "request", "task_id": "a1-012", "payload_keys": ["backend", "model", "prompt", "workdir"]}
+{"ts": "2026-04-27T10:23:44.184768Z", "event": "response", "task_id": "a1-012", "tokens": {"input": 8172, "output": 373, "cache_read": 24448, "cache_write": 0}, "cost_usd": 0.037445, "wallclock_ms": 14659, "stop_reason": null}
+{"ts": "2026-04-27T10:23:44.184799Z", "event": "task_end", "task_id": "a1-012", "status": "ok"}
+{"ts": "2026-04-27T10:23:44.184885Z", "event": "task_start", "task_id": "a1-013", "prompt_chars": 134, "metadata": {"skill": "review", "arm_kind": "vanilla", "cwd": "/tmp/cursor-vanilla-m8jr3pc3"}}
+{"ts": "2026-04-27T10:23:44.184950Z", "event": "request", "task_id": "a1-013", "payload_keys": ["backend", "model", "prompt", "workdir"]}
+{"ts": "2026-04-27T10:23:53.970672Z", "event": "response", "task_id": "a1-013", "tokens": {"input": 855, "output": 178, "cache_read": 11776, "cache_write": 0}, "cost_usd": 0.008768, "wallclock_ms": 9785, "stop_reason": null}
+{"ts": "2026-04-27T10:23:53.970703Z", "event": "task_end", "task_id": "a1-013", "status": "ok"}
+{"ts": "2026-04-27T10:23:53.970789Z", "event": "task_start", "task_id": "a1-014", "prompt_chars": 240, "metadata": {"skill": "review", "arm_kind": "vanilla", "cwd": "/tmp/cursor-vanilla-m8jr3pc3"}}
+{"ts": "2026-04-27T10:23:53.970854Z", "event": "request", "task_id": "a1-014", "payload_keys": ["backend", "model", "prompt", "workdir"]}
+{"ts": "2026-04-27T10:24:06.461681Z", "event": "response", "task_id": "a1-014", "tokens": {"input": 888, "output": 307, "cache_read": 11776, "cache_write": 0}, "cost_usd": 0.010802, "wallclock_ms": 12490, "stop_reason": null}
+{"ts": "2026-04-27T10:24:06.461708Z", "event": "task_end", "task_id": "a1-014", "status": "ok"}
+{"ts": "2026-04-27T10:24:06.461775Z", "event": "task_start", "task_id": "a1-015", "prompt_chars": 436, "metadata": {"skill": "review", "arm_kind": "vanilla", "cwd": "/tmp/cursor-vanilla-m8jr3pc3"}}
+{"ts": "2026-04-27T10:24:06.461824Z", "event": "request", "task_id": "a1-015", "payload_keys": ["backend", "model", "prompt", "workdir"]}
+{"ts": "2026-04-27T10:24:23.317248Z", "event": "response", "task_id": "a1-015", "tokens": {"input": 945, "output": 458, "cache_read": 11776, "cache_write": 0}, "cost_usd": 0.013238, "wallclock_ms": 16855, "stop_reason": null}
+{"ts": "2026-04-27T10:24:23.317280Z", "event": "task_end", "task_id": "a1-015", "status": "ok"}
+{"ts": "2026-04-27T10:24:23.317367Z", "event": "task_start", "task_id": "a1-016", "prompt_chars": 281, "metadata": {"skill": "review", "arm_kind": "vanilla", "cwd": "/tmp/cursor-vanilla-m8jr3pc3"}}
+{"ts": "2026-04-27T10:24:23.317437Z", "event": "request", "task_id": "a1-016", "payload_keys": ["backend", "model", "prompt", "workdir"]}
+{"ts": "2026-04-27T10:24:38.573657Z", "event": "response", "task_id": "a1-016", "tokens": {"input": 895, "output": 249, "cache_read": 11776, "cache_write": 0}, "cost_usd": 0.009953, "wallclock_ms": 15255, "stop_reason": null}
+{"ts": "2026-04-27T10:24:38.573689Z", "event": "task_end", "task_id": "a1-016", "status": "ok"}
+{"ts": "2026-04-27T10:24:38.573777Z", "event": "task_start", "task_id": "a1-017", "prompt_chars": 376, "metadata": {"skill": "review", "arm_kind": "vanilla", "cwd": "/tmp/cursor-vanilla-m8jr3pc3"}}
+{"ts": "2026-04-27T10:24:38.573842Z", "event": "request", "task_id": "a1-017", "payload_keys": ["backend", "model", "prompt", "workdir"]}
+{"ts": "2026-04-27T10:24:48.867557Z", "event": "response", "task_id": "a1-017", "tokens": {"input": 917, "output": 211, "cache_read": 11776, "cache_write": 0}, "cost_usd": 0.009449, "wallclock_ms": 10293, "stop_reason": null}
+{"ts": "2026-04-27T10:24:48.867583Z", "event": "task_end", "task_id": "a1-017", "status": "ok"}
+{"ts": "2026-04-27T10:24:48.867652Z", "event": "task_start", "task_id": "a1-018", "prompt_chars": 574, "metadata": {"skill": "review", "arm_kind": "vanilla", "cwd": "/tmp/cursor-vanilla-m8jr3pc3"}}
+{"ts": "2026-04-27T10:24:48.867700Z", "event": "request", "task_id": "a1-018", "payload_keys": ["backend", "model", "prompt", "workdir"]}
+{"ts": "2026-04-27T10:25:04.452120Z", "event": "response", "task_id": "a1-018", "tokens": {"input": 976, "output": 368, "cache_read": 11776, "cache_write": 0}, "cost_usd": 0.011981, "wallclock_ms": 15584, "stop_reason": null}
+{"ts": "2026-04-27T10:25:04.452144Z", "event": "task_end", "task_id": "a1-018", "status": "ok"}
+{"ts": "2026-04-27T10:25:04.452216Z", "event": "task_start", "task_id": "a1-019", "prompt_chars": 243, "metadata": {"skill": "security-review", "arm_kind": "vanilla", "cwd": "/tmp/cursor-vanilla-m8jr3pc3"}}
+{"ts": "2026-04-27T10:25:04.452272Z", "event": "request", "task_id": "a1-019", "payload_keys": ["backend", "model", "prompt", "workdir"]}
+{"ts": "2026-04-27T10:25:14.907860Z", "event": "response", "task_id": "a1-019", "tokens": {"input": 884, "output": 286, "cache_read": 11776, "cache_write": 0}, "cost_usd": 0.010475, "wallclock_ms": 10455, "stop_reason": null}
+{"ts": "2026-04-27T10:25:14.907892Z", "event": "task_end", "task_id": "a1-019", "status": "ok"}
+{"ts": "2026-04-27T10:25:14.907979Z", "event": "task_start", "task_id": "a1-020", "prompt_chars": 288, "metadata": {"skill": "security-review", "arm_kind": "vanilla", "cwd": "/tmp/cursor-vanilla-m8jr3pc3"}}
+{"ts": "2026-04-27T10:25:14.908042Z", "event": "request", "task_id": "a1-020", "payload_keys": ["backend", "model", "prompt", "workdir"]}
+{"ts": "2026-04-27T10:25:31.727931Z", "event": "response", "task_id": "a1-020", "tokens": {"input": 895, "output": 336, "cache_read": 11776, "cache_write": 0}, "cost_usd": 0.011258, "wallclock_ms": 16819, "stop_reason": null}
+{"ts": "2026-04-27T10:25:31.727963Z", "event": "task_end", "task_id": "a1-020", "status": "ok"}
+{"ts": "2026-04-27T10:25:31.728060Z", "event": "task_start", "task_id": "a1-021", "prompt_chars": 264, "metadata": {"skill": "security-review", "arm_kind": "vanilla", "cwd": "/tmp/cursor-vanilla-m8jr3pc3"}}
+{"ts": "2026-04-27T10:25:31.728127Z", "event": "request", "task_id": "a1-021", "payload_keys": ["backend", "model", "prompt", "workdir"]}
+{"ts": "2026-04-27T10:25:48.039694Z", "event": "response", "task_id": "a1-021", "tokens": {"input": 890, "output": 510, "cache_read": 11776, "cache_write": 0}, "cost_usd": 0.013853, "wallclock_ms": 16311, "stop_reason": null}
+{"ts": "2026-04-27T10:25:48.039721Z", "event": "task_end", "task_id": "a1-021", "status": "ok"}
+{"ts": "2026-04-27T10:25:48.039796Z", "event": "task_start", "task_id": "a1-022", "prompt_chars": 257, "metadata": {"skill": "security-review", "arm_kind": "vanilla", "cwd": "/tmp/cursor-vanilla-m8jr3pc3"}}
+{"ts": "2026-04-27T10:25:48.039846Z", "event": "request", "task_id": "a1-022", "payload_keys": ["backend", "model", "prompt", "workdir"]}
+{"ts": "2026-04-27T10:26:00.428479Z", "event": "response", "task_id": "a1-022", "tokens": {"input": 886, "output": 345, "cache_read": 11776, "cache_write": 0}, "cost_usd": 0.011366, "wallclock_ms": 12388, "stop_reason": null}
+{"ts": "2026-04-27T10:26:00.428504Z", "event": "task_end", "task_id": "a1-022", "status": "ok"}
+{"ts": "2026-04-27T10:26:00.428568Z", "event": "task_start", "task_id": "a1-023", "prompt_chars": 174, "metadata": {"skill": "security-review", "arm_kind": "vanilla", "cwd": "/tmp/cursor-vanilla-m8jr3pc3"}}
+{"ts": "2026-04-27T10:26:00.428616Z", "event": "request", "task_id": "a1-023", "payload_keys": ["backend", "model", "prompt", "workdir"]}
+{"ts": "2026-04-27T10:26:12.470226Z", "event": "response", "task_id": "a1-023", "tokens": {"input": 862, "output": 356, "cache_read": 11776, "cache_write": 0}, "cost_usd": 0.011459, "wallclock_ms": 12041, "stop_reason": null}
+{"ts": "2026-04-27T10:26:12.470257Z", "event": "task_end", "task_id": "a1-023", "status": "ok"}
+{"ts": "2026-04-27T10:26:12.470344Z", "event": "task_start", "task_id": "a1-024", "prompt_chars": 473, "metadata": {"skill": "security-review", "arm_kind": "vanilla", "cwd": "/tmp/cursor-vanilla-m8jr3pc3"}}
+{"ts": "2026-04-27T10:26:12.470416Z", "event": "request", "task_id": "a1-024", "payload_keys": ["backend", "model", "prompt", "workdir"]}
+{"ts": "2026-04-27T10:26:31.211582Z", "event": "response", "task_id": "a1-024", "tokens": {"input": 937, "output": 774, "cache_read": 11776, "cache_write": 0}, "cost_usd": 0.017954, "wallclock_ms": 18740, "stop_reason": null}
+{"ts": "2026-04-27T10:26:31.211607Z", "event": "task_end", "task_id": "a1-024", "status": "ok"}
+{"ts": "2026-04-27T10:26:31.211669Z", "event": "task_start", "task_id": "a1-025", "prompt_chars": 251, "metadata": {"skill": "debug", "arm_kind": "vanilla", "cwd": "/tmp/cursor-vanilla-m8jr3pc3"}}
+{"ts": "2026-04-27T10:26:31.211717Z", "event": "request", "task_id": "a1-025", "payload_keys": ["backend", "model", "prompt", "workdir"]}
+{"ts": "2026-04-27T10:26:46.751650Z", "event": "response", "task_id": "a1-025", "tokens": {"input": 875, "output": 570, "cache_read": 11776, "cache_write": 0}, "cost_usd": 0.014708, "wallclock_ms": 15539, "stop_reason": null}
+{"ts": "2026-04-27T10:26:46.751682Z", "event": "task_end", "task_id": "a1-025", "status": "ok"}
+{"ts": "2026-04-27T10:26:46.751773Z", "event": "task_start", "task_id": "a1-026", "prompt_chars": 228, "metadata": {"skill": "debug", "arm_kind": "vanilla", "cwd": "/tmp/cursor-vanilla-m8jr3pc3"}}
+{"ts": "2026-04-27T10:26:46.751840Z", "event": "request", "task_id": "a1-026", "payload_keys": ["backend", "model", "prompt", "workdir"]}
+{"ts": "2026-04-27T10:27:04.537731Z", "event": "response", "task_id": "a1-026", "tokens": {"input": 871, "output": 702, "cache_read": 11776, "cache_write": 0}, "cost_usd": 0.016676, "wallclock_ms": 17785, "stop_reason": null}
+{"ts": "2026-04-27T10:27:04.537764Z", "event": "task_end", "task_id": "a1-026", "status": "ok"}
+{"ts": "2026-04-27T10:27:04.537859Z", "event": "task_start", "task_id": "a1-027", "prompt_chars": 253, "metadata": {"skill": "debug", "arm_kind": "vanilla", "cwd": "/tmp/cursor-vanilla-m8jr3pc3"}}
+{"ts": "2026-04-27T10:27:04.537922Z", "event": "request", "task_id": "a1-027", "payload_keys": ["backend", "model", "prompt", "workdir"]}
+{"ts": "2026-04-27T10:27:30.550754Z", "event": "response", "task_id": "a1-027", "tokens": {"input": 3223, "output": 1061, "cache_read": 53760, "cache_write": 0}, "cost_usd": 0.041712, "wallclock_ms": 26012, "stop_reason": null}
+{"ts": "2026-04-27T10:27:30.550785Z", "event": "task_end", "task_id": "a1-027", "status": "ok"}
+{"ts": "2026-04-27T10:27:30.550873Z", "event": "task_start", "task_id": "a1-028", "prompt_chars": 242, "metadata": {"skill": "debug", "arm_kind": "vanilla", "cwd": "/tmp/cursor-vanilla-m8jr3pc3"}}
+{"ts": "2026-04-27T10:27:30.550936Z", "event": "request", "task_id": "a1-028", "payload_keys": ["backend", "model", "prompt", "workdir"]}
+{"ts": "2026-04-27T10:27:51.844652Z", "event": "response", "task_id": "a1-028", "tokens": {"input": 2733, "output": 771, "cache_read": 24448, "cache_write": 0}, "cost_usd": 0.027098, "wallclock_ms": 21293, "stop_reason": null}
+{"ts": "2026-04-27T10:27:51.844683Z", "event": "task_end", "task_id": "a1-028", "status": "ok"}
+{"ts": "2026-04-27T10:27:51.844769Z", "event": "task_start", "task_id": "a1-029", "prompt_chars": 279, "metadata": {"skill": "debug", "arm_kind": "vanilla", "cwd": "/tmp/cursor-vanilla-m8jr3pc3"}}
+{"ts": "2026-04-27T10:27:51.844831Z", "event": "request", "task_id": "a1-029", "payload_keys": ["backend", "model", "prompt", "workdir"]}
+{"ts": "2026-04-27T10:28:15.428729Z", "event": "response", "task_id": "a1-029", "tokens": {"input": 3019, "output": 877, "cache_read": 39040, "cache_write": 0}, "cost_usd": 0.033924, "wallclock_ms": 23583, "stop_reason": null}
+{"ts": "2026-04-27T10:28:15.428754Z", "event": "task_end", "task_id": "a1-029", "status": "ok"}
+{"ts": "2026-04-27T10:28:15.428812Z", "event": "task_start", "task_id": "a1-030", "prompt_chars": 305, "metadata": {"skill": "debug", "arm_kind": "vanilla", "cwd": "/tmp/cursor-vanilla-m8jr3pc3"}}
+{"ts": "2026-04-27T10:28:15.428857Z", "event": "request", "task_id": "a1-030", "payload_keys": ["backend", "model", "prompt", "workdir"]}
+{"ts": "2026-04-27T10:28:43.280215Z", "event": "response", "task_id": "a1-030", "tokens": {"input": 3099, "output": 1062, "cache_read": 39040, "cache_write": 0}, "cost_usd": 0.036939, "wallclock_ms": 27850, "stop_reason": null}
+{"ts": "2026-04-27T10:28:43.280247Z", "event": "task_end", "task_id": "a1-030", "status": "ok"}
+{"ts": "2026-04-27T10:28:43.280339Z", "event": "task_start", "task_id": "a1-031", "prompt_chars": 377, "metadata": {"skill": "trace", "arm_kind": "vanilla", "cwd": "/tmp/cursor-vanilla-m8jr3pc3"}}
+{"ts": "2026-04-27T10:28:43.280414Z", "event": "request", "task_id": "a1-031", "payload_keys": ["backend", "model", "prompt", "workdir"]}
+{"ts": "2026-04-27T10:29:28.754878Z", "event": "response", "task_id": "a1-031", "tokens": {"input": 13530, "output": 1838, "cache_read": 137728, "cache_write": 0}, "cost_usd": 0.109478, "wallclock_ms": 45474, "stop_reason": null}
+{"ts": "2026-04-27T10:29:28.754906Z", "event": "task_end", "task_id": "a1-031", "status": "ok"}
+{"ts": "2026-04-27T10:29:28.754972Z", "event": "task_start", "task_id": "a1-032", "prompt_chars": 311, "metadata": {"skill": "trace", "arm_kind": "vanilla", "cwd": "/tmp/cursor-vanilla-m8jr3pc3"}}
+{"ts": "2026-04-27T10:29:28.755024Z", "event": "request", "task_id": "a1-032", "payload_keys": ["backend", "model", "prompt", "workdir"]}
+{"ts": "2026-04-27T10:29:59.899214Z", "event": "response", "task_id": "a1-032", "tokens": {"input": 2990, "output": 1456, "cache_read": 39168, "cache_write": 0}, "cost_usd": 0.04256, "wallclock_ms": 31143, "stop_reason": null}
+{"ts": "2026-04-27T10:29:59.899245Z", "event": "task_end", "task_id": "a1-032", "status": "ok"}
+{"ts": "2026-04-27T10:29:59.899329Z", "event": "task_start", "task_id": "a1-033", "prompt_chars": 344, "metadata": {"skill": "trace", "arm_kind": "vanilla", "cwd": "/tmp/cursor-vanilla-m8jr3pc3"}}
+{"ts": "2026-04-27T10:29:59.899398Z", "event": "request", "task_id": "a1-033", "payload_keys": ["backend", "model", "prompt", "workdir"]}
+{"ts": "2026-04-27T10:30:33.337505Z", "event": "response", "task_id": "a1-033", "tokens": {"input": 6062, "output": 1543, "cache_read": 36352, "cache_write": 0}, "cost_usd": 0.052237, "wallclock_ms": 33437, "stop_reason": null}
+{"ts": "2026-04-27T10:30:33.337536Z", "event": "task_end", "task_id": "a1-033", "status": "ok"}
+{"ts": "2026-04-27T10:30:33.337622Z", "event": "task_start", "task_id": "a1-034", "prompt_chars": 328, "metadata": {"skill": "trace", "arm_kind": "vanilla", "cwd": "/tmp/cursor-vanilla-m8jr3pc3"}}
+{"ts": "2026-04-27T10:30:33.337686Z", "event": "request", "task_id": "a1-034", "payload_keys": ["backend", "model", "prompt", "workdir"]}
+{"ts": "2026-04-27T10:31:02.673135Z", "event": "response", "task_id": "a1-034", "tokens": {"input": 2984, "output": 1233, "cache_read": 38912, "cache_write": 0}, "cost_usd": 0.039121, "wallclock_ms": 29335, "stop_reason": null}
+{"ts": "2026-04-27T10:31:02.673166Z", "event": "task_end", "task_id": "a1-034", "status": "ok"}
+{"ts": "2026-04-27T10:31:02.673250Z", "event": "task_start", "task_id": "a1-035", "prompt_chars": 351, "metadata": {"skill": "trace", "arm_kind": "vanilla", "cwd": "/tmp/cursor-vanilla-m8jr3pc3"}}
+{"ts": "2026-04-27T10:31:02.673314Z", "event": "request", "task_id": "a1-035", "payload_keys": ["backend", "model", "prompt", "workdir"]}
+{"ts": "2026-04-27T10:31:37.240066Z", "event": "response", "task_id": "a1-035", "tokens": {"input": 2909, "output": 1573, "cache_read": 39168, "cache_write": 0}, "cost_usd": 0.044072, "wallclock_ms": 34566, "stop_reason": null}
+{"ts": "2026-04-27T10:31:37.240098Z", "event": "task_end", "task_id": "a1-035", "status": "ok"}
+{"ts": "2026-04-27T10:31:37.240186Z", "event": "task_start", "task_id": "a1-036", "prompt_chars": 479, "metadata": {"skill": "trace", "arm_kind": "vanilla", "cwd": "/tmp/cursor-vanilla-m8jr3pc3"}}
+{"ts": "2026-04-27T10:31:37.240252Z", "event": "request", "task_id": "a1-036", "payload_keys": ["backend", "model", "prompt", "workdir"]}
+{"ts": "2026-04-27T10:31:57.682497Z", "event": "response", "task_id": "a1-036", "tokens": {"input": 3243, "output": 702, "cache_read": 53888, "cache_write": 0}, "cost_usd": 0.036425, "wallclock_ms": 20441, "stop_reason": null}
+{"ts": "2026-04-27T10:31:57.682529Z", "event": "task_end", "task_id": "a1-036", "status": "ok"}
+{"ts": "2026-04-27T10:31:57.682614Z", "event": "task_start", "task_id": "a1-037", "prompt_chars": 253, "metadata": {"skill": "iterate-loop", "arm_kind": "vanilla", "cwd": "/tmp/cursor-vanilla-m8jr3pc3"}}
+{"ts": "2026-04-27T10:31:57.682677Z", "event": "request", "task_id": "a1-037", "payload_keys": ["backend", "model", "prompt", "workdir"]}
+{"ts": "2026-04-27T10:32:12.713017Z", "event": "response", "task_id": "a1-037", "tokens": {"input": 877, "output": 540, "cache_read": 11776, "cache_write": 0}, "cost_usd": 0.014264, "wallclock_ms": 15030, "stop_reason": null}
+{"ts": "2026-04-27T10:32:12.713044Z", "event": "task_end", "task_id": "a1-037", "status": "ok"}
+{"ts": "2026-04-27T10:32:12.713110Z", "event": "task_start", "task_id": "a1-038", "prompt_chars": 244, "metadata": {"skill": "iterate-loop", "arm_kind": "vanilla", "cwd": "/tmp/cursor-vanilla-m8jr3pc3"}}
+{"ts": "2026-04-27T10:32:12.713155Z", "event": "request", "task_id": "a1-038", "payload_keys": ["backend", "model", "prompt", "workdir"]}
+{"ts": "2026-04-27T10:32:27.880625Z", "event": "response", "task_id": "a1-038", "tokens": {"input": 870, "output": 565, "cache_read": 11776, "cache_write": 0}, "cost_usd": 0.014618, "wallclock_ms": 15167, "stop_reason": null}
+{"ts": "2026-04-27T10:32:27.880655Z", "event": "task_end", "task_id": "a1-038", "status": "ok"}
+{"ts": "2026-04-27T10:32:27.880740Z", "event": "task_start", "task_id": "a1-039", "prompt_chars": 373, "metadata": {"skill": "iterate-loop", "arm_kind": "vanilla", "cwd": "/tmp/cursor-vanilla-m8jr3pc3"}}
+{"ts": "2026-04-27T10:32:27.880805Z", "event": "request", "task_id": "a1-039", "payload_keys": ["backend", "model", "prompt", "workdir"]}
+{"ts": "2026-04-27T10:32:51.395641Z", "event": "response", "task_id": "a1-039", "tokens": {"input": 896, "output": 939, "cache_read": 11776, "cache_write": 0}, "cost_usd": 0.020306, "wallclock_ms": 23514, "stop_reason": null}
+{"ts": "2026-04-27T10:32:51.395668Z", "event": "task_end", "task_id": "a1-039", "status": "ok"}
+{"ts": "2026-04-27T10:32:51.395738Z", "event": "task_start", "task_id": "a1-040", "prompt_chars": 321, "metadata": {"skill": "iterate-loop", "arm_kind": "vanilla", "cwd": "/tmp/cursor-vanilla-m8jr3pc3"}}
+{"ts": "2026-04-27T10:32:51.395789Z", "event": "request", "task_id": "a1-040", "payload_keys": ["backend", "model", "prompt", "workdir"]}
+{"ts": "2026-04-27T10:33:13.277995Z", "event": "response", "task_id": "a1-040", "tokens": {"input": 889, "output": 867, "cache_read": 11776, "cache_write": 0}, "cost_usd": 0.019205, "wallclock_ms": 21881, "stop_reason": null}
+{"ts": "2026-04-27T10:33:13.278019Z", "event": "task_end", "task_id": "a1-040", "status": "ok"}
+{"ts": "2026-04-27T10:33:13.278086Z", "event": "task_start", "task_id": "a1-041", "prompt_chars": 347, "metadata": {"skill": "iterate-loop", "arm_kind": "vanilla", "cwd": "/tmp/cursor-vanilla-m8jr3pc3"}}
+{"ts": "2026-04-27T10:33:13.278135Z", "event": "request", "task_id": "a1-041", "payload_keys": ["backend", "model", "prompt", "workdir"]}
+{"ts": "2026-04-27T10:33:32.601181Z", "event": "response", "task_id": "a1-041", "tokens": {"input": 897, "output": 825, "cache_read": 11776, "cache_write": 0}, "cost_usd": 0.018599, "wallclock_ms": 19322, "stop_reason": null}
+{"ts": "2026-04-27T10:33:32.601212Z", "event": "task_end", "task_id": "a1-041", "status": "ok"}
+{"ts": "2026-04-27T10:33:32.601299Z", "event": "task_start", "task_id": "a1-042", "prompt_chars": 412, "metadata": {"skill": "iterate-loop", "arm_kind": "vanilla", "cwd": "/tmp/cursor-vanilla-m8jr3pc3"}}
+{"ts": "2026-04-27T10:33:32.601362Z", "event": "request", "task_id": "a1-042", "payload_keys": ["backend", "model", "prompt", "workdir"]}
+{"ts": "2026-04-27T10:34:12.786347Z", "event": "response", "task_id": "a1-042", "tokens": {"input": 902, "output": 1818, "cache_read": 11776, "cache_write": 0}, "cost_usd": 0.033509, "wallclock_ms": 40184, "stop_reason": null}
+{"ts": "2026-04-27T10:34:12.786384Z", "event": "task_end", "task_id": "a1-042", "status": "ok"}
+{"ts": "2026-04-27T10:34:12.786473Z", "event": "task_start", "task_id": "a1-043", "prompt_chars": 282, "metadata": {"skill": "parallel-batch", "arm_kind": "vanilla", "cwd": "/tmp/cursor-vanilla-m8jr3pc3"}}
+{"ts": "2026-04-27T10:34:12.786538Z", "event": "request", "task_id": "a1-043", "payload_keys": ["backend", "model", "prompt", "workdir"]}
+{"ts": "2026-04-27T10:34:34.628704Z", "event": "response", "task_id": "a1-043", "tokens": {"input": 6157, "output": 798, "cache_read": 24448, "cache_write": 0}, "cost_usd": 0.037775, "wallclock_ms": 21841, "stop_reason": null}
+{"ts": "2026-04-27T10:34:34.628729Z", "event": "task_end", "task_id": "a1-043", "status": "ok"}
+{"ts": "2026-04-27T10:34:34.628795Z", "event": "task_start", "task_id": "a1-044", "prompt_chars": 270, "metadata": {"skill": "parallel-batch", "arm_kind": "vanilla", "cwd": "/tmp/cursor-vanilla-m8jr3pc3"}}
+{"ts": "2026-04-27T10:34:34.628843Z", "event": "request", "task_id": "a1-044", "payload_keys": ["backend", "model", "prompt", "workdir"]}
+{"ts": "2026-04-27T10:35:01.370506Z", "event": "response", "task_id": "a1-044", "tokens": {"input": 6228, "output": 1181, "cache_read": 42624, "cache_write": 0}, "cost_usd": 0.049186, "wallclock_ms": 26741, "stop_reason": null}
+{"ts": "2026-04-27T10:35:01.370532Z", "event": "task_end", "task_id": "a1-044", "status": "ok"}
+{"ts": "2026-04-27T10:35:01.370597Z", "event": "task_start", "task_id": "a1-045", "prompt_chars": 337, "metadata": {"skill": "parallel-batch", "arm_kind": "vanilla", "cwd": "/tmp/cursor-vanilla-m8jr3pc3"}}
+{"ts": "2026-04-27T10:35:01.370644Z", "event": "request", "task_id": "a1-045", "payload_keys": ["backend", "model", "prompt", "workdir"]}
+{"ts": "2026-04-27T10:35:31.234808Z", "event": "response", "task_id": "a1-045", "tokens": {"input": 1620, "output": 1338, "cache_read": 50944, "cache_write": 0}, "cost_usd": 0.040213, "wallclock_ms": 29863, "stop_reason": null}
+{"ts": "2026-04-27T10:35:31.234838Z", "event": "task_end", "task_id": "a1-045", "status": "ok"}
+{"ts": "2026-04-27T10:35:31.234924Z", "event": "task_start", "task_id": "a1-046", "prompt_chars": 319, "metadata": {"skill": "parallel-batch", "arm_kind": "vanilla", "cwd": "/tmp/cursor-vanilla-m8jr3pc3"}}
+{"ts": "2026-04-27T10:35:31.234988Z", "event": "request", "task_id": "a1-046", "payload_keys": ["backend", "model", "prompt", "workdir"]}
+{"ts": "2026-04-27T10:35:59.867814Z", "event": "response", "task_id": "a1-046", "tokens": {"input": 1391, "output": 1375, "cache_read": 37888, "cache_write": 0}, "cost_usd": 0.036164, "wallclock_ms": 28632, "stop_reason": null}
+{"ts": "2026-04-27T10:35:59.867846Z", "event": "task_end", "task_id": "a1-046", "status": "ok"}
+{"ts": "2026-04-27T10:35:59.867940Z", "event": "task_start", "task_id": "a1-047", "prompt_chars": 321, "metadata": {"skill": "parallel-batch", "arm_kind": "vanilla", "cwd": "/tmp/cursor-vanilla-m8jr3pc3"}}
+{"ts": "2026-04-27T10:35:59.868004Z", "event": "request", "task_id": "a1-047", "payload_keys": ["backend", "model", "prompt", "workdir"]}
+{"ts": "2026-04-27T10:36:22.721284Z", "event": "response", "task_id": "a1-047", "tokens": {"input": 1392, "output": 928, "cache_read": 37632, "cache_write": 0}, "cost_usd": 0.029386, "wallclock_ms": 22852, "stop_reason": null}
+{"ts": "2026-04-27T10:36:22.721309Z", "event": "task_end", "task_id": "a1-047", "status": "ok"}
+{"ts": "2026-04-27T10:36:22.721381Z", "event": "task_start", "task_id": "a1-048", "prompt_chars": 417, "metadata": {"skill": "parallel-batch", "arm_kind": "vanilla", "cwd": "/tmp/cursor-vanilla-m8jr3pc3"}}
+{"ts": "2026-04-27T10:36:22.721430Z", "event": "request", "task_id": "a1-048", "payload_keys": ["backend", "model", "prompt", "workdir"]}
+{"ts": "2026-04-27T10:36:45.477585Z", "event": "response", "task_id": "a1-048", "tokens": {"input": 3261, "output": 871, "cache_read": 54272, "cache_write": 0}, "cost_usd": 0.03913, "wallclock_ms": 22755, "stop_reason": null}
+{"ts": "2026-04-27T10:36:45.477617Z", "event": "task_end", "task_id": "a1-048", "status": "ok"}
+{"ts": "2026-04-27T10:36:45.477704Z", "event": "task_start", "task_id": "a1-049", "prompt_chars": 308, "metadata": {"skill": "auto-execute", "arm_kind": "vanilla", "cwd": "/tmp/cursor-vanilla-m8jr3pc3"}}
+{"ts": "2026-04-27T10:36:45.477768Z", "event": "request", "task_id": "a1-049", "payload_keys": ["backend", "model", "prompt", "workdir"]}
+{"ts": "2026-04-27T10:37:44.463146Z", "event": "response", "task_id": "a1-049", "tokens": {"input": 20736, "output": 2836, "cache_read": 149760, "cache_write": 0}, "cost_usd": 0.149676, "wallclock_ms": 58984, "stop_reason": null}
+{"ts": "2026-04-27T10:37:44.463181Z", "event": "task_end", "task_id": "a1-049", "status": "ok"}
+{"ts": "2026-04-27T10:37:44.463276Z", "event": "task_start", "task_id": "a1-050", "prompt_chars": 334, "metadata": {"skill": "auto-execute", "arm_kind": "vanilla", "cwd": "/tmp/cursor-vanilla-m8jr3pc3"}}
+{"ts": "2026-04-27T10:37:44.463352Z", "event": "request", "task_id": "a1-050", "payload_keys": ["backend", "model", "prompt", "workdir"]}
+{"ts": "2026-04-27T10:39:27.517813Z", "event": "response", "task_id": "a1-050", "tokens": {"input": 45621, "output": 4321, "cache_read": 234496, "cache_write": 0}, "cost_usd": 0.272027, "wallclock_ms": 103054, "stop_reason": null}
+{"ts": "2026-04-27T10:39:27.517839Z", "event": "task_end", "task_id": "a1-050", "status": "ok"}
+{"ts": "2026-04-27T10:39:27.517908Z", "event": "task_start", "task_id": "a1-051", "prompt_chars": 317, "metadata": {"skill": "auto-execute", "arm_kind": "vanilla", "cwd": "/tmp/cursor-vanilla-m8jr3pc3"}}
+{"ts": "2026-04-27T10:39:27.517957Z", "event": "request", "task_id": "a1-051", "payload_keys": ["backend", "model", "prompt", "workdir"]}
+{"ts": "2026-04-27T10:40:46.323510Z", "event": "response", "task_id": "a1-051", "tokens": {"input": 28538, "output": 4856, "cache_read": 201600, "cache_write": 0}, "cost_usd": 0.218934, "wallclock_ms": 78805, "stop_reason": null}
+{"ts": "2026-04-27T10:40:46.323534Z", "event": "task_end", "task_id": "a1-051", "status": "ok"}
+{"ts": "2026-04-27T10:40:46.323598Z", "event": "task_start", "task_id": "a1-052", "prompt_chars": 355, "metadata": {"skill": "auto-execute", "arm_kind": "vanilla", "cwd": "/tmp/cursor-vanilla-m8jr3pc3"}}
+{"ts": "2026-04-27T10:40:46.323647Z", "event": "request", "task_id": "a1-052", "payload_keys": ["backend", "model", "prompt", "workdir"]}
+{"ts": "2026-04-27T10:41:49.219440Z", "event": "response", "task_id": "a1-052", "tokens": {"input": 16473, "output": 3323, "cache_read": 193536, "cache_write": 0}, "cost_usd": 0.157325, "wallclock_ms": 62895, "stop_reason": null}
+{"ts": "2026-04-27T10:41:49.219466Z", "event": "task_end", "task_id": "a1-052", "status": "ok"}
+{"ts": "2026-04-27T10:41:49.219528Z", "event": "task_start", "task_id": "a1-053", "prompt_chars": 350, "metadata": {"skill": "auto-execute", "arm_kind": "vanilla", "cwd": "/tmp/cursor-vanilla-m8jr3pc3"}}
+{"ts": "2026-04-27T10:41:49.219577Z", "event": "request", "task_id": "a1-053", "payload_keys": ["backend", "model", "prompt", "workdir"]}
+{"ts": "2026-04-27T10:43:26.075700Z", "event": "response", "task_id": "a1-053", "tokens": {"input": 33742, "output": 5817, "cache_read": 290688, "cache_write": 0}, "cost_usd": 0.275687, "wallclock_ms": 96855, "stop_reason": null}
+{"ts": "2026-04-27T10:43:26.075732Z", "event": "task_end", "task_id": "a1-053", "status": "ok"}
+{"ts": "2026-04-27T10:43:26.075826Z", "event": "task_start", "task_id": "a1-054", "prompt_chars": 403, "metadata": {"skill": "auto-execute", "arm_kind": "vanilla", "cwd": "/tmp/cursor-vanilla-m8jr3pc3"}}
+{"ts": "2026-04-27T10:43:26.075891Z", "event": "request", "task_id": "a1-054", "payload_keys": ["backend", "model", "prompt", "workdir"]}
+{"ts": "2026-04-27T10:43:58.069466Z", "event": "response", "task_id": "a1-054", "tokens": {"input": 5179, "output": 1448, "cache_read": 23552, "cache_write": 0}, "cost_usd": 0.044323, "wallclock_ms": 31993, "stop_reason": null}
+{"ts": "2026-04-27T10:43:58.069491Z", "event": "task_end", "task_id": "a1-054", "status": "ok"}
+{"ts": "2026-04-27T10:43:58.069558Z", "event": "task_start", "task_id": "a1-055", "prompt_chars": 352, "metadata": {"skill": "doctor", "arm_kind": "vanilla", "cwd": "/tmp/cursor-vanilla-m8jr3pc3"}}
+{"ts": "2026-04-27T10:43:58.069608Z", "event": "request", "task_id": "a1-055", "payload_keys": ["backend", "model", "prompt", "workdir"]}
+{"ts": "2026-04-27T10:44:41.314262Z", "event": "response", "task_id": "a1-055", "tokens": {"input": 4138, "output": 2048, "cache_read": 64384, "cache_write": 0}, "cost_usd": 0.062449, "wallclock_ms": 43244, "stop_reason": null}
+{"ts": "2026-04-27T10:44:41.314293Z", "event": "task_end", "task_id": "a1-055", "status": "ok"}
+{"ts": "2026-04-27T10:44:41.314398Z", "event": "task_start", "task_id": "a1-056", "prompt_chars": 333, "metadata": {"skill": "doctor", "arm_kind": "vanilla", "cwd": "/tmp/cursor-vanilla-m8jr3pc3"}}
+{"ts": "2026-04-27T10:44:41.314467Z", "event": "request", "task_id": "a1-056", "payload_keys": ["backend", "model", "prompt", "workdir"]}
+{"ts": "2026-04-27T10:45:17.318559Z", "event": "response", "task_id": "a1-056", "tokens": {"input": 3289, "output": 1518, "cache_read": 62464, "cache_write": 0}, "cost_usd": 0.051376, "wallclock_ms": 36003, "stop_reason": null}
+{"ts": "2026-04-27T10:45:17.318591Z", "event": "task_end", "task_id": "a1-056", "status": "ok"}
+{"ts": "2026-04-27T10:45:17.318677Z", "event": "task_start", "task_id": "a1-057", "prompt_chars": 374, "metadata": {"skill": "doctor", "arm_kind": "vanilla", "cwd": "/tmp/cursor-vanilla-m8jr3pc3"}}
+{"ts": "2026-04-27T10:45:17.318740Z", "event": "request", "task_id": "a1-057", "payload_keys": ["backend", "model", "prompt", "workdir"]}
+{"ts": "2026-04-27T10:45:47.393838Z", "event": "response", "task_id": "a1-057", "tokens": {"input": 899, "output": 1494, "cache_read": 11776, "cache_write": 0}, "cost_usd": 0.02864, "wallclock_ms": 30074, "stop_reason": null}
+{"ts": "2026-04-27T10:45:47.393869Z", "event": "task_end", "task_id": "a1-057", "status": "ok"}
+{"ts": "2026-04-27T10:45:47.393956Z", "event": "task_start", "task_id": "a1-058", "prompt_chars": 359, "metadata": {"skill": "doctor", "arm_kind": "vanilla", "cwd": "/tmp/cursor-vanilla-m8jr3pc3"}}
+{"ts": "2026-04-27T10:45:47.394018Z", "event": "request", "task_id": "a1-058", "payload_keys": ["backend", "model", "prompt", "workdir"]}
+{"ts": "2026-04-27T10:46:13.966896Z", "event": "response", "task_id": "a1-058", "tokens": {"input": 896, "output": 1136, "cache_read": 11776, "cache_write": 0}, "cost_usd": 0.023261, "wallclock_ms": 26572, "stop_reason": null}
+{"ts": "2026-04-27T10:46:13.966928Z", "event": "task_end", "task_id": "a1-058", "status": "ok"}
+{"ts": "2026-04-27T10:46:13.967017Z", "event": "task_start", "task_id": "a1-059", "prompt_chars": 395, "metadata": {"skill": "doctor", "arm_kind": "vanilla", "cwd": "/tmp/cursor-vanilla-m8jr3pc3"}}
+{"ts": "2026-04-27T10:46:13.967082Z", "event": "request", "task_id": "a1-059", "payload_keys": ["backend", "model", "prompt", "workdir"]}
+{"ts": "2026-04-27T10:46:49.761783Z", "event": "response", "task_id": "a1-059", "tokens": {"input": 903, "output": 1801, "cache_read": 11776, "cache_write": 0}, "cost_usd": 0.033257, "wallclock_ms": 35794, "stop_reason": null}
+{"ts": "2026-04-27T10:46:49.761814Z", "event": "task_end", "task_id": "a1-059", "status": "ok"}
+{"ts": "2026-04-27T10:46:49.761902Z", "event": "task_start", "task_id": "a1-060", "prompt_chars": 550, "metadata": {"skill": "doctor", "arm_kind": "vanilla", "cwd": "/tmp/cursor-vanilla-m8jr3pc3"}}
+{"ts": "2026-04-27T10:46:49.761967Z", "event": "request", "task_id": "a1-060", "payload_keys": ["backend", "model", "prompt", "workdir"]}
+{"ts": "2026-04-27T10:48:02.821676Z", "event": "response", "task_id": "a1-060", "tokens": {"input": 22323, "output": 3716, "cache_read": 137600, "cache_write": 0}, "cost_usd": 0.163989, "wallclock_ms": 73059, "stop_reason": null}
+{"ts": "2026-04-27T10:48:02.821711Z", "event": "task_end", "task_id": "a1-060", "status": "ok"}
+{"ts": "2026-04-27T10:48:02.821740Z", "event": "run_end", "status": "ok", "totals": {"n_tasks": 60, "n_responses": 60, "n_errors": 0, "n_fallback_events": 0, "tokens_in": 323013, "tokens_out": 74726, "cost_usd": 2.864495, "wallclock_seconds": 1748.798}}

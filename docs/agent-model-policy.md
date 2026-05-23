@@ -58,7 +58,7 @@ benchmark shows a fixed model is required for a role.
 
 A fixed model may be added to one role only when all of these are true:
 
-1. `scripts/smoke-agent-model-suitability.sh --all-roles` or a role-specific
+1. `scripts/smoke-agent-model-suitability.ts --all-roles` or a role-specific
    benchmark records the candidate model, baseline model, prompt, command, and
    output. The default smoke intentionally checks only a representative sample
    so normal validation does not spend minutes on every role.
@@ -66,10 +66,10 @@ A fixed model may be added to one role only when all of these are true:
 3. The benchmark records the Cursor account model list or explicit bounded
    reason why the model list is unavailable.
 4. `docs/references.md`, this file, and
-   `scripts/validate-cursor-workflow-artifacts.py` are updated in the same
+   `scripts/validate-cursor-workflow-artifacts.ts` are updated in the same
    change.
 5. The change remains compatible with Cursor's documented fallback behavior when
    a model is unavailable to the user.
 
-Until then, use `scripts/resolve-cursor-model.py` for parent CLI process model
+Until then, use `scripts/resolve-cursor-model.ts` for parent CLI process model
 selection and keep role frontmatter at `model: auto`.

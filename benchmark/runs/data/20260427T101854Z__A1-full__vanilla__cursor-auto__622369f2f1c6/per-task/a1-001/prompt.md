@@ -1,0 +1,3 @@
+## User prompt
+
+Plan a 4-step migration to add OAuth login to a Flask app currently using session cookies. Output: numbered steps, each with file scope and rollback consideration.
