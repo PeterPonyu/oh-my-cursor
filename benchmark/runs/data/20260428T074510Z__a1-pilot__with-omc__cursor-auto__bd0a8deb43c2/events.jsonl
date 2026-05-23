@@ -1,0 +1,6 @@
+{"ts": "2026-04-28T07:45:10.080415Z", "event": "run_start", "run_id": "bd0a8deb43c2", "benchmark": "a1-pilot", "arm": "with-omc", "model": "cursor/auto", "fallback_model": null, "budget_usd": 2.0, "started_at": "20260428T074510Z"}
+{"ts": "2026-04-28T07:45:10.080558Z", "event": "task_start", "task_id": "a1-pilot-001", "prompt_chars": 173, "metadata": {"skill": "plan", "arm_kind": "with-omc", "cwd": "/home/zeyufu/Desktop/oh-my-cursor"}}
+{"ts": "2026-04-28T07:45:10.080631Z", "event": "request", "task_id": "a1-pilot-001", "payload_keys": ["backend", "cmd", "model", "model_arg", "prompt", "workdir"]}
+{"ts": "2026-04-28T07:45:31.608265Z", "event": "response", "task_id": "a1-pilot-001", "tokens": {"input": 3154, "output": 513, "cache_read": 9728, "cache_write": 0}, "cost_usd": 0.020075, "wallclock_ms": 21527, "stop_reason": null}
+{"ts": "2026-04-28T07:45:31.608290Z", "event": "task_end", "task_id": "a1-pilot-001", "status": "ok"}
+{"ts": "2026-04-28T07:45:31.608307Z", "event": "run_end", "status": "ok", "totals": {"n_tasks": 1, "n_responses": 1, "n_errors": 0, "n_fallback_events": 0, "tokens_in": 3154, "tokens_out": 513, "cost_usd": 0.020075, "wallclock_seconds": 21.528}}

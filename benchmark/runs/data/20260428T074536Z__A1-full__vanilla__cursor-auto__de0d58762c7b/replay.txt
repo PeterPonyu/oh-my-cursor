@@ -1,0 +1,7 @@
+[2026-04-28T07:45:36.665394Z] run_start
+  benchmark=A1-full arm=vanilla model=cursor/auto budget=$5.0
+[2026-04-28T07:45:36.665550Z] task_start task=a1-001  prompt_chars=163
+[2026-04-28T07:45:36.665625Z] request task=a1-001  keys=['backend', 'cmd', 'model', 'model_arg', 'prompt', 'workdir']
+[2026-04-28T07:46:03.793279Z] response task=a1-001  in=7609 out=631 cost=$0.03882 ms=27127 stop=None
+[2026-04-28T07:46:03.793304Z] task_end task=a1-001  status=ok
+[2026-04-28T07:46:03.793319Z] run_end  status=ok totals={'n_tasks': 1, 'n_responses': 1, 'n_errors': 0, 'n_fallback_events': 0, 'tokens_in': 7609, 'tokens_out': 631, 'cost_usd': 0.03882, 'wallclock_seconds': 27.128}

@@ -1,0 +1,50 @@
+name: Node & TypeScript CI
+
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - "scripts/**/*.ts"
+      - "hooks/**/*.ts"
+      - "src/**/*.ts"
+      - ".github/workflows/node-ts-ci.yml"
+
+jobs:
+  ts-gates:
+    name: TypeScript validation gates
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          # 22+ required for `node --experimental-strip-types` used by the
+          # gate test scripts below. Node 20 does not recognize the flag and
+          # exits with "bad option: --experimental-strip-types".
+          node-version: 22
+
+      - name: Install dependencies
+        run: |
+          if [ -f package.json ]; then
+            npm ci
+          fi
+
+      - name: Typecheck TypeScript (if typescript is installed)
+        run: |
+          if npm list typescript >/dev/null 2>&1; then
+            npx tsc --noEmit
+          else
+            echo "TypeScript package not installed in workspace; compiling via --experimental-strip-types execution."
+          fi
+
+      - name: Run Autopilot and Consensus Gate Tests
+        run: node --experimental-strip-types scripts/test-autopilot-gates.ts
+
+      - name: Run Unified Configuration Tests
+        run: node --experimental-strip-types scripts/test-unified-config.ts
+
+      - name: Run Backbone Verification Suite
+        run: node --experimental-strip-types scripts/verify-backbone.ts

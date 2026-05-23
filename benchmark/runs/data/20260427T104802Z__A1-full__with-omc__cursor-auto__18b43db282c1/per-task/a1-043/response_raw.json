@@ -1,0 +1,16 @@
+{
+  "type": "result",
+  "subtype": "success",
+  "is_error": false,
+  "duration_ms": 12422,
+  "duration_api_ms": 12422,
+  "result": "Use one scoped codemod pattern so only **imported bindings** are renamed, not arbitrary identifiers/strings.\n\n- **Single-pattern definition**\n  - Target only import specifiers named `oldUtil`:\n  - **Pattern:** `import { ..., oldUtil, ... } from '...';` → `import { ..., newUtil, ... } from '...';`\n  - **Also handle alias form safely:** `import { oldUtil as localName } from '...';` should become `import { newUtil as localName } from '...';`\n  - If there are default/namespace imports, skip unless `oldUtil` is actually the imported symbol name (avoid blind text replace).\n\n- **Per-file scope (batch list)**\n  - `a/x.ts`\n  - `a/y.ts`\n  - `a/z.ts`\n  - `a/aa.ts`\n  - `a/bb.ts`\n  - `a/cc.ts`\n  - `a/dd.ts`\n  - `a/ee.ts`\n  - `a/ff.ts`\n  - `a/gg.ts`\n  - `a/hh.ts`\n  - `a/l.ts`\n\n- **Conflict-avoidance reasoning**\n  - Restrict rewrite to `ImportSpecifier.imported.name === \"oldUtil\"` (AST-aware), so:\n    - no changes to comments/strings/type names/object keys.\n    - no accidental rename of a local variable coincidentally named `oldUtil`.\n    - alias safety is preserved (`as localName` unchanged).\n  - Do not rename call sites unless they reference the same local binding; for aliased imports, usage stays on alias.\n  - Run file-by-file transform with explicit allowlist (the 12 paths only), so other packages in the monorepo are untouched.\n\n- **Verification command after batch**\n  - Run:\n    - `rg -n \"\\boldUtil\\b\" a/x.ts a/y.ts a/z.ts a/aa.ts a/bb.ts a/cc.ts a/dd.ts a/ee.ts a/ff.ts a/gg.ts a/hh.ts a/l.ts`\n  - Expect: no matches in import positions (and ideally none at all unless intentionally aliased/local).  \n  - Then run repo typecheck for safety (e.g. monorepo standard `tsc -b` / workspace check command).",
+  "session_id": "3700b696-4ce1-423e-9f3d-25cb5e7d8547",
+  "request_id": "d34d09f3-c97f-4768-9cb6-a16c9bb007bb",
+  "usage": {
+    "inputTokens": 165,
+    "outputTokens": 581,
+    "cacheReadTokens": 13312,
+    "cacheWriteTokens": 0
+  }
+}

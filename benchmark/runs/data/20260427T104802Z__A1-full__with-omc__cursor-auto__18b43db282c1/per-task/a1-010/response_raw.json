@@ -1,0 +1,16 @@
+{
+  "type": "result",
+  "subtype": "success",
+  "is_error": false,
+  "duration_ms": 8582,
+  "duration_api_ms": 8582,
+  "result": "Great prompt. I’d run the interview against these **four clarity dimensions**:\n\n- **Business Decision Clarity** — how clearly we know which decisions analytics must enable  \n- **Outcome Metric Clarity** — how clearly success/failure is defined (activation, retention, revenue, etc.)  \n- **User/Journey Clarity** — how clearly personas, lifecycle stages, and key flows are mapped  \n- **Instrumentation/Constraint Clarity** — how clearly event definitions, data quality needs, and constraints (privacy, team, timeline) are known  \n\nInitial scores (0–10, based on your one-line brief):\n\n- **Business Decision Clarity:** 2/10  \n- **Outcome Metric Clarity:** 2/10  \n- **User/Journey Clarity:** 1/10  \n- **Instrumentation/Constraint Clarity:** 1/10  \n\n**Highest-leverage first question:**  \nIf you could get a **reliable weekly answer to exactly one product question** that would most change what your team does next, what is that question?",
+  "session_id": "d19d01f6-d5db-46ba-bc22-b32cd4be4f85",
+  "request_id": "89ab9248-48f4-411f-8fa5-ce26d81dcc25",
+  "usage": {
+    "inputTokens": 138,
+    "outputTokens": 250,
+    "cacheReadTokens": 13312,
+    "cacheWriteTokens": 0
+  }
+}

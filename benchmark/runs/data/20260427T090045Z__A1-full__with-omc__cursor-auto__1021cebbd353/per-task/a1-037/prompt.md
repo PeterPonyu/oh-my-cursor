@@ -1,0 +1,3 @@
+## User prompt
+
+Design a retry loop to stabilize a known-flaky test that passes ~85% of the time and is too costly to fix immediately. Output: stop condition, idempotence guarantee, max-iteration cap, observable success signal, and what makes it safe to run repeatedly.

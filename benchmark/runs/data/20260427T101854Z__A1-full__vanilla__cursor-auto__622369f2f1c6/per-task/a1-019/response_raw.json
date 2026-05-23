@@ -1,0 +1,16 @@
+{
+  "type": "result",
+  "subtype": "success",
+  "is_error": false,
+  "duration_ms": 7049,
+  "duration_api_ms": 7049,
+  "result": "- **OWASP class:** `A03:2021 – Injection` (SQL Injection / CWE-89)  \n- **Severity:** **High**  \n- **Attack scenario:** An attacker supplies input like `' OR '1'='1' --` for `name`, causing the query to become valid attacker-controlled SQL, potentially bypassing intended filtering, dumping user rows, or modifying data (depending on DB permissions).  \n- **File:line:** `snippet.py:2` (string concatenation into SQL), with sink at `snippet.py:3` (`db.execute(q)`)  \n- **Remediation:** Use parameterized queries/prepared statements; never concatenate untrusted input into SQL. Also enforce least-privilege DB accounts and optionally validate input format.\n\n```python\ndef get_user(name):\n    q = \"SELECT * FROM users WHERE name = ?\"\n    return db.execute(q, (name,)).fetchone()\n```\n\nIf your DB driver uses `%s` or named params (`:name`) instead of `?`, use that driver’s parameter syntax.",
+  "session_id": "62b807b8-af91-456e-9044-7ef9aa373b06",
+  "request_id": "7a800dda-618c-4ead-9b45-2b77435f9c57",
+  "usage": {
+    "inputTokens": 884,
+    "outputTokens": 286,
+    "cacheReadTokens": 11776,
+    "cacheWriteTokens": 0
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "type": "result",
+  "subtype": "success",
+  "is_error": false,
+  "duration_ms": 17409,
+  "duration_api_ms": 17409,
+  "result": "1) **Ingress / reverse-proxy path mismatch (highest prior)**\n- **Why likely:** Dev usually hits app directly (`localhost`), while prod often adds Nginx/API Gateway/Ingress with path rewriting (`/api` prefix, trailing slash, basePath).\n- **Evidence for:**  \n  - 404 only in production.  \n  - Endpoint works locally with same app code.  \n  - Prod has extra network hop/components not present in dev.\n- **Evidence against:**  \n  - Other routes with same prefix/rewrite pattern work fine in prod.  \n  - Proxy logs show request forwarded to the exact expected upstream path.\n- **Smallest discriminating probe:**  \n  - Send one request directly to the Node container/service (bypass proxy) and one through public URL, compare `method + path` seen by app logs.  \n  - If direct works but proxied fails, root cause is almost certainly proxy/base-path config.\n\n2) **Route not actually registered in production build/runtime**\n- **Why likely:** Conditional route loading (`NODE_ENV`, feature flags, dynamic imports, tree-shaken/compiled artifacts) can differ between dev and prod startup.\n- **Evidence for:**  \n  - 404 returned by app itself (not gateway).  \n  - Startup logs in prod lack the route/module registration line.  \n  - Route depends on env var or optional module present in dev but absent in prod image.\n- **Evidence against:**  \n  - Route table dump in prod shows endpoint registered exactly as expected.  \n  - Same container image/config in staging works.\n- **Smallest discriminating probe:**  \n  - Add a temporary boot-time log of registered routes (or one `console.log(\"route X mounted\")`) in prod; redeploy once.  \n  - If missing, issue is route-registration/config/build divergence.\n\n3) **HTTP method or canonical path drift (case, slash, version prefix)**\n- **Why likely:** Dev testing tools may call `GET /foo`, while prod clients send `POST /foo/` or `/v1/foo`; Express/Fastify matching can differ with strict/case settings or middleware order.\n- **Evidence for:**  \n  - 404 occurs only for specific clients or only one method.  \n  - Access logs show near-match paths (`/users` vs `/user`, `/API/foo` vs `/api/foo`).  \n  - Recent client/proxy change introduced version/prefix/trailing slash differences.\n- **Evidence against:**  \n  - Reproducing with exact prod request (same method/path/headers) against prod still works from curl.  \n  - App uses permissive routing and explicit handlers for both variants.\n- **Smallest discriminating probe:**  \n  - Capture one failing prod request (method + full path) from logs and replay verbatim with `curl -v` against prod and dev.  \n  - If only prod fails with same request shape, mismatch is in prod routing/proxy normalization.\n\nIf you want, I can also give a **10-minute triage order** (which probe to run first for fastest certainty).",
+  "session_id": "d9427170-d224-4b14-a591-c743c1845ac4",
+  "request_id": "ad5f014c-132f-4417-9512-820e126b055f",
+  "usage": {
+    "inputTokens": 871,
+    "outputTokens": 662,
+    "cacheReadTokens": 11776,
+    "cacheWriteTokens": 0
+  }
+}

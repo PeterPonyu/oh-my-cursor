@@ -1,0 +1,3 @@
+## User prompt
+
+Observation: a Python ML inference returns identical-looking outputs in dev but diverges in production for ~5% of inputs. Same model file SHA, same library versions per `pip freeze`. Trace the cause. Output 3 deliberately different hypothesis lanes with evidence ranked by strength, eliminated alternatives, critical unknown, and discriminating probe.

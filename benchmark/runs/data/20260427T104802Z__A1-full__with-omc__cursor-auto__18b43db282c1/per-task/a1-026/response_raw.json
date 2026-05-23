@@ -1,0 +1,16 @@
+{
+  "type": "result",
+  "subtype": "success",
+  "is_error": false,
+  "duration_ms": 15536,
+  "duration_api_ms": 15536,
+  "result": "1) **Route not actually mounted in prod (build/start path mismatch)**\n- **Why high prior:** Most common dev/prod drift in Node APIs is different entrypoint (`src/server.ts` vs `dist/server.js`), conditional route registration, or forgotten import in compiled output.\n- **Evidence for:**\n  - Endpoint works locally with dev runner (`ts-node`, `nodemon`) but not after build/start.\n  - Other endpoints may still work (app is up, but one router missing).\n  - Prod logs show app startup without expected “mounted route” message.\n- **Evidence against:**\n  - A route listing/introspection in prod clearly includes that exact path+method.\n  - Hitting a sibling route from same router works in prod.\n- **Smallest discriminating probe:**\n  - Add one startup log in the exact mount file and in the handler file (or temporary `/__routes` dump) in prod artifact; verify the missing endpoint is present in `dist` and mounted at runtime.\n\n2) **Reverse proxy / ingress path rewrite mismatch (Nginx, ALB, API gateway)**\n- **Why medium-high prior:** In production, requests usually pass through a proxy that may strip/add prefixes (`/api`, `/v1`) differently than dev.\n- **Evidence for:**\n  - 404 body/headers look like proxy-generated (not your app’s error shape).\n  - Only externally accessed URL fails; direct container/pod localhost call works.\n  - Recent infra change: ingress rules, base path, stage mapping, or trailing-slash behavior.\n- **Evidence against:**\n  - App-level access logs show request reaching Node with expected path and still 404.\n  - Same URL path works when bypassing proxy and hitting app directly in prod network.\n- **Smallest discriminating probe:**\n  - Compare two curls: one to public URL, one directly to app upstream (`localhost`/service DNS). Include `-i` and inspect response server headers + path seen in app logs.\n\n3) **Method/version/strict-routing difference in prod config**\n- **Why medium prior:** Prod often enables stricter settings (`case sensitive routing`, `strict routing`, method restrictions, versioned base path via env), while dev is permissive.\n- **Evidence for:**\n  - `GET /foo` works but `POST /foo` 404 (or `/Foo` vs `/foo`, `/foo/` vs `/foo`).\n  - Endpoint depends on env-driven prefix (`API_PREFIX=/api/v1`) present only in prod.\n  - Framework differences between dev/prod boot flags (Express/Fastify options).\n- **Evidence against:**\n  - Exact method + canonical path tested and still missing regardless of slash/case/prefix variants.\n  - Routing config is explicitly identical and logged in both environments.\n- **Smallest discriminating probe:**\n  - Run a 6-request matrix in prod: method (`GET`,`POST`) × path variants (`/x`, `/x/`, case/prefix form) and compare with one-time log of resolved base prefix/routing flags at startup.\n\nIf you want, I can turn this into a **10-minute incident checklist** (exact commands/log lines) tailored to Express, Fastify, or Nest.",
+  "session_id": "a73ddd65-52ee-43f3-bc6d-5dab49f06a6f",
+  "request_id": "264d40fe-5d7f-4970-a500-eeafb25c0b97",
+  "usage": {
+    "inputTokens": 145,
+    "outputTokens": 708,
+    "cacheReadTokens": 13312,
+    "cacheWriteTokens": 0
+  }
+}

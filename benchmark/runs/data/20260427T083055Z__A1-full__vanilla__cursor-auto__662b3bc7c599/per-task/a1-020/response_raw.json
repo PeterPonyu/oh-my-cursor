@@ -1,0 +1,16 @@
+{
+  "type": "result",
+  "subtype": "success",
+  "is_error": false,
+  "duration_ms": 11668,
+  "duration_api_ms": 11668,
+  "result": "- **OWASP class:** `A02:2021 – Cryptographic Failures`  \n  **Severity:** `High`  \n  **Attack scenario:** On line `3`, the password is hashed with unsalted `MD5`, which is fast and broken for password storage. If an attacker gets a DB dump, they can crack many hashes quickly using GPU brute force/rainbow tables and reuse recovered passwords across accounts.  \n  **Line cited:** `3` (`hashlib.md5(...)`)  \n  **Remediation:** Use a password-specific, adaptive KDF with per-password salt (and optional pepper), e.g. `Argon2id` (preferred), `bcrypt`, `scrypt`, or `PBKDF2` with strong parameters. Store the full encoded hash string from the KDF library, not a raw MD5 digest.\n\nNo SQL injection issue is evident in line `4` because the query is parameterized.",
+  "session_id": "01d4ae44-5c7a-474a-b00d-fc31b178e013",
+  "request_id": "5a0eb9df-516b-4f87-810e-4aac6add4e00",
+  "usage": {
+    "inputTokens": 895,
+    "outputTokens": 329,
+    "cacheReadTokens": 11776,
+    "cacheWriteTokens": 0
+  }
+}

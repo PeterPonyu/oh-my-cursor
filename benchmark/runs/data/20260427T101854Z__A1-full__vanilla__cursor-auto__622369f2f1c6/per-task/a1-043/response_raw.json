@@ -1,0 +1,16 @@
+{
+  "type": "result",
+  "subtype": "success",
+  "is_error": false,
+  "duration_ms": 18348,
+  "duration_api_ms": 18348,
+  "result": "I’ll draft a precise batch-edit plan for renaming `oldUtil` to `newUtil` across `a/x.ts` … `a/l.ts`, including a reusable pattern, per-file scope, conflict safeguards, and a post-batch verification command. I’m first checking the planning skill guidance to match your requested output format.Use one **symbol-aware rename batch** scoped to the 12 files only, not a global string replace.\n\n- **Single-pattern definition:**  \n  Target the imported binding named `oldUtil` and its in-file references via a TS-aware matcher:  \n  `ImportSpecifier(imported.name == \"oldUtil\" OR local.name == \"oldUtil\")`  \n  then rename the bound local symbol to `newUtil` in the same file.  \n  (Equivalent textual guard for quick scans: `\\boldUtil\\b`, but apply only where it resolves to that import symbol.)\n\n- **Per-file scope (only these files):**  \n  `a/x.ts`, `a/y.ts`, `a/z.ts`, `a/aa.ts`, `a/ab.ts`, `a/ac.ts`, `a/ad.ts`, `a/ae.ts`, `a/af.ts`, `a/ag.ts`, `a/ah.ts`, `a/l.ts`\n\n- **Conflict-avoidance reasoning:**  \n  - Restrict edits to the listed 12 files to avoid cross-package churn in the monorepo.  \n  - Use symbol/binding-aware rename so unrelated `oldUtil` identifiers (different imports, params, locals, object keys, strings, comments) are untouched.  \n  - Skip files where `newUtil` is already declared/imported in the same scope; resolve manually (alias merge or import cleanup) before applying rename there.  \n  - Preserve import source paths; only rename the specifier/local binding name, not module paths.\n\n- **Verification command after batch:**  \n  Run this from repo root:\n  ```bash\n  rg -n --glob 'a/{x,y,z,aa,ab,ac,ad,ae,af,ag,ah,l}.ts' '\\boldUtil\\b' && echo \"leftovers found\" || echo \"rename complete in target files\"\n  ```\n  Then run monorepo typecheck (e.g. `pnpm -r typecheck` / your workspace equivalent) to confirm no symbol conflicts.",
+  "session_id": "bee4f3a7-454c-4f9b-8ae4-e593efc711f6",
+  "request_id": "e73a7e86-970b-4be2-a7b4-ce588d318b92",
+  "usage": {
+    "inputTokens": 6157,
+    "outputTokens": 798,
+    "cacheReadTokens": 24448,
+    "cacheWriteTokens": 0
+  }
+}

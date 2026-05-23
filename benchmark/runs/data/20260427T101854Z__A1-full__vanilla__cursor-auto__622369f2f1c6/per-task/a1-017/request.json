@@ -1,0 +1,6 @@
+{
+  "backend": "cursor_cli",
+  "model": "cursor/auto",
+  "prompt": "Review this TypeScript snippet for correctness bugs. Severity-rate (CRITICAL/HIGH/MEDIUM/LOW), cite line, give smallest fix.\n\n```typescript\n1 async function fetchAll(urls: string[]): Promise<string[]> {\n2   const results: string[] = [];\n3   urls.forEach(async (url) => {\n4     const r = await fetch(url);\n5     results.push(await r.text());\n6   });\n7   return results;\n8 }\n```",
+  "workdir": "/tmp/cursor-vanilla-m8jr3pc3"
+}

@@ -1,0 +1,3 @@
+## User prompt
+
+Symptom: a search endpoint p95 latency went from 80ms to 720ms after a deploy that touched only the cache layer. No errors in logs. Output: restated failure, 3 ranked hypotheses with H/M/L confidence, evidence-for/against, the cheapest discriminating probe, and explicit symptom-vs-root-cause distinction.

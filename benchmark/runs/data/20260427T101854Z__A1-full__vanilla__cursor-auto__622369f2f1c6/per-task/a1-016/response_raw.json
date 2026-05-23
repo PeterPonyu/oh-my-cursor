@@ -1,0 +1,16 @@
+{
+  "type": "result",
+  "subtype": "success",
+  "is_error": false,
+  "duration_ms": 11742,
+  "duration_api_ms": 11742,
+  "result": "- **High** — File handle leak due to missing close on all paths (`line 2`): if `json.load` or list construction raises, `f.close()` is never called.  \n  **Smallest fix:** use a context manager.\n- **Medium** — Possible `KeyError` when a row lacks `active` (`line 4`): `row['active']` crashes on missing key.  \n  **Smallest fix:** use `row.get('active')`.\n\nMinimal patch:\n\n```python\ndef load_users(path):\n    with open(path) as f:\n        data = json.load(f)\n    users = [User(**row) for row in data if row.get('active')]\n    return users\n```\n\nIf you want this to be stricter (e.g., reject rows missing `active`), I can provide a validated version too.",
+  "session_id": "3158f5a5-37f3-4a1a-8746-2ad935fede72",
+  "request_id": "9b323ab3-14e5-4246-8fea-854eaac440bc",
+  "usage": {
+    "inputTokens": 895,
+    "outputTokens": 249,
+    "cacheReadTokens": 11776,
+    "cacheWriteTokens": 0
+  }
+}

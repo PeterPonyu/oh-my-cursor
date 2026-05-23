@@ -1,0 +1,16 @@
+{
+  "type": "result",
+  "subtype": "success",
+  "is_error": false,
+  "duration_ms": 12039,
+  "duration_api_ms": 12039,
+  "result": "Most likely causes, ranked by base rate for “`pytest` hangs forever with no output/error”:\n\n- **1) Test collection imports execute blocking code (highest base rate)**\n  - **Confidence:** High\n  - **Why common:** `pytest` imports test modules and app modules during collection; any import-time side effect (network call, DB connect, waiting on lock, infinite loop, heavy model load) can stall before first test output.\n  - **Cheapest diagnostic command:**  \n    - `pytest --collect-only -vv -s`\n  - **Discriminate vs next-best alternative:**  \n    - If it hangs during collection and you never reach “collected X items”, this strongly favors import-time blocking.  \n    - Next-best (plugin deadlock) often still shows plugin/session startup lines, and disabling plugins changes behavior quickly.\n\n- **2) Problematic plugin or `conftest.py` fixture hook blocking startup**\n  - **Confidence:** Medium-High\n  - **Why common:** Third-party plugins (`xdist`, `asyncio`, coverage, env loaders) or autouse/session fixtures in `conftest.py` can block before tests run.\n  - **Cheapest diagnostic command:**  \n    - `pytest -p no:all -q`  \n    (then re-enable minimal builtins/plugins incrementally)\n  - **Discriminate vs next-best alternative:**  \n    - If disabling plugins unblocks immediately, root cause is plugin/hook/fixture path.  \n    - If still hangs with plugins disabled, suspect import-time block or external resource wait in project code.\n\n- **3) Waiting on external dependency (DB/service/socket/file lock) with no timeout**\n  - **Confidence:** Medium\n  - **Why common:** Tests or setup code call real services (localhost ports, Docker DB, cloud APIs) and block silently when endpoint is unavailable.\n  - **Cheapest diagnostic command:**  \n    - `pytest -vv -s --maxfail=1`\n  - **Discriminate vs next-best alternative:**  \n    - If verbose output shows it gets past collection and hangs on a specific test/fixture boundary, external wait is likely.  \n    - If it never reaches first test node, import-time or plugin startup is more likely.\n\nQuick triage order (fastest signal):  \n1) `pytest --collect-only -vv -s`  \n2) `pytest -p no:all -q`  \n3) `pytest -vv -s --maxfail=1`  \n\nIf you want, I can give you a 5-command “binary search” flow to localize the exact file/fixture in under 10 minutes.",
+  "session_id": "111d5a59-ee92-4c61-b7d5-45fd9c07f814",
+  "request_id": "53fe1dcb-6ee0-416e-9be7-6d5bffb778da",
+  "usage": {
+    "inputTokens": 149,
+    "outputTokens": 587,
+    "cacheReadTokens": 13312,
+    "cacheWriteTokens": 0
+  }
+}

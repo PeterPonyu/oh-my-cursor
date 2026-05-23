@@ -1,10 +1,10 @@
 {
   "task_id": "plugin-self-audit-202605",
   "title": "Self-audit of oh-my-cursor plugin (orchestration, hooks, docs)",
-  "phase": "verify",
-  "status": "in_progress",
+  "phase": "done",
+  "status": "passed",
   "current_role": "verifier",
-  "next_action": "Review docs/plans/plugin-self-audit-202605/SYNTHESIS.md and decide whether to open an iterate-loop to apply fixes (hooks path hardening + docs drift corrections).",
+  "next_action": "none; all self-audit findings remediated and verified",
   "acceptance_criteria": [
     {
       "id": "AC-001",
@@ -57,6 +57,13 @@
       "role": "verifier",
       "note": "team audit lanes completed; synthesis written; validators run; ready to decide remediation scope",
       "at": "2026-05-09"
+    },
+    {
+      "phase": "done",
+      "status": "passed",
+      "role": "verifier",
+      "note": "completed self-audit remediation loop and verified all gates",
+      "at": "2026-05-23"
     }
   ]
 }

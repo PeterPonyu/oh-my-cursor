@@ -1,0 +1,6 @@
+{
+  "backend": "cursor_cli",
+  "model": "cursor/auto",
+  "prompt": "Design an iteration loop that drives a multi-story PRD to completion: PRD with task-specific acceptance criteria per story, story-by-story execution, fresh verification per story, separate reviewer pass before declaring done. Output: stop condition, max-iter cap, idempotence guarantee for re-runs, and the observable success signal that gates declaring the whole PRD done.",
+  "workdir": "/tmp/cursor-vanilla-m8jr3pc3"
+}

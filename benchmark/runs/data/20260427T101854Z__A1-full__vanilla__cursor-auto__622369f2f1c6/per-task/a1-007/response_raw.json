@@ -1,0 +1,16 @@
+{
+  "type": "result",
+  "subtype": "success",
+  "is_error": false,
+  "duration_ms": 17928,
+  "duration_api_ms": 17928,
+  "result": "You want a pre-build discovery pass for app notifications, so I’ll first structure the decision points (product, technical, and compliance) and then turn that into a concrete implementation-ready checklist without writing code. I’m quickly loading the planning workflow I should follow.Great place to start. Before writing any notification code, you need a **notification product spec** with these decisions locked:\n\n- **Outcome first:** what user behavior should notifications drive (e.g., return to app, complete task, prevent churn)?\n- **Event list:** exact triggers per notification type (transactional, reminder, marketing, security).\n- **Audience rules:** who gets what, and who must never get it.\n- **Urgency model:** priority levels (critical vs nice-to-have) and max send frequency.\n- **Success metrics:** open rate, conversion, retention lift, opt-out rate, delivery failure rate.\n\nThen define the delivery surface:\n\n- **Channels:** push, in-app inbox, email, SMS (choose primary + fallback).\n- **Platforms:** iOS, Android, web, desktop.\n- **Provider choices:** APNs/FCM directly vs third-party (OneSignal, Braze, etc.).\n- **Template strategy:** localized templates, personalization fields, and approval flow.\n- **Quiet hours/time zone:** send windows and “do not disturb” logic.\n\nAnd the non-negotiables (often missed):\n\n- **Consent & legal:** opt-in/opt-out rules, GDPR/CCPA/CAN-SPAM requirements.\n- **Preferences center:** per-topic notification settings in-app.\n- **Idempotency:** prevent duplicate sends on retries.\n- **Reliability:** retry policy, dead-letter handling, monitoring/alerting.\n- **Auditability:** log what was sent, when, and why.\n\nA practical “phase 1” scope is usually:\n\n- 1–2 high-value use cases\n- 1 primary channel (usually push or email)\n- basic preference controls\n- delivery + open tracking\n- simple throttling/quiet hours\n\nIf you want, I can help you produce a one-page requirements doc from this.  \nFirst decision to make: **Which platforms/channels must be in v1 (e.g., iOS push only, or web + email)?**",
+  "session_id": "7088ef5b-68f2-408b-9128-baea09720489",
+  "request_id": "95e0aff2-54c5-4688-bcf3-53737bea507b",
+  "usage": {
+    "inputTokens": 6065,
+    "outputTokens": 762,
+    "cacheReadTokens": 24448,
+    "cacheWriteTokens": 0
+  }
+}

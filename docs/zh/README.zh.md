@@ -1,0 +1,72 @@
+# oh-my-cursor
+
+<div align="center">
+  <img src="../../assets/oh-my-cursor-character.jpg" alt="oh-my-cursor character" width="600" />
+</div>
+
+一个 Cursor 原生的工作流主干骨架，为 Cursor 工作区提供规则（rules）、技能（skills）、智能体（agents）和生命周期钩子（hooks）。该插件编排了明确的生命周期—— intake (摄入)、research (调研)、plan (规划)、execute (执行)、verify (验证)、review (审查) —— 并将每一个功能声明都锚定到检入（checked-in）的产物中。
+
+## 快速入门
+
+在 Cursor composer 中输入 `@phase-controller` 以启动或恢复 oh-my-cursor 工作流。
+
+### 安装
+
+该插件根目录位于 `.cursor-plugin/plugin.json`，并安装到 `~/.cursor/plugins/local/oh-my-cursor/`。
+
+```bash
+# 从仓库根目录安装（复制模式 — 最小运行载荷）
+node --experimental-strip-types scripts/install-local-plugin.ts
+
+# 或者是包含可选的 MCP 桥接器以用于智能体调用状态写入
+node --experimental-strip-types scripts/install-local-plugin.ts --with-mcp
+
+# 软链接模式以用于实时开发（重载窗口后更改可见）
+node --experimental-strip-types scripts/install-local-plugin.ts --symlink
+```
+
+安装完成后，在 Cursor 中执行重新加载 (**Developer: Reload Window**)。
+
+使用以下命令验证安装： `node --experimental-strip-types scripts/check-local-plugin-install.ts`。
+
+## 包含组件
+
+| 组件 | 位置 | 用途 |
+|-----------|----------|---------|
+| **Hooks 钩子** (14 个事件) | `hooks/hooks.json` + `hooks/` | 编排了每一个官方的 Cursor 钩子事件: `sessionStart`, `sessionEnd`, `beforeSubmitPrompt`, `preToolUse`, `postToolUse`, `postToolUseFailure`, `subagentStart`, `subagentStop`, `beforeShellExecution`, `afterShellExecution`, `beforeReadFile`, `afterFileEdit`, `preCompact`, 和 `stop`。所有脚本仅限标准库（stdlib-only）、fail-open（失败放行），且对工作流状态为只读 |
+| **Agents 智能体** (14 个角色) | `agents/` | 完整的智能体角色注册表 — `orchestrator`, `architect`, `researcher`, `planner`, `implementer`, `qa-tester`, `verifier`, `critic`, `code-reviewer`, `debugger`, `tracer`, `security-reviewer`, `explore`, `test-engineer`。所有检入智能体均默认使用 `model: auto`，除非基准测试结果证明必须锁定特定模型 |
+| **Skills 技能** (14 个技能) | `skills/` | `phase-controller` (入口), `plan`, `iterate-loop`, `auto-execute`, `review`, `security-review`, `debug`, `trace`, `verify`, `deep-interview`, `doctor`, `local-plugin-check`, `mcp-setup`, `parallel-batch` |
+| **Rules 规则** | `.cursor/rules/` + `rules/` | Cursor 工作区指南以及插件边界兼容性策略 |
+| **State 状态契约** | `.cursor/state/` + `src/oh_my_cursor/workflow_state/` | 基于文件的工作流状态契约、兼容性垫片以及封装的 API/CLI/文件锁实现 |
+| **MCP 状态桥** (可选) | `mcp/cursor-state-bridge/` | 智能体可通过 JSON-RPC 进行调用并写入工作流状态 |
+
+## 文档指引
+
+| 需求 | 阅读文档 |
+|------|------|
+| 常驻策略 | [`AGENTS.md`](../../AGENTS.md) |
+| 编排图谱 | [`docs/orchestration.md`](../orchestration.md) |
+| 智能体模型策略 | [`docs/agent-model-policy.md`](../agent-model-policy.md) |
+| 状态契约 | [`docs/state-contract.md`](../state-contract.md) |
+| MCP 状态桥 | [`docs/mcp-bridge.md`](../mcp-bridge.md) |
+| 外部运行时桥接 | [`docs/external-runtime-bridge.md`](../external-runtime-bridge.md) |
+| 外部运行时兼容性 | [`docs/external-runtime-compatibility.md`](../external-runtime-compatibility.md) |
+| 验收标准 | [`docs/PRD.yaml`](../PRD.yaml) |
+| 变更历史 | [`CHANGELOG.md`](../../CHANGELOG.md) |
+| 确认表面映射 | [`docs/confirmed-surfaces.md`](../confirmed-surfaces.md) |
+| 官方文献引用 | [`docs/references.md`](../references.md) |
+
+旧版开发说明（优化优先级、插件边界审查、后备策略）保存在 [`docs/archive/`](../archive/)。
+
+## 治理机制
+
+本仓库中的每个组件都携带明确的**所有权分类（ownership class）**与**证据分类（proof class）**。
+参见 [`docs/confirmed-surfaces.md`](../confirmed-surfaces.md) 获取当前的详细映射。简言之：
+
+- **repo-owned**（仓库所有） — 在此处检入并在本地进行验证的资源。
+- **host-product-only**（仅宿主产品） — Cursor 原生支持的功能，不由本仓库直接提供。
+- **unsupported-or-out-of-scope**（不支持或超出范围） — 有意不提供或不声明支持的特性。
+
+## 开源协议
+
+MIT — 参见 [`LICENSE`](../../LICENSE)。

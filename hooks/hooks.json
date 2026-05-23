@@ -3,72 +3,72 @@
   "hooks": {
     "sessionStart": [
       {
-        "command": "python3 hooks/session-bootstrap.py"
+        "command": "node --experimental-strip-types hooks/session-bootstrap.ts"
       }
     ],
     "sessionEnd": [
       {
-        "command": "python3 hooks/session-summary.py"
+        "command": "node --experimental-strip-types hooks/session-summary.ts"
       }
     ],
     "beforeSubmitPrompt": [
       {
-        "command": "python3 hooks/prompt-router.py"
+        "command": "node --experimental-strip-types hooks/prompt-router.ts"
       }
     ],
     "preToolUse": [
       {
-        "command": "python3 hooks/tool-guard.py"
+        "command": "node --experimental-strip-types hooks/tool-guard.ts"
       }
     ],
     "postToolUse": [
       {
-        "command": "python3 hooks/state-watcher.py"
+        "command": "node --experimental-strip-types hooks/state-watcher.ts"
       }
     ],
     "postToolUseFailure": [
       {
-        "command": "python3 hooks/failure-router.py"
+        "command": "node --experimental-strip-types hooks/failure-router.ts"
       }
     ],
     "subagentStart": [
       {
-        "command": "python3 hooks/subagent-bootstrap.py"
+        "command": "node --experimental-strip-types hooks/subagent-bootstrap.ts"
       }
     ],
     "subagentStop": [
       {
-        "command": "python3 hooks/subagent-summary.py"
+        "command": "node --experimental-strip-types hooks/subagent-summary.ts"
       }
     ],
     "beforeShellExecution": [
       {
-        "command": "python3 hooks/shell-guard.py"
+        "command": "node --experimental-strip-types hooks/shell-guard.ts"
       }
     ],
     "afterShellExecution": [
       {
-        "command": "python3 hooks/shell-debrief.py"
+        "command": "node --experimental-strip-types hooks/shell-debrief.ts"
       }
     ],
     "beforeReadFile": [
       {
-        "command": "python3 hooks/read-advisor.py"
+        "command": "node --experimental-strip-types hooks/read-advisor.ts"
       }
     ],
     "afterFileEdit": [
       {
-        "command": "python3 hooks/claim-guard.py"
+        "command": "node --experimental-strip-types hooks/claim-guard.ts"
       }
     ],
     "preCompact": [
       {
-        "command": "python3 hooks/compact-reminder.py"
+        "command": "node --experimental-strip-types hooks/compact-reminder.ts"
       }
     ],
     "stop": [
       {
-        "command": "python3 hooks/stop-gate.py",
+        "command": "node --experimental-strip-types hooks/stop-gate.ts",
         "loop_limit": 1,
         "automatic_followup": false
       }

@@ -35,14 +35,21 @@ It must contain:
 - a recommended `current_role` for the next phase (`implementer`, `verifier`,
   etc.);
 - a concise `next_action` describing the first concrete step; and
-- an optional `tasks` array if the work needs more than one wave, where each
-  task entry includes `id`, `summary`, `wave`, `agent`, `dependencies`, and
-  `acceptance_ids`.
+- an explicit `tasks` array where each task entry includes:
+  - `id`: unique string identifier (e.g., `T-001`);
+  - `summary`: brief description of the task;
+  - `wave`: integer indicating execution sequence;
+  - `agent`: the target role (e.g. `implementer`);
+  - `dependencies`: array of task IDs that must complete first;
+  - `acceptance_ids`: array of acceptance criterion IDs verified by this task;
+  - `verification_command`: the command to execute to verify correctness (e.g., `node --experimental-strip-types scripts/verify-backbone.ts`);
+  - `rollback_plan`: a brief strategy or command sequence to revert changes if the task fails.
 
 ## Rules
 
 - Acceptance criteria must be verifiable with checked-in artifacts or
   reproducible script invocations.
+- Every task in the `tasks` array must specify a concrete `verification_command` and a `rollback_plan` to mitigate edit-drift or compilation errors.
 - Do not invent new phases or statuses outside
   `.cursor/state/workflow-state.schema.json`.
 - Prefer the smallest plan that satisfies the objective.

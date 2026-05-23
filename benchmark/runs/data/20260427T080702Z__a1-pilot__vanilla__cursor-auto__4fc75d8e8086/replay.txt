@@ -1,0 +1,15 @@
+[2026-04-27T08:07:02.641274Z] run_start
+  benchmark=a1-pilot arm=vanilla model=cursor/auto budget=$2.0
+[2026-04-27T08:07:02.641442Z] task_start task=a1-pilot-001  prompt_chars=173
+[2026-04-27T08:07:02.641515Z] request task=a1-pilot-001  keys=['backend', 'model', 'prompt', 'workdir']
+[2026-04-27T08:07:25.566902Z] response task=a1-pilot-001  in=9564 out=638 cost=$0.043945 ms=22924 stop=None
+[2026-04-27T08:07:25.566932Z] task_end task=a1-pilot-001  status=ok
+[2026-04-27T08:07:25.567016Z] task_start task=a1-pilot-002  prompt_chars=112
+[2026-04-27T08:07:25.567079Z] request task=a1-pilot-002  keys=['backend', 'model', 'prompt', 'workdir']
+[2026-04-27T08:07:36.635641Z] response task=a1-pilot-002  in=2256 out=134 cost=$0.011888 ms=11068 stop=None
+[2026-04-27T08:07:36.635666Z] task_end task=a1-pilot-002  status=ok
+[2026-04-27T08:07:36.635732Z] task_start task=a1-pilot-003  prompt_chars=184
+[2026-04-27T08:07:36.635776Z] request task=a1-pilot-003  keys=['backend', 'model', 'prompt', 'workdir']
+[2026-04-27T08:07:48.094127Z] response task=a1-pilot-003  in=859 out=254 cost=$0.00992 ms=11458 stop=None
+[2026-04-27T08:07:48.094152Z] task_end task=a1-pilot-003  status=ok
+[2026-04-27T08:07:48.094170Z] run_end  status=ok totals={'n_tasks': 3, 'n_responses': 3, 'n_errors': 0, 'n_fallback_events': 0, 'tokens_in': 12679, 'tokens_out': 1026, 'cost_usd': 0.065753, 'wallclock_seconds': 45.453}

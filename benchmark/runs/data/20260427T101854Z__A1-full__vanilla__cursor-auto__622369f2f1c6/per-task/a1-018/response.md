@@ -1,0 +1,11 @@
+- **High** — `4-5, 8-9: Cache lookups can fail for logically same user`
+  - **Issue:** `get()` and `put()` create new `User` instances as keys, but `User` uses default identity-based `equals/hashCode`.
+  - **Root cause:** `HashMap` key matching depends on `equals/hashCode`; without overrides, two `User(userId, region)` objects are never equal unless same instance.
+  - **Smallest fix:** Implement `equals()` and `hashCode()` in `User` using `userId` and `region` (or switch key type to a stable value key like concatenated string/record key).
+
+- **Medium** — `5, 9: Stored byte[] can be mutated externally`
+  - **Issue:** `put()` stores the caller’s array reference; `get()` returns internal array reference. Callers can mutate cache contents accidentally.
+  - **Root cause:** `byte[]` is mutable and references are shared directly.
+  - **Smallest fix:** Defensive copy on both boundaries:
+    - in `put`: `store.put(k, Arrays.copyOf(data, data.length))`
+    - in `get`: return `v == null ? null : Arrays.copyOf(v, v.length)`

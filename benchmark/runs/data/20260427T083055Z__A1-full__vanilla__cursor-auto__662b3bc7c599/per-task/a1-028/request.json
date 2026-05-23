@@ -1,0 +1,6 @@
+{
+  "backend": "cursor_cli",
+  "model": "cursor/auto",
+  "prompt": "Symptom: a long-running Python worker's RSS climbs ~50MB/hour until OOM after 18h. Produce: restated failure, 3 ranked hypotheses with confidence, the cheapest discriminating probe per hypothesis, and which hypothesis the probe would falsify.",
+  "workdir": "/tmp/cursor-vanilla-597mqx8a"
+}

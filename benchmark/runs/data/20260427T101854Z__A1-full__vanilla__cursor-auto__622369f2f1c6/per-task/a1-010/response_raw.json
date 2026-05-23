@@ -1,0 +1,16 @@
+{
+  "type": "result",
+  "subtype": "success",
+  "is_error": false,
+  "duration_ms": 8730,
+  "duration_api_ms": 8730,
+  "result": "Great prompt. I’d run a quick clarity pass on these **4 dimensions** before recommending anything:\n\n- **Business Decision Clarity** — how clearly you’ve defined the decisions analytics must support  \n  - **Initial score:** **3/10**\n- **Success Metric Clarity** — how concretely you’ve defined outcome metrics (revenue, retention, activation, etc.)  \n  - **Initial score:** **2/10**\n- **User Journey/Event Clarity** — how well key user actions and lifecycle stages are mapped  \n  - **Initial score:** **3/10**\n- **Operational Readiness Clarity** — constraints like team bandwidth, implementation ownership, and reporting cadence  \n  - **Initial score:** **4/10**\n\n**Single highest-leverage first question:**  \nIf you could answer **one analytics question reliably every week** that would most improve growth, what exact question would that be?",
+  "session_id": "854aa7a2-b8bc-4aeb-bc19-817218954fa9",
+  "request_id": "79acd25d-32d3-4a2a-9de6-4f38bf922723",
+  "usage": {
+    "inputTokens": 864,
+    "outputTokens": 220,
+    "cacheReadTokens": 11776,
+    "cacheWriteTokens": 0
+  }
+}

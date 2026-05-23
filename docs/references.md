@@ -1,6 +1,6 @@
 # References
 
-Access date for web references: **2026-05-20**.
+Access date for web references: **2026-05-23**.
 
 This page is the citation index for public `oh-my-cursor` claims. It separates
 repo-owned proof from host-product documentation so repo wording does not drift
@@ -54,11 +54,11 @@ When capability claims change in `AGENTS.md`, `README.md`, `docs/**`, or
   (`~/.codex/skills`, `~/.codex/agents`) assets are peer
   **host-product-discovered user assets** when present. OMCS (`oh-my-cursor`)
   remains the repo-owned plugin surface after local install validation.
-- `scripts/link-omc-cursor-compat-assets.py` is a repo-owned local helper that
+- `scripts/link-omc-cursor-compat-assets.ts` is a repo-owned local helper that
   copies OMC plugin-cache skills/agents into Cursor-documented Claude
   compatibility directories when the user requests that bridge. Its proof class
   is `checked-in-artifact` plus the opt-in
-  `CHECK_USER_COMPAT_ASSETS=1 scripts/e2e-qa-session-assets.sh` smoke.
+  `CHECK_USER_COMPAT_ASSETS=1 scripts/e2e-qa-session-assets.ts` smoke.
 - Repo-file custom-mode packaging, repo-file background-agent provisioning, a
   default MCP config, and marketplace publication remain outside the
   current repo contract.
@@ -67,7 +67,7 @@ When capability claims change in `AGENTS.md`, `README.md`, `docs/**`, or
 - Checked-in agent model selection is governed by
   [`agent-model-policy.md`](./agent-model-policy.md). Role-specific model
   pinning requires benchmark evidence; parent CLI model selection uses
-  `scripts/resolve-cursor-model.py` and remains host-product-only.
+  `scripts/resolve-cursor-model.ts` and remains host-product-only.
 
 ## Repo-Owned Agents Governance (Access date: 2026-05-19)
 
@@ -101,8 +101,32 @@ All tools speak JSON-RPC 2.0 over stdio. No network listener. Runs only when exp
 | state_history_append | Append run-level notes | `history[]` | `.cursor/state/` | any phase (audit trail) |
 | state_read | Read current workflow-state | read-only | `.cursor/state/` | all phases (all agents) |
 
-**Error Handling**: All tools return JSON-RPC 2.0 errors with semantic codes. File lock serializes concurrent writes; CLI and MCP bridge share the same packaged lock via `src/oh_my_cursor/workflow_state/locking.py`.
+**Error Handling**: All tools return JSON-RPC 2.0 errors with semantic codes. File lock serializes concurrent writes; CLI and MCP bridge share the same packaged lock via `src/oh_my_cursor/workflow_state/locking.ts`.
 
 **Token-based Auth** (optional): Not implemented in baseline. Future scope: JWTs for remote agent invocation.
 
-**Validator Integration**: `scripts/validate-mcp-server-structure.py` proves package well-formedness. Smoke test: `scripts/smoke-mcp-cursor-state-bridge.sh` (gated by `RUN_MCP_BRIDGE_SMOKE=1`).
+**Validator Integration**: `scripts/validate-mcp-server-structure.ts` proves package well-formedness. Smoke test: `scripts/smoke-mcp-cursor-state-bridge.ts` (gated by `RUN_MCP_BRIDGE_SMOKE=1`).
+
+## Third-party recipe references (Access date: 2026-05-23)
+
+| Reference | Purpose in Recipes | Link |
+| --- | --- | --- |
+| Exa MCP Server | Semantic web search integration details | [exa/mcp-server](https://github.com/exa-labs/exa-mcp-server) |
+| Context7 MCP Server | Documentation search integration details | [context7/mcp-server](https://github.com/context7/mcp-server) |
+| Grep.app MCP Server | GitHub public code search integration | [grep-app/mcp-server](https://github.com/grep-app/mcp-server) |
+| AST-Grep | Structural search and refactoring patterns | [ast-grep](https://ast-grep.github.io/) |
+
+## Autopilot & Consensus Gate (Access date: 2026-05-23)
+
+| Reference | Purpose | Path / Link |
+| --- | --- | --- |
+| Autopilot Guide | Documentation for Bounded Autopilot and Consensus Gate | [recipes/autopilot-guide.md](./recipes/autopilot-guide.md) |
+| Consensus Planning Gate | Script enforcing multi-agent planning consensus | [consensus-gate.ts](../scripts/consensus-gate.ts) |
+| Bounded Autopilot Runner | CLI loop runner for sequential task execution | [run-autopilot.ts](../scripts/run-autopilot.ts) |
+
+## Internationalization (i18n) (Access date: 2026-05-23)
+
+| Reference | Purpose | Path / Link |
+| --- | --- | --- |
+| Chinese README | Chinese translation of the project overview and quick start | [docs/zh/README.zh.md](./zh/README.zh.md) |
+| Chinese AGENTS policy | Chinese translation of the core agent model policy and boundaries | [docs/zh/AGENTS.zh.md](./zh/AGENTS.zh.md) |

@@ -1,0 +1,6 @@
+{
+  "backend": "cursor_cli",
+  "model": "cursor/auto",
+  "prompt": "Observation: an end-to-end checkout test fails ~8% of the time. Failure surfaces in the frontend assertion ('expected order id, got null'), but backend logs show the order was created successfully. Database has the row. Trace across the full stack with 3 deliberately different lanes, rank evidence per lane, force a rebuttal round in which the strongest non-leading lane attacks the leader, and end with the single discriminating probe and the critical unknown it would resolve.",
+  "workdir": "/tmp/cursor-vanilla-597mqx8a"
+}

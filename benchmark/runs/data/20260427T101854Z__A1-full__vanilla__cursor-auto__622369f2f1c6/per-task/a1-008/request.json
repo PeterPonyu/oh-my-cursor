@@ -1,0 +1,6 @@
+{
+  "backend": "cursor_cli",
+  "model": "cursor/auto",
+  "prompt": "Make my web app faster. Don't write code yet — figure out what I actually mean.",
+  "workdir": "/tmp/cursor-vanilla-m8jr3pc3"
+}

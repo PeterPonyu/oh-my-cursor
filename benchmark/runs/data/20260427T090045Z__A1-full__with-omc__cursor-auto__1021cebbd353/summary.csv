@@ -1,0 +1,2 @@
+run_id,benchmark,arm,model,n_tasks,total_tokens_in,total_tokens_out,total_cost_usd,wallclock_seconds,n_errors
+1021cebbd353,A1-full,with-omc,cursor/auto,60,60998,10557,0.41381,646.068,50

@@ -1,0 +1,16 @@
+{
+  "type": "result",
+  "subtype": "success",
+  "is_error": false,
+  "duration_ms": 8922,
+  "duration_api_ms": 8922,
+  "result": "- **OWASP Class:** `A01:2021 - Broken Access Control` (specifically IDOR / BOLA).\n- **Severity:** **High**.\n- **Vulnerable Line(s):** `3-4` (`Order.query.get(oid)` + unconditional `return`).\n\n**Attack scenario (concrete request):**  \nAn authenticated user (or even unauthenticated, if route is public) can enumerate order IDs and read other users' orders:\n\n`GET /orders/1001`  \n`GET /orders/1002`  \n`GET /orders/1003`\n\nBecause the handler fetches by direct object ID and returns it without checking ownership/authorization, any valid `oid` is exposed.\n\n**Smallest remediation:**  \nAdd an authorization check tied to the current user before returning the object.\n\n```python\n@app.get('/orders/<int:oid>')\n@login_required\ndef get_order(oid):\n    o = Order.query.get_or_404(oid)\n    if o.user_id != current_user.id:\n        abort(404)  # or 403\n    return jsonify(o.to_dict())\n```\n\nUsing `404` for unauthorized access can reduce object-enumeration signal.",
+  "session_id": "23e338c6-9ffd-4f3a-a2cb-9e0a863d9a39",
+  "request_id": "0471063a-e460-4830-adaf-71e399eaf916",
+  "usage": {
+    "inputTokens": 886,
+    "outputTokens": 345,
+    "cacheReadTokens": 11776,
+    "cacheWriteTokens": 0
+  }
+}

@@ -1,0 +1,3 @@
+## User prompt
+
+You must rename the imported symbol `oldUtil` to `newUtil` across 12 files (paths a/x.ts ... a/l.ts) in a TS monorepo. Plan the batched edit. Output: single-pattern definition, per-file scope listed, conflict-avoidance reasoning, and the verification command to run after the batch.

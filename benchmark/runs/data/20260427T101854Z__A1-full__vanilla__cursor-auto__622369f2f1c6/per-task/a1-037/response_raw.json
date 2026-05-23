@@ -1,0 +1,16 @@
+{
+  "type": "result",
+  "subtype": "success",
+  "is_error": false,
+  "duration_ms": 11541,
+  "duration_api_ms": 11541,
+  "result": "Use a **bounded, evidence-driven retry wrapper** around the flaky test, with strict safety checks.\n\n- **Stop condition**\n  - Stop immediately on first **verified pass** (test exits 0 *and* emits the expected success marker), or when retries hit cap.\n  - Also stop early on **hard-fail signatures** (e.g., syntax error, missing dependency, setup failure) that retries cannot fix.\n\n- **Idempotence guarantee**\n  - Run each attempt in an **isolated, reset state**: fresh temp workspace/DB schema, deterministic seed, cleared caches, unique run IDs.\n  - No shared mutable state between attempts; cleanup runs in `finally` so a failed attempt cannot poison the next.\n  - The loop never performs non-test side effects (no external writes without mock/sandbox).\n\n- **Max-iteration cap**\n  - `max_attempts = 5` (tunable), with backoff (`1s, 2s, 4s, 8s`) and optional jitter.\n  - At 85% pass probability, failure after 5 attempts is `0.15^5 ≈ 0.000076` (~0.0076%), so this sharply reduces false red builds while staying bounded.\n\n- **Observable success signal**\n  - Require both:\n    1. Process exit code `0`\n    2. Machine-parseable success evidence (e.g., JUnit XML shows `failures=0` for target test, or log token `TEST_PASS:<name>`).\n  - Don’t trust plain human-readable logs alone.\n\n- **What makes repeated runs safe**\n  - Bounded attempts + deterministic reset + explicit non-retryable error filter + auditable per-attempt logs/metrics.\n  - Record `attempt_count`, durations, and final disposition (`pass_on_n`, `hard_fail`, `exhausted`) so behavior is transparent and reversible.\n\nMinimal pseudocode:\n\n```python\nfor attempt in range(1, max_attempts + 1):\n    reset_isolated_state()\n    result = run_test_once()\n    if is_hard_fail(result):\n        return FAIL_HARD\n    if result.exit_code == 0 and has_success_marker(result):\n        return PASS(attempt)\n    sleep(backoff(attempt))\nreturn FAIL_EXHAUSTED\n```\n\nIf you want, I can adapt this into a concrete Bash/Python wrapper for your CI system (GitHub Actions, GitLab CI, Jenkins, etc.).",
+  "session_id": "b23763fc-f865-4b02-9caa-3b53f9df38cb",
+  "request_id": "47d55c73-4fb6-4d73-92bd-7a6f81c53df1",
+  "usage": {
+    "inputTokens": 877,
+    "outputTokens": 540,
+    "cacheReadTokens": 11776,
+    "cacheWriteTokens": 0
+  }
+}

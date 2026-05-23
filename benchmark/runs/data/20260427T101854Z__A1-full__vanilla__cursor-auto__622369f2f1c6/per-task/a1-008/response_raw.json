@@ -1,0 +1,16 @@
+{
+  "type": "result",
+  "subtype": "success",
+  "is_error": false,
+  "duration_ms": 10464,
+  "duration_api_ms": 10464,
+  "result": "You want better app performance, but first to pin down the real goal and constraints before touching code. I’ll run a quick clarification pass so we can translate “faster” into concrete targets.Perfect starting point. “Faster” can mean very different things, so let’s pin down the target before any coding.\n\nFirst question (most important): **when you say fast, what pain do you actually feel most right now?**\n\nPick one primary pain:\n1. Slow first page load  \n2. Sluggish interactions after load (clicks, typing, navigation)  \n3. Slow API/data responses  \n4. Janky scrolling/animations  \n5. High mobile latency specifically  \n6. Something else (describe a concrete moment)",
+  "session_id": "0c288b26-d1a4-4701-9906-d335bfa31417",
+  "request_id": "30a1ce8a-c24f-4eb1-a23c-842970391acd",
+  "usage": {
+    "inputTokens": 9031,
+    "outputTokens": 403,
+    "cacheReadTokens": 23552,
+    "cacheWriteTokens": 0
+  }
+}

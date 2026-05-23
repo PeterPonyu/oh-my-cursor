@@ -1,0 +1,16 @@
+{
+  "type": "result",
+  "subtype": "success",
+  "is_error": false,
+  "duration_ms": 15541,
+  "duration_api_ms": 15541,
+  "result": "Use this as a **deterministic PRD completion loop** for multi-story delivery.\n\n## Iteration Loop (Story-Scoped, Reviewer-Gated)\n\n1. **Initialize PRD run**\n- Parse PRD into ordered stories `S1..Sn`.\n- For each story, require explicit:\n  - scope\n  - task list\n  - acceptance criteria (AC) as testable checks\n  - required artifacts/evidence\n\n2. **For each story `Si` (in order)**\n- **Plan**: derive an execution checklist from `Si` AC only.\n- **Implement**: make only `Si`-scoped changes.\n- **Fresh verify**: run verification from clean/fresh state (no reused prior pass), capturing evidence.\n- **Reviewer pass (separate)**: independent review checks `Si` against AC and evidence.\n- **Decision**:\n  - If verify + reviewer pass: mark `Si = Done`.\n  - Else: log defects, create follow-up tasks for `Si`, iterate `Si` again.\n\n3. **After all stories are Done**\n- Run **PRD-level aggregation gate**:\n  - all stories `Done`\n  - no open defects linked to any story AC\n  - required evidence complete per story\n- If pass: declare PRD complete.\n- Else: reopen failing stories and continue loop.\n\n---\n\n## Stop Condition\n\nStop only when **all** are true:\n\n- Every story status is `Done`.\n- Every story’s AC has a **fresh passing verification result** from current run.\n- Every story has an explicit **independent reviewer approval** after verification.\n- PRD-level gate passes with zero unresolved AC-linked defects.\n\n---\n\n## Max-Iteration Cap\n\nUse two caps to prevent endless churn:\n\n- **Per-story cap**: `max_story_iters = 5`\n- **Global cap**: `max_prd_iters = 3 * (#stories)`\n\nIf either cap is hit:\n- set PRD state to `Escalation Required`\n- output blocking defects, owner, and decision needed (scope cut, AC rewrite, or dependency unblock)\n\n---\n\n## Idempotence Guarantee (Re-runs)\n\nGuarantee deterministic re-runs via these rules:\n\n- **Stable story IDs and AC IDs** (immutable keys).\n- **Content-hash checkpoints** per story: `(code hash, AC set hash, test config hash)`.\n- **No duplicate completion events**: writing `Done(Si)` is upsert-only keyed by story ID + checkpoint hash.\n- **Fresh verification required each run**, but prior passing evidence is reusable only if hashes match exactly.\n- Re-run with unchanged inputs yields identical statuses and no duplicated tasks/evidence records.\n\n---\n\n## Observable Success Signal (PRD Done Gate)\n\nDeclare whole PRD done only when this machine-checkable signal is true:\n\n`PRD_DONE = AND over all stories i: (VERIFY_PASS_i && REVIEW_PASS_i && AC_COVERAGE_i == 100%) && OPEN_DEFECTS_AC_LINKED == 0`\n\nPractical output artifact:\n- a single `prd_completion_report` containing:\n  - story-by-story AC pass matrix\n  - verification timestamps/run IDs\n  - reviewer approvals\n  - final boolean `PRD_DONE=true`\n\nIf `PRD_DONE` is not true, PRD cannot be declared complete.",
+  "session_id": "fcb2a685-9afe-4595-9e2d-7dd044b1dc64",
+  "request_id": "c77e31b2-64c8-4b49-9547-8c3393cc8b63",
+  "usage": {
+    "inputTokens": 170,
+    "outputTokens": 738,
+    "cacheReadTokens": 13312,
+    "cacheWriteTokens": 0
+  }
+}

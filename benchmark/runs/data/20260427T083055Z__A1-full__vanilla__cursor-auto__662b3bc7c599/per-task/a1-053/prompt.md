@@ -1,0 +1,3 @@
+## User prompt
+
+Auto-execute end-to-end: add a `tags` JSONB column to a `posts` table in a Django project, plus migration and serializer support. Output explicit phases (expansion, planning, execution, QA, review, cleanup), per-phase gates, verification commands, security-review trigger condition (does this touch untrusted input?), and the bounded QA retry budget.

@@ -1,0 +1,243 @@
+[2026-04-27T10:48:02.822768Z] run_start
+  benchmark=A1-full arm=with-omc model=cursor/auto budget=$5.0
+[2026-04-27T10:48:02.822895Z] task_start task=a1-001  prompt_chars=163
+[2026-04-27T10:48:02.822957Z] request task=a1-001  keys=['backend', 'model', 'prompt', 'workdir']
+[2026-04-27T10:48:23.951737Z] response task=a1-001  in=2959 out=618 cost=$0.020989 ms=21128 stop=None
+[2026-04-27T10:48:23.951760Z] task_end task=a1-001  status=ok
+[2026-04-27T10:48:23.951819Z] task_start task=a1-002  prompt_chars=211
+[2026-04-27T10:48:23.951864Z] request task=a1-002  keys=['backend', 'model', 'prompt', 'workdir']
+[2026-04-27T10:48:46.535657Z] response task=a1-002  in=3085 out=677 cost=$0.02252 ms=22583 stop=None
+[2026-04-27T10:48:46.535681Z] task_end task=a1-002  status=ok
+[2026-04-27T10:48:46.535750Z] task_start task=a1-003  prompt_chars=299
+[2026-04-27T10:48:46.535795Z] request task=a1-003  keys=['backend', 'model', 'prompt', 'workdir']
+[2026-04-27T10:49:24.953377Z] response task=a1-003  in=5424 out=1399 cost=$0.045283 ms=38417 stop=None
+[2026-04-27T10:49:24.953402Z] task_end task=a1-003  status=ok
+[2026-04-27T10:49:24.953468Z] task_start task=a1-004  prompt_chars=217
+[2026-04-27T10:49:24.953516Z] request task=a1-004  keys=['backend', 'model', 'prompt', 'workdir']
+[2026-04-27T10:50:06.045103Z] response task=a1-004  in=8444 out=1967 cost=$0.061941 ms=41091 stop=None
+[2026-04-27T10:50:06.045135Z] task_end task=a1-004  status=ok
+[2026-04-27T10:50:06.045223Z] task_start task=a1-005  prompt_chars=274
+[2026-04-27T10:50:06.045290Z] request task=a1-005  keys=['backend', 'model', 'prompt', 'workdir']
+[2026-04-27T10:50:38.743562Z] response task=a1-005  in=5568 out=1611 cost=$0.048856 ms=32697 stop=None
+[2026-04-27T10:50:38.743591Z] task_end task=a1-005  status=ok
+[2026-04-27T10:50:38.743679Z] task_start task=a1-006  prompt_chars=262
+[2026-04-27T10:50:38.743744Z] request task=a1-006  keys=['backend', 'model', 'prompt', 'workdir']
+[2026-04-27T10:51:14.938829Z] response task=a1-006  in=7828 out=1599 cost=$0.049159 ms=36194 stop=None
+[2026-04-27T10:51:14.938861Z] task_end task=a1-006  status=ok
+[2026-04-27T10:51:14.938947Z] task_start task=a1-007  prompt_chars=106
+[2026-04-27T10:51:14.939010Z] request task=a1-007  keys=['backend', 'model', 'prompt', 'workdir']
+[2026-04-27T10:51:53.367204Z] response task=a1-007  in=8602 out=1289 cost=$0.067682 ms=38427 stop=None
+[2026-04-27T10:51:53.367234Z] task_end task=a1-007  status=ok
+[2026-04-27T10:51:53.367322Z] task_start task=a1-008  prompt_chars=79
+[2026-04-27T10:51:53.367400Z] request task=a1-008  keys=['backend', 'model', 'prompt', 'workdir']
+[2026-04-27T10:58:18.990109Z] response task=a1-008  in=2945 out=375 cost=$0.017302 ms=17607 stop=None
+[2026-04-27T10:58:18.990134Z] task_end task=a1-008  status=ok
+[2026-04-27T10:58:18.990200Z] task_start task=a1-009  prompt_chars=200
+[2026-04-27T10:58:18.990248Z] request task=a1-009  keys=['backend', 'model', 'prompt', 'workdir']
+[2026-04-27T10:58:33.339936Z] response task=a1-009  in=131 out=352 cost=$0.009667 ms=14349 stop=None
+[2026-04-27T10:58:33.339968Z] task_end task=a1-009  status=ok
+[2026-04-27T10:58:33.340056Z] task_start task=a1-010  prompt_chars=209
+[2026-04-27T10:58:33.340121Z] request task=a1-010  keys=['backend', 'model', 'prompt', 'workdir']
+[2026-04-27T10:58:45.282517Z] response task=a1-010  in=138 out=250 cost=$0.008158 ms=11942 stop=None
+[2026-04-27T10:58:45.282547Z] task_end task=a1-010  status=ok
+[2026-04-27T10:58:45.282640Z] task_start task=a1-011  prompt_chars=195
+[2026-04-27T10:58:45.282705Z] request task=a1-011  keys=['backend', 'model', 'prompt', 'workdir']
+[2026-04-27T10:58:58.306711Z] response task=a1-011  in=136 out=375 cost=$0.010027 ms=13023 stop=None
+[2026-04-27T10:58:58.306743Z] task_end task=a1-011  status=ok
+[2026-04-27T10:58:58.306830Z] task_start task=a1-012  prompt_chars=274
+[2026-04-27T10:58:58.306894Z] request task=a1-012  keys=['backend', 'model', 'prompt', 'workdir']
+[2026-04-27T10:59:14.021780Z] response task=a1-012  in=7468 out=369 cost=$0.035965 ms=15714 stop=None
+[2026-04-27T10:59:14.021811Z] task_end task=a1-012  status=ok
+[2026-04-27T10:59:14.021905Z] task_start task=a1-013  prompt_chars=134
+[2026-04-27T10:59:14.021967Z] request task=a1-013  keys=['backend', 'model', 'prompt', 'workdir']
+[2026-04-27T10:59:24.884969Z] response task=a1-013  in=129 out=223 cost=$0.007726 ms=10862 stop=None
+[2026-04-27T10:59:24.884994Z] task_end task=a1-013  status=ok
+[2026-04-27T10:59:24.885059Z] task_start task=a1-014  prompt_chars=240
+[2026-04-27T10:59:24.885108Z] request task=a1-014  keys=['backend', 'model', 'prompt', 'workdir']
+[2026-04-27T10:59:36.238236Z] response task=a1-014  in=162 out=259 cost=$0.008365 ms=11352 stop=None
+[2026-04-27T10:59:36.238267Z] task_end task=a1-014  status=ok
+[2026-04-27T10:59:36.238354Z] task_start task=a1-015  prompt_chars=436
+[2026-04-27T10:59:36.238440Z] request task=a1-015  keys=['backend', 'model', 'prompt', 'workdir']
+[2026-04-27T10:59:51.636470Z] response task=a1-015  in=219 out=480 cost=$0.011851 ms=15397 stop=None
+[2026-04-27T10:59:51.636502Z] task_end task=a1-015  status=ok
+[2026-04-27T10:59:51.636589Z] task_start task=a1-016  prompt_chars=281
+[2026-04-27T10:59:51.636653Z] request task=a1-016  keys=['backend', 'model', 'prompt', 'workdir']
+[2026-04-27T11:00:04.737740Z] response task=a1-016  in=681 out=261 cost=$0.009798 ms=13100 stop=None
+[2026-04-27T11:00:04.737772Z] task_end task=a1-016  status=ok
+[2026-04-27T11:00:04.737861Z] task_start task=a1-017  prompt_chars=376
+[2026-04-27T11:00:04.737929Z] request task=a1-017  keys=['backend', 'model', 'prompt', 'workdir']
+[2026-04-27T11:00:16.053497Z] response task=a1-017  in=191 out=233 cost=$0.008062 ms=11315 stop=None
+[2026-04-27T11:00:16.053527Z] task_end task=a1-017  status=ok
+[2026-04-27T11:00:16.053614Z] task_start task=a1-018  prompt_chars=574
+[2026-04-27T11:00:16.053682Z] request task=a1-018  keys=['backend', 'model', 'prompt', 'workdir']
+[2026-04-27T11:00:31.313622Z] response task=a1-018  in=7930 out=435 cost=$0.032005 ms=15259 stop=None
+[2026-04-27T11:00:31.313652Z] task_end task=a1-018  status=ok
+[2026-04-27T11:00:31.313749Z] task_start task=a1-019  prompt_chars=243
+[2026-04-27T11:00:31.313819Z] request task=a1-019  keys=['backend', 'model', 'prompt', 'workdir']
+[2026-04-27T11:00:43.290342Z] response task=a1-019  in=158 out=352 cost=$0.009748 ms=11976 stop=None
+[2026-04-27T11:00:43.290366Z] task_end task=a1-019  status=ok
+[2026-04-27T11:00:43.290431Z] task_start task=a1-020  prompt_chars=288
+[2026-04-27T11:00:43.290481Z] request task=a1-020  keys=['backend', 'model', 'prompt', 'workdir']
+[2026-04-27T11:01:01.446595Z] response task=a1-020  in=4090 out=561 cost=$0.028519 ms=18155 stop=None
+[2026-04-27T11:01:01.446629Z] task_end task=a1-020  status=ok
+[2026-04-27T11:01:01.446726Z] task_start task=a1-021  prompt_chars=264
+[2026-04-27T11:01:01.446790Z] request task=a1-021  keys=['backend', 'model', 'prompt', 'workdir']
+[2026-04-27T11:01:16.008550Z] response task=a1-021  in=164 out=474 cost=$0.011596 ms=14561 stop=None
+[2026-04-27T11:01:16.008582Z] task_end task=a1-021  status=ok
+[2026-04-27T11:01:16.008669Z] task_start task=a1-022  prompt_chars=257
+[2026-04-27T11:01:16.008732Z] request task=a1-022  keys=['backend', 'model', 'prompt', 'workdir']
+[2026-04-27T11:01:31.708704Z] response task=a1-022  in=3512 out=499 cost=$0.026008 ms=15699 stop=None
+[2026-04-27T11:01:31.708736Z] task_end task=a1-022  status=ok
+[2026-04-27T11:01:31.708825Z] task_start task=a1-023  prompt_chars=174
+[2026-04-27T11:01:31.708889Z] request task=a1-023  keys=['backend', 'model', 'prompt', 'workdir']
+[2026-04-27T11:01:43.750386Z] response task=a1-023  in=136 out=246 cost=$0.008092 ms=12041 stop=None
+[2026-04-27T11:01:43.750418Z] task_end task=a1-023  status=ok
+[2026-04-27T11:01:43.750504Z] task_start task=a1-024  prompt_chars=473
+[2026-04-27T11:01:43.750570Z] request task=a1-024  keys=['backend', 'model', 'prompt', 'workdir']
+[2026-04-27T11:02:03.727813Z] response task=a1-024  in=211 out=717 cost=$0.015382 ms=19976 stop=None
+[2026-04-27T11:02:03.727845Z] task_end task=a1-024  status=ok
+[2026-04-27T11:02:03.727930Z] task_start task=a1-025  prompt_chars=251
+[2026-04-27T11:02:03.727996Z] request task=a1-025  keys=['backend', 'model', 'prompt', 'workdir']
+[2026-04-27T11:02:19.347598Z] response task=a1-025  in=149 out=587 cost=$0.013246 ms=15619 stop=None
+[2026-04-27T11:02:19.347629Z] task_end task=a1-025  status=ok
+[2026-04-27T11:02:19.347714Z] task_start task=a1-026  prompt_chars=228
+[2026-04-27T11:02:19.347775Z] request task=a1-026  keys=['backend', 'model', 'prompt', 'workdir']
+[2026-04-27T11:02:38.388974Z] response task=a1-026  in=145 out=708 cost=$0.015049 ms=19040 stop=None
+[2026-04-27T11:02:38.388999Z] task_end task=a1-026  status=ok
+[2026-04-27T11:02:38.389063Z] task_start task=a1-027  prompt_chars=253
+[2026-04-27T11:02:38.389117Z] request task=a1-027  keys=['backend', 'model', 'prompt', 'workdir']
+[2026-04-27T11:03:13.036500Z] response task=a1-027  in=3888 out=1318 cost=$0.053514 ms=34646 stop=None
+[2026-04-27T11:03:13.036531Z] task_end task=a1-027  status=ok
+[2026-04-27T11:03:13.036618Z] task_start task=a1-028  prompt_chars=242
+[2026-04-27T11:03:13.036680Z] request task=a1-028  keys=['backend', 'model', 'prompt', 'workdir']
+[2026-04-27T11:03:30.957681Z] response task=a1-028  in=149 out=551 cost=$0.012706 ms=17920 stop=None
+[2026-04-27T11:03:30.957712Z] task_end task=a1-028  status=ok
+[2026-04-27T11:03:30.957800Z] task_start task=a1-029  prompt_chars=279
+[2026-04-27T11:03:30.957863Z] request task=a1-029  keys=['backend', 'model', 'prompt', 'workdir']
+[2026-04-27T11:03:59.922413Z] response task=a1-029  in=9535 out=1038 cost=$0.061685 ms=28964 stop=None
+[2026-04-27T11:03:59.922445Z] task_end task=a1-029  status=ok
+[2026-04-27T11:03:59.922532Z] task_start task=a1-030  prompt_chars=305
+[2026-04-27T11:03:59.922596Z] request task=a1-030  keys=['backend', 'model', 'prompt', 'workdir']
+[2026-04-27T11:04:22.484701Z] response task=a1-030  in=166 out=767 cost=$0.015997 ms=22561 stop=None
+[2026-04-27T11:04:22.484726Z] task_end task=a1-030  status=ok
+[2026-04-27T11:04:22.484796Z] task_start task=a1-031  prompt_chars=377
+[2026-04-27T11:04:22.484843Z] request task=a1-031  keys=['backend', 'model', 'prompt', 'workdir']
+[2026-04-27T11:05:05.977628Z] response task=a1-031  in=27935 out=1584 cost=$0.141127 ms=43492 stop=None
+[2026-04-27T11:05:05.977659Z] task_end task=a1-031  status=ok
+[2026-04-27T11:05:05.977750Z] task_start task=a1-032  prompt_chars=311
+[2026-04-27T11:05:05.977815Z] request task=a1-032  keys=['backend', 'model', 'prompt', 'workdir']
+[2026-04-27T11:05:46.604465Z] response task=a1-032  in=14067 out=1773 cost=$0.094217 ms=40626 stop=None
+[2026-04-27T11:05:46.604491Z] task_end task=a1-032  status=ok
+[2026-04-27T11:05:46.604553Z] task_start task=a1-033  prompt_chars=344
+[2026-04-27T11:05:46.604600Z] request task=a1-033  keys=['backend', 'model', 'prompt', 'workdir']
+[2026-04-27T11:06:35.900713Z] response task=a1-033  in=4927 out=1977 cost=$0.071393 ms=49295 stop=None
+[2026-04-27T11:06:35.900744Z] task_end task=a1-033  status=ok
+[2026-04-27T11:06:35.900826Z] task_start task=a1-034  prompt_chars=328
+[2026-04-27T11:06:35.900893Z] request task=a1-034  keys=['backend', 'model', 'prompt', 'workdir']
+[2026-04-27T11:07:38.595200Z] response task=a1-034  in=76773 out=2849 cost=$0.334955 ms=62693 stop=None
+[2026-04-27T11:07:38.595231Z] task_end task=a1-034  status=ok
+[2026-04-27T11:07:38.595317Z] task_start task=a1-035  prompt_chars=351
+[2026-04-27T11:07:38.595392Z] request task=a1-035  keys=['backend', 'model', 'prompt', 'workdir']
+[2026-04-27T11:08:44.825178Z] response task=a1-035  in=59446 out=3130 cost=$0.28596 ms=66229 stop=None
+[2026-04-27T11:08:44.825210Z] task_end task=a1-035  status=ok
+[2026-04-27T11:08:44.825298Z] task_start task=a1-036  prompt_chars=479
+[2026-04-27T11:08:44.825362Z] request task=a1-036  keys=['backend', 'model', 'prompt', 'workdir']
+[2026-04-27T11:09:41.775477Z] response task=a1-036  in=9227 out=2246 cost=$0.093051 ms=56949 stop=None
+[2026-04-27T11:09:41.775502Z] task_end task=a1-036  status=ok
+[2026-04-27T11:09:41.775567Z] task_start task=a1-037  prompt_chars=253
+[2026-04-27T11:09:41.775613Z] request task=a1-037  keys=['backend', 'model', 'prompt', 'workdir']
+[2026-04-27T11:09:56.198546Z] response task=a1-037  in=151 out=409 cost=$0.010582 ms=14422 stop=None
+[2026-04-27T11:09:56.198571Z] task_end task=a1-037  status=ok
+[2026-04-27T11:09:56.198635Z] task_start task=a1-038  prompt_chars=244
+[2026-04-27T11:09:56.198684Z] request task=a1-038  keys=['backend', 'model', 'prompt', 'workdir']
+[2026-04-27T11:10:13.172826Z] response task=a1-038  in=144 out=518 cost=$0.012196 ms=16973 stop=None
+[2026-04-27T11:10:13.172856Z] task_end task=a1-038  status=ok
+[2026-04-27T11:10:13.172941Z] task_start task=a1-039  prompt_chars=373
+[2026-04-27T11:10:13.173003Z] request task=a1-039  keys=['backend', 'model', 'prompt', 'workdir']
+[2026-04-27T11:10:32.257263Z] response task=a1-039  in=170 out=738 cost=$0.015574 ms=19083 stop=None
+[2026-04-27T11:10:32.257290Z] task_end task=a1-039  status=ok
+[2026-04-27T11:10:32.257356Z] task_start task=a1-040  prompt_chars=321
+[2026-04-27T11:10:32.257411Z] request task=a1-040  keys=['backend', 'model', 'prompt', 'workdir']
+[2026-04-27T11:10:54.595770Z] response task=a1-040  in=163 out=846 cost=$0.017173 ms=22337 stop=None
+[2026-04-27T11:10:54.595793Z] task_end task=a1-040  status=ok
+[2026-04-27T11:10:54.595860Z] task_start task=a1-041  prompt_chars=347
+[2026-04-27T11:10:54.595905Z] request task=a1-041  keys=['backend', 'model', 'prompt', 'workdir']
+[2026-04-27T11:11:14.984537Z] response task=a1-041  in=171 out=899 cost=$0.017992 ms=20388 stop=None
+[2026-04-27T11:11:14.984568Z] task_end task=a1-041  status=ok
+[2026-04-27T11:11:14.984654Z] task_start task=a1-042  prompt_chars=412
+[2026-04-27T11:11:14.984717Z] request task=a1-042  keys=['backend', 'model', 'prompt', 'workdir']
+[2026-04-27T11:11:42.890693Z] response task=a1-042  in=176 out=1292 cost=$0.023902 ms=27905 stop=None
+[2026-04-27T11:11:42.890718Z] task_end task=a1-042  status=ok
+[2026-04-27T11:11:42.890788Z] task_start task=a1-043  prompt_chars=282
+[2026-04-27T11:11:42.890837Z] request task=a1-043  keys=['backend', 'model', 'prompt', 'workdir']
+[2026-04-27T11:11:58.881759Z] response task=a1-043  in=165 out=581 cost=$0.013204 ms=15990 stop=None
+[2026-04-27T11:11:58.881784Z] task_end task=a1-043  status=ok
+[2026-04-27T11:11:58.881850Z] task_start task=a1-044  prompt_chars=270
+[2026-04-27T11:11:58.881895Z] request task=a1-044  keys=['backend', 'model', 'prompt', 'workdir']
+[2026-04-27T11:12:24.837482Z] response task=a1-044  in=849 out=1079 cost=$0.030828 ms=25955 stop=None
+[2026-04-27T11:12:24.837508Z] task_end task=a1-044  status=ok
+[2026-04-27T11:12:24.837577Z] task_start task=a1-045  prompt_chars=337
+[2026-04-27T11:12:24.837629Z] request task=a1-045  keys=['backend', 'model', 'prompt', 'workdir']
+[2026-04-27T11:13:18.549758Z] response task=a1-045  in=20145 out=2042 cost=$0.153657 ms=53711 stop=None
+[2026-04-27T11:13:18.549783Z] task_end task=a1-045  status=ok
+[2026-04-27T11:13:18.549848Z] task_start task=a1-046  prompt_chars=319
+[2026-04-27T11:13:18.549899Z] request task=a1-046  keys=['backend', 'model', 'prompt', 'workdir']
+[2026-04-27T11:14:06.662814Z] response task=a1-046  in=7363 out=1993 cost=$0.082051 ms=48112 stop=None
+[2026-04-27T11:14:06.662840Z] task_end task=a1-046  status=ok
+[2026-04-27T11:14:06.662906Z] task_start task=a1-047  prompt_chars=321
+[2026-04-27T11:14:06.662955Z] request task=a1-047  keys=['backend', 'model', 'prompt', 'workdir']
+[2026-04-27T11:14:34.837947Z] response task=a1-047  in=835 out=1349 cost=$0.039175 ms=28174 stop=None
+[2026-04-27T11:14:34.837978Z] task_end task=a1-047  status=ok
+[2026-04-27T11:14:34.838064Z] task_start task=a1-048  prompt_chars=417
+[2026-04-27T11:14:34.838132Z] request task=a1-048  keys=['backend', 'model', 'prompt', 'workdir']
+[2026-04-27T11:15:14.842594Z] response task=a1-048  in=975 out=1839 cost=$0.046984 ms=40004 stop=None
+[2026-04-27T11:15:14.842620Z] task_end task=a1-048  status=ok
+[2026-04-27T11:15:14.842687Z] task_start task=a1-049  prompt_chars=308
+[2026-04-27T11:15:14.842744Z] request task=a1-049  keys=['backend', 'model', 'prompt', 'workdir']
+[2026-04-27T11:16:36.084265Z] response task=a1-049  in=24432 out=3467 cost=$0.219957 ms=81241 stop=None
+[2026-04-27T11:16:36.084291Z] task_end task=a1-049  status=ok
+[2026-04-27T11:16:36.084364Z] task_start task=a1-050  prompt_chars=334
+[2026-04-27T11:16:36.084427Z] request task=a1-050  keys=['backend', 'model', 'prompt', 'workdir']
+[2026-04-27T11:18:29.612542Z] response task=a1-050  in=47123 out=4791 cost=$0.307736 ms=113527 stop=None
+[2026-04-27T11:18:29.612567Z] task_end task=a1-050  status=ok
+[2026-04-27T11:18:29.612642Z] task_start task=a1-051  prompt_chars=317
+[2026-04-27T11:18:29.612692Z] request task=a1-051  keys=['backend', 'model', 'prompt', 'workdir']
+[2026-04-27T11:19:37.408319Z] response task=a1-051  in=12184 out=3416 cost=$0.13825 ms=67795 stop=None
+[2026-04-27T11:19:37.408343Z] task_end task=a1-051  status=ok
+[2026-04-27T11:19:37.408412Z] task_start task=a1-052  prompt_chars=355
+[2026-04-27T11:19:37.408459Z] request task=a1-052  keys=['backend', 'model', 'prompt', 'workdir']
+[2026-04-27T11:20:39.100687Z] response task=a1-052  in=14262 out=3218 cost=$0.159792 ms=61691 stop=None
+[2026-04-27T11:20:39.100715Z] task_end task=a1-052  status=ok
+[2026-04-27T11:20:39.100790Z] task_start task=a1-053  prompt_chars=350
+[2026-04-27T11:20:39.100840Z] request task=a1-053  keys=['backend', 'model', 'prompt', 'workdir']
+[2026-04-27T11:21:24.677561Z] response task=a1-053  in=14337 out=1749 cost=$0.095089 ms=45576 stop=None
+[2026-04-27T11:21:24.677591Z] task_end task=a1-053  status=ok
+[2026-04-27T11:21:24.677677Z] task_start task=a1-054  prompt_chars=403
+[2026-04-27T11:21:24.677742Z] request task=a1-054  keys=['backend', 'model', 'prompt', 'workdir']
+[2026-04-27T11:22:03.126764Z] response task=a1-054  in=195 out=1585 cost=$0.028354 ms=38448 stop=None
+[2026-04-27T11:22:03.126796Z] task_end task=a1-054  status=ok
+[2026-04-27T11:22:03.126885Z] task_start task=a1-055  prompt_chars=352
+[2026-04-27T11:22:03.126949Z] request task=a1-055  keys=['backend', 'model', 'prompt', 'workdir']
+[2026-04-27T11:22:55.497661Z] response task=a1-055  in=4411 out=2448 cost=$0.094497 ms=52370 stop=None
+[2026-04-27T11:22:55.497695Z] task_end task=a1-055  status=ok
+[2026-04-27T11:22:55.497787Z] task_start task=a1-056  prompt_chars=333
+[2026-04-27T11:22:55.497854Z] request task=a1-056  keys=['backend', 'model', 'prompt', 'workdir']
+[2026-04-27T11:23:31.041561Z] response task=a1-056  in=667 out=1764 cost=$0.04505 ms=35543 stop=None
+[2026-04-27T11:23:31.041592Z] task_end task=a1-056  status=ok
+[2026-04-27T11:23:31.041679Z] task_start task=a1-057  prompt_chars=374
+[2026-04-27T11:23:31.041748Z] request task=a1-057  keys=['backend', 'model', 'prompt', 'workdir']
+[2026-04-27T11:24:14.867753Z] response task=a1-057  in=7353 out=2095 cost=$0.080441 ms=43825 stop=None
+[2026-04-27T11:24:14.867783Z] task_end task=a1-057  status=ok
+[2026-04-27T11:24:14.867864Z] task_start task=a1-058  prompt_chars=359
+[2026-04-27T11:24:14.867927Z] request task=a1-058  keys=['backend', 'model', 'prompt', 'workdir']
+[2026-04-27T11:24:43.927490Z] response task=a1-058  in=186 out=1366 cost=$0.025042 ms=29059 stop=None
+[2026-04-27T11:24:43.927521Z] task_end task=a1-058  status=ok
+[2026-04-27T11:24:43.927609Z] task_start task=a1-059  prompt_chars=395
+[2026-04-27T11:24:43.927680Z] request task=a1-059  keys=['backend', 'model', 'prompt', 'workdir']
+[2026-04-27T11:25:14.637833Z] response task=a1-059  in=193 out=1628 cost=$0.028993 ms=30709 stop=None
+[2026-04-27T11:25:14.637859Z] task_end task=a1-059  status=ok
+[2026-04-27T11:25:14.637923Z] task_start task=a1-060  prompt_chars=550
+[2026-04-27T11:25:14.637973Z] request task=a1-060  keys=['backend', 'model', 'prompt', 'workdir']
+[2026-04-27T11:27:20.742904Z] response task=a1-060  in=58796 out=5802 cost=$0.427232 ms=126104 stop=None
+[2026-04-27T11:27:20.742936Z] task_end task=a1-060  status=ok
+[2026-04-27T11:27:20.742962Z] run_end  status=ok totals={'n_tasks': 60, 'n_responses': 60, 'n_errors': 0, 'n_fallback_events': 0, 'tokens_in': 492164, 'tokens_out': 81063, 'cost_usd': 3.881339, 'wallclock_seconds': 2357.92}

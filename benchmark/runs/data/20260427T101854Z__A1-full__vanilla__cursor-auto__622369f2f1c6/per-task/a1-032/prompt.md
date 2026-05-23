@@ -1,0 +1,3 @@
+## User prompt
+
+Observation: dashboard shows daily-active-users dropped 14% on Monday, but signup, login success, and session counts are flat. Trace why. Use 3 deliberately different lanes (code, config/env, measurement/artifact), rank evidence per lane, run a rebuttal round, and end with the single best discriminating probe.

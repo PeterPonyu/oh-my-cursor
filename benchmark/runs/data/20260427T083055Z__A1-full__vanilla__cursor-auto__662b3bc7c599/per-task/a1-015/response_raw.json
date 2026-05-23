@@ -1,0 +1,16 @@
+{
+  "type": "result",
+  "subtype": "success",
+  "is_error": false,
+  "duration_ms": 12702,
+  "duration_api_ms": 12702,
+  "result": "- **High — Data race / slice corruption** (`snippet:8`): `results` is appended from multiple goroutines without synchronization. `append` mutates slice header/backing array and is not safe concurrently, causing lost writes or memory corruption under race.  \n  - **Root cause:** shared mutable slice captured by all goroutines with no mutex/channel/index partitioning.  \n  - **Smallest fix:** guard append with a `sync.Mutex`.\n\n- **High — Wrong loop variable captured** (`snippet:6`, `snippet:8`): the goroutine closes over `it` from the `for` loop, so goroutines can read the same (last/changed) value instead of per-iteration value.  \n  - **Root cause:** closure captures loop variable by reference-like reuse semantics.  \n  - **Smallest fix:** pass `it` as a parameter to the goroutine (`go func(it Item) { ... }(it)`).\n\n- **Medium — Output order is nondeterministic** (`snippet:8`): concurrent appends produce results in completion order, not input order. If callers expect positional correspondence with `items`, this is a behavior bug.  \n  - **Root cause:** fan-out goroutines write into a shared accumulation path with no stable index.  \n  - **Smallest fix:** preallocate `results := make([]Result, len(items))` and write by index (`results[i] = process(it)`), passing both `i` and `it` into goroutine.\n\nSmall safe version (minimal structural change):\n\n```go\nfunc processAll(items []Item) []Result {\n    results := make([]Result, len(items))\n    var wg sync.WaitGroup\n    for i, it := range items {\n        wg.Add(1)\n        go func(i int, it Item) {\n            defer wg.Done()\n            results[i] = process(it)\n        }(i, it)\n    }\n    wg.Wait()\n    return results\n}\n```\n\nThis removes both high-severity bugs and preserves deterministic order without needing a mutex.",
+  "session_id": "a0842eba-4851-49fe-b0b1-3117b3e8fc48",
+  "request_id": "2ceb41bf-f4d1-4a97-969e-e6d63640cc7e",
+  "usage": {
+    "inputTokens": 945,
+    "outputTokens": 485,
+    "cacheReadTokens": 11776,
+    "cacheWriteTokens": 0
+  }
+}

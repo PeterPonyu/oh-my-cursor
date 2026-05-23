@@ -1,0 +1,16 @@
+{
+  "type": "result",
+  "subtype": "success",
+  "is_error": false,
+  "duration_ms": 8561,
+  "duration_api_ms": 8561,
+  "result": "- **HIGH** — `forEach` does not await async callbacks, so function returns before fetches finish (`line 3`, `line 7`).  \n  Smallest fix: await all tasks before returning.\n  ```typescript\n  async function fetchAll(urls: string[]): Promise<string[]> {\n    return Promise.all(\n      urls.map(async (url) => {\n        const r = await fetch(url);\n        return r.text();\n      })\n    );\n  }\n  ```\n\n- **MEDIUM** — `results.push(...)` records responses in completion order, not input order (`line 5`), so output may be shuffled.  \n  Same fix above also preserves original `urls` order because `Promise.all` resolves by index.\n\n- **LOW** — errors from `fetch`/`text` become unhandled in the original `forEach` callback (`line 3-5`) since nothing awaits them.  \n  Same fix above routes failures through `fetchAll`’s returned promise (rejects properly).",
+  "session_id": "65792334-7da5-4f92-b559-56a3a7ac1262",
+  "request_id": "509e0146-50c2-49b8-84e7-3fd8b7280bde",
+  "usage": {
+    "inputTokens": 917,
+    "outputTokens": 321,
+    "cacheReadTokens": 11776,
+    "cacheWriteTokens": 0
+  }
+}

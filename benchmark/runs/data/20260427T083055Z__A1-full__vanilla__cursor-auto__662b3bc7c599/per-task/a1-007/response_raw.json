@@ -1,0 +1,16 @@
+{
+  "type": "result",
+  "subtype": "success",
+  "is_error": false,
+  "duration_ms": 17372,
+  "duration_api_ms": 17372,
+  "result": "You want a pre-implementation requirements pass for app notifications, so I’ll first run a structured discovery workflow and then turn that into a concrete checklist/spec you can approve before any code changes.To make sure we design the *right* notification system, start with the most important point:\n\n**What user behavior are you trying to drive with notifications?**  \nPick the primary goal (or write your own):\n- bring users back to the app\n- alert users to time-sensitive events\n- confirm critical actions/success/failure\n- reduce support issues/confusion\n- increase conversion/revenue\n- something else (describe it in one sentence)\n\nOnce you answer that, I’ll turn it into a concrete “needs before code” checklist (channels, trigger rules, priority levels, permission strategy, opt-outs, compliance, and measurement).",
+  "session_id": "c4bcda2c-e9fe-4dfd-b033-d186ce05628b",
+  "request_id": "618b1f6d-b46b-4250-bbfe-4fda08c36771",
+  "usage": {
+    "inputTokens": 9029,
+    "outputTokens": 372,
+    "cacheReadTokens": 23552,
+    "cacheWriteTokens": 0
+  }
+}

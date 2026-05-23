@@ -1,0 +1,16 @@
+{
+  "type": "result",
+  "subtype": "success",
+  "is_error": false,
+  "duration_ms": 13478,
+  "duration_api_ms": 13478,
+  "result": "Use a **time-bounded, lease-based reconciliation loop**:\n\n## Reconciliation Loop Design\n\n- Run every `T` seconds (e.g. 30s–2m), selecting rows in `pending_jobs` where `status='pending'` and `last_heartbeat_at < now() - stuck_timeout`.\n- Re-enqueue in small batches (`LIMIT N`) using atomic claim/update (`FOR UPDATE SKIP LOCKED` + status/version bump) so multiple reconcilers can coexist.\n- Mark each reclaimed row with `reconciled_at`, increment `retry_count`, and publish enqueue event once claim succeeds.\n\n## Required Outputs\n\n- **Stop condition**: stop the current cycle when either (a) no more eligible stuck rows are found, or (b) cycle budget is exhausted (time budget or iteration cap reached).\n- **Idempotence requirement**: enqueue operation must be idempotent per job key (`job_id`/dedupe key). Re-running reconciliation must not create duplicate effective work; consumers should ignore duplicate deliveries via the same idempotency key or monotonic attempt/version check.\n- **Max-iteration cap per cycle**: hard cap like `max_iterations = 20` with `batch_size = 100` (max 2,000 rows/cycle). Prevents runaway scans and protects DB/queue.\n- **Observable success signal**: emit metrics/logs:\n  - `reconciler.rows_scanned`\n  - `reconciler.rows_reenqueued`\n  - `reconciler.cycle_duration_ms`\n  - `pending_jobs.stuck_count` (should trend down)\n  - optional SLO: “stuck job age p95 < X minutes”.\n- **Fallback for repeat failures**: if `retry_count >= K` (e.g. 5), move row to `dead_letter_jobs` (or `status='quarantined'`), store last error/reason, stop automatic re-enqueue, and trigger alert/ticket for manual or specialized recovery flow.\n\n## Practical Defaults\n\n- `stuck_timeout`: 2x–3x normal heartbeat interval\n- `batch_size`: 100\n- `max_iterations`: 20\n- `K` (quarantine threshold): 5\n- jitter schedule start times to avoid thundering herd\n\nIf you want, I can turn this into pseudocode + SQL transaction skeleton next.",
+  "session_id": "0f2166a5-a626-444f-b738-6a2a8fde1133",
+  "request_id": "9ff0a61a-4da8-4f65-aa48-d58d5dc09208",
+  "usage": {
+    "inputTokens": 144,
+    "outputTokens": 518,
+    "cacheReadTokens": 13312,
+    "cacheWriteTokens": 0
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "type": "result",
+  "subtype": "success",
+  "is_error": false,
+  "duration_ms": 6336,
+  "duration_api_ms": 6336,
+  "result": "- **High** — `divide` raises `ZeroDivisionError` when `b == 0`, which is an unhandled runtime failure in normal use.\n  - **Smallest fix:** guard `b` before dividing and raise a clear error.\n\n```python\ndef divide(a, b):\n    if b == 0:\n        raise ValueError(\"b must not be 0\")\n    return a / b\n```\n\n- **Low** — No input validation for non-numeric types; passing strings/objects will raise `TypeError`.\n  - **Smallest fix (optional):** leave as-is if Python’s built-in error behavior is acceptable.",
+  "session_id": "d76e426e-579e-4c80-a351-446502e9ed1b",
+  "request_id": "e77dc767-33dd-4425-9fec-aaaaadf45510",
+  "usage": {
+    "inputTokens": 855,
+    "outputTokens": 178,
+    "cacheReadTokens": 11776,
+    "cacheWriteTokens": 0
+  }
+}

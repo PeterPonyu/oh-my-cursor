@@ -1,0 +1,16 @@
+{
+  "type": "result",
+  "subtype": "success",
+  "is_error": false,
+  "duration_ms": 13613,
+  "duration_api_ms": 13613,
+  "result": "- **High — `snippet.go:8` — Data race on shared slice `results`**\n  - **Root cause:** multiple goroutines concurrently execute `append` on the same slice variable without synchronization; `append` mutates slice header/underlying array and is not thread-safe.\n  - **Smallest fix:** guard the append with a mutex.\n  ```go\n  var mu sync.Mutex\n  go func(it Item) {\n      defer wg.Done()\n      r := process(it)\n      mu.Lock()\n      results = append(results, r)\n      mu.Unlock()\n  }(it)\n  ```\n\n- **High — `snippet.go:6` / `snippet.go:8` — Loop variable capture bug (`it`)**\n  - **Root cause:** closure captures the loop variable by reference; goroutines may run after `it` changes, so they can process the wrong item (often last value).\n  - **Smallest fix:** pass `it` as a parameter to the goroutine (or shadow-copy inside loop).\n  ```go\n  go func(it Item) {\n      defer wg.Done()\n      // ...\n  }(it)\n  ```\n\n- **Medium — `snippet.go:8` / `snippet.go:12` — Result order is nondeterministic**\n  - **Root cause:** concurrent completion order determines append order, not input order.\n  - **Smallest fix:** preallocate and write by index.\n  ```go\n  results := make([]Result, len(items))\n  for i, it := range items {\n      wg.Add(1)\n      go func(i int, it Item) {\n          defer wg.Done()\n          results[i] = process(it)\n      }(i, it)\n  }\n  ```\n\nIf you want, I can provide a single corrected version that fixes all three issues at once.",
+  "session_id": "75f575de-79be-4085-8286-8e3f381fcc65",
+  "request_id": "90fdfc5d-a902-4775-9288-fd66ad6f0262",
+  "usage": {
+    "inputTokens": 945,
+    "outputTokens": 458,
+    "cacheReadTokens": 11776,
+    "cacheWriteTokens": 0
+  }
+}

@@ -1,0 +1,3 @@
+## User prompt
+
+Plan the extraction of a shared `payments` library from a monorepo into a versioned internal npm package consumed by 4 services. Required: ordered phases, dependency-cycle risk analysis, per-phase verification commands, rollback strategy, and explicit non-goals.

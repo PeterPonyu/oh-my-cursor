@@ -1,0 +1,16 @@
+{
+  "type": "result",
+  "subtype": "success",
+  "is_error": false,
+  "duration_ms": 14397,
+  "duration_api_ms": 14397,
+  "result": "1. **Route not actually mounted in production build/runtime** *(highest prior)*  \n   - **Why likely:** Very common when dev and prod bootstrap paths differ (e.g., dev loads `src` with `ts-node`, prod runs `dist` where route file wasn’t compiled/exported, or conditional mount behind `NODE_ENV`/feature flag).  \n   - **Evidence for:**  \n     - Endpoint works locally in dev server but *all* calls to that path are 404 in prod.  \n     - Other endpoints may still work, suggesting app is up but missing this route registration.  \n     - Recent deploy changed build config, imports, or route index wiring.  \n   - **Evidence against:**  \n     - Prod logs show handler-level logs for this endpoint being hit (then it’s not a true routing miss).  \n     - Route appears in a runtime route dump in prod.  \n   - **Smallest discriminating probe:**  \n     - Add a one-line startup log (or temporary `/__routes` debug endpoint) listing registered routes in **prod**; verify this path is present exactly as expected.\n\n2. **Reverse proxy / ingress path rewrite mismatch** *(second highest prior)*  \n   - **Why likely:** Nginx/API gateway/ALB/CloudFront often prepend/strip prefixes differently in prod; dev usually hits Node directly.  \n   - **Evidence for:**  \n     - 404 only when calling through public domain, but direct container/pod port works.  \n     - Endpoint path includes version/prefix (`/api/v1/...`) that might be rewritten incorrectly.  \n     - Recent infra change (ingress rules, gateway config, basePath).  \n   - **Evidence against:**  \n     - Requests reach Node with the expected `req.originalUrl` and still 404.  \n     - Other routes with same prefix succeed through the same proxy path chain.  \n   - **Smallest discriminating probe:**  \n     - Send the same request to Node service directly (bypass proxy) and compare with edge request; also log `req.originalUrl` in prod for one request.\n\n3. **HTTP method or trailing-slash/case mismatch exposed by prod clients** *(third prior)*  \n   - **Why likely:** Express/Fastify matching can be strict depending on config; prod client/CDN may send `GET` vs `POST`, `/foo/` vs `/foo`, or case variations. Dev testing tools often use the “right” shape.  \n   - **Evidence for:**  \n     - 404 occurs only from specific client/app version, not from manual curl using expected method/path.  \n     - Access logs show same path with differing method/slash/case.  \n   - **Evidence against:**  \n     - 404 reproduces even with exact known-good curl command from prod environment.  \n     - Router configured to be non-strict and method matches confirmed.  \n   - **Smallest discriminating probe:**  \n     - From prod network, run 2–4 curl variants (method + trailing slash + exact casing) and inspect which one hits; this quickly separates matcher issues from infra issues.\n\nIf you want, I can turn this into a **10-minute triage runbook** (exact curl commands + log lines to add) so you can narrow to one hypothesis fast.",
+  "session_id": "94797b1a-9197-4180-96d2-90e46d6440b0",
+  "request_id": "8f97ef99-3718-40b6-b4e7-ce971b2cc9cd",
+  "usage": {
+    "inputTokens": 871,
+    "outputTokens": 702,
+    "cacheReadTokens": 11776,
+    "cacheWriteTokens": 0
+  }
+}

@@ -13,10 +13,10 @@ plugin directory without claiming more automation than the repo actually owns.
 1. Install the local plugin path with:
 
    ```bash
-   ./scripts/install-local-plugin.sh
+   node --experimental-strip-types scripts/install-local-plugin.ts
    # or build first, then install the bundled payload:
-   ./scripts/build-dist.sh
-   ./scripts/install-local-plugin.sh --root dist/oh-my-cursor --force
+   node --experimental-strip-types scripts/build-dist.ts
+   node --experimental-strip-types scripts/install-local-plugin.ts --root dist/oh-my-cursor --force
    ```
 
    The default command installs directly from the repository root. The build +
@@ -55,7 +55,7 @@ Choosing the right install mode depends on how you work:
 ### Symlink mode (recommended for active development)
 
 ```bash
-./scripts/install-local-plugin.sh --symlink
+node --experimental-strip-types scripts/install-local-plugin.ts --symlink
 ```
 
 Symlink mode creates a link from `~/.cursor/plugins/local/oh-my-cursor` directly
@@ -66,8 +66,8 @@ iteration path when you are actively editing rules, skills, hooks, or agents.
 ### Copy mode (default, recommended for testing stable builds)
 
 ```bash
-./scripts/install-local-plugin.sh              # first install
-./scripts/install-local-plugin.sh --force      # re-install after changes
+node --experimental-strip-types scripts/install-local-plugin.ts              # first install
+node --experimental-strip-types scripts/install-local-plugin.ts --force      # re-install after changes
 ```
 
 Copy mode copies only the minimal runtime payload into the target directory.
@@ -78,7 +78,7 @@ a stable, reproducible install that is isolated from ongoing repo edits.
 ### Watch mode (auto-reinstall on changes)
 
 ```bash
-./scripts/install-local-plugin.sh --watch
+node --experimental-strip-types scripts/install-local-plugin.ts --watch
 ```
 
 Watch mode performs an initial copy-mode install, then monitors the repo for
@@ -95,8 +95,8 @@ with `--symlink` since symlinks already reflect changes live).
 ### Status and uninstall
 
 ```bash
-./scripts/install-local-plugin.sh --status     # show version, mode, staleness
-./scripts/install-local-plugin.sh --uninstall  # remove plugin and legacy aliases
+node --experimental-strip-types scripts/install-local-plugin.ts --status     # show version, mode, staleness
+node --experimental-strip-types scripts/install-local-plugin.ts --uninstall  # remove plugin and legacy aliases
 ```
 
 `--status` reports the installed version, whether it is a symlink or copy, the
@@ -112,11 +112,11 @@ a clean, production-like plugin payload after making repo changes.
 ### Step 1 — Rebuild the dist payload
 
 ```bash
-./scripts/build-dist.sh
+node --experimental-strip-types scripts/build-dist.ts
 ```
 
-`build-dist.sh` validates the plugin structure (runs
-`validate-plugin-structure.sh`), removes any stale `dist/` directory, and
+`build-dist.ts` validates the plugin structure (runs
+`validate-plugin-structure.ts`), removes any stale `dist/` directory, and
 copies only the minimal runtime payload to `dist/oh-my-cursor/`. Dev artifacts
 (`__pycache__/`, `*.pyc`, `*.lock`) are stripped by the rsync filter list
 before the copy completes.
@@ -124,7 +124,7 @@ before the copy completes.
 ### Step 2 — Reinstall from the dist payload
 
 ```bash
-./scripts/install-local-plugin.sh --root dist/oh-my-cursor --force
+node --experimental-strip-types scripts/install-local-plugin.ts --root dist/oh-my-cursor --force
 ```
 
 Installing from `dist/oh-my-cursor` (rather than the repo root) exercises the
@@ -143,12 +143,12 @@ up the new files.
 ### Quick verification after reinstall
 
 ```bash
-./scripts/install-local-plugin.sh --status
-./scripts/check-local-plugin-install.sh
+node --experimental-strip-types scripts/install-local-plugin.ts --status
+node --experimental-strip-types scripts/check-local-plugin-install.ts
 ```
 
 `--status` reports the installed version, install mode, file count, and whether
-the payload is stale relative to the repo. `check-local-plugin-install.sh` runs
+the payload is stale relative to the repo. `check-local-plugin-install.ts` runs
 a CI-safe end-to-end check in temporary directories without touching the live
 install.
 
@@ -170,7 +170,7 @@ copy-mode snapshot for final validation.
 ### Watch mode (automatic re-copy)
 
 ```bash
-./scripts/install-local-plugin.sh --watch
+node --experimental-strip-types scripts/install-local-plugin.ts --watch
 ```
 
 Watch mode performs an initial copy-mode install, then monitors the repo for
@@ -200,7 +200,7 @@ installs.
 |---|---|---|
 | Edit a rule, skill, or agent file | Cursor reload only | `--force` reinstall required |
 | Edit a hook script | Cursor reload only | `--force` reinstall required |
-| Add or remove a payload file | Cursor reload only | Rebuild (`build-dist.sh`) + `--force` reinstall |
+| Add or remove a payload file | Cursor reload only | Rebuild (`build-dist.ts`) + `--force` reinstall |
 | Bump plugin version in `plugin.json` | Cursor reload only | Rebuild + `--force` reinstall |
 | Structural payload contract change | Cursor reload only | Rebuild + `--force` reinstall |
 | Change a dev-only file (`docs/`, `scripts/`, `benchmark/`) | No action needed | No action needed (excluded from payload) |
@@ -212,7 +212,7 @@ installed snapshot is frozen at install time and must be explicitly refreshed.
 ### `__pycache__` contamination prevention rule
 
 **Always install copy-mode payloads from `dist/oh-my-cursor`** (built by
-`build-dist.sh`), not directly from the repo root.
+`build-dist.ts`), not directly from the repo root.
 
 The build script strips `__pycache__/`, `*.pyc`, and `*.lock` files before
 writing to `dist/`. The installer's rsync filter list repeats this exclusion,
@@ -258,7 +258,7 @@ The local plugin walkthrough does **not** by itself prove or imply:
 When running the manual workflow, record at least:
 
 - the absolute local plugin path used;
-- whether `scripts/install-local-plugin.sh` used a copy or a symlink;
+- whether `scripts/install-local-plugin.ts` used a copy or a symlink;
 - whether Cursor required a full restart or only **Developer: Reload Window**;
 - which plugin files were present; and
 - any mismatch between the docs and the actual visible plugin surface.
@@ -269,7 +269,7 @@ If you only need to verify the helper behavior without touching the live Cursor
 UI flow, run:
 
 ```bash
-./scripts/check-local-plugin-install.sh
+node --experimental-strip-types scripts/check-local-plugin-install.ts
 ```
 
 That installs the plugin into bounded temporary directories in both symlink and

@@ -1,0 +1,16 @@
+{
+  "type": "result",
+  "subtype": "success",
+  "is_error": false,
+  "duration_ms": 18132,
+  "duration_api_ms": 18132,
+  "result": "1. **Introduce OAuth config and dependencies (no behavior change yet)**  \n   - **File scope:** `requirements.txt` (or `pyproject.toml`), `config.py` / environment loading module, `.env.example`, optional `docs/auth.md`.  \n   - **What to do:** Add OAuth client library (e.g., Authlib), define provider settings (`CLIENT_ID`, `CLIENT_SECRET`, authorize/token/userinfo URLs), and add feature flag like `AUTH_MODE=session|oauth-hybrid|oauth-only`.  \n   - **Rollback consideration:** Safe, low-risk rollback by removing new deps/env keys and setting `AUTH_MODE=session`; no user-impacting routes changed yet.\n\n2. **Add OAuth login/callback/logout endpoints alongside existing session auth (hybrid mode)**  \n   - **File scope:** `app/routes/auth.py` (or equivalent auth blueprint), `app/__init__.py` route registration, `app/templates/login.html` (add “Login with X” button), optional `app/services/oauth.py`.  \n   - **What to do:** Implement `/auth/oauth/login`, `/auth/oauth/callback`, `/auth/oauth/logout`; on callback, map OAuth identity to local user and then continue issuing your existing session cookie to minimize downstream changes. Keep current username/password flow active.  \n   - **Rollback consideration:** Disable OAuth button and routes via `AUTH_MODE=session`; existing session login still works, so rollback is mostly config-only.\n\n3. **Unify user identity/session handling and authorization checks**  \n   - **File scope:** `app/models.py` (user fields for provider/sub), auth helpers (`app/auth.py`, decorators), `app/routes/*` where `current_user`/session is read, migration files if schema changes are needed.  \n   - **What to do:** Standardize post-login identity object so both legacy and OAuth paths populate the same session keys/user context; add account-linking policy (first login, duplicate email, disabled user). Add tests for protected routes under both auth paths.  \n   - **Rollback consideration:** Keep schema changes backward compatible (nullable new columns, no destructive drops). If issues arise, route all logins back to legacy path while retaining new columns unused.\n\n4. **Cut over gradually to OAuth-first, then OAuth-only after validation**  \n   - **File scope:** `app/templates/login.html`, auth config toggles, monitoring/logging config, test suite/CI auth tests, runbook docs.  \n   - **What to do:** Move to `oauth-hybrid` first (OAuth default, legacy fallback), monitor login success/error rates, then switch to `oauth-only` once stable. Add operational metrics and alerting for callback failures/token exchange errors.  \n   - **Rollback consideration:** Use staged flags for instant rollback (`oauth-only -> oauth-hybrid -> session`). Keep legacy login code for one release window before final removal to ensure fast recovery.",
+  "session_id": "450d6728-7a27-47ae-ab86-cd1a76dcca89",
+  "request_id": "d97630a5-1c72-49a2-a613-930b5311ca97",
+  "usage": {
+    "inputTokens": 2148,
+    "outputTokens": 629,
+    "cacheReadTokens": 9472,
+    "cacheWriteTokens": 0
+  }
+}

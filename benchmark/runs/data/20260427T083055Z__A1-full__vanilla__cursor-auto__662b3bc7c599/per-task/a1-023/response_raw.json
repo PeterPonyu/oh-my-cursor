@@ -1,0 +1,16 @@
+{
+  "type": "result",
+  "subtype": "success",
+  "is_error": false,
+  "duration_ms": 9756,
+  "duration_api_ms": 9756,
+  "result": "- **High — Insecure deserialization (`pickle.loads`) allows arbitrary code execution**  \n  - **OWASP class:** A08:2021 - Software and Data Integrity Failures (unsafe deserialization)  \n  - **Severity:** High  \n  - **Line:** `3` (`return pickle.loads(blob)`)  \n  - **Attack scenario:** An attacker supplies a crafted `blob` (for example via cookie, API field, cache poisoning, or message queue). When `load_session()` calls `pickle.loads`, Python may execute attacker-controlled gadget code during object reconstruction, leading to remote code execution on the server.  \n  - **Remediation:** Do not deserialize untrusted data with `pickle`. Use a safe format like JSON (`json.loads`) with strict schema/type validation, signed session tokens (e.g., HMAC/JWT with verified claims), and allowlist-based parsing if complex objects are needed.\n\nIf you want, I can provide a drop-in safe rewrite of `load_session()` using JSON + schema validation.",
+  "session_id": "9d8ba324-9580-4ce4-b230-48c9a9c32b14",
+  "request_id": "ea392ebc-cd7c-4f97-8acd-b7e3e2a640ff",
+  "usage": {
+    "inputTokens": 862,
+    "outputTokens": 257,
+    "cacheReadTokens": 11776,
+    "cacheWriteTokens": 0
+  }
+}

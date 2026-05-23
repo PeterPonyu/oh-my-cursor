@@ -1,0 +1,16 @@
+{
+  "type": "result",
+  "subtype": "success",
+  "is_error": false,
+  "duration_ms": 11535,
+  "duration_api_ms": 11535,
+  "result": "You want a speed improvement, but first to align on what “faster” means for your app in practice. I’ll run a quick clarification pass so we optimize the right thing before touching code.To make this actionable, I need to pin down **which kind of “faster”** you care about most.\n\nWhat’s the single biggest pain right now?\n\n- `page load` (first visit is slow)\n- `interaction latency` (click/type feels laggy)\n- `API speed` (requests take too long)\n- `build/deploy time` (dev or CI feels slow)\n- `runtime cost` (too much CPU/RAM)\n- `something else` (describe briefly)\n\nPick one, and I’ll narrow from there without writing code yet.",
+  "session_id": "04d8e8a0-3ae4-4bb2-965d-7ba176b4ba46",
+  "request_id": "ba8e04d4-c31e-4129-aad9-c7375e93dd52",
+  "usage": {
+    "inputTokens": 7437,
+    "outputTokens": 376,
+    "cacheReadTokens": 26752,
+    "cacheWriteTokens": 0
+  }
+}

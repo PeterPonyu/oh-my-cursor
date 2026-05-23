@@ -1,0 +1,6 @@
+{"ts": "2026-04-28T07:45:36.665394Z", "event": "run_start", "run_id": "de0d58762c7b", "benchmark": "A1-full", "arm": "vanilla", "model": "cursor/auto", "fallback_model": null, "budget_usd": 5.0, "started_at": "20260428T074536Z"}
+{"ts": "2026-04-28T07:45:36.665550Z", "event": "task_start", "task_id": "a1-001", "prompt_chars": 163, "metadata": {"skill": "plan", "arm_kind": "vanilla", "cwd": "/tmp/cursor-vanilla-g4o3x5pi"}}
+{"ts": "2026-04-28T07:45:36.665625Z", "event": "request", "task_id": "a1-001", "payload_keys": ["backend", "cmd", "model", "model_arg", "prompt", "workdir"]}
+{"ts": "2026-04-28T07:46:03.793279Z", "event": "response", "task_id": "a1-001", "tokens": {"input": 7609, "output": 631, "cache_read": 21760, "cache_write": 0}, "cost_usd": 0.03882, "wallclock_ms": 27127, "stop_reason": null}
+{"ts": "2026-04-28T07:46:03.793304Z", "event": "task_end", "task_id": "a1-001", "status": "ok"}
+{"ts": "2026-04-28T07:46:03.793319Z", "event": "run_end", "status": "ok", "totals": {"n_tasks": 1, "n_responses": 1, "n_errors": 0, "n_fallback_events": 0, "tokens_in": 7609, "tokens_out": 631, "cost_usd": 0.03882, "wallclock_seconds": 27.128}}

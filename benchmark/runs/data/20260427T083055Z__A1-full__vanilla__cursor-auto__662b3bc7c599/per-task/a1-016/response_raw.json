@@ -1,0 +1,16 @@
+{
+  "type": "result",
+  "subtype": "success",
+  "is_error": false,
+  "duration_ms": 10276,
+  "duration_api_ms": 10276,
+  "result": "- **High** — File handle leak on normal/exception paths (`line 2`): `open(path)` is never closed, which can exhaust file descriptors over time.  \n  **Smallest fix:** use a context manager.\n  ```python\n  with open(path) as f:\n      data = json.load(f)\n  ```\n\n- **Medium** — Possible `KeyError` when `active` is missing (`line 4`): `row['active']` crashes if any row lacks that key.  \n  **Smallest fix:** use `.get('active', False)` (or `if row.get('active')`).\n  ```python\n  users = [User(**row) for row in data if row.get('active', False)]\n  ```\n\n- **Low** — `json` is used but not shown as imported (`line 3`): this raises `NameError` unless imported elsewhere.  \n  **Smallest fix:** add:\n  ```python\n  import json\n  ```\n\nMinimal corrected version:\n\n```python\nimport json\n\ndef load_users(path):\n    with open(path) as f:\n        data = json.load(f)\n    users = [User(**row) for row in data if row.get('active', False)]\n    return users\n```",
+  "session_id": "881886da-8cbe-4459-b31e-65a9b000cf55",
+  "request_id": "a972d600-459a-457a-9ca1-604fa13bdd55",
+  "usage": {
+    "inputTokens": 895,
+    "outputTokens": 360,
+    "cacheReadTokens": 11776,
+    "cacheWriteTokens": 0
+  }
+}

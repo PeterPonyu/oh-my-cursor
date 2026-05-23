@@ -1,0 +1,16 @@
+{
+  "type": "result",
+  "subtype": "success",
+  "is_error": false,
+  "duration_ms": 7670,
+  "duration_api_ms": 7670,
+  "result": "Great prompt. I’d start by scoring clarity across these **four dimensions**:\n\n- **Business Outcome Clarity** (what decisions analytics must improve): **3/10**\n- **User Journey Clarity** (core flows/events from acquisition to retention): **2/10**\n- **Metric Definition Clarity** (north-star + leading/lagging KPI formulas): **2/10**\n- **Operational Readiness Clarity** (team cadence, ownership, data quality expectations): **3/10**\n\n**Single highest-leverage first question:**\n\nWhat are the **top 1–2 business decisions** you want analytics to improve in the next 90 days (e.g., pricing, activation, retention), and what would a “good decision” look like for each?",
+  "session_id": "489e808b-0e25-4cbd-a7ec-b7a0f95f0a4e",
+  "request_id": "3418fb32-d93e-4a9e-89ac-1e6a8bd7020e",
+  "usage": {
+    "inputTokens": 864,
+    "outputTokens": 189,
+    "cacheReadTokens": 11776,
+    "cacheWriteTokens": 0
+  }
+}

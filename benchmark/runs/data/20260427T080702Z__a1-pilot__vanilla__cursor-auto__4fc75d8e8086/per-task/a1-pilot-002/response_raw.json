@@ -1,0 +1,16 @@
+{
+  "type": "result",
+  "subtype": "success",
+  "is_error": false,
+  "duration_ms": 7758,
+  "duration_api_ms": 7758,
+  "result": "- **High** — `divide(a, b)` will raise `ZeroDivisionError` when `b == 0`, which can crash callers if not handled.  \n  ```python\n  def divide(a, b):\n      return a / b\n  ```\n\n- **Low** — No input validation/type constraints; non-numeric inputs (or unexpected numeric-like types) may raise `TypeError` or produce surprising behavior depending on caller expectations.\n\nNo other defects are visible in this snippet.",
+  "session_id": "2d704fe7-4eff-491c-bb78-263352883ea7",
+  "request_id": "2b275a1e-c0ef-4ca2-b01c-6bcd5cbcbcd2",
+  "usage": {
+    "inputTokens": 2256,
+    "outputTokens": 134,
+    "cacheReadTokens": 10368,
+    "cacheWriteTokens": 0
+  }
+}

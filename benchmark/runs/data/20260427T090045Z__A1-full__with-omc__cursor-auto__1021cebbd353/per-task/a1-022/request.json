@@ -1,0 +1,6 @@
+{
+  "backend": "cursor_cli",
+  "model": "cursor/auto",
+  "prompt": "Security-review. Identify OWASP class, severity, attack scenario with concrete request, line, and the smallest remediation.\n\n```python\n1 @app.get('/orders/<int:oid>')\n2 def get_order(oid):\n3     o = Order.query.get(oid)\n4     return jsonify(o.to_dict())\n```",
+  "workdir": "/home/zeyufu/Desktop/oh-my-cursor"
+}

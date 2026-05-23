@@ -1,0 +1,11 @@
+{
+  "model": "anthropic/claude-haiku-4-5-20251001",
+  "max_tokens": 1024,
+  "temperature": 0.2,
+  "messages": [
+    {
+      "role": "user",
+      "content": "A user reports: 'My pytest run hangs forever, no output, no error.' Generate the top 3 most likely root causes ranked by base rate, plus the single fastest diagnostic command for each."
+    }
+  ]
+}

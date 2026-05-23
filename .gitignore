@@ -39,3 +39,6 @@ Icon\r
 
 # Build artifacts
 dist/
+
+# Dependencies
+node_modules/

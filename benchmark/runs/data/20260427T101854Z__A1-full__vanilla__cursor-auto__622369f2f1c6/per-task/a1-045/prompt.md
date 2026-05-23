@@ -1,0 +1,3 @@
+## User prompt
+
+Replace `console.log(` with `logger.info(` across 24 Node.js service files (paths services/*/handler.js). Plan the batched edit. Output: explicit single-pattern definition, per-file scope, dependencies between files (none expected — justify), conflict-avoidance for files where `logger` is not yet imported, and the verification command.

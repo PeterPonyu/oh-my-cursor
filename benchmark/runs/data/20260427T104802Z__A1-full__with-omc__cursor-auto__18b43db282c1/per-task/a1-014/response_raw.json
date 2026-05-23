@@ -1,0 +1,16 @@
+{
+  "type": "result",
+  "subtype": "success",
+  "is_error": false,
+  "duration_ms": 8044,
+  "duration_api_ms": 8044,
+  "result": "- **MEDIUM** — `addItem` mutates the caller-owned array in place (`list.push(item)`), which can cause hidden side effects if callers expect a pure function.  \n  **Issue line:** `2`\n\n- **LOW** — `defaults` is reused and mutated across calls, so state accumulates globally (`['a', 'b']`) and can leak between usages/tests if this pattern is copied into shared/module scope.  \n  **Issue lines:** `5`, `6`, `7`\n\nIf you want this safer, return a new array instead of mutating:\n\n```javascript\nfunction addItem(list, item) {\n  return [...list, item];\n}\n```",
+  "session_id": "1a8c885b-9629-4041-91af-d7566c15cb18",
+  "request_id": "90099b4b-e58f-4b7b-9f5d-b841374667a1",
+  "usage": {
+    "inputTokens": 162,
+    "outputTokens": 259,
+    "cacheReadTokens": 13312,
+    "cacheWriteTokens": 0
+  }
+}

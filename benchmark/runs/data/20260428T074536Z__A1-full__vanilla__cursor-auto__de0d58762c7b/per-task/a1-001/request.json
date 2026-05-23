@@ -1,0 +1,17 @@
+{
+  "backend": "cursor_cli",
+  "model": "cursor/auto",
+  "model_arg": "auto",
+  "prompt": "Plan a 4-step migration to add OAuth login to a Flask app currently using session cookies. Output: numbered steps, each with file scope and rollback consideration.",
+  "workdir": "/tmp/cursor-vanilla-g4o3x5pi",
+  "cmd": [
+    "cursor-agent",
+    "--print",
+    "--trust",
+    "--output-format",
+    "json",
+    "--model",
+    "auto",
+    "Plan a 4-step migration to add OAuth login to a Flask app currently using session cookies. Output: numbered steps, each with file scope and rollback consideration."
+  ]
+}

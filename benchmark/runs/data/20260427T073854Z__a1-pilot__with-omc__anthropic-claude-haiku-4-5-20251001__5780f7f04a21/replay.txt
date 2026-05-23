@@ -1,0 +1,15 @@
+[2026-04-27T07:38:54.692341Z] run_start
+  benchmark=a1-pilot arm=with-omc model=anthropic/claude-haiku-4-5-20251001 budget=$2.0
+[2026-04-27T07:38:54.692501Z] task_start task=a1-pilot-001  prompt_chars=173
+[2026-04-27T07:38:54.692594Z] request task=a1-pilot-001  keys=['max_tokens', 'messages', 'model', 'system', 'temperature']
+[2026-04-27T07:39:51.362390Z] response task=a1-pilot-001  in=28 out=5175 cost=$0.04584 ms=56669 stop=end_turn
+[2026-04-27T07:39:51.362421Z] task_end task=a1-pilot-001  status=ok
+[2026-04-27T07:39:51.362560Z] task_start task=a1-pilot-002  prompt_chars=112
+[2026-04-27T07:39:51.362656Z] request task=a1-pilot-002  keys=['max_tokens', 'messages', 'model', 'system', 'temperature']
+[2026-04-27T07:40:03.373656Z] response task=a1-pilot-002  in=9 out=754 cost=$0.012496 ms=12010 stop=end_turn
+[2026-04-27T07:40:03.373687Z] task_end task=a1-pilot-002  status=ok
+[2026-04-27T07:40:03.373821Z] task_start task=a1-pilot-003  prompt_chars=184
+[2026-04-27T07:40:03.373916Z] request task=a1-pilot-003  keys=['max_tokens', 'messages', 'model', 'system', 'temperature']
+[2026-04-27T07:40:23.412327Z] response task=a1-pilot-003  in=10 out=1492 cost=$0.016068 ms=20038 stop=end_turn
+[2026-04-27T07:40:23.412351Z] task_end task=a1-pilot-003  status=ok
+[2026-04-27T07:40:23.412367Z] run_end  status=ok totals={'n_tasks': 3, 'n_responses': 3, 'n_errors': 0, 'n_fallback_events': 0, 'tokens_in': 47, 'tokens_out': 7421, 'cost_usd': 0.074405, 'wallclock_seconds': 88.72}

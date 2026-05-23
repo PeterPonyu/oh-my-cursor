@@ -1,0 +1,16 @@
+{
+  "type": "result",
+  "subtype": "success",
+  "is_error": false,
+  "duration_ms": 14202,
+  "duration_api_ms": 14202,
+  "result": "“Make my web app faster” can mean a few very different goals, so I want to pin down your target before touching code.\n\nThe fastest way to align is this quick checklist:\n\n- **What feels slow?** First load, route changes, API responses, search/filter, typing lag, scroll/jank, or mobile only?\n- **Where is the app?** Local dev, staging, or production URL?\n- **What stack?** (e.g., Next.js/React/Vue/Svelte, backend language, DB, hosting)\n- **What metric do you care about most?**  \n  - user-perceived speed (snappy UX)  \n  - Core Web Vitals (LCP/INP/CLS)  \n  - backend latency (TTFB/API p95)  \n  - bundle size / JS execution\n- **Any hard target?** e.g. “LCP < 2.5s on 4G mobile” or “dashboard API p95 < 300ms”.\n- **Where are users impacted most?** Specific pages, countries, devices, browsers?\n- **Do you already have data?** Lighthouse report, Web Vitals, APM traces, network waterfall, slow query logs.\n\nIf you want, I can drive this as a **diagnostic phase** first:\n1) define success metric,  \n2) find the top 1–2 bottlenecks,  \n3) propose a prioritized fix plan with expected impact,  \n4) only then implement.  \n\nIf you share your repo stack + one “slow path” (exact page/action), I’ll narrow this down immediately.",
+  "session_id": "10b9ca46-1b30-4ac2-9b84-9a0c9ea3b0be",
+  "request_id": "1b0efe72-4bec-4d3c-a9c1-f31dd711c7a5",
+  "usage": {
+    "inputTokens": 2945,
+    "outputTokens": 375,
+    "cacheReadTokens": 9472,
+    "cacheWriteTokens": 0
+  }
+}
