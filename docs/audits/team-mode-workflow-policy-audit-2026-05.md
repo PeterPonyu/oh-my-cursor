@@ -30,13 +30,13 @@ their concrete repo-owned artifacts, and calls out policy / enforcement drift.
 ### Workflow state contract (repo-owned, checked-in-artifact)
 
 - **Schema**: `.cursor/state/workflow-state.schema.json`
-- **Local validator**: `scripts/validate-workflow-state.py`
-- **Read-only hook validators**: `hooks/state-watcher.py` (observes and
-  validates after edits/writes), `hooks/stop-gate.py` (stop reminder),
-  `hooks/prompt-router.py` (routing hints + state summary)
+- **Local validator**: `scripts/validate-workflow-state.ts`
+- **Read-only hook validators**: `hooks/state-watcher.ts` (observes and
+  validates after edits/writes), `hooks/stop-gate.ts` (stop reminder),
+  `hooks/prompt-router.ts` (routing hints + state summary)
 - **Write paths**:
   - Agent-callable (opt-in): `mcp/cursor-state-bridge/` (see `docs/orchestration.md`)
-  - Developer terminal fallback: `scripts/workflow-state.py` (`.cursor/state/workflow-state.py` compatibility shim) (see
+  - Developer terminal fallback: `scripts/workflow-state.ts` (`.cursor/state/workflow-state.ts` compatibility shim) (see
     `.cursor/state/README.md` and `docs/orchestration.md`)
 
 ### Phase routing & roles (repo-owned, checked-in-artifact)
@@ -75,10 +75,10 @@ parallel. The current codebase supports two operator-driven options:
   `skills/phase-controller/SKILL.md`, and `docs/team-orchestration.md`.
 - **State writes are bounded**:
   - Hooks are read-only observers (`hooks/README.md`).
-  - `tool-guard.py` prompts for confirmation on direct edits to
-    `workflow-state.json` (`hooks/tool-guard.py`).
+  - `tool-guard.ts` prompts for confirmation on direct edits to
+    `workflow-state.json` (`hooks/tool-guard.ts`).
 - **Schema shape is enforced; transition semantics are mostly “by convention”**:
-  - The validator enforces enums + shape (`scripts/validate-workflow-state.py`).
+  - The validator enforces enums + shape (`scripts/validate-workflow-state.ts`).
   - The transition matrix lives as policy text (`docs/multi-state-compat.md`)
     and is not fully enforced by the validator.
 
@@ -108,9 +108,9 @@ risks and security findings. Relevant excerpts for team mode / workflow policy:
 **Evidence sources read**: `hooks/hooks.json`, `.cursor/state/workflow-state.json`, `docs/plans/audit-team-mode-workflow-policy-202605/workflow-state.json`, `docs/team-orchestration.md`, `docs/orchestration.md`.
 
 ### Key observations (repo-owned surfaces confirmed)
-- The source `hooks/hooks.json` declares exactly **14** event-driven hooks (sessionStart through stop). All point to `python3 hooks/*.py`. No long-running or daemon entry exists in the manifest.
+- The source hooks/hooks.json declares exactly **14** event-driven hooks (sessionStart through stop). All point to `node --experimental-strip-types hooks/*.ts`. No long-running or daemon entry exists in the manifest.
 - The 12 task JSON files (T-001..T-012) provide non-overlapping coverage that matches the surfaces enumerated in `docs/orchestration.md` (hooks, skills, agents, validators, MCP bridge, plugin manifest, root policy docs).
-- Both the canonical `.cursor/state/workflow-state.json` and the per-task `docs/plans/audit-team-mode-workflow-policy-202605/workflow-state.json` are valid per `scripts/validate-workflow-state.py` and follow the schema (phase=research, status=in_progress, role=orchestrator, history monotonic).
+- Both the canonical `.cursor/state/workflow-state.json` and the per-task `docs/plans/audit-team-mode-workflow-policy-202605/workflow-state.json` are valid per `scripts/validate-workflow-state.ts` and follow the schema (phase=research, status=in_progress, role=orchestrator, history monotonic).
 - Team delivery state lives in individual `tasks/T-NNN.json` files; workflow-state tracks the lead phase and acceptance criteria. This separation is explicitly documented in `docs/team-orchestration.md` and `docs/multi-state-compat.md`.
 
 ### No overclaim confirmed

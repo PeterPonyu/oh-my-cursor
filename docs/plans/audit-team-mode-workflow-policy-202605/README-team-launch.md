@@ -180,5 +180,5 @@ Follow the task description (workflow-state path resolution). Read-only; update 
 2. Validate state:
 
 ```bash
-python3 scripts/validate-workflow-state.py docs/plans/audit-team-mode-workflow-policy-202605/workflow-state.json
+node --experimental-strip-types scripts/validate-workflow-state.ts docs/plans/audit-team-mode-workflow-policy-202605/workflow-state.json
 ```
