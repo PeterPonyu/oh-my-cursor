@@ -123,3 +123,10 @@ All tools speak JSON-RPC 2.0 over stdio. No network listener. Runs only when exp
 | Autopilot Guide | Documentation for Bounded Autopilot and Consensus Gate | [recipes/autopilot-guide.md](./recipes/autopilot-guide.md) |
 | Consensus Planning Gate | Script enforcing multi-agent planning consensus | [consensus-gate.ts](../scripts/consensus-gate.ts) |
 | Bounded Autopilot Runner | CLI loop runner for sequential task execution | [run-autopilot.ts](../scripts/run-autopilot.ts) |
+
+## Internationalization (i18n) (Access date: 2026-05-23)
+
+| Reference | Purpose | Path / Link |
+| --- | --- | --- |
+| Chinese README | Chinese translation of the project overview and quick start | [docs/zh/README.zh.md](./zh/README.zh.md) |
+| Chinese AGENTS policy | Chinese translation of the core agent model policy and boundaries | [docs/zh/AGENTS.zh.md](./zh/AGENTS.zh.md) |

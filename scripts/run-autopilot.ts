@@ -3,7 +3,7 @@ import * as path from 'node:path';
 import process from 'node:process';
 import { execSync, spawn } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
-import { fileLock } from '../src/oh_my_cursor/workflow_state/locking.ts';
+import { fileLock, resolveConfig } from '../src/oh_my_cursor/workflow_state/index.ts';
 
 const currentFile = fileURLToPath(import.meta.url);
 const ROOT = path.resolve(path.dirname(currentFile), '..');
@@ -109,8 +109,9 @@ function checkCancelToken(): boolean {
 
 async function main() {
   const args = process.argv.slice(2);
-  let statePath = process.env.OH_MY_CURSOR_WORKFLOW_STATE || '';
-  let stepLimit = parseInt(process.env.OH_MY_CURSOR_STEP_LIMIT || '5', 10);
+  const config = resolveConfig(ROOT);
+  let statePath = '';
+  let stepLimit = NaN;
 
   for (let i = 0; i < args.length; i++) {
     const arg = args[i];
@@ -136,7 +137,7 @@ async function main() {
   }
 
   if (!statePath) {
-    statePath = path.join(ROOT, '.cursor', 'state', 'workflow-state.json');
+    statePath = config.statePath;
   } else {
     if (statePath.startsWith('~')) {
       const homedir = process.env.HOME || '';
@@ -145,6 +146,10 @@ async function main() {
     if (!path.isAbsolute(statePath)) {
       statePath = path.resolve(ROOT, statePath);
     }
+  }
+
+  if (isNaN(stepLimit)) {
+    stepLimit = config.stepLimit;
   }
 
   if (!fs.existsSync(statePath)) {
@@ -170,7 +175,7 @@ async function main() {
   }
   console.log(`ok: Using model: ${model}`);
 
-  const logDir = path.join(ROOT, '.cursor-agent-logs');
+  const logDir = config.logDir;
   fs.mkdirSync(logDir, { recursive: true });
 
   let steps = 0;
