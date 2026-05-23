@@ -115,3 +115,11 @@ All tools speak JSON-RPC 2.0 over stdio. No network listener. Runs only when exp
 | Context7 MCP Server | Documentation search integration details | [context7/mcp-server](https://github.com/context7/mcp-server) |
 | Grep.app MCP Server | GitHub public code search integration | [grep-app/mcp-server](https://github.com/grep-app/mcp-server) |
 | AST-Grep | Structural search and refactoring patterns | [ast-grep](https://ast-grep.github.io/) |
+
+## Autopilot & Consensus Gate (Access date: 2026-05-23)
+
+| Reference | Purpose | Path / Link |
+| --- | --- | --- |
+| Autopilot Guide | Documentation for Bounded Autopilot and Consensus Gate | [recipes/autopilot-guide.md](./recipes/autopilot-guide.md) |
+| Consensus Planning Gate | Script enforcing multi-agent planning consensus | [consensus-gate.ts](../scripts/consensus-gate.ts) |
+| Bounded Autopilot Runner | CLI loop runner for sequential task execution | [run-autopilot.ts](../scripts/run-autopilot.ts) |
