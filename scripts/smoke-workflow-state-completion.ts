@@ -131,6 +131,16 @@ function main() {
 
     runNode('scripts/validate-workflow-state.ts', [`"${statePath}"`], {});
 
+    const sessionsDir = path.join(tempDir, 'sessions');
+    if (!fs.existsSync(sessionsDir)) {
+      fail(`sessions directory not created at ${sessionsDir}`);
+    }
+    const sessionFiles = fs.readdirSync(sessionsDir);
+    if (sessionFiles.length === 0) {
+      fail(`no session files archived in ${sessionsDir}`);
+    }
+    console.log(`ok: smoke test successfully verified archiving of ${sessionFiles[0]}`);
+
     const finalStopOutput = runNode('hooks/stop-gate.ts', [], {
       OH_MY_CURSOR_WORKSPACE: ROOT,
       OH_MY_CURSOR_WORKFLOW_STATE: statePath

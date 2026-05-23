@@ -1,0 +1,24 @@
+{
+  "project_name": "oh-my-cursor-extended",
+  "project_directories": [
+    ".cursor/rules",
+    "agents",
+    "hooks",
+    "rules",
+    "skills",
+    "src"
+  ],
+  "technology_stack": {
+    "core": "HTML / TypeScript",
+    "runtime": "Node.js (node --experimental-strip-types)",
+    "styling": "Vanilla CSS"
+  },
+  "key_file_indexes": [
+    "AGENTS.md",
+    "README.md",
+    "docs/confirmed-surfaces.md",
+    "hooks/hooks.json"
+  ],
+  "cumulative_context": "Initial project setup of oh-my-cursor backbone.\n\nWave 3 state features implemented.",
+  "last_updated": "2026-05-23T10:51:03.273Z"
+}

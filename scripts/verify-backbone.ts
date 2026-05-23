@@ -88,6 +88,9 @@ const required = [
   'scripts/smoke-agent-model-suitability.ts',
   'scripts/run-team-coordinator.ts',
   'scripts/refine-branding.ts',
+  'scripts/rule-doctor.ts',
+  '.cursor/state/project-memory.ts',
+  '.cursor/state/notepad.md',
 ];
 
 function main() {
@@ -191,6 +194,7 @@ function main() {
     }
   };
 
+  runValidator('node --experimental-strip-types scripts/rule-doctor.ts');
   runValidator('node --experimental-strip-types scripts/validate-plugin-structure.ts');
   runValidator('node --experimental-strip-types scripts/validate-public-language.ts');
   runValidator('node --experimental-strip-types scripts/validate-cursor-workflow-artifacts.ts');

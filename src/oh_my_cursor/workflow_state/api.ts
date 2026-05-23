@@ -191,6 +191,55 @@ export function initState(
   return state;
 }
 
+function _archiveSession(resolvedPath: string, state: any): void {
+  const sessionsDir = path.join(path.dirname(resolvedPath), 'sessions');
+  try {
+    fs.mkdirSync(sessionsDir, { recursive: true });
+  } catch (err: any) {
+    console.error(`Warning: failed to create sessions directory: ${err.message}`);
+    return;
+  }
+
+  const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
+  const taskId = state.task_id || 'session';
+  const sessionId = state.session_id || Math.random().toString(36).slice(2) + '-' + Date.now();
+  
+  const archiveState = {
+    ...state,
+    session_id: sessionId,
+    session_archived_at: new Date().toISOString()
+  };
+
+  const archiveFile = path.join(sessionsDir, `session-${taskId}-${timestamp}.json`);
+  const data = JSON.stringify(archiveState, null, 2) + '\n';
+  try {
+    fs.writeFileSync(archiveFile, data, 'utf-8');
+  } catch (err: any) {
+    console.error(`Warning: failed to write session archive: ${err.message}`);
+    return;
+  }
+
+  const cap = state.session_cap !== undefined ? state.session_cap : 10;
+  try {
+    const files = fs.readdirSync(sessionsDir)
+      .filter(f => f.startsWith('session-') && f.endsWith('.json'))
+      .map(f => {
+        const full = path.join(sessionsDir, f);
+        return { name: full, mtime: fs.statSync(full).mtimeMs };
+      });
+    
+    files.sort((a, b) => a.mtime - b.mtime);
+    while (files.length > cap) {
+      const toRemove = files.shift();
+      if (toRemove) {
+        fs.unlinkSync(toRemove.name);
+      }
+    }
+  } catch (err: any) {
+    console.error(`Warning: failed during session pruning: ${err.message}`);
+  }
+}
+
 export function setState(
   targetPath: string,
   opts: {
@@ -222,6 +271,7 @@ export function setState(
 
   return fileLock(resolvedPath, () => {
     const state = _loadState(resolvedPath);
+    const oldPhase = state.phase;
     if (phase !== undefined && phase !== null) {
       state.phase = phase;
     }
@@ -237,6 +287,11 @@ export function setState(
     _pushHistory(state, note);
     _compactHistory(state, history_cap);
     _atomicWriteState(resolvedPath, state);
+
+    if (state.phase === 'done' && oldPhase !== 'done') {
+      _archiveSession(resolvedPath, state);
+    }
+
     return state;
   });
 }

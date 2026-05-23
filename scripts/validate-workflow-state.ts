@@ -47,6 +47,10 @@ const ALLOWED_TOP_KEYS = new Set([
   'failure',
   'history',
   'tasks',
+  'session_id',
+  'session_archived_at',
+  'session_cap',
+  'project_memory',
 ]);
 const ALLOWED_AC_KEYS = new Set(['id', 'criterion', 'status', 'evidence']);
 const ALLOWED_FAILURE_KEYS = new Set(['type', 'message', 'retry_count']);

@@ -99,6 +99,24 @@
         "at": { "type": "string" }
       }
       }
+    },
+    "session_id": {
+      "type": "string",
+      "description": "Unique identifier for the orchestrator session."
+    },
+    "session_archived_at": {
+      "type": "string",
+      "description": "ISO timestamp indicating when the session was archived."
+    },
+    "session_cap": {
+      "type": "integer",
+      "description": "Maximum number of session files to keep in the archive folder before pruning.",
+      "minimum": 1
+    },
+    "project_memory": {
+      "type": "object",
+      "description": "Cumulative context, tech stack, and workspace observations.",
+      "additionalProperties": true
     }
   }
 }
