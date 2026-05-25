@@ -123,6 +123,40 @@ Read `.cursor-plugin/plugin.json` and confirm it parses as JSON, has a
 `name` and `version`, and (if it lists skills) every listed skill has a
 matching `skills/<name>/SKILL.md`.
 
+### 6a. Manifest completeness (additive)
+
+```bash
+node -e 'const m=JSON.parse(require("fs").readFileSync(".cursor-plugin/plugin.json","utf8")); ["name","displayName","description","version"].forEach(k=>{ if(!m[k]||(""+m[k]).trim()==="") console.error("MISSING/EMPTY: "+k) }); if(m.mcpServers && typeof m.mcpServers==="string"){ const p=require("fs"); const ok=p.existsSync(".cursor/"+m.mcpServers)||p.existsSync(".cursor/"+m.mcpServers.replace(/\.json$/,".example.json")); if(!ok) console.error("MISSING: .cursor/"+m.mcpServers+" (or .example.json)"); }'
+```
+
+- OK: required fields non-empty; `mcpServers` resolves to a file
+  on disk (the live `.cursor/mcp.json` is gitignored per
+  `docs/PR-POLICY.md` §3, so an `.example.json` counterpart is
+  the auditable artifact).
+- WARN: any field empty or referenced mcpServers file missing.
+
+### 6b. Skill-reference cross-ref (additive)
+
+For each `skills/<x>/SKILL.md`, parse the Orchestration Role
+block's `Invoked by:` and `Invokes:` lines. Every referenced
+skill name must resolve to `skills/<that-name>/SKILL.md` on
+disk.
+
+```bash
+for f in skills/*/SKILL.md; do
+  refs=$(grep -E "^- \*\*(Invoked by|Invokes)\*\*:" "$f" | grep -oE '`[a-z-]+`' | tr -d '`' | sort -u)
+  for r in $refs; do
+    if [ ! -f "skills/$r/SKILL.md" ] && [ "$r" != "User" ] && [ "$r" != "user" ]; then
+      echo "$f references missing skill: $r"
+    fi
+  done
+done
+```
+
+- OK: every referenced skill exists.
+- WARN: broken references — advisory only (these are documentation,
+  not load-bearing wiring).
+
 ### 7. Rules sanity
 
 Read `.cursor/rules/*.mdc` and confirm each file:
@@ -153,6 +187,8 @@ Summary: HEALTHY | ISSUES FOUND
 | Validators | OK / FAIL | which scripts failed |
 | Skill catalogue | OK / WARN | missing skill dirs |
 | Plugin manifest | OK / WARN | parse + cross-check result |
+| Manifest completeness         | OK / WARN  | which fields empty / missing mcp.json/example |
+| Skill-reference cross-ref     | OK / WARN  | broken references with file:line              |
 | Rules sanity | OK / WARN | malformed files |
 | Local install check | OK / FAIL / SKIPPED | exit code |
 
