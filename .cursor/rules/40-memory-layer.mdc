@@ -1,0 +1,48 @@
+---
+description: Workspace dev rule for the oh-my-cursor memory layer
+alwaysApply: true
+---
+
+# Memory layer (workspace dev)
+
+This rule applies when editing the oh-my-cursor repository itself. It
+complements the plugin-shipped `rules/memory-and-notepad.mdc` (which applies
+to consumer workspaces).
+
+## Hard requirements
+
+- New memory templates live under `docs/templates/`. Do not put runtime
+  files in `docs/templates/`; templates are documentation.
+- Every new memory surface must have a validator under `scripts/`,
+  pytest coverage under `tests/memory/`, and a row in
+  `docs/memory-layer.md`.
+- Every new template must be listed in the `required` array of
+  `scripts/validate-plugin-structure.sh` and included in the rsync payload
+  of `scripts/install-local-plugin.sh`.
+- The new skills (`remember`, `notepad`, `wiki`, `decisions`,
+  `rules-authoring`) must carry the standard governance block: Ownership
+  Class, Proof Class, Claim Summary, MCP Integration Points, Hooks
+  Dependencies, Orchestration Role.
+- Hooks may **read** memory paths for observability (e.g. a future
+  compact-reminder mention of notepad) but must not **write** them. This
+  is enforced by `scripts/validate-hook-readonly.py`.
+
+## When updating
+
+- If you add or rename a memory template, update `docs/memory-layer.md`,
+  `AGENTS.md`, `README.md`, `docs/confirmed-surfaces.md`, the validator
+  list in `scripts/validate-plugin-structure.sh`, and the rsync include
+  list in `scripts/install-local-plugin.sh` in the same change.
+- If you rename a skill, also update `skills/phase-controller/SKILL.md` and
+  `skills/auto-execute/SKILL.md` if they cite it.
+- If you change a section cap in `notepad.md`, update the cap in
+  `scripts/validate-notepad-format.py` and in the template at
+  `docs/templates/notepad.md` together.
+
+## Why this is workspace-dev only
+
+Consumer workspaces should not be forced to follow oh-my-cursor's internal
+authoring conventions for memory templates. They get the shipped runtime
+rule (`rules/memory-and-notepad.mdc`); this dev rule is just for
+maintainers editing the plugin itself, so it lives under `.cursor/rules/`
+which the install script explicitly excludes.

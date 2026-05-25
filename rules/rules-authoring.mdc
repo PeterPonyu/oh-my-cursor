@@ -1,0 +1,76 @@
+---
+description: "[OMCS] Repo-owned rule for adding new rules to the oh-my-cursor plugin: where to put them, what to ship, and how to keep install parity."
+globs:
+	- rules/**
+	- .cursor/rules/**
+alwaysApply: false
+---
+
+# Rules authoring
+
+The oh-my-cursor plugin has two rule scopes and they are intentionally
+distinct.
+
+## Scopes
+
+| Scope | Path | Ships with `install-local-plugin.sh`? | When to use |
+|-------|------|----------------------------------------|-------------|
+| Plugin-shipped | `rules/*.mdc` | YES — copied into `~/.cursor/plugins/local/oh-my-cursor/rules/` | Rules that should apply in every consumer workspace that installs this plugin |
+| Workspace dev-only | `.cursor/rules/*.mdc` | NO — explicitly excluded by `--exclude='/.cursor/rules/'` in `install-local-plugin.sh` | Rules that govern editing this repo (docs claims, commit discipline, error handling, memory templates) |
+
+The exclude in the install script is deliberate. Workspace dev rules tell
+the *maintainer* what to do when editing this repository; they would be
+noise in consumer workspaces that install this plugin.
+
+## Frontmatter shape
+
+Every `.mdc` rule starts with a YAML frontmatter block:
+
+```mdc
+---
+description: "[OMCS] <one-sentence purpose, present tense, ASCII only>"
+globs:
+	- <path glob 1>
+	- <path glob 2>
+alwaysApply: <true|false>
+---
+```
+
+- `description` starts with `[OMCS] ` for plugin-shipped rules. Workspace
+  dev rules omit the bracket prefix and use a short title (see
+  `.cursor/rules/00-repo-scope.mdc`).
+- `globs` use forward slashes, may contain `**`, and are tab-indented.
+- `alwaysApply: true` only for repo-wide invariants. Default to `false`
+  with explicit globs.
+
+## Validators that gate a new rule
+
+Run every time a rule is added or edited:
+
+| Validator | What it checks |
+|-----------|-----------------|
+| `scripts/validate-plugin-structure.sh` | New plugin-shipped rule must be listed in the `required` array if it is part of the contract |
+| `scripts/validate-rules-install-parity.sh` | Every `rules/*.mdc` shipped in the repo is also present in the install payload (when `install-local-plugin.sh` is run) |
+| `scripts/validate-agent-bridge-contract.py` | Rules must not invoke the workflow-state writer CLI or reference archived doc paths |
+| `scripts/validate-public-language.py` | Rules must not contain validator-forbidden legacy package names |
+
+## Anti-patterns
+
+- Adding `alwaysApply: true` to a narrowly-scoped rule. Use globs.
+- Editing `rules/*.mdc` to embed plugin behavior that should live in a
+  `skills/<name>/SKILL.md` instead. Rules are short guidance; skills are
+  invocable workflows.
+- Documenting capabilities the plugin does not yet ship. Rules are
+  evidence-backed (see `.cursor/rules/00-repo-scope.mdc`).
+- Creating a workspace dev rule that consumers also need. Move it to
+  `rules/` instead.
+- Reformatting frontmatter with spaces instead of tabs. The existing rules
+  use tab indentation; keep it consistent so downstream tooling matches.
+
+## Cross-references
+
+- `rules/repo-owned-plugin-boundary.mdc` — what this plugin claims to own.
+- `rules/memory-and-notepad.mdc` — memory layer rule that sits next to this.
+- `.cursor/rules/00-repo-scope.mdc` — repo-wide invariants.
+- `skills/rules-authoring/SKILL.md` — full step-by-step workflow when
+  adding a rule.

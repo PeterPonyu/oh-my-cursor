@@ -12,7 +12,7 @@ export const SKILL_NAMES = new Set([
   'phase-controller', 'plan', 'auto-execute', 'iterate-loop',
   'parallel-batch', 'review', 'debug', 'trace', 'security-review',
   'deep-interview', 'doctor', 'local-plugin-check', 'verify', 'mcp-setup',
-  'team-controller',
+  'team-controller', 'decisions', 'notepad', 'remember', 'rules-authoring', 'wiki',
 ]);
 
 export const AGENT_NAMES = new Set([

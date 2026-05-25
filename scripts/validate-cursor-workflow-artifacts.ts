@@ -29,22 +29,27 @@ const EXPECTED_AGENT_READONLY: Record<string, string> = {
 const EXPECTED_SKILLS = new Set([
   'auto-execute',
   'debug',
+  'decisions',
   'deep-interview',
   'doctor',
   'iterate-loop',
   'local-plugin-check',
   'mcp-setup',
+  'notepad',
   'parallel-batch',
   'phase-controller',
   'plan',
+  'remember',
   'review',
+  'rules-authoring',
   'security-review',
   'team-controller',
   'trace',
   'verify',
+  'wiki',
 ]);
 
-const MCP_TOOL_NAMES = new Set([
+const BASE_MCP_TOOL_NAMES = new Set([
   'state_read',
   'state_init',
   'state_set_phase',
@@ -52,6 +57,16 @@ const MCP_TOOL_NAMES = new Set([
   'state_update_acceptance_criterion',
   'state_history_append',
 ]);
+
+const MEMORY_MCP_TOOL_NAMES = new Set([
+  'memory_notepad_read',
+  'memory_notepad_append_working',
+  'memory_project_memory_read',
+  'memory_project_memory_set_directive',
+  'memory_wiki_log_append',
+]);
+
+const MCP_TOOL_NAMES = new Set([...BASE_MCP_TOOL_NAMES, ...MEMORY_MCP_TOOL_NAMES]);
 
 const EXPECTED_AGENT_MCP_TOOLS: Record<string, Set<string>> = {
   architect: new Set(['state_read']),
@@ -73,18 +88,29 @@ const EXPECTED_AGENT_MCP_TOOLS: Record<string, Set<string>> = {
 const EXPECTED_SKILL_MCP_TOOLS: Record<string, Set<string>> = {
   'auto-execute': new Set(['state_init', 'state_set_phase', 'state_record_failure', 'state_update_acceptance_criterion']),
   debug: new Set(),
+  decisions: new Set(),
   'deep-interview': new Set(),
   doctor: new Set(),
   'iterate-loop': new Set(['state_record_failure', 'state_update_acceptance_criterion', 'state_history_append']),
   'local-plugin-check': new Set(),
   'mcp-setup': MCP_TOOL_NAMES,
+  notepad: new Set(['memory_notepad_read', 'memory_notepad_append_working']),
   'parallel-batch': new Set(),
-  'phase-controller': MCP_TOOL_NAMES,
+  'phase-controller': BASE_MCP_TOOL_NAMES,
   plan: new Set(),
+  remember: new Set([
+    'memory_notepad_append_working',
+    'memory_project_memory_set_directive',
+    'memory_wiki_log_append',
+    'state_history_append',
+  ]),
   review: new Set(),
+  'rules-authoring': new Set(),
   'security-review': new Set(),
+  'team-controller': new Set(),
   trace: new Set(),
   verify: new Set(['state_read', 'state_update_acceptance_criterion', 'state_history_append']),
+  wiki: new Set(['memory_wiki_log_append']),
 };
 
 function fail(message: string): never {
@@ -140,7 +166,7 @@ function helperImports(filePath: string): Set<string> {
 }
 
 function mcpToolsFromText(text: string): Set<string> {
-  const matches = text.matchAll(/(?:mcp__cursor-state-bridge__)?(state_[a-z_]+)/g);
+  const matches = text.matchAll(/(?:mcp__cursor-state-bridge__)?((?:state|memory)_[a-z_]+)/g);
   const tools = new Set<string>();
   for (const match of matches) {
     if (MCP_TOOL_NAMES.has(match[1])) {
