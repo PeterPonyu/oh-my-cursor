@@ -2,6 +2,28 @@
 
 ## 2026-05-20
 
+### feat(memory): rules + memory layer migrated from sibling-plugin patterns
+
+- Added plugin-shipped rules `rules/memory-and-notepad.mdc` and
+  `rules/rules-authoring.mdc`, plus workspace dev rule
+  `.cursor/rules/40-memory-layer.mdc`.
+- Added five memory skills: `remember` (router), `notepad`, `wiki`,
+  `decisions`, `rules-authoring`, with templates under `docs/templates/`
+  and cross-cutting doc `docs/memory-layer.md`.
+- Added stdlib validators and `tests/memory/` (54 pytest cases) for
+  notepad format, project memory JSON, wiki structure, ADR frontmatter,
+  template golden files, skill governance, and install parity for
+  `rules/*.mdc`.
+- Extended optional `cursor-state-bridge` MCP with five memory tools
+  (`memory_io.py`): read/append notepad, read/set project memory
+  directives, append wiki log — workspace allowlist + containment, no hook
+  auto-injection.
+- Audit and plan preserved under
+  `docs/plans/rules-and-memory-2026-05-20/`; synthesis in
+  `docs/plans/rules-and-memory-2026-05-20/SYNTHESIS.md`.
+- Install payload now ships `docs/memory-layer.md` and `docs/templates/`
+  via `scripts/install-local-plugin.sh`.
+
 ### orchestration coverage sweep — architect + qa-tester roles, payload-root resolver, MCP schema lock-down
 
 - `agents/` registry grew from twelve to fourteen roles:

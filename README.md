@@ -40,10 +40,12 @@ Verify the install with `node --experimental-strip-types scripts/check-local-plu
 |-----------|----------|---------|
 | **Hooks** (14 events) | `hooks/hooks.json` + `hooks/` | Every documented Cursor hook event is wired: `sessionStart`, `sessionEnd`, `beforeSubmitPrompt`, `preToolUse`, `postToolUse`, `postToolUseFailure`, `subagentStart`, `subagentStop`, `beforeShellExecution`, `afterShellExecution`, `beforeReadFile`, `afterFileEdit`, `preCompact`, and `stop`. All scripts are stdlib-only, fail-open, and read-only against workflow-state |
 | **Agents** (14 roles) | `agents/` | Full role registry — `orchestrator`, `architect`, `researcher`, `planner`, `implementer`, `qa-tester`, `verifier`, `critic`, `code-reviewer`, `debugger`, `tracer`, `security-reviewer`, `explore`, `test-engineer`. All checked-in agents use `model: auto` until benchmark evidence justifies pinning |
-| **Skills** (14 skills) | `skills/` | `phase-controller` (entry), `plan`, `iterate-loop`, `auto-execute`, `review`, `security-review`, `debug`, `trace`, `verify`, `deep-interview`, `doctor`, `local-plugin-check`, `mcp-setup`, `parallel-batch` |
+| **Skills** (20 skills) | `skills/` | Orchestration: `phase-controller`, `plan`, `iterate-loop`, `auto-execute`, `review`, `security-review`, `debug`, `trace`, `verify`, `deep-interview`, `doctor`, `local-plugin-check`, `mcp-setup`, `parallel-batch`, `team-controller`. Memory: `remember`, `notepad`, `wiki`, `decisions`, `rules-authoring` |
 | **Rules** | `.cursor/rules/` + `rules/` | Cursor workspace guidance plus plugin boundary compatibility policy |
+| **Memory templates** | `docs/templates/` | Notepad, project memory, wiki, and ADR templates shipped with the plugin |
+| **Memory layer** | `docs/memory-layer.md` | Skill-owned notepad, project memory, decisions, and wiki (separate from workflow-state) |
 | **State contract** | `.cursor/state/` + `src/oh_my_cursor/workflow_state/` | File-backed workflow-state contract, compatibility shims, and packaged API/CLI/lock implementation |
-| **MCP bridge** (opt-in) | `mcp/cursor-state-bridge/` | Agent-callable workflow-state writes via JSON-RPC |
+| **MCP bridge** (opt-in) | `mcp/cursor-state-bridge/` | Workflow-state writes plus optional memory tools via JSON-RPC |
 
 ## Docs
 
@@ -52,6 +54,7 @@ Verify the install with `node --experimental-strip-types scripts/check-local-plu
 | Always-on policy | [`AGENTS.md`](./AGENTS.md) |
 | Orchestration map | [`docs/orchestration.md`](./docs/orchestration.md) |
 | Agent model policy | [`docs/agent-model-policy.md`](./docs/agent-model-policy.md) |
+| Memory layer | [`docs/memory-layer.md`](./docs/memory-layer.md) |
 | State contract | [`docs/state-contract.md`](./docs/state-contract.md) |
 | MCP bridge | [`docs/mcp-bridge.md`](./docs/mcp-bridge.md) |
 | External runtime bridge | [`docs/external-runtime-bridge.md`](./docs/external-runtime-bridge.md) |

@@ -42,7 +42,8 @@ Each phase advance is an action on a schema-bounded JSON document that follows
 | Plugin manifest | `.cursor-plugin/plugin.json` | Declares the repo-root plugin and points Cursor at the rules, skills, agents, and hooks payload. |
 | Hooks | `hooks/hooks.json` plus stdlib-only TypeScript scripts under `hooks/` | Fourteen documented Cursor hook events are wired (`sessionStart` → `session-bootstrap.ts`; `sessionEnd` → `session-summary.ts`; `beforeSubmitPrompt` → `prompt-router.ts`; `preToolUse` → `tool-guard.ts`; `postToolUse` → `state-watcher.ts`; `postToolUseFailure` → `failure-router.ts`; `subagentStart` → `subagent-bootstrap.ts`; `subagentStop` → `subagent-summary.ts`; `beforeShellExecution` → `shell-guard.ts`; `afterShellExecution` → `shell-debrief.ts`; `beforeReadFile` → `read-advisor.ts`; `afterFileEdit` → `claim-guard.ts`; `preCompact` → `compact-reminder.ts`; `stop` → `stop-gate.ts`). All scripts are fail-open, observational unless a tightly bounded severe pattern is detected, and **read** workflow-state — they never write it. |
 | Agents | `agents/orchestrator.md`, `architect.md`, `researcher.md`, `planner.md`, `implementer.md`, `qa-tester.md`, `verifier.md`, `critic.md`, `code-reviewer.md`, `debugger.md`, `tracer.md`, `security-reviewer.md`, `explore.md`, `test-engineer.md` | Role prompts. `orchestrator.md` is the entry point; it routes work to the other roles. Most role agents are read-only; `debugger`, `implementer`, `orchestrator`, and `test-engineer` may update files only when the requested workflow requires it, while `qa-tester` may run bounded validation commands without editing files. |
-| Skills | `skills/*/SKILL.md` (14 total; see Skills table below) | Workflow recipes the user or agent invokes by name. Invoke by name from agent prompts or user input. |
+| Skills | `skills/*/SKILL.md` (19 total; see Skills table below) | Workflow recipes the user or agent invokes by name. Invoke by name from agent prompts or user input. |
+| Memory layer | `docs/memory-layer.md`, `docs/templates/` | Notepad, project memory, decisions, and wiki — skill-owned writes, separate from workflow-state. |
 | Workflow state | `.cursor/state/workflow-state.schema.json`, `.cursor/state/workflow-state.example.json`, `.cursor/state/README.md` | The shared state contract; file-backed, human-visible, opt-in. |
 | State writer (agent-callable) | `mcp/cursor-state-bridge/` MCP tools (`state_init`, `state_set_phase`, `state_update_acceptance_criterion`, `state_record_failure`, `state_history_append`) | Sole agent-callable writer of `.cursor/state/workflow-state.json` (and per-task variants under `docs/plans/<task-id>/`). Routes through the shared `file_lock` from `src/oh_my_cursor/workflow_state/locking.ts`. Opt-in install via `scripts/install-local-plugin.ts --with-mcp`. |
 | State writer (developer-only fallback) | `scripts/workflow-state.ts` (`.cursor/state/workflow-state.ts` compatibility shim in installed payloads) | CLI wrapper over the packaged workflow-state API for developer terminals. Calls the same `init_state` / `set_state` / ... library functions as the bridge so concurrent CLI and bridge writes serialise on the same lock. Not invoked from agent prompts or skills. |
@@ -155,7 +156,7 @@ Developer-only equivalents (not for agents/skills):
 - acceptance update: `node --experimental-strip-types scripts/workflow-state.ts ac ... --id AC-001 --status passed --evidence scripts/check-local-plugin-install.ts`
 - failure record: `node --experimental-strip-types scripts/workflow-state.ts fail ... --type fixable --message "..."`
 
-## Skills Enumeration (15 repo-owned, checked-in-artifact)
+## Skills Enumeration (20 repo-owned, checked-in-artifact)
 
 | Skill | Governance | Primary MCP Tools | Invoked When | Phase(s) |
 | --- | --- | --- | --- | --- |
@@ -166,7 +167,7 @@ Developer-only equivalents (not for agents/skills):
 | doctor | repo-owned, checked-in-artifact | None | Diagnostic check of Cursor + repo installation | intake |
 | iterate-loop | repo-owned, checked-in-artifact | state_record_failure, state_update_acceptance_criterion, state_history_append | Execute phase with multiple acceptance criteria | execute |
 | local-plugin-check | repo-owned, checked-in-artifact | None | User verifies local plugin installation | intake |
-| mcp-setup | repo-owned, checked-in-artifact | state_read, state_init, state_set_phase, state_record_failure, state_update_acceptance_criterion, state_history_append | MCP bridge setup or verification requested | intake |
+| mcp-setup | repo-owned, checked-in-artifact | state_* + memory_* (full bridge surface) | MCP bridge setup or verification requested | intake |
 | parallel-batch | repo-owned, checked-in-artifact | None | Independent tasks can run as separate CLI parent processes | execute |
 | plan | repo-owned, checked-in-artifact | None | User requests planning or orchestrator routes to plan phase | plan |
 | review | repo-owned, checked-in-artifact | None | Orchestrator routes to review phase | review |
@@ -174,6 +175,11 @@ Developer-only equivalents (not for agents/skills):
 | team-controller | repo-owned, checked-in-artifact | None | Orchestrating concurrent agent execution lanes across independent tasks | execute/verify |
 | trace | repo-owned, checked-in-artifact | state_read | Causal investigation or flow tracing requested | blocked/failed |
 | verify | repo-owned, checked-in-artifact | state_update_acceptance_criterion, state_read | Acceptance criteria validation requested | verify |
+| remember | repo-owned, checked-in-artifact | memory_* (optional), state_history_append | Route a finding to the correct memory surface | any |
+| notepad | repo-owned, checked-in-artifact | memory_notepad_read, memory_notepad_append_working | Read/update Priority, Working, or MANUAL sections | any |
+| wiki | repo-owned, checked-in-artifact | memory_wiki_log_append | Wiki page lifecycle + append-only log | any |
+| decisions | repo-owned, checked-in-artifact | None | Create or supersede ADRs under docs/decisions/ | plan/review |
+| rules-authoring | repo-owned, checked-in-artifact | None | Add a new plugin or workspace rule with install parity | any |
 
 ## Hook → Skill Wiring (14 hooks, state-aware invocation)
 

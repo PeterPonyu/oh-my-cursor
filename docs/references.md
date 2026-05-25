@@ -37,6 +37,20 @@ When capability claims change in `AGENTS.md`, `README.md`, `docs/**`, or
 | [Next.js static exports](https://nextjs.org/docs/app/building-your-application/deploying/static-exports) | `output: 'export'` builds static assets into `out/` for App Router projects. | Supports deployment mechanics for `apps/cursor-backbone-site/`; repo-owned wording still requires checked-in files and exported output validation. |
 | [GitHub Pages custom workflows](https://docs.github.com/en/pages/getting-started-with-github-pages/using-custom-workflows-with-github-pages) | Official `configure-pages`, `upload-pages-artifact`, and `deploy-pages` workflow path for Pages deployments. | Supports workflow-shape checks for the repo-owned landing site when the workflow and app artifacts are present. |
 
+## Sibling-plugin memory patterns (repo-owned synthesis, 2026-05-20)
+
+These are **not** official Cursor documentation. They record which patterns
+oh-my-cursor migrated from peer plugins during the rules-and-memory work.
+See `docs/plans/rules-and-memory-2026-05-20/AUDIT.md`.
+
+| Pattern | Source | OMCS adaptation |
+| --- | --- | --- |
+| Three-tier notepad (Priority / Working / MANUAL) | Sibling notepad implementations | `docs/templates/notepad.md`, `skills/notepad`, `<!-- OMCS:NOTEPAD:* -->` markers |
+| Project memory JSON with protected `userOwned` | Sibling project-memory implementations | `docs/templates/project-memory.json`, `validate-project-memory.py` |
+| Markdown wiki + append-only log | Sibling wiki implementations | `docs/templates/wiki-*.md`, `skills/wiki` |
+| Explicit remember router (no `<remember>` hook parsing) | oh-my-claudecode `skills/remember`, `<remember>` tags in orchestrator hook | `skills/remember` — skill-invoked only |
+| Rules authoring + install parity | Sibling multi-root rules and marker-bounded merge patterns | `skills/rules-authoring`, `validate-rules-install-parity.sh` |
+
 ## Claim mapping used by this repo
 
 - Root `AGENTS.md`, `.cursor/rules/`, `hooks/hooks.json`, `hooks/`,
@@ -88,9 +102,11 @@ When capability claims change in `AGENTS.md`, `README.md`, `docs/**`, or
 | explore | repo-owned | checked-in-artifact | `state_read` | Research phase: fast codebase mapping |
 | test-engineer | repo-owned | checked-in-artifact | `state_read`, `state_set_phase`, `state_update_acceptance_criterion` | Verify phase: test strategy + coverage |
 
-## MCP Tool Surface — cursor-state-bridge (Access date: 2026-05-19, Verified: repo-owned, checked-in-artifact)
+## MCP Tool Surface — cursor-state-bridge (Access date: 2026-05-20, Verified: repo-owned, checked-in-artifact)
 
 All tools speak JSON-RPC 2.0 over stdio. No network listener. Runs only when explicitly configured.
+
+### Workflow-state tools
 
 | Tool | Purpose | Write Scope | Jail Root | Accessible Phases |
 | --- | --- | --- | --- | --- |
@@ -100,6 +116,16 @@ All tools speak JSON-RPC 2.0 over stdio. No network listener. Runs only when exp
 | state_record_failure | Record failure metadata (hypothesis, timestamp) | `failure` object | `.cursor/state/` | any phase on error |
 | state_history_append | Append run-level notes | `history[]` | `.cursor/state/` | any phase (audit trail) |
 | state_read | Read current workflow-state | read-only | `.cursor/state/` | all phases (all agents) |
+
+### Memory tools (optional, same bridge install)
+
+| Tool | Purpose | Write scope | Containment |
+| --- | --- | --- | --- |
+| memory_notepad_read | Read notepad sections | read-only | workspace allowlist: `notepad.md` |
+| memory_notepad_append_working | Append Working Memory line | `notepad.md` | workspace allowlist |
+| memory_project_memory_read | Read project memory | read-only | `project-memory.json` |
+| memory_project_memory_set_directive | Append directive (idempotent) | `userOwned.directives[]` | `project-memory.json` |
+| memory_wiki_log_append | Append wiki log entry | `docs/wiki/log.md` | workspace allowlist |
 
 **Error Handling**: All tools return JSON-RPC 2.0 errors with semantic codes. File lock serializes concurrent writes; CLI and MCP bridge share the same packaged lock via `src/oh_my_cursor/workflow_state/locking.ts`.
 

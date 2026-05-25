@@ -55,11 +55,20 @@ must resolve to this repo's trusted `mcp/cursor-state-bridge/` payload; the
 | `state_record_failure` | functional (Phase 2) | `record_failure(...)` |
 | `state_update_acceptance_criterion` | functional (Phase 3) | `update_acceptance_criterion(...)` |
 | `state_history_append` | functional (Phase 3) | `append_history(...)` |
+| `memory_notepad_read` | functional | `memory_io.py` — read notepad sections |
+| `memory_notepad_append_working` | functional | append one Working Memory line |
+| `memory_project_memory_read` | functional | read `project-memory.json` |
+| `memory_project_memory_set_directive` | functional | idempotent `userOwned.directives` append |
+| `memory_wiki_log_append` | functional | append one `docs/wiki/log.md` line |
 
 `evidence` on `state_update_acceptance_criterion` stays optional, matching
 `.cursor/state/workflow-state.schema.json` exactly.
 
-## Jail roots
+Memory tools use a workspace allowlist (`notepad.md`, `project-memory.json`,
+`docs/wiki/log.md`) with realpath containment under the workspace root —
+they do **not** use the workflow-state jail roots below.
+
+## Jail roots (workflow-state tools only)
 
 The bridge resolves every read/write target with `os.path.realpath` and
 asserts containment under one of three roots:

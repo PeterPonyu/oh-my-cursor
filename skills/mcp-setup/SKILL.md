@@ -32,6 +32,11 @@ This skill is a diagnostic-first setup guide for the repo-owned `cursor-state-br
 | `state_record_failure` | cursor-state-bridge | Verify failure-recording tool is visible/callable in full smoke | No | optional |
 | `state_update_acceptance_criterion` | cursor-state-bridge | Verify acceptance evidence tool is visible/callable in full smoke | No | optional |
 | `state_history_append` | cursor-state-bridge | Verify history note tool is visible/callable in full smoke | No | optional |
+| `memory_notepad_read` | cursor-state-bridge | Verify notepad read tool is visible when memory layer is installed | No | optional |
+| `memory_notepad_append_working` | cursor-state-bridge | Verify notepad append tool is visible/callable in full smoke | No | optional |
+| `memory_project_memory_read` | cursor-state-bridge | Verify project memory read tool is visible | No | optional |
+| `memory_project_memory_set_directive` | cursor-state-bridge | Verify directive append tool is visible/callable in full smoke | No | optional |
+| `memory_wiki_log_append` | cursor-state-bridge | Verify wiki log append tool is visible/callable in full smoke | No | optional |
 
 **Note**: This skill sets up MCP; it does not require MCP to run.
 
@@ -123,6 +128,9 @@ No hooks dependencies. This skill runs entirely within the Cursor chat.
    - `state_record_failure`
    - `state_update_acceptance_criterion`
    - `state_history_append`
+   - `memory_notepad_read`, `memory_notepad_append_working`,
+     `memory_project_memory_read`, `memory_project_memory_set_directive`,
+     `memory_wiki_log_append` (when the memory layer is in use)
 
    At minimum, call `state_read` against the current workspace. For a full
    functional check, use a disposable task id or test workspace state and

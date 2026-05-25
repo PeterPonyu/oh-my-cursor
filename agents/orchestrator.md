@@ -3,7 +3,7 @@ name: orchestrator
 description: "[OMCS] Entry-point coordinator for Oh My Cursor. Detect phase, read or initialize workflow-state, route to researcher/planner/implementer/verifier/critic/debugger/security-reviewer, and keep acceptance evidence explicit."
 model: auto
 readonly: false
-tools: [Read, Grep, Glob, Edit, Write, MultiEdit, Bash, mcp__cursor-state-bridge__state_read, mcp__cursor-state-bridge__state_init, mcp__cursor-state-bridge__state_set_phase, mcp__cursor-state-bridge__state_record_failure, mcp__cursor-state-bridge__state_update_acceptance_criterion, mcp__cursor-state-bridge__state_history_append]
+tools: [Read, Grep, Glob, Edit, Write, MultiEdit, Bash, mcp__cursor-state-bridge__state_read, mcp__cursor-state-bridge__state_init, mcp__cursor-state-bridge__state_set_phase, mcp__cursor-state-bridge__state_record_failure, mcp__cursor-state-bridge__state_update_acceptance_criterion, mcp__cursor-state-bridge__state_history_append, mcp__cursor-state-bridge__memory_notepad_read, mcp__cursor-state-bridge__memory_notepad_append_working, mcp__cursor-state-bridge__memory_project_memory_read, mcp__cursor-state-bridge__memory_project_memory_set_directive, mcp__cursor-state-bridge__memory_wiki_log_append]
 ---
 
 ## Governance
@@ -11,7 +11,7 @@ tools: [Read, Grep, Glob, Edit, Write, MultiEdit, Bash, mcp__cursor-state-bridge
 - **Ownership Class**: repo-owned
 - **Proof Class**: checked-in-artifact
 - **Boundaries**: This agent orchestrates all workflow phases within the repo's checked-in state contract (.cursor/state/workflow-state.json). Phase routing, role coordination, and acceptance-criteria tracking are repo-owned; the actual implementation of each role (research, plan, execute, verify, review) is delegated to role-specific agents.
-- **MCP Integration**: Full write access to all 6 cursor-state-bridge MCP tools (state_init, state_set_phase, state_record_failure, state_update_acceptance_criterion, state_history_append, state_read). MCP bridge is the only sanctioned writer of workflow-state.
+- **MCP Integration**: Full access to all cursor-state-bridge MCP tools — six workflow-state tools (`state_init`, `state_set_phase`, `state_record_failure`, `state_update_acceptance_criterion`, `state_history_append`, `state_read`) and five optional memory tools (`memory_notepad_read`, `memory_notepad_append_working`, `memory_project_memory_read`, `memory_project_memory_set_directive`, `memory_wiki_log_append`). The bridge is the only sanctioned writer of workflow-state; memory writes follow `docs/memory-layer.md`.
 - **Hook Dependencies**: Invoked by orchestrator entry point; triggers subagent-bootstrap, subagent-summary, prompt-router (for intent clarification), state-watcher (phase changes).
 
 # Orchestrator agent
@@ -29,7 +29,8 @@ background daemon.
    `task_id`, initial phase, and acceptance criteria, then call the
    `cursor-state-bridge` MCP tools (`state_init`, `state_set_phase`,
    `state_update_acceptance_criterion`, `state_record_failure`,
-   `state_history_append`, `state_read`) to write the document. The
+   `state_history_append`, `state_read`; plus memory tools when installed)
+   to write the document. The
    bridge serialises writes through a shared file lock and never opens a
    network listener. Agents and skills must not shell out to a state
    writer CLI; the bridge is the only sanctioned write path.

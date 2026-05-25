@@ -92,7 +92,20 @@ ls .cursor-plugin/plugin.json
 - Do not auto-fix; just report which validators failed and the first error
   they printed.
 
-### 4. Skill catalogue
+### 4. Memory validators (when `docs/memory-layer.md` is present)
+
+```bash
+python3 scripts/validate-memory-templates.py
+python3 scripts/validate-notepad-format.py docs/templates/notepad.md
+python3 scripts/validate-project-memory.py docs/templates/project-memory.json
+bash scripts/validate-rules-install-parity.sh
+python3 -m pytest tests/memory -q
+```
+
+Report each command as OK / FAIL / SKIPPED. These are repo-owned proof for
+the memory layer; they do not require the MCP bridge.
+
+### 5. Skill catalogue
 
 ```bash
 ls skills/
@@ -104,20 +117,20 @@ ls skills/
 - WARN if any directory is missing `SKILL.md`, or if the `name:` value
   does not match its directory.
 
-### 5. Plugin manifest
+### 6. Plugin manifest
 
 Read `.cursor-plugin/plugin.json` and confirm it parses as JSON, has a
 `name` and `version`, and (if it lists skills) every listed skill has a
 matching `skills/<name>/SKILL.md`.
 
-### 6. Rules sanity
+### 7. Rules sanity
 
 Read `.cursor/rules/*.mdc` and confirm each file:
 - has a YAML frontmatter block,
 - has a `description` field, and
 - declares either `alwaysApply: true` or a `globs:` pattern.
 
-### 7. Optional local install
+### 8. Optional local install
 
 ```bash
 ./scripts/check-local-plugin-install.sh

@@ -31,3 +31,6 @@ alwaysApply: false
 	and `~/.cursor/plugins/local` as a manual user-environment verification path.
 - When plugin ownership claims change, update validator scripts and
 	`docs/references.md` in the same edit.
+- Memory surfaces (notepad, project memory, wiki, decisions) are
+	documented in `docs/memory-layer.md` and scoped by
+	`rules/memory-and-notepad.mdc`; they are separate from workflow-state.

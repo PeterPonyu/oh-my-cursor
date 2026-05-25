@@ -2,7 +2,7 @@
 
 `cursor-state-bridge` is the repo-owned MCP server that handles writes to
 the workflow-state document at `.cursor/state/workflow-state.json`. It
-speaks JSON-RPC 2.0 over stdio, exposes six tools mapped 1:1 to the
+speaks JSON-RPC 2.0 over stdio, exposes six workflow-state tools mapped 1:1 to the
 workflow-state schema, and runs without any network listener.
 
 The package source lives at

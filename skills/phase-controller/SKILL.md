@@ -49,10 +49,11 @@ justifies pinning them.
    missing, set `phase=intake`, `status=pending`.
 3. **Decide the next action.**
    - `intake` → record `task_id`, `title`, and an initial acceptance-criteria
-     list, then advance to `research`.
+     list; optionally read `notepad.md` Priority Context via `skills/notepad`
+     when the file exists, then advance to `research`.
    - `research` → invoke the `researcher` agent, capture findings, then advance
      to `plan`.
-   - `plan` → invoke the `planner` agent or the `plan` skill, invoke `architect` for broad or high-risk changes, finalize the
+   - `plan` → invoke the `planner` agent or the `plan` skill, invoke `architect` for broad or high-risk changes, skim `docs/decisions/` index when present, finalize the
      acceptance-criteria list, then advance to `execute`.
    - `execute` → use the appropriate implementation skill (`auto-execute`,
      `iterate-loop`, etc.). Mark each acceptance criterion as `passed` only when

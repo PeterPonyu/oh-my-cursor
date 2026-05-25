@@ -3,6 +3,7 @@ import * as process from 'node:process';
 import * as path from 'node:path';
 import { JailError } from './jail.ts';
 import * as stateIo from './state_io.ts';
+import * as memoryIo from './memory_io.ts';
 import * as traceModule from './_trace.ts';
 import * as authModule from './auth.ts';
 
@@ -127,15 +128,88 @@ export const TOOLS: any[] = [
       additionalProperties: false,
     },
   },
+  {
+    name: 'memory_notepad_read',
+    description: 'Read notepad.md and return the three marker-bounded sections.',
+    inputSchema: {
+      type: 'object',
+      properties: {
+        path: { type: 'string', description: 'Relative path; default notepad.md' },
+        workspace: { type: 'string' },
+      },
+      additionalProperties: false,
+    },
+  },
+  {
+    name: 'memory_notepad_append_working',
+    description: 'Append one ISO-8601 timestamped line to Working Memory in notepad.md.',
+    inputSchema: {
+      type: 'object',
+      properties: {
+        note: { type: 'string' },
+        path: { type: 'string' },
+        workspace: { type: 'string' },
+      },
+      required: ['note'],
+      additionalProperties: false,
+    },
+  },
+  {
+    name: 'memory_project_memory_read',
+    description: 'Read project-memory.json from the workspace root.',
+    inputSchema: {
+      type: 'object',
+      properties: {
+        path: { type: 'string' },
+        workspace: { type: 'string' },
+      },
+      additionalProperties: false,
+    },
+  },
+  {
+    name: 'memory_project_memory_set_directive',
+    description: 'Append a directive to userOwned.directives (idempotent).',
+    inputSchema: {
+      type: 'object',
+      properties: {
+        directive: { type: 'string' },
+        path: { type: 'string' },
+        workspace: { type: 'string' },
+      },
+      required: ['directive'],
+      additionalProperties: false,
+    },
+  },
+  {
+    name: 'memory_wiki_log_append',
+    description: 'Append one line to docs/wiki/log.md (append-only wiki log).',
+    inputSchema: {
+      type: 'object',
+      properties: {
+        action: { type: 'string', description: 'add, update, or archive' },
+        slug: { type: 'string' },
+        note: { type: 'string' },
+        path: { type: 'string' },
+        workspace: { type: 'string' },
+      },
+      required: ['slug'],
+      additionalProperties: false,
+    },
+  },
 ];
 
-export const FUNCTIONAL_TOOLS: Record<string, keyof typeof stateIo> = {
-  state_read: 'state_read',
-  state_init: 'state_init',
-  state_set_phase: 'state_set_phase',
-  state_record_failure: 'state_record_failure',
-  state_update_acceptance_criterion: 'state_update_acceptance_criterion',
-  state_history_append: 'state_history_append',
+export const FUNCTIONAL_TOOLS: Record<string, Function> = {
+  state_read: stateIo.state_read,
+  state_init: stateIo.state_init,
+  state_set_phase: stateIo.state_set_phase,
+  state_record_failure: stateIo.state_record_failure,
+  state_update_acceptance_criterion: stateIo.state_update_acceptance_criterion,
+  state_history_append: stateIo.state_history_append,
+  memory_notepad_read: memoryIo.memory_notepad_read,
+  memory_notepad_append_working: memoryIo.memory_notepad_append_working,
+  memory_project_memory_read: memoryIo.memory_project_memory_read,
+  memory_project_memory_set_directive: memoryIo.memory_project_memory_set_directive,
+  memory_wiki_log_append: memoryIo.memory_wiki_log_append,
 };
 
 function okResponse(reqId: any, result: any): any {
@@ -276,8 +350,7 @@ export class Server {
     const toolParams = params.arguments || {};
 
     if (toolName in FUNCTIONAL_TOOLS) {
-      const handlerName = FUNCTIONAL_TOOLS[toolName];
-      const handler = stateIo[handlerName] as Function;
+      const handler = FUNCTIONAL_TOOLS[toolName];
       try {
         const result = handler(this.workspace, toolParams);
         sendResponse(okResponse(reqId, result));

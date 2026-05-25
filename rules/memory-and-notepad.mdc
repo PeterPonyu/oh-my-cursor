@@ -1,0 +1,73 @@
+---
+description: "[OMCS] Repo-owned rule: how to use the oh-my-cursor memory layer (notepad, project memory, decisions, wiki) without violating the read-only-hook contract."
+globs:
+	- notepad.md
+	- docs/notepad*/**
+	- project-memory.json
+	- docs/project-memory*.json
+	- docs/wiki/**
+	- docs/decisions/**
+	- docs/memory-layer.md
+	- skills/remember/**
+	- skills/notepad/**
+	- skills/wiki/**
+	- skills/decisions/**
+alwaysApply: false
+---
+
+# Memory and notepad layer
+
+The oh-my-cursor plugin ships four explicit, file-backed memory surfaces.
+Each one has a single owner skill and a single validator. None of them are
+written by hooks. None of them are part of workflow-state.
+
+## Surfaces
+
+| Surface | Default path (consumer workspace) | Owner skill | Validator | Lifetime |
+|---------|-----------------------------------|-------------|-----------|----------|
+| Notepad | `./notepad.md` | `skills/notepad/SKILL.md` | `scripts/validate-notepad-format.py` | Per workspace; three sections (Priority / Working / MANUAL) with explicit char caps |
+| Project memory | `./project-memory.json` | `skills/remember/SKILL.md` (router) | `scripts/validate-project-memory.py` | Per workspace; structured JSON with marker-protected user keys |
+| Decisions | `./docs/decisions/YYYYMMDD-<slug>.md` | `skills/decisions/SKILL.md` | `scripts/validate-decisions-format.py` | Per workspace; append-only ADRs |
+| Wiki | `./docs/wiki/` (with `index.md`, `log.md`, topic pages) | `skills/wiki/SKILL.md` | `scripts/validate-wiki-structure.py` | Per workspace; checked-in markdown with append-only audit log |
+
+## Where each one differs from workflow-state
+
+- **workflow-state.json** captures *task-life* state: phase, status,
+  acceptance criteria, history. It is bounded to a single task and is
+  written through the `cursor-state-bridge` MCP tools.
+- **Memory** captures *workspace-life* knowledge that outlives any one task.
+  It is written by the agent through normal file tools (or, optionally,
+  through the MCP bridge's memory tools when `--with-mcp` is installed).
+
+`docs/memory-layer.md` has the full comparison table.
+
+## Hard rules
+
+1. **Hooks never write memory.** `claim-guard.py`, `stop-gate.py`,
+   `state-watcher.py`, `compact-reminder.py`, and any future hook may read
+   memory paths but must not mutate them. This is the same rule the repo
+   applies to workflow-state and is enforced by `validate-hook-readonly.py`.
+2. **The agent decides routing through `skills/remember/SKILL.md`.**
+   Do not "auto-promote" findings to a memory surface without invoking the
+   `remember` skill or making the routing decision explicit in the chat.
+3. **Use one of the four surfaces, or document why none fit.** Findings
+   that do not fit any surface should live in `docs/` (durable docs) or be
+   discarded.
+4. **Respect the section caps in `notepad.md`.** The Priority Context block
+   is replace-on-write with a 500-character cap; Working Memory is
+   append-only with timestamps; MANUAL is never auto-pruned.
+5. **Never invent new memory paths.** If a different layout is needed, add
+   a new template under `docs/templates/`, extend the validators, and update
+   this rule in the same change. Drive-by paths break the validators.
+6. **No embeddings, no vector stores.** The wiki uses keyword/grep search.
+   `skills/wiki/SKILL.md` is explicit about this.
+
+## Where new authors should start
+
+- Read `docs/memory-layer.md` for the cross-cutting overview.
+- Read the SKILL.md for the surface you want to touch.
+- Run the matching validator with `--self-test` before extending it.
+- Update `docs/templates/<surface>.md` if the shape changes.
+
+This rule is `alwaysApply: false` and scoped to the memory paths above so
+it only fires when the agent is editing a memory surface.

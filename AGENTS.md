@@ -62,3 +62,27 @@ When changing capability claims, be explicit about ownership and proof:
 
 See `docs/confirmed-surfaces.md` for the current ownership map.
 See `docs/references.md` for official citation links.
+
+## Memory layer
+
+The plugin ships a file-backed memory layer (notepad, project memory,
+decisions, wiki) separate from workflow-state. Agents invoke the owner
+skills explicitly; hooks never write memory files.
+
+| Surface | Consumer path | Owner skill |
+|---------|---------------|-------------|
+| Notepad | `./notepad.md` | `skills/notepad/SKILL.md` |
+| Project memory | `./project-memory.json` | `skills/remember/SKILL.md` (router) |
+| Decisions | `./docs/decisions/` | `skills/decisions/SKILL.md` |
+| Wiki | `./docs/wiki/` | `skills/wiki/SKILL.md` |
+
+Cross-cutting policy: [`docs/memory-layer.md`](./docs/memory-layer.md).
+Routing skill: [`skills/remember/SKILL.md`](./skills/remember/SKILL.md).
+Plugin rule: [`rules/memory-and-notepad.mdc`](./rules/memory-and-notepad.mdc).
+
+When the MCP bridge is installed (`./scripts/install-local-plugin.sh
+--with-mcp`), five optional memory tools are available on
+`cursor-state-bridge` (`memory_notepad_read`,
+`memory_notepad_append_working`, `memory_project_memory_read`,
+`memory_project_memory_set_directive`, `memory_wiki_log_append`). The
+default minimal install does not require them.

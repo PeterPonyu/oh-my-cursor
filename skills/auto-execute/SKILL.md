@@ -41,7 +41,7 @@ No hooks dependencies. This skill orchestrates other skills and runs verificatio
 
 - **Lifecycle phase(s)**: all (intake → research → plan → execute → verify → review → done)
 - **Invoked by**: User (keyword: 'autopilot', 'auto execute', 'build me', 'make me', 'handle it all')
-- **Invokes**: `deep-interview`, `plan`, `iterate-loop`, `review`, `security-review`
+- **Invokes**: `deep-interview`, `plan`, `iterate-loop`, `review`, `security-review`, `remember` (optional, after review to persist durable findings)
 - **State contract**: Reads/writes `prd.json` at workspace root; optionally updates workflow-state via MCP bridge
 - **Failure handling**: Caps QA cycles at 5; if same error recurs 3 times, stops and surfaces it
 
@@ -92,7 +92,9 @@ Each phase must complete before the next begins.
    `skills/iterate-loop/SKILL.md` step 7): `APPROVE` / `passed` =>
    `pass`, `COMMENT` / `comment` => `comment`, `REQUEST CHANGES` /
    `needs_changes` / `blocking` => `block`. Any `block` is a regression: fix, re-QA,
-   re-review. Cap at three review rounds.
+   re-review. Cap at three review rounds. When the run produced durable
+   project knowledge, invoke `skills/remember/SKILL.md` once to route
+   findings to notepad, project memory, decisions, or wiki (never hooks).
 6. **Stop.** Report:
    - the spec, plan, and PRD paths,
    - the final test/build output,

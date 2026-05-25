@@ -6,5 +6,18 @@
   "author": {
     "name": "Zeyu Fu"
   },
+  "license": "MIT",
+  "homepage": "https://github.com/zeyufu/oh-my-cursor",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/zeyufu/oh-my-cursor.git"
+  },
+  "keywords": [
+    "cursor",
+    "workflow",
+    "agents",
+    "skills",
+    "hooks"
+  ],
   "mcpServers": "mcp.json"
 }
