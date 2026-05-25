@@ -16,6 +16,7 @@ const EXCLUDED_PREFIXES = [
   'apps/cursor-backbone-site/.next/',
   'apps/cursor-backbone-site/out/',
   'node_modules/',
+  'docs/plans/',
 ];
 
 const FORBIDDEN_PATTERNS: Record<string, RegExp> = {
