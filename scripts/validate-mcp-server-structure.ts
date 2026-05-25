@@ -85,7 +85,7 @@ async function main() {
   log('server.ts: no forbidden network imports');
 
   // Tool literals check
-  const REQUIRED_TOOL_NAMES = [
+  const REQUIRED_STATE_TOOL_NAMES = [
     'state_read',
     'state_init',
     'state_set_phase',
@@ -93,14 +93,22 @@ async function main() {
     'state_update_acceptance_criterion',
     'state_history_append',
   ];
+  const REQUIRED_MEMORY_TOOL_NAMES = [
+    'memory_notepad_read',
+    'memory_notepad_append_working',
+    'memory_project_memory_read',
+    'memory_project_memory_set_directive',
+    'memory_wiki_log_append',
+  ];
+  const REQUIRED_TOOL_NAMES = [...REQUIRED_STATE_TOOL_NAMES, ...REQUIRED_MEMORY_TOOL_NAMES];
 
-  for (const tool of REQUIRED_TOOL_NAMES) {
+  for (const tool of REQUIRED_STATE_TOOL_NAMES) {
     const pattern = new RegExp(`['"]${tool}['"]`);
     if (!pattern.test(serverText)) {
       fail(`server.ts does not contain required tool name as string literal: ${tool}`);
     }
   }
-  log(`server.ts: all ${REQUIRED_TOOL_NAMES.length} required tool names present`);
+  log(`server.ts: all ${REQUIRED_STATE_TOOL_NAMES.length} required state tool names present`);
 
   // Dynamically load server.ts and validate schema structure
   let serverModule: any;
@@ -147,15 +155,27 @@ async function main() {
   }
 
   const stateIoModule = await import(path.join(pkgDir, 'state_io.ts'));
-  for (const [tool, handlerName] of Object.entries(functionalTools)) {
-    if (typeof handlerName !== 'string' || typeof stateIoModule[handlerName] !== 'function') {
-      fail(`functional tool ${tool} maps to missing state_io handler ${handlerName}`);
+  const memoryIoModule = await import(path.join(pkgDir, 'memory_io.ts'));
+  const expectedStateSet = new Set(REQUIRED_STATE_TOOL_NAMES);
+  const expectedMemorySet = new Set(REQUIRED_MEMORY_TOOL_NAMES);
+  for (const [tool, handler] of Object.entries(functionalTools)) {
+    if (typeof handler !== 'function') {
+      fail(`functional tool ${tool} must map to a function handler`);
+    }
+    const sourceModule = expectedStateSet.has(tool) ? stateIoModule : expectedMemorySet.has(tool) ? memoryIoModule : null;
+    if (!sourceModule || sourceModule[tool] !== handler) {
+      fail(`functional tool ${tool} does not match exported handler in state_io.ts or memory_io.ts`);
     }
   }
 
   const stateHandlers = Object.keys(stateIoModule).filter(name => name.startsWith('state_') && typeof stateIoModule[name] === 'function');
-  if (stateHandlers.length !== expectedToolSet.size || !stateHandlers.every(n => expectedToolSet.has(n))) {
-    fail(`state_io handler drift: expected ${REQUIRED_TOOL_NAMES.sort().join(', ')}, got ${stateHandlers.sort().join(', ')}`);
+  if (stateHandlers.length !== expectedStateSet.size || !stateHandlers.every(n => expectedStateSet.has(n))) {
+    fail(`state_io handler drift: expected ${REQUIRED_STATE_TOOL_NAMES.sort().join(', ')}, got ${stateHandlers.sort().join(', ')}`);
+  }
+
+  const memoryHandlers = Object.keys(memoryIoModule).filter(name => name.startsWith('memory_') && typeof memoryIoModule[name] === 'function');
+  if (memoryHandlers.length !== expectedMemorySet.size || !memoryHandlers.every(n => expectedMemorySet.has(n))) {
+    fail(`memory_io handler drift: expected ${REQUIRED_MEMORY_TOOL_NAMES.sort().join(', ')}, got ${memoryHandlers.sort().join(', ')}`);
   }
 
   const serverInstance = new serverModule.Server(ROOT);
@@ -197,6 +217,11 @@ async function main() {
       'history_cap',
     ]),
     state_history_append: new Set(['task_id', 'event', 'note', 'phase', 'status', 'history_cap']),
+    memory_notepad_read: new Set(['path', 'workspace']),
+    memory_notepad_append_working: new Set(['note', 'path', 'workspace']),
+    memory_project_memory_read: new Set(['path', 'workspace']),
+    memory_project_memory_set_directive: new Set(['directive', 'path', 'workspace']),
+    memory_wiki_log_append: new Set(['action', 'slug', 'note', 'path', 'workspace']),
   };
 
   for (const [tool, expectedProps] of Object.entries(EXPECTED_SCHEMA_PROPERTIES)) {
