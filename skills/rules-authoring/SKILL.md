@@ -91,8 +91,8 @@ For a workspace dev rule:
 Run, in order:
 
 ```
-python3 scripts/validate-agent-bridge-contract.py
-python3 scripts/validate-public-language.py
+node --experimental-strip-types scripts/validate-agent-bridge-contract.ts
+node --experimental-strip-types scripts/validate-public-language.ts
 bash scripts/validate-plugin-structure.sh
 bash scripts/validate-rules-install-parity.sh   # for plugin-shipped rules
 ```

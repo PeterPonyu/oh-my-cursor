@@ -79,7 +79,7 @@ the same markers.
 Run:
 
 ```
-python3 scripts/validate-notepad-format.py ./notepad.md
+node --experimental-strip-types scripts/validate-notepad-format.ts ./notepad.md
 ```
 
 If the validator fails, revert the edit and surface the error. Do not

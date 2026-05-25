@@ -215,7 +215,7 @@ function main(): number {
     additionalContext = (
       'State-watcher detected schema issues in the edited workflow-state document: ' +
       errors.slice(0, 8).join('; ') +
-      '. Use scripts/validate-workflow-state.py for the full validator output.'
+      '. Use node --experimental-strip-types scripts/validate-workflow-state.ts for the full validator output.'
     );
     status = 'warning';
   } else {

@@ -102,7 +102,7 @@ No hooks dependencies. This skill runs entirely within the Cursor chat.
 5. **Validate checked-in server structure.** Run:
 
    ```bash
-   python3 scripts/validate-mcp-server-structure.py
+   node --experimental-strip-types scripts/validate-mcp-server-structure.ts
    ```
 
    This proves the repo-owned package is present and well-formed. Failure here
