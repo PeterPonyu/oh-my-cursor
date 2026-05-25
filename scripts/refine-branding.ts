@@ -11,6 +11,23 @@ const TARGET_DIRS = [
 ];
 
 const REPLACEMENTS: [string | RegExp, string][] = [
+  // Brand independence robust updates (for SSR bundles and Next.js artifacts)
+  [/sibling-context navigation/g, 'evidence-based navigation'],
+  [/Visit sibling site/g, 'Read references'],
+  [/Sibling context: oh-my-cursor/g, 'MCP State Bridge'],
+  [/Sibling context: oh-my-copilot/g, 'MCP State Bridge'],
+  [
+    'Compare the Copilot sibling homepage as context only; it is not the canonical identity root for oh-my-cursor.',
+    'Opt-in local model context protocol bridge for agent-callable workflow-state reads and writes.'
+  ],
+  [/Open sibling site/g, 'Open MCP Docs'],
+  [/Shared flagship rhythm, repo-specific boundaries\./g, 'Opt-in, local, and file-backed contract.'],
+  [
+    'The sibling link exists for context and comparison only. It does not change the canonical identity root of oh-my-cursor, and it does not imply broader ownership than this repository can prove.',
+    'Orchestrate local intake, planning, execution, and verification phases without background daemons. The workflow status is kept in .cursor/state/workflow-state.json and can be verified anytime.'
+  ],
+  [/sibling context/g, 'workflow state'],
+
   // 1. Header secondary button ("View sibling context")
   // HTML Format
   [

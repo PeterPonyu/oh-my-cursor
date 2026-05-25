@@ -93,6 +93,65 @@ const required = [
   '.cursor/state/notepad.md',
 ];
 
+
+/** Recursively collect files matching given extensions under a directory. */
+function collectFiles(dir: string, extensions: string[]): string[] {
+  const results: string[] = [];
+  if (!fs.existsSync(dir)) return results;
+  for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
+    const full = path.join(dir, entry.name);
+    if (entry.isDirectory()) {
+      results.push(...collectFiles(full, extensions));
+    } else if (extensions.some(ext => entry.name.endsWith(ext))) {
+      results.push(full);
+    }
+  }
+  return results;
+}
+
+/** Brand-independence: ensure static site output contains no forbidden branding. */
+function checkBrandIndependence() {
+  const outDir = path.join(ROOT, 'apps', 'cursor-backbone-site', 'out');
+  if (!fs.existsSync(outDir)) {
+    log('brand-independence: out/ directory absent — skipping (site not built)');
+    return;
+  }
+
+  const forbidden: { label: string; pattern: RegExp }[] = [
+    { label: 'oh-my-copilot', pattern: /oh-my-copilot/i },
+    { label: 'peterponyu', pattern: /peterponyu/i },
+    { label: 'sibling context', pattern: /sibling context/i },
+    { label: 'sibling site', pattern: /sibling site/i },
+    { label: 'sibling-context', pattern: /sibling-context/i },
+  ];
+
+  const files = collectFiles(outDir, ['.html', '.js', '.css', '.txt']);
+  const violations: string[] = [];
+
+  for (const filePath of files) {
+    const content = fs.readFileSync(filePath, 'utf-8');
+    const lines = content.split(/\r?\n/);
+    for (let lineno = 1; lineno <= lines.length; lineno++) {
+      const line = lines[lineno - 1];
+      for (const { label, pattern } of forbidden) {
+        if (pattern.test(line)) {
+          const rel = path.relative(ROOT, filePath);
+          violations.push(`${rel}:${lineno}: brand-independence: found '${label}'`);
+        }
+      }
+    }
+  }
+
+  if (violations.length > 0) {
+    console.error('FAIL: brand-independence check found forbidden branding in static site output');
+    for (const v of violations) {
+      console.error(v);
+    }
+    process.exit(1);
+  }
+  log('brand-independence: static site output is clean of forbidden branding');
+}
+
 function main() {
   // Verify required files
   for (const relativePath of required) {
@@ -124,6 +183,9 @@ function main() {
   if (!referencesText.includes('docs.cursor.com/en/cli/using')) fail('references doc must keep Cursor CLI source link');
   if (!referencesText.includes('nextjs.org/docs/app/building-your-application/deploying/static-exports')) fail('references doc must keep Next.js static export source link');
   if (!referencesText.includes('docs.github.com/en/pages/getting-started-with-github-pages/using-custom-workflows-with-github-pages')) fail('references doc must keep GitHub Pages workflow source link');
+
+  // Brand-independence check on static site output
+  checkBrandIndependence();
 
   // Overclaim scan
   const filesToScan = [
