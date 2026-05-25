@@ -23,6 +23,7 @@ import sys
 import tempfile
 import textwrap
 from pathlib import Path
+from typing import NoReturn
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -43,7 +44,7 @@ FRONTMATTER_RE = re.compile(r"^---\n(?P<body>.*?)\n---\n", re.DOTALL)
 REQUIRED_PAGE_KEYS = {"slug", "title", "created", "updated", "tags"}
 
 
-def _fail(message: str) -> None:
+def _fail(message: str) -> NoReturn:
     print(f"FAIL: {message}", file=sys.stderr)
     raise SystemExit(1)
 

@@ -30,6 +30,7 @@ import json
 import sys
 import tempfile
 from pathlib import Path
+from typing import NoReturn
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -53,7 +54,7 @@ ALLOWED_STRUCTURE_KEYS = {"src", "tests", "docs"}
 ALLOWED_USEROWNED_KEYS = {"$comment", "customNotes", "directives"}
 
 
-def _fail(message: str) -> None:
+def _fail(message: str) -> NoReturn:
     print(f"FAIL: {message}", file=sys.stderr)
     raise SystemExit(1)
 

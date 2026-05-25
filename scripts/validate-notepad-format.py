@@ -34,6 +34,7 @@ import sys
 import tempfile
 import textwrap
 from pathlib import Path
+from typing import NoReturn
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -52,7 +53,7 @@ SECTIONS = (
 )
 
 
-def _fail(message: str) -> None:
+def _fail(message: str) -> NoReturn:
     print(f"FAIL: {message}", file=sys.stderr)
     raise SystemExit(1)
 
