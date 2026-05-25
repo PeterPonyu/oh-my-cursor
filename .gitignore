@@ -39,6 +39,8 @@ Icon\r
 
 # Build artifacts
 dist/
+apps/cursor-backbone-site/.next/
+apps/cursor-backbone-site/out/
 
 # Dependencies
 node_modules/
