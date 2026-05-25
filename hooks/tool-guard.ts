@@ -7,6 +7,24 @@ import { extractFilePath, extractToolName } from './_tool_payload.ts';
 
 const EDIT_TOOLS = new Set(['Write', 'Edit', 'MultiEdit', 'NotebookEdit']);
 
+const NAMING_SLOP_PATTERNS: Array<{ name: string; regex: RegExp }> = [
+  { name: 'slop-final', regex: /-final(\.[^./]+)?$/ },
+  { name: 'slop-final-vN', regex: /-final-v\d+(\.[^./]+)?$/ },
+  { name: 'slop-backup', regex: /_backup\b/ },
+  { name: 'slop-old', regex: /_old\b/ },
+  { name: 'slop-copy', regex: /_copy\b/ },
+  { name: 'slop-vN', regex: /_v\d+(\.[^./]+)?$/ },
+  { name: 'slop-paren', regex: / \(\d+\)(\.[^./]+)?$/ },
+  { name: 'slop-space-copy', regex: / copy(\.[^./]+)?$/ },
+];
+
+function matchNamingSlop(basename: string): string {
+  for (const { name, regex } of NAMING_SLOP_PATTERNS) {
+    if (regex.test(basename)) return name;
+  }
+  return '';
+}
+
 function readPayload(): any {
   try {
     const raw = fs.readFileSync(0, 'utf-8');
@@ -67,6 +85,11 @@ function main(): number {
       `\`tools:\` allowlist (agents/${activeRole}.md). Approve to proceed or extend the allowlist.`
     );
     status = 'ask';
+  } else if (EDIT_TOOLS.has(toolName) && basename && matchNamingSlop(basename)) {
+    const slopName = matchNamingSlop(basename);
+    permission = 'ask';
+    status = 'ask';
+    message = `Tool-guard observed an edit to \`${basename}\` whose name matches the \`${slopName}\` slop pattern. Prefer overwriting the canonical file instead of creating a slop variant. Approve if this is intentional (one-off backup, migration step).`;
   }
 
   const output = {
@@ -86,6 +109,7 @@ function main(): number {
     tool_name: toolName,
     file_basename: basename,
     active_role: activeRole || '',
+    naming_slop: matchNamingSlop(basename),
   });
 
   console.log(JSON.stringify(output));
