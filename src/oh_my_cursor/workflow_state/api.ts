@@ -191,6 +191,15 @@ export function initState(
   return state;
 }
 
+const TASK_ID_SAFE_RE = /^[A-Za-z0-9._-]+$/;
+
+function _sanitizeTaskId(raw: string): string {
+  if (TASK_ID_SAFE_RE.test(raw)) {
+    return raw;
+  }
+  return raw.replace(/[^A-Za-z0-9._-]/g, '_');
+}
+
 function _archiveSession(resolvedPath: string, state: any): void {
   const sessionsDir = path.join(path.dirname(resolvedPath), 'sessions');
   try {
@@ -201,9 +210,9 @@ function _archiveSession(resolvedPath: string, state: any): void {
   }
 
   const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
-  const taskId = state.task_id || 'session';
+  const taskId = _sanitizeTaskId(String(state.task_id || 'session'));
   const sessionId = state.session_id || Math.random().toString(36).slice(2) + '-' + Date.now();
-  
+
   const archiveState = {
     ...state,
     session_id: sessionId,
@@ -211,6 +220,14 @@ function _archiveSession(resolvedPath: string, state: any): void {
   };
 
   const archiveFile = path.join(sessionsDir, `session-${taskId}-${timestamp}.json`);
+
+  // Guard: ensure resolved archive path stays inside sessionsDir
+  const resolvedArchive = path.resolve(archiveFile);
+  const resolvedSessions = path.resolve(sessionsDir);
+  if (!resolvedArchive.startsWith(resolvedSessions + path.sep)) {
+    console.error(`Warning: archive path escaped sessions directory (task_id: ${state.task_id}); skipping archive`);
+    return;
+  }
   const data = JSON.stringify(archiveState, null, 2) + '\n';
   try {
     fs.writeFileSync(archiveFile, data, 'utf-8');

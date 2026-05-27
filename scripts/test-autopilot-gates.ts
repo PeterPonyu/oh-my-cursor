@@ -176,20 +176,30 @@ try {
   if (fs.existsSync(tempRollbackFile)) {
     try { fs.unlinkSync(tempRollbackFile); } catch {}
   }
-  
+
+  // Write a small helper script that the rollback_plan can call without shell operators.
+  // rollback_plan must not use shell metacharacters (|, &, ;, >, <, `, $) because
+  // run-autopilot now invokes commands via execFileSync (no shell=true).
+  const tempRollbackScript = path.join(ROOT, 'temp_rollback_helper.mjs');
+  fs.writeFileSync(
+    tempRollbackScript,
+    `import { writeFileSync } from 'node:fs';\nwriteFileSync(${JSON.stringify(tempRollbackFile)}, 'rolled back', 'utf-8');\n`,
+    'utf-8'
+  );
+
   fs.writeFileSync(TEMP_STATE, JSON.stringify({
     task_id: "T-TEST",
     phase: "execute",
     status: "in_progress",
     history: [],
     tasks: [
-      { 
-        id: "T-1", 
-        status: "pending", 
-        role: "verifier", 
+      {
+        id: "T-1",
+        status: "pending",
+        role: "verifier",
         prompt: "verify failure trigger",
-        verification_command: "node -e 'process.exit(1)'",
-        rollback_plan: `node -e 'const fs = require(\"fs\"); fs.writeFileSync(\"${tempRollbackFile.replace(/\\/g, '\\\\')}\", \"rolled back\", \"utf-8\");'`
+        verification_command: "node --input-type=module --eval \"process.exit(1)\"",
+        rollback_plan: `node ${tempRollbackScript}`
       }
     ]
   }, null, 2));
@@ -208,6 +218,9 @@ try {
   if (fs.existsSync(tempRollbackFile)) {
     try { fs.unlinkSync(tempRollbackFile); } catch {}
   }
+  if (fs.existsSync(tempRollbackScript)) {
+    try { fs.unlinkSync(tempRollbackScript); } catch {}
+  }
 
   const resultingState = JSON.parse(fs.readFileSync(TEMP_STATE, 'utf-8'));
   const rollbackLogged = resultingState.history.some((h: any) => h.note.includes('Executed rollback plan'));
@@ -218,5 +231,10 @@ try {
 
   console.log('All Consensus Gate & Autopilot tests passed successfully!');
 } finally {
+  // Clean up temp rollback helper script if it exists
+  const helperScript = path.join(ROOT, 'temp_rollback_helper.mjs');
+  if (fs.existsSync(helperScript)) {
+    try { fs.unlinkSync(helperScript); } catch {}
+  }
   cleanup();
 }

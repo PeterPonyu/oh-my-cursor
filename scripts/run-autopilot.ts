@@ -1,7 +1,7 @@
 import * as fs from 'node:fs';
 import * as path from 'node:path';
 import process from 'node:process';
-import { execSync, spawn } from 'node:child_process';
+import { execSync, execFileSync, spawn } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 import { fileLock, resolveConfig } from '../src/oh_my_cursor/workflow_state/index.ts';
 
@@ -95,18 +95,76 @@ function updateWorkflowStatus(filePath: string, phase: string, status: string, n
   });
 }
 
+/**
+ * Parse a shell-style command string into [executable, ...args] without
+ * spawning a shell. Supports single/double-quoted tokens and backslash
+ * escaping but deliberately rejects operators (|, &, ;, >, <, `) that
+ * would only make sense in a shell context.
+ * Returns null if the string contains shell operators or is otherwise unsafe.
+ */
+function _parseArgv(cmd: string): string[] | null {
+  // Reject shell metacharacters that have no safe argv equivalent
+  if (/[|&;<>$`]/.test(cmd)) {
+    return null;
+  }
+  const tokens: string[] = [];
+  let current = '';
+  let i = 0;
+  while (i < cmd.length) {
+    const ch = cmd[i];
+    if (ch === '\\') {
+      i++;
+      if (i < cmd.length) current += cmd[i++];
+      continue;
+    }
+    if (ch === '"') {
+      i++;
+      while (i < cmd.length && cmd[i] !== '"') {
+        if (cmd[i] === '\\' && i + 1 < cmd.length) { i++; current += cmd[i++]; }
+        else { current += cmd[i++]; }
+      }
+      i++; // closing "
+      continue;
+    }
+    if (ch === "'") {
+      i++;
+      while (i < cmd.length && cmd[i] !== "'") { current += cmd[i++]; }
+      i++; // closing '
+      continue;
+    }
+    if (ch === ' ' || ch === '\t') {
+      if (current.length > 0) { tokens.push(current); current = ''; }
+      i++;
+      continue;
+    }
+    current += ch;
+    i++;
+  }
+  if (current.length > 0) tokens.push(current);
+  return tokens.length > 0 ? tokens : null;
+}
+
 function executeRollback(task: Task, statePath: string, phase: string) {
   if (task.rollback_plan) {
     console.log(`ok: Initiating rollback plan for task ${task.id}: ${task.rollback_plan}`);
     const logDir = resolveConfig(ROOT).logDir;
     fs.mkdirSync(logDir, { recursive: true });
     const logFile = path.join(logDir, `rollback-${task.id}.log`);
-    
+
+    const argv = _parseArgv(task.rollback_plan);
+    if (!argv) {
+      const msg = `Rollback plan for task ${task.id} contains shell operators and was rejected for safety: ${task.rollback_plan}`;
+      fs.writeFileSync(logFile, msg, 'utf-8');
+      console.error(`FAIL: ${msg}`);
+      updateWorkflowStatus(statePath, phase, 'blocked', `Task ${task.id} failed. Rollback rejected (shell operators): ${task.rollback_plan}`);
+      return;
+    }
+
     try {
-      const output = execSync(task.rollback_plan, { cwd: ROOT, encoding: 'utf-8' });
+      const output = execFileSync(argv[0], argv.slice(1), { cwd: ROOT, encoding: 'utf-8' });
       fs.writeFileSync(logFile, output, 'utf-8');
       console.log(`ok: Rollback completed successfully for task ${task.id}. Logs written to ${logFile}`);
-      
+
       updateWorkflowStatus(
         statePath,
         phase,
@@ -117,7 +175,7 @@ function executeRollback(task: Task, statePath: string, phase: string) {
       const errorMsg = err.stdout || err.message || String(err);
       fs.writeFileSync(logFile, errorMsg, 'utf-8');
       console.error(`FAIL: Rollback command failed for task ${task.id}: ${err.message}`);
-      
+
       updateWorkflowStatus(
         statePath,
         phase,
@@ -319,8 +377,15 @@ async function main() {
         // Run Verification Command
         if (nextTask.verification_command) {
           console.log(`ok: Running verification command for task ${nextTask.id}: ${nextTask.verification_command}`);
+          const vArgv = _parseArgv(nextTask.verification_command);
+          if (!vArgv) {
+            console.error(`FAIL: Verification command for task ${nextTask.id} contains shell operators and was rejected for safety: ${nextTask.verification_command}`);
+            updateTaskStatus(statePath, nextTask.id, 'failed', `Verification command rejected (shell operators) for task ${nextTask.id}`);
+            executeRollback(nextTask, statePath, phase);
+            process.exit(1);
+          }
           try {
-            execSync(nextTask.verification_command, { cwd: ROOT, stdio: 'inherit' });
+            execFileSync(vArgv[0], vArgv.slice(1), { cwd: ROOT, stdio: 'inherit' });
             console.log(`ok: Verification passed for task ${nextTask.id}`);
           } catch (err: any) {
             console.error(`FAIL: Verification failed for task ${nextTask.id}: ${err.message}`);

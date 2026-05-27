@@ -30,7 +30,7 @@ The repository currently owns only these checked-in state-like surfaces:
 - `AGENTS.md`
 - `.cursor/rules/*.mdc`
 - `.cursor-plugin/plugin.json`
-- `hooks/hooks.json` and `hooks/` (`session-bootstrap.py`, `session-summary.py`, `prompt-router.py`, `tool-guard.py`, `state-watcher.py`, `failure-router.py`, `subagent-bootstrap.py`, `subagent-summary.py`, `shell-guard.py`, `shell-debrief.py`, `read-advisor.py`, `claim-guard.py`, `compact-reminder.py`, `stop-gate.py`)
+- `hooks/hooks.json` and `hooks/` (`session-bootstrap.ts`, `session-summary.ts`, `prompt-router.ts`, `tool-guard.ts`, `state-watcher.ts`, `failure-router.ts`, `subagent-bootstrap.ts`, `subagent-summary.ts`, `shell-guard.ts`, `shell-debrief.ts`, `read-advisor.ts`, `claim-guard.ts`, `compact-reminder.ts`, `stop-gate.ts`)
 - `agents/` (`orchestrator`, `architect`, `researcher`, `planner`,
   `implementer`, `qa-tester`, `verifier`, `critic`, `code-reviewer`,
   `debugger`, `tracer`, `security-reviewer`, `explore`, `test-engineer`)
@@ -41,7 +41,7 @@ The repository currently owns only these checked-in state-like surfaces:
   `skills/phase-controller/SKILL.md`
 - bounded documentation, including `docs/orchestration.md`
 - local validators and optional runtime-smoke scripts (including
-  `scripts/validate-workflow-state.py`)
+  `scripts/validate-workflow-state.ts`)
 - `apps/cursor-backbone-site/` and `.github/workflows/deploy-pages.yml` only
   when they are actually checked in and locally validated
 
@@ -75,7 +75,7 @@ tmp+rename. The cap is configurable per call via `history_cap` (library
 API and bridge tool params) or `--history-cap N` on the CLI shim, and
 `history_cap=0` opts out of compaction. Eviction preserves timestamp
 monotonicity by retaining the trailing window of the array. Local
-verification: `python3 scripts/validate-workflow-state.py
+verification: `node --experimental-strip-types scripts/validate-workflow-state.ts
 --check-history-cap 1000 <path>` enforces the cap and re-checks the
 monotonic invariant.
 
@@ -83,9 +83,9 @@ monotonic invariant.
 
 The `.cursor/state/workflow-state.schema.json` schema defines the shape of an
 opt-in, file-backed workflow-state document used by the `phase-controller`
-skill and the `stop-gate.py` hook. Documents that follow the schema are the
+skill and the `stop-gate.ts` hook. Documents that follow the schema are the
 only state object hooks may **read**; nothing in this repo writes that state
-automatically. The validator at `scripts/validate-workflow-state.py` keeps the
+automatically. The validator at `scripts/validate-workflow-state.ts` keeps the
 contract honest. See [`docs/orchestration.md`](./orchestration.md) for the full
 lifecycle map.
 

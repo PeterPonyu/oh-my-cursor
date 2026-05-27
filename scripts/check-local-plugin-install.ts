@@ -50,15 +50,19 @@ function parseArgs() {
 
 function runNode(script: string, args: string[]): string {
   const abs = path.resolve(REPO_ROOT, script);
-  return execSync(`node --experimental-strip-types "${abs}" ${args.join(' ')}`, { encoding: 'utf-8' });
+  // Use execFileSync with argv array to avoid shell injection
+  return execSync(
+    `node --experimental-strip-types "${abs}" ${args.map(a => a.replace(/"/g, '\\"')).join(' ')}`,
+    { encoding: 'utf-8' }
+  );
 }
 
 function main() {
   parseArgs();
 
-  // Validate plugin structure first
+  // Validate plugin structure first (against sourceRoot, not REPO_ROOT)
   try {
-    execSync(`node --experimental-strip-types "${path.join(REPO_ROOT, 'scripts', 'validate-plugin-structure.ts')}"`, { stdio: 'ignore' });
+    execSync(`node --experimental-strip-types "${path.join(REPO_ROOT, 'scripts', 'validate-plugin-structure.ts')}" --root "${sourceRoot}"`, { stdio: 'ignore' });
   } catch (err: any) {
     fail(`validation of source root structure failed: ${err.message}`);
   }
@@ -78,6 +82,7 @@ function main() {
 
     // Run symlink install
     runNode('scripts/install-local-plugin.ts', [
+      '--root', `"${sourceRoot}"`,
       '--target-root', `"${symlinkTarget}"`,
       '--name', pluginName,
       '--symlink',
@@ -98,6 +103,7 @@ function main() {
 
     if (fs.existsSync(path.join(sourceRoot, 'mcp'))) {
       runNode('scripts/install-local-plugin.ts', [
+        '--root', `"${sourceRoot}"`,
         '--target-root', `"${symlinkTarget}"`,
         '--name', pluginName,
         '--symlink',
@@ -111,6 +117,7 @@ function main() {
 
     // Run copy install
     const copyArgs = [
+      '--root', `"${sourceRoot}"`,
       '--target-root', `"${copyTarget}"`,
       '--name', pluginName,
       '--copy',

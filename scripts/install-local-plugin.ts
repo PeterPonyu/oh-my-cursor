@@ -97,7 +97,14 @@ function shouldCopy(relPath: string, withMcpOption: boolean): boolean {
     parts.includes('apps') ||
     parts.includes('docs') ||
     parts.includes('scripts') ||
-    parts.includes('tests')
+    parts.includes('tests') ||
+    // local cache / virtualenv / runtime artifacts — never ship in plugin payload
+    parts.includes('.conda') ||
+    parts.includes('.mypy_cache') ||
+    parts.includes('.ruff_cache') ||
+    parts.includes('.sisyphus') ||
+    parts.includes('.cursor-agent-logs') ||
+    parts.includes('.omx')
   ) {
     return false;
   }

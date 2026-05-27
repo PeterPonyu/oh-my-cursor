@@ -53,8 +53,8 @@ features:
       - publish docs/orchestration.md as the orchestration-first entry point
       - ship .cursor/state/workflow-state.schema.json plus a documented example
       - ship skills/phase-controller/SKILL.md as the orchestration entry skill
-      - extend stop-gate.py to surface pending acceptance criteria from an active workflow-state file
-      - validate state documents locally with scripts/validate-workflow-state.py
+      - extend stop-gate.ts to surface pending acceptance criteria from an active workflow-state file
+      - validate state documents locally with scripts/validate-workflow-state.ts
       - provide the packaged workflow-state API plus CLI compatibility shim so users can intentionally create or update local workflow-state JSON files
   validators:
     goal: Make the new workflow artifacts locally provable.
@@ -71,17 +71,17 @@ features:
 
 acceptance_criteria:
   - docs/PRD.yaml exists and describes the independent product posture.
-  - hooks/hooks.json wires sessionStart, sessionEnd, beforeSubmitPrompt, preToolUse, postToolUse, postToolUseFailure, subagentStart, subagentStop, beforeShellExecution, afterShellExecution, beforeReadFile, afterFileEdit, preCompact, and stop events to checked-in lifecycle hook scripts (session-bootstrap.py, session-summary.py, prompt-router.py, tool-guard.py, state-watcher.py, failure-router.py, subagent-bootstrap.py, subagent-summary.py, shell-guard.py, shell-debrief.py, read-advisor.py, claim-guard.py, compact-reminder.py, and stop-gate.py).
-  - hooks/ contains README.md plus stdlib-only Python hook scripts that emit valid JSON.
+  - hooks/hooks.json wires sessionStart, sessionEnd, beforeSubmitPrompt, preToolUse, postToolUse, postToolUseFailure, subagentStart, subagentStop, beforeShellExecution, afterShellExecution, beforeReadFile, afterFileEdit, preCompact, and stop events to checked-in lifecycle hook scripts (session-bootstrap.ts, session-summary.ts, prompt-router.ts, tool-guard.ts, state-watcher.ts, failure-router.ts, subagent-bootstrap.ts, subagent-summary.ts, shell-guard.ts, shell-debrief.ts, read-advisor.ts, claim-guard.ts, compact-reminder.ts, and stop-gate.ts).
+  - hooks/ contains README.md plus TypeScript hook scripts that emit valid JSON.
   - agents/ contains orchestrator, researcher, planner, implementer, verifier, critic, code-reviewer, debugger, tracer, security-reviewer, qa-tester, architect, explore, and test-engineer prompts with valid frontmatter.
   - .cursor/state ships workflow-state.schema.json, workflow-state.example.json, and a README that explains the contract.
   - skills/phase-controller/SKILL.md is the documented orchestration entry skill.
   - docs/orchestration.md is the orchestration-first overview and is referenced from README.md.
   - .cursor-plugin/plugin.json references rules, skills, agents, and hooks.
-  - scripts/validate-public-language.py prints PUBLIC_LANGUAGE_OK when public text is clean.
-  - scripts/validate-cursor-workflow-artifacts.py prints HOOKS_ARTIFACTS_OK and AGENTS_ARTIFACTS_OK when artifacts are valid.
-  - scripts/validate-workflow-state.py prints WORKFLOW_STATE_OK for a valid state document.
-  - scripts/workflow-state.py and the installed compatibility shim can initialize and update a local workflow-state JSON file.
+  - scripts/validate-public-language.ts prints PUBLIC_LANGUAGE_OK when public text is clean.
+  - scripts/validate-cursor-workflow-artifacts.ts prints HOOKS_ARTIFACTS_OK and AGENTS_ARTIFACTS_OK when artifacts are valid.
+  - scripts/validate-workflow-state.ts prints WORKFLOW_STATE_OK for a valid state document.
+  - scripts/workflow-state.ts and the installed compatibility shim can initialize and update a local workflow-state JSON file.
   - scripts/smoke-cursor-workflow-artifacts.sh exercises both hook scripts and artifact validation.
   - scripts/verify-backbone.sh runs the new validators.
   - Core docs and required skills describe the repository as a self-developed Cursor-native product with artifact-backed proof.
@@ -92,15 +92,15 @@ mcp_acceptance_criteria:
   AC-103: { phase: 1, status: shipped, summary: "smoke --jail-escape returns -32602 with jail-escape prefix" }
   AC-104: { phase: 1, status: shipped, summary: "validate-public-language clean against new public files" }
   AC-105: { phase: 1, status: shipped, summary: "default install does not include mcp/" }
-  AC-106: { phase: 1, status: shipped, summary: "--with-mcp install includes mcp/cursor-state-bridge/server.py" }
+  AC-106: { phase: 1, status: shipped, summary: "--with-mcp install includes mcp/cursor-state-bridge/server.ts" }
   AC-107: { phase: 1, status: shipped, summary: "validate-plugin-structure --self-test rejects tracked .cursor/mcp.json" }
   AC-108: { phase: 1, status: shipped, summary: ".cursor/mcp.example.json byte-equal to canonical fixture" }
   AC-109: { phase: 1, status: shipped, summary: "smoke fast-path bounded when RUN_MCP_BRIDGE_SMOKE unset" }
   AC-110: { phase: 1, status: shipped, summary: "validate-plugin-structure allowlists .cursor/mcp.example.json" }
-  AC-201: { phase: 2, status: shipped, summary: "src/oh_my_cursor/workflow_state/api.py exposes typed library API for six entrypoints" }
-  AC-202: { phase: 2, status: shipped, summary: "bridge state_io.py imports library; zero subprocess hits" }
+  AC-201: { phase: 2, status: shipped, summary: "src/oh_my_cursor/workflow_state/api.ts exposes typed library API for six entrypoints" }
+  AC-202: { phase: 2, status: shipped, summary: "bridge state_io.ts imports library; zero subprocess hits" }
   AC-203: { phase: 2, status: shipped, summary: "CLI shim still works after refactor; validate-state-contract green" }
-  AC-204: { phase: 2, status: shipped, summary: "all writes acquire shared file_lock from src/oh_my_cursor/workflow_state/locking.py" }
+  AC-204: { phase: 2, status: shipped, summary: "all writes acquire shared file_lock from src/oh_my_cursor/workflow_state/locking.ts" }
   AC-205: { phase: 2, status: shipped, summary: "validate-workflow-state passes example state document" }
   AC-206: { phase: 2, status: shipped, summary: "test_library_api covers six entrypoints, zero argparse mocks" }
   AC-207: { phase: 2, status: shipped, summary: "workflow-state locking shim imports cleanly on POSIX" }

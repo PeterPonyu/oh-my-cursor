@@ -51,5 +51,11 @@ jobs:
       - name: Run Backbone Verification Suite
         run: node --experimental-strip-types scripts/verify-backbone.ts
 
+      - name: Validate Rename References (drift guard)
+        run: node --experimental-strip-types scripts/validate-rename-references.ts
+
       - name: Run Memory Layer Tests
         run: node --experimental-strip-types --test tests/memory/*.test.ts
+
+      - name: Run Security Regression Tests
+        run: node --experimental-strip-types --test tests/security/*.test.ts

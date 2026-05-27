@@ -132,7 +132,7 @@ with criteria that name a file, a command, or an observable behavior.
 
 When a workflow-state document is in scope, mirror PRD progress to
 `.cursor/state/workflow-state.json` through the `cursor-state-bridge` MCP
-tools so verifiers and `stop-gate.py` can read it:
+tools so verifiers and `stop-gate.ts` can read it:
 
 - `state_update_acceptance_criterion` when a story flips to `passes: true`,
   passing the supporting `evidence` reference (file path or command output

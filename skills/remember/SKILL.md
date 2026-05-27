@@ -10,7 +10,7 @@ explicit, file-backed decision. It is the router for the oh-my-cursor
 memory layer.
 
 The skill is **agent-invoked, not hook-triggered**. The plugin's hooks
-(`claim-guard.py`, `stop-gate.py`, etc.) never write memory; they may
+(`claim-guard.ts`, `stop-gate.ts`, etc.) never write memory; they may
 remind the user that this skill exists. All routing happens here.
 
 ## When to use
