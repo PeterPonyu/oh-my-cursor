@@ -49,7 +49,7 @@ This is **defense-in-depth only**, not perimeter security:
   `.cursor/mcp.example.json` carries `<placeholder>` precisely so users
   do not commit real tokens.
 - `.cursor/mcp.json` is gitignored and is rejected by
-  `scripts/validate-plugin-structure.sh` if accidentally tracked.
+  `scripts/validate-plugin-structure.ts` if accidentally tracked.
 
 ## Why default OFF
 

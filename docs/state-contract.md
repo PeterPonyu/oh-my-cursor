@@ -133,9 +133,9 @@ Run:
 
 ```bash
 node --experimental-strip-types scripts/install-local-plugin.ts
-./scripts/check-local-plugin-install.sh
-./scripts/check-default-auth.sh
-./scripts/validate-state-contract.sh
+node --experimental-strip-types scripts/check-local-plugin-install.ts
+node --experimental-strip-types scripts/check-default-auth.ts
+node --experimental-strip-types scripts/validate-state-contract.ts
 ```
 
 The validation script keeps this state contract bounded to checked-in proof.
