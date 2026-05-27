@@ -8,6 +8,8 @@ on:
       - "scripts/**/*.ts"
       - "hooks/**/*.ts"
       - "src/**/*.ts"
+      - "tests/**"
+      - "mcp/**"
       - ".github/workflows/node-ts-ci.yml"
 
 jobs:
@@ -48,3 +50,6 @@ jobs:
 
       - name: Run Backbone Verification Suite
         run: node --experimental-strip-types scripts/verify-backbone.ts
+
+      - name: Run Memory Layer Tests
+        run: node --experimental-strip-types --test tests/memory/*.test.ts
