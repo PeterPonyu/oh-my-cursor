@@ -133,7 +133,7 @@ function main(): number {
       'Compact-reminder: no active workflow-state document was reachable at ' +
       '.cursor/state/workflow-state.json or via override. If a task is in ' +
       'flight, run `state_init` through the cursor-state-bridge MCP server ' +
-      '(or `python3 scripts/workflow-state.py init ...` from the repo root) before the ' +
+      '(or `node --experimental-strip-types scripts/workflow-state.ts init ...` from the repo root) before the ' +
       'next compaction so the post-compact summary keeps the orchestration ' +
       'anchors.'
     );

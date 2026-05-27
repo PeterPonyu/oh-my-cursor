@@ -59,7 +59,7 @@ function main(): number {
   const parts = [
     `Tool failure observed.${toolName ? ` Tool: ${toolName}.` : ''}${failureType ? ` Failure type: ${failureType}.` : ''}`,
     'Route this failure through agents/debugger.md before retrying.',
-    `Record the failure with cursor-state-bridge tools or scripts/workflow-state.py using one of: ${[...FAILURE_TYPES].sort().join(', ')}.`,
+    `Record the failure with cursor-state-bridge tools or \`node --experimental-strip-types scripts/workflow-state.ts\` using one of: ${[...FAILURE_TYPES].sort().join(', ')}.`,
   ];
 
   if (errorMessage) {

@@ -65,8 +65,8 @@ function main(): number {
     permission = 'ask';
     message = (
       'Tool-guard observed a direct edit to a workflow-state.json document. ' +
-      'Prefer the cursor-state-bridge tools or scripts/workflow-state.py ' +
-      '(the installed `.cursor/state/workflow-state.py` path is a compatibility shim) so phase, ' +
+      'Prefer the cursor-state-bridge tools or `node --experimental-strip-types scripts/workflow-state.ts` ' +
+      '(the installed `.cursor/state/workflow-state.ts` path is a compatibility shim) so phase, ' +
       'acceptance criteria, and history advance through one bounded path.'
     );
     status = 'ask';
