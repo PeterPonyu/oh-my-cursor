@@ -13,10 +13,10 @@ distinct.
 
 ## Scopes
 
-| Scope | Path | Ships with `install-local-plugin.sh`? | When to use |
+| Scope | Path | Ships with `install-local-plugin.ts`? | When to use |
 |-------|------|----------------------------------------|-------------|
 | Plugin-shipped | `rules/*.mdc` | YES — copied into `~/.cursor/plugins/local/oh-my-cursor/rules/` | Rules that should apply in every consumer workspace that installs this plugin |
-| Workspace dev-only | `.cursor/rules/*.mdc` | NO — explicitly excluded by `--exclude='/.cursor/rules/'` in `install-local-plugin.sh` | Rules that govern editing this repo (docs claims, commit discipline, error handling, memory templates) |
+| Workspace dev-only | `.cursor/rules/*.mdc` | NO — explicitly excluded by `--exclude='/.cursor/rules/'` in `install-local-plugin.ts` | Rules that govern editing this repo (docs claims, commit discipline, error handling, memory templates) |
 
 The exclude in the install script is deliberate. Workspace dev rules tell
 the *maintainer* what to do when editing this repository; they would be
@@ -50,7 +50,7 @@ Run every time a rule is added or edited:
 | Validator | What it checks |
 |-----------|-----------------|
 | `scripts/validate-plugin-structure.sh` | New plugin-shipped rule must be listed in the `required` array if it is part of the contract |
-| `scripts/validate-rules-install-parity.sh` | Every `rules/*.mdc` shipped in the repo is also present in the install payload (when `install-local-plugin.sh` is run) |
+| `scripts/validate-rules-install-parity.sh` | Every `rules/*.mdc` shipped in the repo is also present in the install payload (when `install-local-plugin.ts` is run) |
 | `scripts/validate-agent-bridge-contract.py` | Rules must not invoke the workflow-state writer CLI or reference archived doc paths |
 | `scripts/validate-public-language.py` | Rules must not contain validator-forbidden legacy package names |
 

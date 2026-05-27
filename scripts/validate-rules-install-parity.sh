@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Validate that every plugin-shipped rule in rules/ would be copied into the
-# install payload by scripts/install-local-plugin.sh.
+# install payload by scripts/install-local-plugin.ts.
 #
 # We do not actually install into ~/.cursor/plugins/local. Instead we rsync
 # the same include/exclude pattern into a temporary directory and compare
@@ -8,7 +8,7 @@
 # both directions:
 #
 #   1. A new rule was added to rules/ but the install script's include list
-#      was changed to exclude it (regression in install-local-plugin.sh).
+#      was changed to exclude it (regression in install-local-plugin.ts).
 #   2. The install script started including .cursor/rules/ even though the
 #      repo's intent is to keep those workspace-dev only.
 #
@@ -29,7 +29,7 @@ command -v rsync >/dev/null 2>&1 || fail "rsync is required"
 TMP_PAYLOAD="$(mktemp -d -t omcs-rules-parity.XXXXXX)"
 trap 'rm -rf "$TMP_PAYLOAD"' EXIT
 
-# Mirror the rsync invocation in scripts/install-local-plugin.sh
+# Mirror the rsync invocation in scripts/install-local-plugin.ts
 # copy_minimal_payload(). We only need the subset of includes that touch
 # rules/ and .cursor/rules/; the other surfaces have their own validators.
 rsync -a -m \

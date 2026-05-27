@@ -118,7 +118,7 @@ permission, status, checked-file basename, error counts, and so on). The
 A typical live-runtime capture looks like:
 
 ```bash
-./scripts/install-local-plugin.sh
+node --experimental-strip-types scripts/install-local-plugin.ts
 mkdir -p .omc && rm -f .omcs/hook-trace.live.log
 OH_MY_CURSOR_HOOK_TRACE=1 \
   OH_MY_CURSOR_HOOK_TRACE_FILE="$PWD/.omcs/hook-trace.live.log" \

@@ -93,7 +93,7 @@ function main(): number {
     message = (
       'Shell-guard flagged a severe pattern that would corrupt repo-owned state or the local plugin install: ' +
       severe.join(', ') +
-      '. Use scripts/workflow-state.py for state edits and scripts/install-local-plugin.sh for the local plugin path.'
+      '. Use scripts/workflow-state.py for state edits and scripts/install-local-plugin.ts for the local plugin path.'
     );
     status = 'severe';
   } else if (warnings.length > 0) {

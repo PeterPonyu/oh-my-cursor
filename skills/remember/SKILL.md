@@ -136,7 +136,7 @@ their own owner skills.
 | `memory_wiki_log_append` | cursor-state-bridge (with-mcp) | Append a wiki log entry | No |
 | `state_history_append` | cursor-state-bridge | Append a workflow-state history note | No |
 
-Bridge is opt-in via `./scripts/install-local-plugin.sh --with-mcp`.
+Bridge is opt-in via `node --experimental-strip-types scripts/install-local-plugin.ts --with-mcp`.
 Without the bridge, the agent edits files directly with normal file tools.
 
 ## Hooks Dependencies

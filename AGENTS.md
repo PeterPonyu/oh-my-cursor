@@ -45,7 +45,7 @@ checked-in artifacts versus Cursor product capabilities.
   `test-engineer`), `.cursor/state/`, and their validators.
 - The MCP server at `mcp/cursor-state-bridge/` is `repo-owned` opt-in:
   the default plugin install excludes it; users add it via
-  `./scripts/install-local-plugin.sh --with-mcp` using the template at
+  `node --experimental-strip-types scripts/install-local-plugin.ts --with-mcp` using the template at
   `mcp.json`.
 
 ## Claim/proof discipline
@@ -80,8 +80,7 @@ Cross-cutting policy: [`docs/memory-layer.md`](./docs/memory-layer.md).
 Routing skill: [`skills/remember/SKILL.md`](./skills/remember/SKILL.md).
 Plugin rule: [`rules/memory-and-notepad.mdc`](./rules/memory-and-notepad.mdc).
 
-When the MCP bridge is installed (`./scripts/install-local-plugin.sh
---with-mcp`), five optional memory tools are available on
+When the MCP bridge is installed (`node --experimental-strip-types scripts/install-local-plugin.ts --with-mcp`), five optional memory tools are available on
 `cursor-state-bridge` (`memory_notepad_read`,
 `memory_notepad_append_working`, `memory_project_memory_read`,
 `memory_project_memory_set_directive`, `memory_wiki_log_append`). The

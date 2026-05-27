@@ -96,7 +96,7 @@ through normal file tools or, optionally, through the bridge.
 5. Add a SKILL.md under `skills/` (if a new owner skill is needed).
 6. Update `rules/memory-and-notepad.mdc` to mention the new surface in
    its rule body.
-7. Update `scripts/install-local-plugin.sh` to include the new template
+7. Update `scripts/install-local-plugin.ts` to include the new template
    in the rsync payload.
 8. Update `scripts/validate-plugin-structure.sh` to require the new
    template + validator.
@@ -107,8 +107,7 @@ See `.cursor/rules/40-memory-layer.mdc` for the workspace dev checklist.
 
 ## Optional MCP bridge tools
 
-When the bridge is installed via `./scripts/install-local-plugin.sh
---with-mcp`, the following memory tools are available:
+When the bridge is installed via `node --experimental-strip-types scripts/install-local-plugin.ts --with-mcp`, the following memory tools are available:
 
 | Tool | Purpose |
 |------|---------|

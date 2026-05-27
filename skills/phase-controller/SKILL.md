@@ -155,7 +155,7 @@ This skill provides the orchestration entry point for `oh-my-cursor` workflows. 
 | `state_history_append` | cursor-state-bridge | Append run notes | No |
 | `state_read` | cursor-state-bridge | Read current state | No |
 
-MCP bridge is opt-in via `./scripts/install-local-plugin.sh --with-mcp`. When the bridge is not installed, the skill still reads workflow-state and reports the next structured update the user or host should apply; it does not authorize direct JSON edits from an agent.
+MCP bridge is opt-in via `node --experimental-strip-types scripts/install-local-plugin.ts --with-mcp`. When the bridge is not installed, the skill still reads workflow-state and reports the next structured update the user or host should apply; it does not authorize direct JSON edits from an agent.
 
 ## Hook dependencies
 

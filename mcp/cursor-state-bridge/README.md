@@ -27,7 +27,7 @@ tightened.
 The package is excluded from the default minimal plugin install. Two steps:
 
 ```bash
-./scripts/install-local-plugin.sh --with-mcp
+node --experimental-strip-types scripts/install-local-plugin.ts --with-mcp
 ```
 
 Then create `.cursor/mcp.json` from the checked-in template in a trusted

@@ -30,7 +30,7 @@ This skill provides bridge-backed verification that reads workflow-state accepta
 | `state_update_acceptance_criterion` | cursor-state-bridge | Record criterion pass/fail with evidence | Yes | optional |
 | `state_history_append` | cursor-state-bridge | Append verification run notes | No | optional |
 
-**Note**: MCP bridge is opt-in via `./scripts/install-local-plugin.sh --with-mcp`. This skill requires the bridge to be installed and available.
+**Note**: MCP bridge is opt-in via `node --experimental-strip-types scripts/install-local-plugin.ts --with-mcp`. This skill requires the bridge to be installed and available.
 
 ## Hooks Dependencies
 
