@@ -14,29 +14,29 @@ to consumer workspaces).
 - New memory templates live under `docs/templates/`. Do not put runtime
   files in `docs/templates/`; templates are documentation.
 - Every new memory surface must have a validator under `scripts/`,
-  pytest coverage under `tests/memory/`, and a row in
+  node:test coverage under `tests/memory/`, and a row in
   `docs/memory-layer.md`.
 - Every new template must be listed in the `required` array of
-  `scripts/validate-plugin-structure.sh` and included in the rsync payload
-  of `scripts/install-local-plugin.sh`.
+  `scripts/validate-plugin-structure.ts` and included in the rsync payload
+  of `scripts/install-local-plugin.ts`.
 - The new skills (`remember`, `notepad`, `wiki`, `decisions`,
   `rules-authoring`) must carry the standard governance block: Ownership
   Class, Proof Class, Claim Summary, MCP Integration Points, Hooks
   Dependencies, Orchestration Role.
 - Hooks may **read** memory paths for observability (e.g. a future
   compact-reminder mention of notepad) but must not **write** them. This
-  is enforced by `scripts/validate-hook-readonly.py`.
+  is enforced by `scripts/validate-hook-readonly.ts`.
 
 ## When updating
 
 - If you add or rename a memory template, update `docs/memory-layer.md`,
   `AGENTS.md`, `README.md`, `docs/confirmed-surfaces.md`, the validator
-  list in `scripts/validate-plugin-structure.sh`, and the rsync include
-  list in `scripts/install-local-plugin.sh` in the same change.
+  list in `scripts/validate-plugin-structure.ts`, and the rsync include
+  list in `scripts/install-local-plugin.ts` in the same change.
 - If you rename a skill, also update `skills/phase-controller/SKILL.md` and
   `skills/auto-execute/SKILL.md` if they cite it.
 - If you change a section cap in `notepad.md`, update the cap in
-  `scripts/validate-notepad-format.py` and in the template at
+  `scripts/validate-notepad-format.ts` and in the template at
   `docs/templates/notepad.md` together.
 
 ## Why this is workspace-dev only
