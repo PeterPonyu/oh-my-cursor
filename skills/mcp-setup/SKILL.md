@@ -74,7 +74,7 @@ No hooks dependencies. This skill runs entirely within the Cursor chat.
 
 1. **Confirm repo context.** Check that the workspace contains the repo-owned
    bridge artifacts: `mcp/cursor-state-bridge/`, `.cursor/mcp.example.json`,
-   `scripts/install-local-plugin.sh`,
+   `scripts/install-local-plugin.ts`,
    `scripts/validate-mcp-server-structure.py`, and
    `scripts/smoke-mcp-cursor-state-bridge.sh`.
 2. **Check prerequisites before fixing.** Confirm that local shell access can
@@ -84,7 +84,7 @@ No hooks dependencies. This skill runs entirely within the Cursor chat.
    `mcp/`. To include the bridge, run:
 
    ```bash
-   ./scripts/install-local-plugin.sh --with-mcp
+   node --experimental-strip-types scripts/install-local-plugin.ts --with-mcp
    ```
 
    Report whether the install was already present, newly run, or skipped by

@@ -43,7 +43,7 @@ No hooks dependencies. This skill runs entirely within the Cursor chat.
 - A new clone or branch needs to confirm the plugin payload is intact.
 - After editing `.cursor-plugin/plugin.json`, hooks, agents, or rules.
 - Before reporting "the local plugin works on my machine" to a teammate.
-- As a smoke check after `./scripts/install-local-plugin.sh`.
+- As a smoke check after `node --experimental-strip-types scripts/install-local-plugin.ts`.
 
 ## Skip when
 

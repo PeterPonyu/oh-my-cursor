@@ -33,7 +33,7 @@ The bridge is shipped under the repo's claim/proof discipline:
   bridge, and the smoke is a fast no-op when the env gate is unset.
 
 The default plugin install excludes `mcp/`. Users opt in with
-`./scripts/install-local-plugin.sh --with-mcp`. The user-environment
+`node --experimental-strip-types scripts/install-local-plugin.ts --with-mcp`. The user-environment
 config file `.cursor/mcp.json` stays gitignored; the repo only ships the
 template at `.cursor/mcp.example.json`.
 
@@ -52,7 +52,7 @@ template at `.cursor/mcp.example.json`.
 
 ```bash
 # install opt-in
-./scripts/install-local-plugin.sh --with-mcp
+node --experimental-strip-types scripts/install-local-plugin.ts --with-mcp
 
 # template-to-config (one time, from this trusted oh-my-cursor checkout)
 cp .cursor/mcp.example.json .cursor/mcp.json   # edit placeholders if needed

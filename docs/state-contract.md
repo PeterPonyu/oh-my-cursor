@@ -132,7 +132,7 @@ exist together.
 Run:
 
 ```bash
-./scripts/install-local-plugin.sh
+node --experimental-strip-types scripts/install-local-plugin.ts
 ./scripts/check-local-plugin-install.sh
 ./scripts/check-default-auth.sh
 ./scripts/validate-state-contract.sh

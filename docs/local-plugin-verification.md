@@ -160,7 +160,7 @@ When making rapid edits to rules, skills, hooks, or agents, use symlink mode
 instead of the full rebuild cycle:
 
 ```bash
-./scripts/install-local-plugin.sh --symlink
+node --experimental-strip-types scripts/install-local-plugin.ts --symlink
 # edit files in the repo
 # run Developer: Reload Window in Cursor to pick up changes
 ```

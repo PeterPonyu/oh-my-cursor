@@ -26,7 +26,7 @@
 - **不要**假定自定义模式（custom modes）具有检入的项目文件格式，除非该格式有官方文档的正式记录。
 - **不要**假定后台智能体（background agents）是从仓库文件中自动配置并运行的，除非有明文文档记录。
 - 生命周期钩子、智能体和工作流状态助手仅在以下范围内属于“仓库所有（repo-owned）”：`hooks/hooks.json`、`hooks/`、`agents/`（14个角色：`orchestrator`、`architect`、`researcher`、`planner`、`implementer`、`qa-tester`、`verifier`、`critic`、`code-reviewer`、`debugger`、`tracer`、`security-reviewer`、`explore`、`test-engineer`）、`.cursor/state/` 及其关联验证器。
-- 位于 `mcp/cursor-state-bridge/` 的 MCP 服务是仓库所有（repo-owned）的**可选（opt-in）**组件：默认插件安装会将其排除；用户可以通过 `./scripts/install-local-plugin.sh --with-mcp`（使用 `mcp.json` 作为模板）来手动添加它。
+- 位于 `mcp/cursor-state-bridge/` 的 MCP 服务是仓库所有（repo-owned）的**可选（opt-in）**组件：默认插件安装会将其排除；用户可以通过 `node --experimental-strip-types scripts/install-local-plugin.ts --with-mcp`（使用 `mcp.json` 作为模板）来手动添加它。
 
 ## 功能声明与证明规范
 

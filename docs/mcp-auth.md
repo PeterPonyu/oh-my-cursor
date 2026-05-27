@@ -54,7 +54,7 @@ This is **defense-in-depth only**, not perimeter security:
 ## Why default OFF
 
 The bridge is meant to be installed by the user explicitly via
-`./scripts/install-local-plugin.sh --with-mcp` and then launched from a
+`node --experimental-strip-types scripts/install-local-plugin.ts --with-mcp` and then launched from a
 trusted parent (an editor or CI runner the user controls).  Requiring
 auth by default would raise the floor for every user who does not need
 it, while still leaving the higher-value attack surface

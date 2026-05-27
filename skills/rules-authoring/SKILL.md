@@ -75,7 +75,7 @@ For a plugin-shipped rule:
   `scripts/validate-plugin-structure.sh` if the rule is part of the
   contract (most are; one-off scoped rules may be omitted from
   `required` but should still ship).
-- Confirm `scripts/install-local-plugin.sh` includes `/rules/***`
+- Confirm `scripts/install-local-plugin.ts` includes `/rules/***`
   (already does — no change needed).
 - Confirm `scripts/validate-rules-install-parity.sh` passes after the
   next install dry-run.
