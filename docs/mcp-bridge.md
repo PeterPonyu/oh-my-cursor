@@ -15,7 +15,7 @@ and trace rotation policy.
 Hooks under `hooks/` already read workflow-state. The bridge gives
 agents a structured, schema-faithful way to **write** that state without
 shelling out to the writer CLI. The executable implementation lives at `src/oh_my_cursor/workflow_state/`;
-`.cursor/state/workflow-state.py` stays only as a compatibility shim. The
+`.cursor/state/workflow-state.ts` stays only as a compatibility shim. The
 bridge imports the packaged API directly so both writers go through one
 implementation and one file lock.
 
@@ -25,9 +25,9 @@ The bridge is shipped under the repo's claim/proof discipline:
 
 - `repo-owned` — checked-in source under `mcp/cursor-state-bridge/`.
 - `checked-in-artifact` — the structure validator
-  ([`scripts/validate-mcp-server-structure.py`](../scripts/validate-mcp-server-structure.py))
+  ([`scripts/validate-mcp-server-structure.ts`](../scripts/validate-mcp-server-structure.ts))
   proves the package is present and well-formed; the smoke harness
-  ([`scripts/smoke-mcp-cursor-state-bridge.sh`](../scripts/smoke-mcp-cursor-state-bridge.sh))
+  ([`scripts/smoke-mcp-cursor-state-bridge.ts`](../scripts/smoke-mcp-cursor-state-bridge.ts))
   proves the runtime contract end-to-end when `RUN_MCP_BRIDGE_SMOKE=1` is set.
 - `runtime-smoke` — env-gated; the default install does not invoke the
   bridge, and the smoke is a fast no-op when the env gate is unset.
@@ -58,8 +58,8 @@ node --experimental-strip-types scripts/install-local-plugin.ts --with-mcp
 cp .cursor/mcp.example.json .cursor/mcp.json   # edit placeholders if needed
 
 # verify
-python3 scripts/validate-mcp-server-structure.py
-RUN_MCP_BRIDGE_SMOKE=1 ./scripts/smoke-mcp-cursor-state-bridge.sh --full --jail-escape --from-example
+node --experimental-strip-types scripts/validate-mcp-server-structure.ts
+RUN_MCP_BRIDGE_SMOKE=1 node --experimental-strip-types scripts/smoke-mcp-cursor-state-bridge.ts --full --jail-escape --from-example
 ```
 
 Reload Cursor; `cursor-state-bridge` appears in the MCP servers panel.

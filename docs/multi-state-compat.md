@@ -86,6 +86,6 @@ When team mode is active, the workflow-state file tracks the lead's phase. Worke
 ## Implementation notes
 
 - The `cursor-state-bridge` MCP tools (`state_set_phase`, `state_record_failure`) are the intended write path and should enforce these transitions by convention
-- The `validate-workflow-state.py` script checks field shape and enum membership against the schema, but does **not** enforce phase-transition rules
+- The `validate-workflow-state.ts` script checks field shape and enum membership against the schema, but does **not** enforce phase-transition rules
 - Direct JSON edits to `workflow-state.json` bypass all checks; agents and skills should use MCP bridge tools
-- The `state-watcher.py` hook observes state after every tool use and flags stale or contradictory state
+- The `state-watcher.ts` hook observes state after every tool use and flags stale or contradictory state

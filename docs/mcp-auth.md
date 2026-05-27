@@ -65,11 +65,11 @@ it, while still leaving the higher-value attack surface
 ```bash
 # default mode: smoke succeeds without any token
 unset OH_MY_CURSOR_MCP_TOKEN
-RUN_MCP_BRIDGE_SMOKE=1 ./scripts/smoke-mcp-cursor-state-bridge.sh --auth
+RUN_MCP_BRIDGE_SMOKE=1 node --experimental-strip-types scripts/smoke-mcp-cursor-state-bridge.ts --auth
 
 # enforced mode: smoke fails (-32001) without the token in initialize params
 OH_MY_CURSOR_MCP_TOKEN=demo-token \
-RUN_MCP_BRIDGE_SMOKE=1 ./scripts/smoke-mcp-cursor-state-bridge.sh --auth-enforced
+RUN_MCP_BRIDGE_SMOKE=1 node --experimental-strip-types scripts/smoke-mcp-cursor-state-bridge.ts --auth-enforced
 ```
 
 Both modes are documented as `runtime-smoke` proof; the default mode is
