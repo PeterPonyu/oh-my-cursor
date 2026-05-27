@@ -135,9 +135,8 @@ Rotation: 10 MiB FIFO eviction. Opt out by setting
 ## Verifying the install
 
 ```bash
-python3 scripts/validate-mcp-server-structure.py
-RUN_MCP_BRIDGE_SMOKE=1 ./scripts/smoke-mcp-cursor-state-bridge.sh --full --jail-escape --from-example
-python3 -m unittest discover -s mcp/cursor-state-bridge/tests -p 'test_*.py'
+node --experimental-strip-types scripts/validate-mcp-server-structure.ts
+RUN_MCP_BRIDGE_SMOKE=1 node --experimental-strip-types scripts/smoke-mcp-cursor-state-bridge.ts --full --jail-escape --from-example
 ```
 
 Each must exit 0. The default smoke (without the env gate) is a fast no-op

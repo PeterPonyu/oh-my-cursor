@@ -11,6 +11,8 @@
 ./docs/audits/team-mode-workflow-policy-audit-2026-05.md:39:  - Developer terminal fallback: `scripts/workflow-state.ts` (`.cursor/state/workflow-state.ts` compatibility shim) (see
 ./docs/audits/team-mode-workflow-policy-audit-2026-05.md:81:  - The validator enforces enums + shape (`scripts/validate-workflow-state.ts`).
 ./docs/guidance-schema.md:101:- Developer CLI writes: `scripts/workflow-state.ts` (installed compatibility shim: `.cursor/state/workflow-state.ts`)
+./docs/mcp-bridge.md:18:`.cursor/state/workflow-state.ts` stays only as a compatibility shim. The
+./docs/multi-state-compat.md:89:- The `validate-workflow-state.ts` script checks field shape and enum membership against the schema, but does **not** enforce phase-transition rules
 ./docs/orchestration.md:142:also use the CLI wrapper at `scripts/workflow-state.ts`. Both paths
 ./docs/orchestration.md:154:- task start: `node --experimental-strip-types scripts/workflow-state.ts init ...`
 ./docs/orchestration.md:155:- phase advance: `node --experimental-strip-types scripts/workflow-state.ts set ... --phase verify --status in_progress`

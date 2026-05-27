@@ -17,7 +17,7 @@ description: "[OMCS] Setup and verification guide for the cursor-state-bridge MC
 ### Proof Class
 - **official-doc**: NO — Cursor does not document MCP setup; this is repo-owned.
 - **checked-in-artifact**: YES — Proof: `skills/mcp-setup/SKILL.md`, `mcp/cursor-state-bridge/`, `.cursor/mcp.example.json`, validators.
-- **runtime-smoke**: YES (optional) — Runs `validate-mcp-server-structure.py` and smoke test; MCP bridge is opt-in via `--with-mcp` install.
+- **runtime-smoke**: YES (optional) — Runs `validate-mcp-server-structure.ts` and smoke test; MCP bridge is opt-in via `--with-mcp` install.
 
 ### Claim Summary
 This skill is a diagnostic-first setup guide for the repo-owned `cursor-state-bridge` MCP server. It checks checked-in artifacts, explains the opt-in install path, and verifies the documented six-tool surface when the Cursor host exposes it. No MCP tools required to run this skill; it sets up MCP for other skills.
@@ -75,10 +75,10 @@ No hooks dependencies. This skill runs entirely within the Cursor chat.
 1. **Confirm repo context.** Check that the workspace contains the repo-owned
    bridge artifacts: `mcp/cursor-state-bridge/`, `.cursor/mcp.example.json`,
    `scripts/install-local-plugin.ts`,
-   `scripts/validate-mcp-server-structure.py`, and
-   `scripts/smoke-mcp-cursor-state-bridge.sh`.
+   `scripts/validate-mcp-server-structure.ts`, and
+   `scripts/smoke-mcp-cursor-state-bridge.ts`.
 2. **Check prerequisites before fixing.** Confirm that local shell access can
-   run `python3`, execute repo scripts, and read `.cursor/`. If a prerequisite
+   run `node`, execute repo scripts, and read `.cursor/`. If a prerequisite
    is missing, report it before suggesting install steps.
 3. **Check local plugin install mode.** The normal install path excludes
    `mcp/`. To include the bridge, run:
@@ -110,7 +110,7 @@ No hooks dependencies. This skill runs entirely within the Cursor chat.
 6. **Run the env-gated smoke harness.** Run:
 
    ```bash
-   RUN_MCP_BRIDGE_SMOKE=1 ./scripts/smoke-mcp-cursor-state-bridge.sh --full --jail-escape --from-example
+   RUN_MCP_BRIDGE_SMOKE=1 node --experimental-strip-types scripts/smoke-mcp-cursor-state-bridge.ts --full --jail-escape --from-example
    ```
 
    This proves the stdio JSON-RPC runtime contract when the local environment
@@ -142,8 +142,8 @@ No hooks dependencies. This skill runs entirely within the Cursor chat.
 | Surface | Ownership | What can be claimed |
 |---------|-----------|---------------------|
 | `mcp/cursor-state-bridge/**` | repo-owned | Checked-in server source exists. |
-| `scripts/validate-mcp-server-structure.py` | repo-owned | Package structure validates. |
-| `scripts/smoke-mcp-cursor-state-bridge.sh` | repo-owned | Runtime contract passes when env-gated smoke runs. |
+| `scripts/validate-mcp-server-structure.ts` | repo-owned | Package structure validates. |
+| `scripts/smoke-mcp-cursor-state-bridge.ts` | repo-owned | Runtime contract passes when env-gated smoke runs. |
 | `.cursor/mcp.example.json` | repo-owned | Template exists for user config. |
 | `.cursor/mcp.json` | host/user environment | Local Cursor config derived from template. |
 | Cursor MCP servers panel | host-product-only | Bridge is loaded and tools are visible in Cursor. |
