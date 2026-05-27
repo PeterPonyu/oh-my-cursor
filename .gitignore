@@ -44,3 +44,6 @@ apps/cursor-backbone-site/out/
 
 # Dependencies
 node_modules/
+
+# Local conda environment (user's local Python env; not a repo artifact)
+.conda/
