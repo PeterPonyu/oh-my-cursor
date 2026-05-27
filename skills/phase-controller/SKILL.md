@@ -30,7 +30,7 @@ justifies pinning them.
 
 1. **Locate or create the state file.** The live session default is
    `.cursor/state/workflow-state.json`; this is the path that
-   `stop-gate.py`, `compact-reminder.py`, `state-watcher.py`, and the
+   `stop-gate.ts`, `compact-reminder.ts`, `state-watcher.ts`, and the
    default bridge resolver read. Packaging validators intentionally fail if a
    live runtime file is left there, so use a per-task archive or temporary path
    for smoke tests and remove `.cursor/state/workflow-state.json` before
@@ -66,7 +66,7 @@ justifies pinning them.
      `COMMENT`/`comment` → `comment`, `REQUEST CHANGES`/`needs_changes`/`blocking`
      → `block`. Advance to `done` only when every reviewer that ran maps to
      `pass` or `comment`.
-   - `done` → set `status=passed` and stop. The `stop-gate.py` hook will use
+   - `done` → set `status=passed` and stop. The `stop-gate.ts` hook will use
      this state to confirm closure.
    - `blocked` → surface the blocking criteria, invoke `debugger` or `tracer`.
 4. **Tighten the acceptance criteria during intake.** Every criterion must name
@@ -75,7 +75,7 @@ justifies pinning them.
 5. **Keep the state document small.** No inline embeddings of full files or
    full agent transcripts. Store paths, hashes, and short summaries.
 6. **Before session stop**, check that every acceptance criterion is `passed`
-   or that the phase is `blocked` with an explicit reason. The `stop-gate.py`
+   or that the phase is `blocked` with an explicit reason. The `stop-gate.ts`
    hook will remind the user.
 
 ## State contract
@@ -138,7 +138,7 @@ Full details in [`docs/team-mode.md`](../../docs/team-mode.md).
 
 ### Proof Class
 - **official-doc**: Cursor does not document a workflow-state primitive; this is repo-owned.
-- **checked-in-artifact**: Proof: `.cursor/state/workflow-state.schema.json`, `agents/orchestrator.md`, `hooks/hooks.json` (state-watcher, stop-gate hooks), `scripts/validate-workflow-state.py`.
+- **checked-in-artifact**: Proof: `.cursor/state/workflow-state.schema.json`, `agents/orchestrator.md`, `hooks/hooks.json` (state-watcher, stop-gate hooks), `scripts/validate-workflow-state.ts`.
 - **runtime-smoke** (optional): When `cursor-state-bridge` MCP is installed, bridge tools provide runtime proof; default install excludes MCP.
 
 ### Claim Summary
@@ -161,8 +161,8 @@ MCP bridge is opt-in via `node --experimental-strip-types scripts/install-local-
 
 | Hook Event | Script | Purpose |
 |---|---|---|
-| `postToolUse` | `state-watcher.py` | Observes tool execution, validates schema (read-only) |
-| `stop` | `stop-gate.py` | Reads current phase before session stop |
-| `preCompact` | `compact-reminder.py` | Reminds user of current phase before compacting |
+| `postToolUse` | `state-watcher.ts` | Observes tool execution, validates schema (read-only) |
+| `stop` | `stop-gate.ts` | Reads current phase before session stop |
+| `preCompact` | `compact-reminder.ts` | Reminds user of current phase before compacting |
 
 Hooks are read-only observers; they do not write workflow-state directly.

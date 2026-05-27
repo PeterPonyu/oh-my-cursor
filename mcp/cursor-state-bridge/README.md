@@ -16,8 +16,8 @@ no `-32601` placeholders left for known tools; an unknown tool name
 still returns `-32601` with an `unknown tool:` prefix.
 
 The shared library lives at `src/oh_my_cursor/workflow_state/`
-(`api.py`, `cli.py`, `locking.py`). The legacy `.cursor/state/workflow-state.py`
-and `.cursor/state/_locking.py` files are compatibility shims, so concurrent
+(`api.ts`, `cli.ts`, `locking.ts`). The legacy `.cursor/state/workflow-state.ts`
+and `.cursor/state/_locking.ts` files are compatibility shims, so concurrent
 bridge and CLI writers still serialise on one advisory lock per state file. `evidence` on
 `state_update_acceptance_criterion` stays optional — the schema is not
 tightened.
@@ -55,7 +55,7 @@ must resolve to this repo's trusted `mcp/cursor-state-bridge/` payload; the
 | `state_record_failure` | functional (Phase 2) | `record_failure(...)` |
 | `state_update_acceptance_criterion` | functional (Phase 3) | `update_acceptance_criterion(...)` |
 | `state_history_append` | functional (Phase 3) | `append_history(...)` |
-| `memory_notepad_read` | functional | `memory_io.py` — read notepad sections |
+| `memory_notepad_read` | functional | `memory_io.ts` — read notepad sections |
 | `memory_notepad_append_working` | functional | append one Working Memory line |
 | `memory_project_memory_read` | functional | read `project-memory.json` |
 | `memory_project_memory_set_directive` | functional | idempotent `userOwned.directives` append |
@@ -104,7 +104,7 @@ The CLI shim accepts the same knob via `--history-cap N` on every
 mutating subcommand (`init`, `set`, `ac`, `fail`, `history`).
 Compaction always runs **before** the atomic tmp+rename, so concurrent
 readers never observe a partially-evicted document. The
-`scripts/validate-workflow-state.py --check-history-cap N` flag asserts
+`scripts/validate-workflow-state.ts --check-history-cap N` flag asserts
 the on-disk file satisfies the cap and stays monotonic.
 
 ## Trace lane (Phase 6)

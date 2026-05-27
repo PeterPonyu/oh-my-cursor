@@ -6,7 +6,7 @@ agents in `oh-my-cursor` share. It is intentionally:
 - **file-backed**: a JSON document, not a daemon;
 - **human-visible**: anyone can read it in a normal file editor;
 - **opt-in**: tasks are not required to maintain a state file, but when one
-  exists the `stop-gate.py` hook will use it to remind you about pending
+  exists the `stop-gate.ts` hook will use it to remind you about pending
   acceptance criteria; and
 - **bounded**: no automatic mutation, no background worker.
 
@@ -16,12 +16,12 @@ agents in `oh-my-cursor` share. It is intentionally:
   statuses, role names, and evidence shape.
 - `workflow-state.example.json` — Reference document showing how a real task
   state looks. Use it as a template, not as live state.
-- `workflow-state.py` — compatibility shim that re-exports the packaged
+- `workflow-state.ts` — compatibility shim that re-exports the packaged
   workflow-state API and CLI from `src/oh_my_cursor/workflow_state/`.
-  Direct calls such as `python3 .cursor/state/workflow-state.py init ...`
+  Direct calls such as `node --experimental-strip-types .cursor/state/workflow-state.ts init ...`
   still work for installed payloads.
-- `_locking.py` — compatibility shim that re-exports the canonical POSIX
-  `file_lock` from `src/oh_my_cursor/workflow_state/locking.py`.
+- `_locking.ts` — compatibility shim that re-exports the canonical POSIX
+  `file_lock` from `src/oh_my_cursor/workflow_state/locking.ts`.
 - `src/oh_my_cursor/workflow_state/` — executable implementation for the
   API (`init_state`, `set_state`, `update_acceptance_criterion`,
   `record_failure`, `append_history`, `read_state`), CLI, and lock.
@@ -32,8 +32,8 @@ These files may appear during active sessions but are not checked in and
 should not be relied upon between runs:
 
 - `active-role.json` — single-active-subagent record written by
-  `subagent-bootstrap.py` (via `_active_role.py`) and cleared by
-  `subagent-summary.py`. Consulted by `tool-guard.py` for role-based
+  `subagent-bootstrap.ts` and cleared by
+  `subagent-summary.ts`. Consulted by `tool-guard.ts` for role-based
   tool allowlists.
 - `*.lock` — transient `fcntl` advisory lock files created during writes;
   removed when the lock context exits.
@@ -49,14 +49,14 @@ should not be relied upon between runs:
 2. The `phase-controller` skill (`skills/phase-controller/SKILL.md`) describes
    how to advance phases and update acceptance criteria.
 3. Write or update the file intentionally with the `cursor-state-bridge` MCP
-   tools, the repository wrapper `scripts/workflow-state.py`, or the installed
-   compatibility shim `.cursor/state/workflow-state.py`. Avoid
+   tools, the repository wrapper `scripts/workflow-state.ts`, or the installed
+   compatibility shim `.cursor/state/workflow-state.ts`. Avoid
    direct JSON edits unless the user explicitly approves the exact change.
-4. The `stop-gate.py` hook can read a workflow-state file passed via the
+4. The `stop-gate.ts` hook can read a workflow-state file passed via the
    `OH_MY_CURSOR_WORKFLOW_STATE` environment variable or via a JSON path field
    inside the stop event. When acceptance criteria are still pending, it emits
    a clear reminder instead of a generic message.
-5. The `scripts/validate-workflow-state.py` validator lets you check any state
+5. The `scripts/validate-workflow-state.ts` validator lets you check any state
    document locally.
 
 ## Boundaries
@@ -76,7 +76,7 @@ repo.
 | Path | Owner | Schema | Hook reads | Hook writes |
 | --- | --- | --- | --- | --- |
 | `.cursor/state/workflow-state.json` | this repo (`oh-my-cursor`) | `workflow-state.schema.json` | yes (14 hooks) | no — only the workflow-state package/CLI and the bridge write |
-| `.cursor/state/active-role.json` | this repo (Stage 4) | single-role record | `tool-guard.py` | `subagent-bootstrap.py` writes; `subagent-summary.py` clears |
+| `.cursor/state/active-role.json` | this repo (Stage 4) | single-role record | `tool-guard.ts` | `subagent-bootstrap.ts` writes; `subagent-summary.ts` clears |
 | `.omc/state/*` | the user's global oh-my-claudecode harness | none in this repo | no | no |
 
 `.omc/state/*` (e.g. `mission-state.json`, `subagent-tracking.json`,
@@ -90,8 +90,8 @@ scope for the Cursor port's hook layer.
 
 ## Read vs write split
 
-- **Hooks read directly off disk** for performance. `stop-gate.py`,
-  `compact-reminder.py`, `session-bootstrap.py`, and similar consumers parse
+- **Hooks read directly off disk** for performance. `stop-gate.ts`,
+  `compact-reminder.ts`, `session-bootstrap.ts`, and similar consumers parse
   `workflow-state.json` without going through the bridge. This is acceptable
   for read-only consumers because writers always settle the file via
   `os.replace` before releasing the shared `file_lock`.
