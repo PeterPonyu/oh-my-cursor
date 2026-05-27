@@ -24,6 +24,7 @@ const ROOT = path.resolve(path.dirname(currentFile), '..', '..');
 // setState (which calls _archiveSession when phase transitions to 'done').
 
 import { initState, setState } from '../../src/oh_my_cursor/workflow_state/api.ts';
+import { _parseArgv } from '../../scripts/run-autopilot.ts';
 
 function makeTmp(): string {
   return fs.mkdtempSync(path.join(os.tmpdir(), 'wf-traversal-test-'));
@@ -116,81 +117,44 @@ test('#32 traversal: safe task_id passes through unchanged', () => {
 });
 
 // ---------------------------------------------------------------------------
-// #33 — _parseArgv shell-operator rejection (tested via run-autopilot internals)
-// We re-implement the same parser logic here to unit-test rejection without
-// spawning the full autopilot script.
+// #33 — _parseArgv shell-operator rejection (imported from run-autopilot.ts)
 // ---------------------------------------------------------------------------
 
-/**
- * Mirrors the _parseArgv function from scripts/run-autopilot.ts.
- * Must stay in sync with that implementation.
- */
-function parseArgv(cmd: string): string[] | null {
-  if (/[|&;<>$`]/.test(cmd)) return null;
-  const tokens: string[] = [];
-  let current = '';
-  let i = 0;
-  while (i < cmd.length) {
-    const ch = cmd[i];
-    if (ch === '\\') { i++; if (i < cmd.length) current += cmd[i++]; continue; }
-    if (ch === '"') {
-      i++;
-      while (i < cmd.length && cmd[i] !== '"') {
-        if (cmd[i] === '\\' && i + 1 < cmd.length) { i++; current += cmd[i++]; }
-        else { current += cmd[i++]; }
-      }
-      i++; continue;
-    }
-    if (ch === "'") {
-      i++;
-      while (i < cmd.length && cmd[i] !== "'") { current += cmd[i++]; }
-      i++; continue;
-    }
-    if (ch === ' ' || ch === '\t') {
-      if (current.length > 0) { tokens.push(current); current = ''; }
-      i++; continue;
-    }
-    current += ch; i++;
-  }
-  if (current.length > 0) tokens.push(current);
-  return tokens.length > 0 ? tokens : null;
-}
-
 test('#33 shell-exec: pipe operator is rejected', () => {
-  assert.strictEqual(parseArgv('echo hello | cat'), null);
+  assert.strictEqual(_parseArgv('echo hello | cat'), null);
 });
 
 test('#33 shell-exec: semicolon is rejected', () => {
-  assert.strictEqual(parseArgv('echo hello; rm -rf /'), null);
+  assert.strictEqual(_parseArgv('echo hello; rm -rf /'), null);
 });
 
 test('#33 shell-exec: ampersand is rejected', () => {
-  assert.strictEqual(parseArgv('sleep 10 & echo pwned'), null);
+  assert.strictEqual(_parseArgv('sleep 10 & echo pwned'), null);
 });
 
 test('#33 shell-exec: backtick is rejected', () => {
-  assert.strictEqual(parseArgv('echo `id`'), null);
+  assert.strictEqual(_parseArgv('echo `id`'), null);
 });
 
 test('#33 shell-exec: dollar-paren subshell is rejected', () => {
-  assert.strictEqual(parseArgv('echo $(id)'), null);
+  assert.strictEqual(_parseArgv('echo $(id)'), null);
 });
 
 test('#33 shell-exec: redirect operator is rejected', () => {
-  assert.strictEqual(parseArgv('printf poc > /tmp/test.txt'), null);
+  assert.strictEqual(_parseArgv('printf poc > /tmp/test.txt'), null);
 });
 
 test('#33 shell-exec: safe single-token command parses correctly', () => {
-  const result = parseArgv('node --check scripts/foo.ts');
+  const result = _parseArgv('node --check scripts/foo.ts');
   assert.deepStrictEqual(result, ['node', '--check', 'scripts/foo.ts']);
 });
 
 test('#33 shell-exec: quoted arguments with spaces parse correctly', () => {
-  const result = parseArgv('node --experimental-strip-types "scripts/my script.ts"');
+  const result = _parseArgv('node --experimental-strip-types "scripts/my script.ts"');
   assert.deepStrictEqual(result, ['node', '--experimental-strip-types', 'scripts/my script.ts']);
 });
 
 test('#33 shell-exec: empty string returns null', () => {
-  assert.strictEqual(parseArgv(''), null);
-  assert.strictEqual(parseArgv('   '), null);
+  assert.strictEqual(_parseArgv(''), null);
+  assert.strictEqual(_parseArgv('   '), null);
 });

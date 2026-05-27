@@ -102,7 +102,7 @@ function updateWorkflowStatus(filePath: string, phase: string, status: string, n
  * would only make sense in a shell context.
  * Returns null if the string contains shell operators or is otherwise unsafe.
  */
-function _parseArgv(cmd: string): string[] | null {
+export function _parseArgv(cmd: string): string[] | null {
   // Reject shell metacharacters that have no safe argv equivalent
   if (/[|&;<>$`]/.test(cmd)) {
     return null;
@@ -453,7 +453,9 @@ async function main() {
   }
 }
 
-main().catch(err => {
-  console.error(`FAIL: Unexpected Autopilot coordinator error: ${err.message}`);
-  process.exit(1);
-});
+if (process.argv[1] && path.resolve(process.argv[1]) === path.resolve(currentFile)) {
+  main().catch(err => {
+    console.error(`FAIL: Unexpected Autopilot coordinator error: ${err.message}`);
+    process.exit(1);
+  });
+}
