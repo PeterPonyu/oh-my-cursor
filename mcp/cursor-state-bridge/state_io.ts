@@ -15,13 +15,7 @@ function resolveStatePath(workspace: string, taskId: string | null | undefined):
 }
 
 function mcpText(payload: any): any {
-  let text: string;
-  if (typeof payload === 'string') {
-    text = payload;
-  } else {
-    // Crucial: replace to match python's json.dumps formatting which has spaces after colons
-    text = JSON.stringify(payload).replace(/":/g, '": ');
-  }
+  const text = typeof payload === 'string' ? payload : JSON.stringify(payload);
   return { content: [{ type: 'text', text }] };
 }
 

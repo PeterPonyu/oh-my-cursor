@@ -33,8 +33,7 @@ export function acquireFileLock(targetPath: string): () => void {
         } catch {
           // ignore
         }
-        const start = Date.now();
-        while (Date.now() - start < retryDelayMs) {}
+        Atomics.wait(new Int32Array(new SharedArrayBuffer(4)), 0, 0, retryDelayMs);
         continue;
       }
       throw err;

@@ -221,8 +221,7 @@ function errResponse(reqId: any, code: number, message: string): any {
 }
 
 function sendResponse(obj: any): void {
-  // Ensure space after colons in JSON output
-  const line = JSON.stringify(obj).replace(/":/g, '": ') + '\n';
+  const line = JSON.stringify(obj) + '\n';
   process.stdout.write(line);
 }
 
