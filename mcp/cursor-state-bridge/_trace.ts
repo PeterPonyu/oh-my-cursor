@@ -66,8 +66,7 @@ export function trace(workspace: string, record: any): void {
       ...record,
     };
 
-    // Note: ensure spaces after colons when stringifying for any simple regex tests!
-    const line = JSON.stringify(full).replace(/":/g, '": ') + '\n';
+    const line = JSON.stringify(full) + '\n';
     fs.appendFileSync(tracePath, line, 'utf-8');
   } catch {
     // swallow

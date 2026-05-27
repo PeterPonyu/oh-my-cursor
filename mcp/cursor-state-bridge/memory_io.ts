@@ -49,12 +49,7 @@ function resolveMemoryPath(workspace: string, relative: string): string {
 }
 
 function mcpText(payload: any): any {
-  let text: string;
-  if (typeof payload === 'string') {
-    text = payload;
-  } else {
-    text = JSON.stringify(payload).replace(/":/g, '": ');
-  }
+  const text = typeof payload === 'string' ? payload : JSON.stringify(payload);
   return { content: [{ type: 'text', text }] };
 }
 
