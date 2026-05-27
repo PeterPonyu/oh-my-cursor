@@ -56,7 +56,7 @@ Answer these questions in order. Stop at the first `yes`.
    - Route to **project memory** (`./project-memory.json`). Edit the
      matching key. Never overwrite `userOwned.customNotes` or
      `userOwned.directives`; append to them instead. Run
-     `python3 scripts/validate-project-memory.py ./project-memory.json`
+     `node --experimental-strip-types scripts/validate-project-memory.ts ./project-memory.json`
      after the edit.
 
 6. **Is this an architectural or process decision with rationale?**

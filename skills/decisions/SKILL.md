@@ -42,7 +42,7 @@ body. Subsequent changes happen via a new ADR that supersedes it.
    `supersedes` (filename of older decision or empty), `superseded_by`
    (empty for new), `tags`.
 5. Fill the body sections: Context / Decision / Consequences / Evidence.
-6. Run `python3 scripts/validate-decisions-format.py
+6. Run `node --experimental-strip-types scripts/validate-decisions-format.ts
    ./docs/decisions/YYYYMMDD-<slug>.md`.
 
 ### Promote `proposed` → `accepted`

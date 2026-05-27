@@ -95,9 +95,9 @@ ls .cursor-plugin/plugin.json
 ### 4. Memory validators (when `docs/memory-layer.md` is present)
 
 ```bash
-python3 scripts/validate-memory-templates.py
-python3 scripts/validate-notepad-format.py docs/templates/notepad.md
-python3 scripts/validate-project-memory.py docs/templates/project-memory.json
+node --experimental-strip-types scripts/validate-memory-templates.ts
+node --experimental-strip-types scripts/validate-notepad-format.ts docs/templates/notepad.md
+node --experimental-strip-types scripts/validate-project-memory.ts docs/templates/project-memory.json
 bash scripts/validate-rules-install-parity.sh
 python3 -m pytest tests/memory -q
 ```

@@ -43,7 +43,7 @@ justifies pinning them.
    targets share the bridge's `file_lock` invariant. Validate the
    on-disk document against
    `.cursor/state/workflow-state.schema.json` with the read-only
-   validator `python3 scripts/validate-workflow-state.py <path>`; the
+   validator `node --experimental-strip-types scripts/validate-workflow-state.ts <path>`; the
    validator does not write and remains agent-callable.
 2. **Detect the current phase.** Read `phase` and `status`. If `phase` is
    missing, set `phase=intake`, `status=pending`.
