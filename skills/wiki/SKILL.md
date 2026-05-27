@@ -43,7 +43,7 @@ If `./docs/wiki/` does not exist:
 1. Create the directory.
 2. Copy `docs/templates/wiki-index.md` to `./docs/wiki/index.md`.
 3. Copy `docs/templates/wiki-log.md` to `./docs/wiki/log.md`.
-4. Run `python3 scripts/validate-wiki-structure.py`.
+4. Run `node --experimental-strip-types scripts/validate-wiki-structure.ts`.
 
 ### Add a page
 
@@ -54,7 +54,7 @@ If `./docs/wiki/` does not exist:
 5. Add a bullet to `./docs/wiki/index.md`'s Pages list.
 6. Append one line to `./docs/wiki/log.md`:
    `YYYY-MM-DDTHH:MM:SSZ  add  <slug>  <short note>`.
-7. Run `python3 scripts/validate-wiki-structure.py`.
+7. Run `node --experimental-strip-types scripts/validate-wiki-structure.ts`.
 
 ### Update a page
 

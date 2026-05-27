@@ -32,7 +32,8 @@ plugin directory without claiming more automation than the repo actually owns.
    omits repository development/test surfaces such as `benchmark/`, `apps/`,
    `docs/`, and `scripts/`.
    When installing the default `oh-my-cursor` plugin, the helper also removes
-   the old `oh-my-copilot-workspace` local alias from the same target root so
+   the old `oh-my-copilot-workspace` (legacy alias, retained for
+   backward-compatible cleanup only) local alias from the same target root so
    Cursor's plugin list does not keep showing the stale workspace companion
    after a reload.
 2. Confirm the plugin root contains:
@@ -102,7 +103,7 @@ node --experimental-strip-types scripts/install-local-plugin.ts --uninstall  # r
 `--status` reports the installed version, whether it is a symlink or copy, the
 file count, and whether the installed version is stale relative to the repo.
 `--uninstall` removes the plugin directory and any legacy `oh-my-copilot-workspace`
-alias.
+(legacy alias, retained for backward-compatible cleanup only) alias.
 
 ## Dev-Iteration Refresh Cycle
 
@@ -130,8 +131,9 @@ node --experimental-strip-types scripts/install-local-plugin.ts --root dist/oh-m
 Installing from `dist/oh-my-cursor` (rather than the repo root) exercises the
 same artifact path that a marketplace-packaged install would follow. The
 `--force` flag replaces an existing install without prompting. The installer
-removes legacy `oh-my-copilot-workspace` aliases and any stale `mcp/` tree from
-a prior `--with-mcp` install.
+removes legacy `oh-my-copilot-workspace` (legacy alias, retained for
+backward-compatible cleanup only) aliases and any stale `mcp/` tree from a prior
+`--with-mcp` install.
 
 ### Step 3 — Reload Cursor
 
