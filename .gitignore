@@ -22,6 +22,7 @@ docs/specs/*-20*.md
 .cursor/state/workflow-state.json
 .cursor/state/active-role.json
 .cursor/state/*.lock
+.cursor/state/subagent-runs.json
 
 # Editor and IDE artifacts
 *.swp

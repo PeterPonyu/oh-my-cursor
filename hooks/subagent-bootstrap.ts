@@ -9,6 +9,8 @@ import { setActiveRole } from './_active_role.ts';
 const currentFile = fileURLToPath(import.meta.url);
 const ROOT = resolveRepoRoot(currentFile);
 const AGENTS_DIR = path.join(ROOT, 'agents');
+const SUBAGENT_RUNS_PATH = path.join(ROOT, '.cursor', 'state', 'subagent-runs.json');
+const SUBAGENT_RUNS_CAP = 20;
 
 export const KNOWN_ROLES = new Set([
   'architect',
@@ -67,15 +69,18 @@ function main(): number {
   let userMessage = '';
   let status = 'pass';
 
-  if (roleMatch && rolePromptExists) {
-    let subagentId = '';
-    for (const key of ['subagent_id', 'subagentId', 'session_id', 'sessionId']) {
-      const value = payload?.[key];
-      if (typeof value === 'string' && value) {
-        subagentId = value;
-        break;
-      }
+  let subagentId = '';
+  for (const key of ['subagent_id', 'subagentId', 'session_id', 'sessionId']) {
+    const value = payload?.[key];
+    if (typeof value === 'string' && value) {
+      subagentId = value;
+      break;
     }
+  }
+
+  const startTs = Date.now();
+
+  if (roleMatch && rolePromptExists) {
     try {
       setActiveRole(subagentType, subagentId);
     } catch {
@@ -107,6 +112,26 @@ function main(): number {
     role_prompt: relativePromptPath,
   };
 
+  try {
+    fs.mkdirSync(path.dirname(SUBAGENT_RUNS_PATH), { recursive: true });
+    let runs: any[] = [];
+    if (fs.existsSync(SUBAGENT_RUNS_PATH)) {
+      try {
+        const parsed = JSON.parse(fs.readFileSync(SUBAGENT_RUNS_PATH, 'utf-8'));
+        if (Array.isArray(parsed)) runs = parsed;
+      } catch {
+        runs = [];
+      }
+    }
+    runs.push({ role: subagentType, start_ts: startTs, subagent_id: subagentId || subagentType });
+    if (runs.length > SUBAGENT_RUNS_CAP) {
+      runs = runs.slice(runs.length - SUBAGENT_RUNS_CAP);
+    }
+    fs.writeFileSync(SUBAGENT_RUNS_PATH, JSON.stringify(runs, null, 2));
+  } catch {
+    // fail-open
+  }
+
   trace({
     hook: 'subagent-bootstrap',
     event: 'subagentStart',
@@ -114,6 +139,7 @@ function main(): number {
     subagent_type: subagentType,
     role_match: roleMatch,
     role_prompt_exists: rolePromptExists,
+    subagent_start_ts: startTs,
   });
 
   console.log(JSON.stringify(output));
