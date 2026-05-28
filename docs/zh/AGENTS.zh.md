@@ -1,3 +1,4 @@
+<!-- source-sha256: AGENTS.md 0b4e1f3bc657ea883f714de8ccb4a65d2fb9511e83e4bfe8a2d4faa4efd89b53 -->
 # oh-my-cursor 仓库指令与策略
 
 本仓库是一个 Cursor 原生的工作流主干骨架——一个向 Cursor 工作区交付规则（rules）、技能（skills）、智能体（agents）和生命周期钩子（hooks）的本地插件。请保持文档先行、以证据为支撑，并明确区分哪些是仓库检入的产物，哪些是 Cursor 本身的产品功能。
@@ -38,3 +39,17 @@
 
 有关当前所有权分布图，请参阅 `docs/confirmed-surfaces.md`。
 有关官方引用链接，请参阅 `docs/references.md`。
+
+
+## 记忆层
+
+该插件交付一个基于文件的记忆层（notepad、project memory、decisions、wiki），它与 workflow-state 分离。智能体需要显式调用对应 owner skill；hooks 不会写入记忆文件。
+
+| 表面 | 消费路径 | Owner skill |
+|------|----------|-------------|
+| Notepad | `./notepad.md` | `skills/notepad/SKILL.md` |
+| Project memory | `./project-memory.json` | `skills/remember/SKILL.md` (router) |
+| Decisions | `./docs/decisions/` | `skills/decisions/SKILL.md` |
+| Wiki | `./docs/wiki/` | `skills/wiki/SKILL.md` |
+
+跨领域策略见 [`docs/memory-layer.md`](../memory-layer.md)。

@@ -66,22 +66,20 @@ function _loadState(targetPath: string): any {
 function _atomicWriteState(targetPath: string, state: any): void {
   const dir = path.dirname(targetPath);
   fs.mkdirSync(dir, { recursive: true });
-  const legacyTmpPath = targetPath + '.tmp';
-  try {
-    const stat = fs.lstatSync(legacyTmpPath);
-    if (stat.isSymbolicLink()) {
-      throw new Error(`unsafe workflow-state temp symlink: ${legacyTmpPath}`);
-    }
-  } catch (err: any) {
-    if (err.code !== 'ENOENT') throw err;
-  }
-
   const data = JSON.stringify(state, null, 2) + '\n';
   const tmpName = path.join(
     dir,
     `.${path.basename(targetPath)}.${Math.random().toString(36).slice(2)}.${process.pid}.tmp`
   );
-  fs.writeFileSync(tmpName, data, 'utf-8');
+  try {
+    const stat = fs.lstatSync(tmpName);
+    if (stat.isSymbolicLink()) {
+      throw new Error(`unsafe workflow-state temp symlink: ${tmpName}`);
+    }
+  } catch (err: any) {
+    if (err.code !== 'ENOENT') throw err;
+  }
+  fs.writeFileSync(tmpName, data, { encoding: 'utf-8', flag: 'wx' });
   try {
     fs.renameSync(tmpName, targetPath);
   } catch (err) {

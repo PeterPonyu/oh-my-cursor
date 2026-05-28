@@ -1,3 +1,4 @@
+<!-- source-sha256: README.md c0ee57618eaaae0402d4a5a607ad5bf69aaf5e114896de1358a293418f7c9678 -->
 # oh-my-cursor
 
 <div align="center">
@@ -29,16 +30,20 @@ node --experimental-strip-types scripts/install-local-plugin.ts --symlink
 
 使用以下命令验证安装： `node --experimental-strip-types scripts/check-local-plugin-install.ts`。
 
+如需可复制粘贴的 workflow-state 演练，请参见 [`docs/recipes/workflow-state-lifecycle.md`](../recipes/workflow-state-lifecycle.md)。
+
 ## 包含组件
 
 | 组件 | 位置 | 用途 |
 |-----------|----------|---------|
 | **Hooks 钩子** (14 个事件) | `hooks/hooks.json` + `hooks/` | 编排了每一个官方的 Cursor 钩子事件: `sessionStart`, `sessionEnd`, `beforeSubmitPrompt`, `preToolUse`, `postToolUse`, `postToolUseFailure`, `subagentStart`, `subagentStop`, `beforeShellExecution`, `afterShellExecution`, `beforeReadFile`, `afterFileEdit`, `preCompact`, 和 `stop`。所有脚本仅限标准库（stdlib-only）、fail-open（失败放行），且对工作流状态为只读 |
 | **Agents 智能体** (14 个角色) | `agents/` | 完整的智能体角色注册表 — `orchestrator`, `architect`, `researcher`, `planner`, `implementer`, `qa-tester`, `verifier`, `critic`, `code-reviewer`, `debugger`, `tracer`, `security-reviewer`, `explore`, `test-engineer`。所有检入智能体均默认使用 `model: auto`，除非基准测试结果证明必须锁定特定模型 |
-| **Skills 技能** (14 个技能) | `skills/` | `phase-controller` (入口), `plan`, `iterate-loop`, `auto-execute`, `review`, `security-review`, `debug`, `trace`, `verify`, `deep-interview`, `doctor`, `local-plugin-check`, `mcp-setup`, `parallel-batch` |
+| **Skills 技能** (20 个技能) | `skills/` | 编排: `phase-controller`, `plan`, `iterate-loop`, `auto-execute`, `review`, `security-review`, `debug`, `trace`, `verify`, `deep-interview`, `doctor`, `local-plugin-check`, `mcp-setup`, `parallel-batch`, `team-controller`。记忆层: `remember`, `notepad`, `wiki`, `decisions`, `rules-authoring` |
 | **Rules 规则** | `.cursor/rules/` + `rules/` | Cursor 工作区指南以及插件边界兼容性策略 |
+| **Memory templates 记忆模板** | `docs/templates/` | 随插件交付的 notepad、project memory、wiki 和 ADR 模板 |
+| **Memory layer 记忆层** | `docs/memory-layer.md` | 技能拥有的 notepad、project memory、decisions 和 wiki（与 workflow-state 分离） |
 | **State 状态契约** | `.cursor/state/` + `src/oh_my_cursor/workflow_state/` | 基于文件的工作流状态契约、兼容性垫片以及封装的 API/CLI/文件锁实现 |
-| **MCP 状态桥** (可选) | `mcp/cursor-state-bridge/` | 智能体可通过 JSON-RPC 进行调用并写入工作流状态 |
+| **MCP 状态桥** (可选) | `mcp/cursor-state-bridge/` | 通过 JSON-RPC 写入 workflow-state，并提供可选记忆工具 |
 
 ## 文档指引
 
@@ -47,6 +52,7 @@ node --experimental-strip-types scripts/install-local-plugin.ts --symlink
 | 常驻策略 | [`AGENTS.md`](../../AGENTS.md) |
 | 编排图谱 | [`docs/orchestration.md`](../orchestration.md) |
 | 智能体模型策略 | [`docs/agent-model-policy.md`](../agent-model-policy.md) |
+| 记忆层 | [`docs/memory-layer.md`](../memory-layer.md) |
 | 状态契约 | [`docs/state-contract.md`](../state-contract.md) |
 | MCP 状态桥 | [`docs/mcp-bridge.md`](../mcp-bridge.md) |
 | 外部运行时桥接 | [`docs/external-runtime-bridge.md`](../external-runtime-bridge.md) |

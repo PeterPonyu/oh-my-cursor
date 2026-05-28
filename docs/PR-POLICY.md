@@ -17,6 +17,9 @@ node --experimental-strip-types scripts/verify-backbone.ts
 
 # 2. Run the end-to-end integration and prompt validation checks against the local Cursor agent CLI
 node --experimental-strip-types scripts/test-plugin-on-cursor-cli.ts --run-prompt
+
+# 3. Check that maintained Chinese translations are not older than their English sources
+node --experimental-strip-types scripts/validate-translation-freshness.ts
 ```
 
 ---
@@ -35,7 +38,11 @@ Any PR that adds, modifies, or removes a capability claim in `AGENTS.md`, `READM
 
 ---
 
-## 3. Pull Request Guidelines
+## 3. Translation Freshness
+
+When `README.md` or `AGENTS.md` changes, update the matching Chinese translation in `docs/zh/` in the same PR unless the change is explicitly translation-neutral. The freshness guard compares a checked-in `source-sha256` marker in each maintained translation against the current English source content, so docs-only drift is caught before merge without relying on filesystem mtimes.
+
+## 4. Pull Request Guidelines
 
 1. **Keep it Docs-First and Small**: Prefer small, focused PRs. Group changes by component.
 2. **TypeScript-Only**: All scripts, hooks, and shims must be written in TypeScript, run under native Node.js (`--experimental-strip-types`), and require zero external npm runtime dependencies.

@@ -34,6 +34,8 @@ After install, reload Cursor (**Developer: Reload Window**).
 
 Verify the install with `node --experimental-strip-types scripts/check-local-plugin-install.ts`.
 
+For a copy-pasteable workflow-state walkthrough, see [`docs/recipes/workflow-state-lifecycle.md`](./docs/recipes/workflow-state-lifecycle.md).
+
 ## What's included
 
 | Component | Location | Purpose |

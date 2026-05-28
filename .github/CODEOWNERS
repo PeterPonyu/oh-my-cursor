@@ -1,0 +1,15 @@
+# Default ownership for repo-owned workflow backbone artifacts.
+* @PeterPonyu
+
+# Governance-critical surfaces.
+/.github/ @PeterPonyu
+/AGENTS.md @PeterPonyu
+/.cursor/rules/ @PeterPonyu
+/agents/ @PeterPonyu
+/hooks/ @PeterPonyu
+/mcp/ @PeterPonyu
+/rules/ @PeterPonyu
+/scripts/ @PeterPonyu
+/skills/ @PeterPonyu
+/src/ @PeterPonyu
+/docs/ @PeterPonyu

@@ -1,0 +1,22 @@
+name: Enhancement
+description: Propose a focused improvement to a repo-owned surface.
+title: "[Enhancement]: "
+labels: [enhancement]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem or opportunity
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed outcome
+    validations:
+      required: true
+  - type: textarea
+    id: proof
+    attributes:
+      label: Ownership/proof notes
+      description: Identify repo-owned artifacts, host-product-only behavior, official docs, or runtime smoke evidence.

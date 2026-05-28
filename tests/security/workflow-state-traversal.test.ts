@@ -158,3 +158,20 @@ test('#33 shell-exec: empty string returns null', () => {
   assert.strictEqual(_parseArgv(''), null);
   assert.strictEqual(_parseArgv('   '), null);
 });
+
+test('#49 atomic write ignores stale legacy .tmp symlink because randomized temp path is protected', () => {
+  const tmpDir = makeTmp();
+  try {
+    const stateFile = path.join(tmpDir, 'workflow-state.json');
+    const staleLegacyTmp = `${stateFile}.tmp`;
+    fs.symlinkSync(path.join(tmpDir, 'benign-target'), staleLegacyTmp);
+
+    initState(stateFile, { task_id: 'legacy-tmp-symlink', phase: 'intake', status: 'pending' });
+
+    const state = JSON.parse(fs.readFileSync(stateFile, 'utf-8'));
+    assert.strictEqual(state.task_id, 'legacy-tmp-symlink');
+    assert.ok(fs.lstatSync(staleLegacyTmp).isSymbolicLink(), 'fixture legacy symlink remains untouched');
+  } finally {
+    fs.rmSync(tmpDir, { recursive: true, force: true });
+  }
+});
