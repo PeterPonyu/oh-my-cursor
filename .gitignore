@@ -48,3 +48,11 @@ node_modules/
 
 # Local conda environment (user's local Python env; not a repo artifact)
 .conda/
+
+# TypeScript incremental build info
+*.tsbuildinfo
+
+# Python tool caches (legacy/local only)
+.mypy_cache/
+.ruff_cache/
+.pytest_cache/

@@ -156,3 +156,12 @@ All tools speak JSON-RPC 2.0 over stdio. No network listener. Runs only when exp
 | --- | --- | --- |
 | Chinese README | Chinese translation of the project overview and quick start | [docs/zh/README.zh.md](./zh/README.zh.md) |
 | Chinese AGENTS policy | Chinese translation of the core agent model policy and boundaries | [docs/zh/AGENTS.zh.md](./zh/AGENTS.zh.md) |
+
+## CI, TypeScript, and GitHub Community Scaffolding (Access date: 2026-05-28)
+
+| Reference | Purpose | Link |
+| --- | --- | --- |
+| TypeScript `allowImportingTsExtensions` TSConfig option | Root `tsconfig.json` permits checked-in `.ts` import specifiers while `noEmit` typechecks the repo | [TypeScript TSConfig reference](https://www.typescriptlang.org/tsconfig/allowImportingTsExtensions.html) |
+| GitHub pull request templates | `.github/pull_request_template.md` is the repo-owned PR checklist surfaced by GitHub when opening PRs | [Managing and standardizing pull requests](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/getting-started/managing-and-standardizing-pull-requests) |
+| GitHub issue templates | `.github/ISSUE_TEMPLATE/*.yml` issue forms standardize bug, enhancement, docs, and chore intake | [About issue and pull request templates](https://docs.github.com/en/enterprise-cloud@latest/communities/using-templates-to-encourage-useful-issues-and-pull-requests/about-issue-and-pull-request-templates) |
+| Dependabot configuration | `.github/dependabot.yml` enables scheduled version update checks for GitHub Actions and npm metadata | [Dependabot options reference](https://docs.github.com/en/code-security/dependabot/working-with-dependabot/dependabot-options-reference) |

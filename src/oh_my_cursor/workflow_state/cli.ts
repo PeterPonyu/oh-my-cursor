@@ -146,3 +146,7 @@ export function main(): void {
     process.exit(1);
   }
 }
+
+if (import.meta.url === `file://${process.argv[1]}`) {
+  main();
+}

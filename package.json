@@ -1,0 +1,15 @@
+{
+  "name": "oh-my-cursor",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "test": "node --experimental-strip-types --test tests/**/*.test.ts mcp/cursor-state-bridge/tests/*.test.ts",
+    "verify": "node --experimental-strip-types scripts/verify-backbone.ts"
+  },
+  "devDependencies": {
+    "@types/node": "^24.10.1",
+    "typescript": "^5.9.3"
+  }
+}

@@ -1,0 +1,16 @@
+name: Chore / automation
+description: Track cleanup, CI, governance, or maintenance work.
+title: "[Chore]: "
+labels: [chore]
+body:
+  - type: textarea
+    id: scope
+    attributes:
+      label: Scope
+    validations:
+      required: true
+  - type: textarea
+    id: validation
+    attributes:
+      label: Validation expected
+      description: Which local/CI checks should prove completion?

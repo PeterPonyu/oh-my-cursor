@@ -36,6 +36,9 @@ const SAFETY_SUFFIXES = new Set([
   '.c', '.cpp', '.h', '.hpp', '.go', '.rs', '.java', '.kt', '.rb', '.php'
 ]);
 
+const MAX_SAFETY_SCAN_BYTES = 256 * 1024;
+const MAX_SAFETY_SCAN_LINES = 5000;
+
 const LANGUAGE_PATTERNS: Record<string, RegExp> = {
   'legacy-short-name-b': /(?<![A-Za-z0-9])omx(?![A-Za-z0-9])/i,
   'legacy-package-b': /oh-my-codex/i,
@@ -218,7 +221,14 @@ function scanFileSafety(relPath: string): any[] {
   const issues: any[] = [];
   try {
     const fullPath = path.resolve(WORKSPACE_ROOT, relPath);
-    if (!fs.existsSync(fullPath) || !fs.statSync(fullPath).isFile()) {
+    if (!fs.existsSync(fullPath)) {
+      return [];
+    }
+    const stat = fs.statSync(fullPath);
+    if (!stat.isFile()) {
+      return [];
+    }
+    if (stat.size > MAX_SAFETY_SCAN_BYTES) {
       return [];
     }
     
@@ -229,6 +239,9 @@ function scanFileSafety(relPath: string): any[] {
     
     const content = fs.readFileSync(fullPath, 'utf-8');
     const lines = content.split(/\r?\n/);
+    if (lines.length > MAX_SAFETY_SCAN_LINES) {
+      return [];
+    }
     
     // 1. Git conflict markers
     for (let lineNo = 1; lineNo <= lines.length; lineNo++) {

@@ -226,13 +226,15 @@ if (
   throw new Error('self-test fixture substitution did not land; check whitespace');
 }
 
-function _safeValidate(filePath: string): { ok: true } | { ok: false; code: number } {
+type ValidationResult = { ok: true; code?: never } | { ok: false; code: number };
+
+function _safeValidate(filePath: string): ValidationResult {
   try {
     validate(filePath);
-    return { ok: true };
+    return { ok: true as const };
   } catch (exc) {
     if (exc instanceof ValidationError) {
-      return { ok: false, code: exc.code };
+      return { ok: false as const, code: exc.code };
     }
     throw exc;
   }

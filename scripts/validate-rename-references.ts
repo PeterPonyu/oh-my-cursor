@@ -40,12 +40,16 @@ function main() {
       '--include=*.mdc ' +
       '--include=*.yaml ' +
       '--exclude-dir=.git ' +
+      '--exclude-dir=.conda ' +
       '--exclude-dir=.omcs ' +
       '--exclude-dir=.omc ' +
       '--exclude-dir=.cursor-worktree ' +
+      '--exclude-dir=.omx ' +
+      '--exclude-dir=node_modules ' +
       '--exclude-dir=dist ' +
       '--exclude-dir=benchmark/runs/data ' +
       '--exclude-dir=docs/plans ' +
+      '--exclude=CHANGELOG.md ' +
       '.',
       { cwd: ROOT, stdio: ['pipe', 'pipe', 'ignore'] }
     );
@@ -55,6 +59,34 @@ function main() {
       grepText = '';
     } else {
       fail(`grep failed with exit code ${err.status}: ${err.message}`);
+    }
+  }
+
+
+  let staleChangelogText = '';
+  try {
+    const result = execSync(
+      'grep -nE \"\\.(py|sh)\\b\" CHANGELOG.md | grep -v \"former \\.py or \\.sh\"',
+      { cwd: ROOT, stdio: ['pipe', 'pipe', 'ignore'] }
+    );
+    staleChangelogText = result.toString('utf-8');
+  } catch (err: any) {
+    if (err.status !== 1) {
+      fail(`CHANGELOG stale-reference grep failed with exit code ${err.status}: ${err.message}`);
+    }
+  }
+
+  if (staleChangelogText.trim()) {
+    const changelog = fs.readFileSync(path.join(ROOT, 'CHANGELOG.md'), 'utf-8');
+    const hasMigrationNote = changelog
+      .slice(0, 500)
+      .includes('TypeScript migration note') &&
+      changelog.includes('former `.py` or `.sh` implementation paths');
+    if (!hasMigrationNote) {
+      fail(
+        'CHANGELOG_STALE_SCRIPT_REFERENCES: update stale .py/.sh names to current .ts entrypoints ' +
+        'or keep them only in a clearly marked historical migration note.'
+      );
     }
   }
 

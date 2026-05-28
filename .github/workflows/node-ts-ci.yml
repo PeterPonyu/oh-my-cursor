@@ -1,6 +1,25 @@
 name: Node & TypeScript CI
 
 on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+    paths:
+      - "scripts/**/*.ts"
+      - "hooks/**/*.ts"
+      - "src/**/*.ts"
+      - "tests/**"
+      - "mcp/**"
+      - "agents/**"
+      - "skills/**"
+      - "rules/**"
+      - ".cursor/rules/**"
+      - "docs/**"
+      - "package.json"
+      - "package-lock.json"
+      - "tsconfig.json"
+      - ".github/**"
   pull_request:
     branches:
       - main
@@ -10,7 +29,15 @@ on:
       - "src/**/*.ts"
       - "tests/**"
       - "mcp/**"
-      - ".github/workflows/node-ts-ci.yml"
+      - "agents/**"
+      - "skills/**"
+      - "rules/**"
+      - ".cursor/rules/**"
+      - "docs/**"
+      - "package.json"
+      - "package-lock.json"
+      - "tsconfig.json"
+      - ".github/**"
 
 jobs:
   ts-gates:
@@ -29,18 +56,10 @@ jobs:
           node-version: 22
 
       - name: Install dependencies
-        run: |
-          if [ -f package.json ]; then
-            npm ci
-          fi
+        run: npm ci
 
-      - name: Typecheck TypeScript (if typescript is installed)
-        run: |
-          if npm list typescript >/dev/null 2>&1; then
-            npx tsc --noEmit
-          else
-            echo "TypeScript package not installed in workspace; compiling via --experimental-strip-types execution."
-          fi
+      - name: Typecheck TypeScript
+        run: npx tsc --noEmit
 
       - name: Run Autopilot and Consensus Gate Tests
         run: node --experimental-strip-types scripts/test-autopilot-gates.ts
@@ -53,6 +72,12 @@ jobs:
 
       - name: Validate Rename References (drift guard)
         run: node --experimental-strip-types scripts/validate-rename-references.ts
+
+      - name: Validate Translation Freshness
+        run: node --experimental-strip-types scripts/validate-translation-freshness.ts
+
+      - name: Run Hook Behavior Tests
+        run: node --experimental-strip-types --test tests/hooks/*.test.ts
 
       - name: Run Memory Layer Tests
         run: node --experimental-strip-types --test tests/memory/*.test.ts

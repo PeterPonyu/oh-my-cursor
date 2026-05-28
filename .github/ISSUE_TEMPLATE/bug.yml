@@ -1,0 +1,35 @@
+name: Bug report
+description: Report a reproducible defect in a repo-owned oh-my-cursor surface.
+title: "[Bug]: "
+labels: [bug]
+body:
+  - type: dropdown
+    id: ownership
+    attributes:
+      label: Ownership class
+      options:
+        - repo-owned
+        - host-product-only
+        - unsupported-or-out-of-scope
+        - unknown
+    validations:
+      required: true
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem
+      description: What failed, and what did you expect instead?
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Evidence
+      description: Include commands, paths, logs, screenshots, or official docs.
+    validations:
+      required: true
+  - type: textarea
+    id: proposed
+    attributes:
+      label: Proposed outcome
+      description: What would close this bug?

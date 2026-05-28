@@ -265,6 +265,7 @@ function main() {
   runValidator('node --experimental-strip-types scripts/validate-agent-bridge-contract.ts');
   runValidator('node --experimental-strip-types scripts/validate-hook-readonly.ts');
   runValidator('node --experimental-strip-types scripts/validate-hook-readonly.ts --check-shared-lock');
+  runValidator('node --experimental-strip-types scripts/validate-translation-freshness.ts');
   runValidator('node --experimental-strip-types scripts/validate-mcp-server-structure.ts');
   runValidator('node --experimental-strip-types scripts/e2e-qa-session-assets.ts');
 
