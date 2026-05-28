@@ -1,3 +1,4 @@
+<!-- source-sha256: AGENTS.md 0b4e1f3bc657ea883f714de8ccb4a65d2fb9511e83e4bfe8a2d4faa4efd89b53 -->
 # oh-my-cursor 仓库指令与策略
 
 本仓库是一个 Cursor 原生的工作流主干骨架——一个向 Cursor 工作区交付规则（rules）、技能（skills）、智能体（agents）和生命周期钩子（hooks）的本地插件。请保持文档先行、以证据为支撑，并明确区分哪些是仓库检入的产物，哪些是 Cursor 本身的产品功能。

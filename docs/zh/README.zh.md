@@ -1,3 +1,4 @@
+<!-- source-sha256: README.md c0ee57618eaaae0402d4a5a607ad5bf69aaf5e114896de1358a293418f7c9678 -->
 # oh-my-cursor
 
 <div align="center">

@@ -40,7 +40,7 @@ Any PR that adds, modifies, or removes a capability claim in `AGENTS.md`, `READM
 
 ## 3. Translation Freshness
 
-When `README.md` or `AGENTS.md` changes, update the matching Chinese translation in `docs/zh/` in the same PR unless the change is explicitly translation-neutral. The freshness guard compares the latest Git commit touching each English source and its maintained translation, so docs-only drift is caught before merge.
+When `README.md` or `AGENTS.md` changes, update the matching Chinese translation in `docs/zh/` in the same PR unless the change is explicitly translation-neutral. The freshness guard compares a checked-in `source-sha256` marker in each maintained translation against the current English source content, so docs-only drift is caught before merge without relying on filesystem mtimes.
 
 ## 4. Pull Request Guidelines
 

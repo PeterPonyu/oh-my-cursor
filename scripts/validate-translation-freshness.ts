@@ -1,3 +1,4 @@
+import * as crypto from 'node:crypto';
 import * as fs from 'node:fs';
 import * as path from 'node:path';
 import * as process from 'node:process';
@@ -16,12 +17,20 @@ function fail(message: string): never {
   process.exit(1);
 }
 
-function fileMtimeMs(relPath: string): number {
+function readText(relPath: string): string {
   try {
-    return fs.statSync(path.join(ROOT, relPath)).mtimeMs;
+    return fs.readFileSync(path.join(ROOT, relPath), 'utf-8');
   } catch (err: any) {
-    fail(`stat failed for ${relPath}: ${err.message}`);
+    fail(`read failed for ${relPath}: ${err.message}`);
   }
+}
+
+function sha256(text: string): string {
+  return crypto.createHash('sha256').update(text, 'utf-8').digest('hex');
+}
+
+function expectedMarker(source: string, sourceHash: string): string {
+  return `<!-- source-sha256: ${source} ${sourceHash} -->`;
 }
 
 for (const pair of PAIRS) {
@@ -30,12 +39,13 @@ for (const pair of PAIRS) {
   if (!fs.existsSync(sourcePath)) fail(`source doc missing: ${pair.source}`);
   if (!fs.existsSync(translationPath)) fail(`translation doc missing: ${pair.translation}`);
 
-  const sourceMtime = fileMtimeMs(pair.source);
-  const translationMtime = fileMtimeMs(pair.translation);
-  if (sourceMtime > translationMtime + 1000) {
+  const sourceHash = sha256(readText(pair.source));
+  const translationText = readText(pair.translation);
+  const marker = expectedMarker(pair.source, sourceHash);
+  if (!translationText.includes(marker)) {
     fail(
-      `TRANSLATION_STALE: ${pair.translation} is older than ${pair.source}; ` +
-      'update the translation or commit both docs together.'
+      `TRANSLATION_STALE: ${pair.translation} is missing ${marker}; ` +
+      'update the translation and refresh its source-sha256 marker.'
     );
   }
 }
