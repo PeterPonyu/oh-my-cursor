@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://github.com/oh-my-cursor/oh-my-cursor/.cursor/state/workflow-state.schema.json",
+  "$id": "https://github.com/PeterPonyu/oh-my-cursor/.cursor/state/workflow-state.schema.json",
   "title": "oh-my-cursor workflow state",
   "description": "Repo-owned, file-backed state that lets hooks, skills, and agents share the same view of the current orchestration phase, acceptance criteria, and verification evidence. The state is human-visible and explicitly opt-in. There is no background daemon.",
   "type": "object",
