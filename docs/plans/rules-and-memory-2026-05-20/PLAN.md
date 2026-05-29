@@ -36,8 +36,8 @@ Key findings driving this plan:
 | oh-my-claudecode `src/hooks/project-memory/` | JSON project memory with merge semantics, user-protected keys |
 | Sibling `AGENTS.md` markers | `<!-- OMCS:MEMORY:START -->` marker-bounded merge for user-owned docs |
 | Sibling repo-root wiki pattern | Wiki as committed markdown at repo root, not hidden under `.omc/` |
-| oh-my-openagent `src/hooks/rules-injector/` | Proximity-based rule walk + dedup by realpath + content hash (notes only — Cursor product loads `.cursor/rules/` natively) |
-| oh-my-openagent `compaction-context-prompt.ts` | Structured compaction summary sections (already in our `compact-reminder.py` philosophy; reinforce with notepad) |
+| Upstream OMC project `src/hooks/rules-injector/` | Proximity-based rule walk + dedup by realpath + content hash (notes only — Cursor product loads `.cursor/rules/` natively) |
+| Upstream OMC project `compaction-context-prompt.ts` | Structured compaction summary sections (already in our `compact-reminder.py` philosophy; reinforce with notepad) |
 
 Things we explicitly do **not** migrate (full list in AUDIT.md):
 

@@ -12,7 +12,7 @@ Sibling plugins were read-only audited and distilled in
 |--------|---------------|----------------|-----------|
 | oh-my-claudecode | `rules-injector` hook, `omc-setup` CLAUDE.md markers | Three-tier notepad, project-memory JSON, wiki, `<remember>` tags | Partial — skills + templates, no tag-parsing hooks |
 | Sibling CLI plugin | `AGENTS.md` markers, `developer_instructions` | Local notepad, repo-root wiki, project-memory | Partial — same notepad/wiki shape, OMCS markers |
-| oh-my-openagent | Proximity rule walk, hierarchical AGENTS.md | Plan notepads, compaction prompt, boulder state | Partial — decisions ADRs + compaction philosophy only |
+| Upstream OMC project | Proximity rule walk, hierarchical AGENTS.md | Plan notepads, compaction prompt, boulder state | Partial — decisions ADRs + compaction philosophy only |
 
 Full non-migration list: [`AUDIT.md` §5–6](./AUDIT.md).
 

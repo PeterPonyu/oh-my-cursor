@@ -3,7 +3,7 @@
 ## Purpose
 
 Port three small, recent features from upstream sibling repos
-(`oh-my-claudecode`, `oh-my-codex`, `oh-my-openagent`) into `oh-my-cursor`
+(`oh-my-claudecode`, `oh-my-codex`, and the upstream OMC project) into `oh-my-cursor`
 as three independent, surgical TypeScript PRs. Each PR:
 
 - touches one existing surface (no new files),
@@ -32,8 +32,8 @@ observed in the source repos when they contribute externally
 | PR | Source feature | Source file(s) | Cursor target |
 |----|----------------|----------------|---------------|
 | 1  | Naming-slop pre-tool check | `oh-my-claudecode` `src/scripts/pre-tool-enforcer.mjs` (merged #3013, 2026-05-15) | `hooks/tool-guard.ts` |
-| 2  | Doctor bidirectional cross-ref | `oh-my-openagent` `src/cli/doctor.ts` (schema-validator pattern) | `skills/doctor/SKILL.md` §6 |
-| 3  | Subagent stall warning | `oh-my-openagent` worktree `4218-stall-timeout-separation` | `hooks/subagent-bootstrap.ts` + `hooks/subagent-summary.ts` |
+| 2  | Doctor bidirectional cross-ref | upstream OMC project `src/cli/doctor.ts` (schema-validator pattern) | `skills/doctor/SKILL.md` §6 |
+| 3  | Subagent stall warning | upstream OMC project worktree `4218-stall-timeout-separation` | `hooks/subagent-bootstrap.ts` + `hooks/subagent-summary.ts` |
 
 Each PR cites its source by file path and (where available) merged PR
 number, so a reviewer can audit the port for fidelity.
@@ -106,7 +106,7 @@ Also: there is no `agents/ROLE-INDEX.md` in cursor (that pattern lives
 in `oh-my-grokbuild`). An agents-catalogue cross-ref has no anchor
 file to read.
 
-The openagent "config completeness" pattern still ports usefully, but
+The upstream "config completeness" pattern still ports usefully, but
 to different anchors than the first draft assumed.
 
 ### What changes
@@ -247,8 +247,8 @@ Every PR in this batch must, before opening:
 | OSC 52 clipboard preservation (claudecode) | Cursor does not orchestrate tmux. |
 | Goal artifact mapper (claudecode) | 180 LOC; exceeds per-PR cap. Revisit as its own design. |
 | Co-author opt-out flag (codex) | No commit/git-master skill on disk in cursor. |
-| Disabled provider filter (openagent) | Cursor's tool-guard already implements `agentToolsAllowlist`. |
-| Live-tail integration (openagent) | 400+ LOC; not surgical. Revisit later. |
+| Disabled provider filter (upstream) | Cursor's tool-guard already implements `agentToolsAllowlist`. |
+| Live-tail integration (upstream) | 400+ LOC; not surgical. Revisit later. |
 | Sparkshell secret redaction (codex) | Cursor has no sparkshell-equivalent surface. |
 
 ## Implementation order
