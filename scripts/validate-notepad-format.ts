@@ -176,9 +176,7 @@ function validate(filePath: string): void {
   _ok(`notepad format is valid: ${filePath}`);
 }
 
-// ---------------------------------------------------------------------------
 // --self-test (V2 tempdir isolation)
-// ---------------------------------------------------------------------------
 
 const _CLEAN_FIXTURE =
   `# Project notepad

@@ -24,9 +24,7 @@ function makeTmp(): string {
   return fs.mkdtempSync(path.join(os.tmpdir(), 'bridge-test-'));
 }
 
-// ---------------------------------------------------------------------------
 // jail.ts
-// ---------------------------------------------------------------------------
 
 test('jail: path inside .cursor/state is allowed', () => {
   const tmpDir = makeTmp();
@@ -69,9 +67,7 @@ test('jail: path inside docs/plans is allowed', () => {
   }
 });
 
-// ---------------------------------------------------------------------------
 // auth.ts
-// ---------------------------------------------------------------------------
 
 test('auth: no env var set — authenticate always returns true', () => {
   const prev = process.env[ENV_TOKEN_NAME];
@@ -109,9 +105,7 @@ test('auth: token set — wrong token rejected', () => {
   }
 });
 
-// ---------------------------------------------------------------------------
 // state_io.ts — happy-path round-trip state_init -> state_read
-// ---------------------------------------------------------------------------
 
 test('state_io: state_init then state_read returns the initialised state', () => {
   const tmpDir = makeTmp();
@@ -133,9 +127,7 @@ test('state_io: state_init then state_read returns the initialised state', () =>
   }
 });
 
-// ---------------------------------------------------------------------------
 // memory_io.ts — memory_notepad_append_working happy path + bad path throws
-// ---------------------------------------------------------------------------
 
 const NOTEPAD_CONTENT =
   '# notepad\n\n' +

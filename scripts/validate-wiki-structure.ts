@@ -174,9 +174,7 @@ function validate(wikiDir: string): void {
   ok(`wiki structure is valid (${pages.length} page${plural}): ${wikiDir}`);
 }
 
-// ---------------------------------------------------------------------------
 // --self-test
-// ---------------------------------------------------------------------------
 
 const CLEAN_INDEX =
   `# Wiki index
