@@ -191,9 +191,7 @@ function validate(filePath: string): void {
   ok(`project memory is valid: ${filePath}`);
 }
 
-// ---------------------------------------------------------------------------
 // --self-test
-// ---------------------------------------------------------------------------
 
 const CLEAN_FIXTURE = {
   version: 1,

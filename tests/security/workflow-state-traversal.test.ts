@@ -15,9 +15,7 @@ import { fileURLToPath } from 'node:url';
 const currentFile = fileURLToPath(import.meta.url);
 const ROOT = path.resolve(path.dirname(currentFile), '..', '..');
 
-// ---------------------------------------------------------------------------
 // #32 — _sanitizeTaskId / _archiveSession path traversal
-// ---------------------------------------------------------------------------
 
 // Import the internal helpers by importing the api module. Because
 // _sanitizeTaskId is not exported, we exercise it through initState +
@@ -116,9 +114,7 @@ test('#32 traversal: safe task_id passes through unchanged', () => {
   }
 });
 
-// ---------------------------------------------------------------------------
 // #33 — _parseArgv shell-operator rejection (imported from run-autopilot.ts)
-// ---------------------------------------------------------------------------
 
 test('#33 shell-exec: pipe operator is rejected', () => {
   assert.strictEqual(_parseArgv('echo hello | cat'), null);
