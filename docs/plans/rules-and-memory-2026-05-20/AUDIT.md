@@ -86,15 +86,15 @@ captures the distilled patterns and the migration verdict per pattern.
 `note` (deprecated → MCP-only), `wiki`, `plan`, `setup`, `skill`, `help`,
 `doctor`.
 
-## 3. oh-my-openagent (`/home/zeyufu/Desktop/oh-my-openagent/`)
+## 3. Upstream OMC project (sibling repo)
 
 ### Rule surfaces (declarative)
 
 - 48 hierarchical `AGENTS.md` files (root + `src/**/AGENTS.md`,
   `web/AGENTS.md`).
 - `.github/copilot-instructions.md`, `.github/instructions/*.instructions.md`.
-- `.claude/rules/**`, `.cursor/rules/**`, `.sisyphus/rules/**`,
-  `.opencode/rules/**` (`src/hooks/rules-injector/constants.ts`).
+- `.claude/rules/**`, `.cursor/rules/**`, `.sisyphus/rules/**`, and other
+  per-host rules directories (`src/hooks/rules-injector/constants.ts`).
 - User-global `~/.claude/rules/**` (distance 9999).
 
 ### Runtime injection
@@ -104,7 +104,7 @@ captures the distilled patterns and the migration verdict per pattern.
   `applyTo` / `alwaysApply`, dedup by realpath + content hash, session-scoped
   cache cleared on compaction.
 - `directory-agents-injector` hook walks `AGENTS.md` files up the tree on
-  read, skips project-root file (OpenCode loads natively).
+  read, skips project-root file (the host product loads it natively).
 - `experimental.chat.messages.transform`: `ContextCollector` merges
   pending context blobs from hooks into the last user message.
 
