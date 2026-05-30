@@ -3,6 +3,7 @@ import * as path from 'node:path';
 import * as process from 'node:process';
 import { fileURLToPath } from 'node:url';
 import { resolveRepoRoot, resolveWorkspaceRoot } from './_repo.ts';
+import { fileLock } from '../.cursor/state/_locking.ts';
 
 const currentFile = fileURLToPath(import.meta.url);
 const PAYLOAD_ROOT = resolveRepoRoot(currentFile);
@@ -11,47 +12,6 @@ const WORKSPACE_ROOT = resolveWorkspaceRoot(currentFile);
 const STATE_DIR = path.join(WORKSPACE_ROOT, '.cursor', 'state');
 export const ACTIVE_ROLE_PATH = path.join(STATE_DIR, 'active-role.json');
 export const AGENTS_DIR = path.join(PAYLOAD_ROOT, 'agents');
-
-export function acquireFileLock(targetPath: string): () => void {
-  const lockDir = targetPath + '.lock';
-  const maxRetries = 100;
-  const retryDelayMs = 50;
-
-  try {
-    fs.mkdirSync(path.dirname(targetPath), { recursive: true });
-  } catch {
-    // ignore
-  }
-
-  for (let i = 0; i < maxRetries; i++) {
-    try {
-      fs.mkdirSync(lockDir);
-      return () => {
-        try {
-          fs.rmdirSync(lockDir);
-        } catch {
-          // ignore
-        }
-      };
-    } catch (err: any) {
-      if (err.code === 'EEXIST') {
-        try {
-          const stat = fs.statSync(lockDir);
-          const ageMs = Date.now() - stat.mtimeMs;
-          if (ageMs > 10000) {
-            fs.rmdirSync(lockDir);
-          }
-        } catch {
-          // ignore
-        }
-        Atomics.wait(new Int32Array(new SharedArrayBuffer(4)), 0, 0, retryDelayMs);
-        continue;
-      }
-      throw err;
-    }
-  }
-  return () => {};
-}
 
 export function setActiveRole(role: string, subagentId: string = ''): void {
   if (!role) return;
@@ -67,27 +27,19 @@ export function setActiveRole(role: string, subagentId: string = ''): void {
     // ignore
   }
   
-  const unlock = acquireFileLock(ACTIVE_ROLE_PATH);
-  try {
+  fileLock(ACTIVE_ROLE_PATH, () => {
     const tmp = ACTIVE_ROLE_PATH + '.tmp';
     fs.writeFileSync(tmp, JSON.stringify(payload) + '\n', 'utf-8');
     fs.renameSync(tmp, ACTIVE_ROLE_PATH);
-  } finally {
-    unlock();
-  }
+  });
 }
 
 export function clearActiveRole(): void {
-  const unlock = acquireFileLock(ACTIVE_ROLE_PATH);
-  try {
+  fileLock(ACTIVE_ROLE_PATH, () => {
     if (fs.existsSync(ACTIVE_ROLE_PATH)) {
       fs.unlinkSync(ACTIVE_ROLE_PATH);
     }
-  } catch {
-    // ignore
-  } finally {
-    unlock();
-  }
+  });
 }
 
 export function getActiveRole(): string | null {
