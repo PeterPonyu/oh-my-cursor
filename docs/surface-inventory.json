@@ -1,0 +1,98 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "schemaVersion": 1,
+  "host": "cursor",
+  "package": "oh-my-cursor",
+  "sourceOfTruth": {
+    "skills": "skills/*/SKILL.md",
+    "agents": "agents/*.md",
+    "hooks": "hooks/hooks.json",
+    "mcpTools": "mcp/cursor-state-bridge/server.ts#TOOLS",
+    "readme": "README.md"
+  },
+  "surfaces": {
+    "skills": {
+      "ownership": "repo-owned",
+      "count": 20,
+      "names": [
+        "auto-execute",
+        "debug",
+        "decisions",
+        "deep-interview",
+        "doctor",
+        "iterate-loop",
+        "local-plugin-check",
+        "mcp-setup",
+        "notepad",
+        "parallel-batch",
+        "phase-controller",
+        "plan",
+        "remember",
+        "review",
+        "rules-authoring",
+        "security-review",
+        "team-controller",
+        "trace",
+        "verify",
+        "wiki"
+      ]
+    },
+    "agents": {
+      "ownership": "repo-owned",
+      "count": 14,
+      "names": [
+        "architect",
+        "code-reviewer",
+        "critic",
+        "debugger",
+        "explore",
+        "implementer",
+        "orchestrator",
+        "planner",
+        "qa-tester",
+        "researcher",
+        "security-reviewer",
+        "test-engineer",
+        "tracer",
+        "verifier"
+      ]
+    },
+    "hooks": {
+      "ownership": "repo-owned",
+      "count": 14,
+      "events": [
+        "afterFileEdit",
+        "afterShellExecution",
+        "beforeReadFile",
+        "beforeShellExecution",
+        "beforeSubmitPrompt",
+        "postToolUse",
+        "postToolUseFailure",
+        "preCompact",
+        "preToolUse",
+        "sessionEnd",
+        "sessionStart",
+        "stop",
+        "subagentStart",
+        "subagentStop"
+      ]
+    },
+    "mcpTools": {
+      "ownership": "repo-owned-opt-in",
+      "count": 11,
+      "names": [
+        "memory_notepad_append_working",
+        "memory_notepad_read",
+        "memory_project_memory_read",
+        "memory_project_memory_set_directive",
+        "memory_wiki_log_append",
+        "state_history_append",
+        "state_init",
+        "state_read",
+        "state_record_failure",
+        "state_set_phase",
+        "state_update_acceptance_criterion"
+      ]
+    }
+  }
+}

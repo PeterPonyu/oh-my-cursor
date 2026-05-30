@@ -71,6 +71,7 @@ const required = [
   '.cursor/rules/20-commit-discipline.mdc',
   '.cursor/rules/30-error-handling.mdc',
   'docs/confirmed-surfaces.md',
+  'docs/surface-inventory.json',
   'docs/archive/fallback-policy.md',
   'docs/local-plugin-verification.md',
   'docs/orchestration.md',
@@ -89,6 +90,7 @@ const required = [
   'scripts/run-team-coordinator.ts',
   'scripts/refine-branding.ts',
   'scripts/rule-doctor.ts',
+  'scripts/validate-surface-inventory.ts',
   '.cursor/state/project-memory.ts',
   '.cursor/state/notepad.md',
 ];
@@ -260,6 +262,7 @@ function main() {
   runValidator('node --experimental-strip-types scripts/validate-plugin-structure.ts');
   runValidator('node --experimental-strip-types scripts/validate-public-language.ts');
   runValidator('node --experimental-strip-types scripts/validate-cursor-workflow-artifacts.ts');
+  runValidator('node --experimental-strip-types scripts/validate-surface-inventory.ts');
   runValidator('node --experimental-strip-types scripts/smoke-workflow-state-completion.ts');
   runValidator('node --experimental-strip-types scripts/validate-agent-model-policy.ts');
   runValidator('node --experimental-strip-types scripts/validate-agent-bridge-contract.ts');

@@ -1,4 +1,4 @@
-<!-- source-sha256: README.md c0ee57618eaaae0402d4a5a607ad5bf69aaf5e114896de1358a293418f7c9678 -->
+<!-- source-sha256: README.md 94065077690f81e4ee9b68c82929be445cd827f19c01b6e79ae7158f75fa9660 -->
 # oh-my-cursor
 
 <div align="center">
@@ -43,7 +43,7 @@ node --experimental-strip-types scripts/install-local-plugin.ts --symlink
 | **Memory templates 记忆模板** | `docs/templates/` | 随插件交付的 notepad、project memory、wiki 和 ADR 模板 |
 | **Memory layer 记忆层** | `docs/memory-layer.md` | 技能拥有的 notepad、project memory、decisions 和 wiki（与 workflow-state 分离） |
 | **State 状态契约** | `.cursor/state/` + `src/oh_my_cursor/workflow_state/` | 基于文件的工作流状态契约、兼容性垫片以及封装的 API/CLI/文件锁实现 |
-| **MCP 状态桥** (可选) | `mcp/cursor-state-bridge/` | 通过 JSON-RPC 写入 workflow-state，并提供可选记忆工具 |
+| **MCP 状态桥** (11 个工具，可选) | `mcp/cursor-state-bridge/` | 通过 JSON-RPC 提供 6 个 workflow-state 工具和 5 个可选记忆工具 |
 
 ## 文档指引
 
@@ -60,6 +60,7 @@ node --experimental-strip-types scripts/install-local-plugin.ts --symlink
 | 验收标准 | [`docs/PRD.yaml`](../PRD.yaml) |
 | 变更历史 | [`CHANGELOG.md`](../../CHANGELOG.md) |
 | 确认表面映射 | [`docs/confirmed-surfaces.md`](../confirmed-surfaces.md) |
+| 表面清单 | [`docs/surface-inventory.json`](../surface-inventory.json) |
 | 官方文献引用 | [`docs/references.md`](../references.md) |
 
 旧版开发说明（优化优先级、插件边界审查、后备策略）保存在 [`docs/archive/`](../archive/)。

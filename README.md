@@ -47,7 +47,7 @@ For a copy-pasteable workflow-state walkthrough, see [`docs/recipes/workflow-sta
 | **Memory templates** | `docs/templates/` | Notepad, project memory, wiki, and ADR templates shipped with the plugin |
 | **Memory layer** | `docs/memory-layer.md` | Skill-owned notepad, project memory, decisions, and wiki (separate from workflow-state) |
 | **State contract** | `.cursor/state/` + `src/oh_my_cursor/workflow_state/` | File-backed workflow-state contract, compatibility shims, and packaged API/CLI/lock implementation |
-| **MCP bridge** (opt-in) | `mcp/cursor-state-bridge/` | Workflow-state writes plus optional memory tools via JSON-RPC |
+| **MCP bridge** (11 tools, opt-in) | `mcp/cursor-state-bridge/` | Six workflow-state tools plus five optional memory tools via JSON-RPC |
 
 ## Docs
 
@@ -64,6 +64,7 @@ For a copy-pasteable workflow-state walkthrough, see [`docs/recipes/workflow-sta
 | Acceptance criteria | [`docs/PRD.yaml`](./docs/PRD.yaml) |
 | Change history | [`CHANGELOG.md`](./CHANGELOG.md) |
 | Confirmed surfaces | [`docs/confirmed-surfaces.md`](./docs/confirmed-surfaces.md) |
+| Surface inventory | [`docs/surface-inventory.json`](./docs/surface-inventory.json) |
 | Official references | [`docs/references.md`](./docs/references.md) |
 
 Older dev notes (refinement priorities, plugin-boundary review, fallback
