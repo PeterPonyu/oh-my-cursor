@@ -11,8 +11,11 @@ every claim anchored to a checked-in artifact.
 
 ## Quick start
 
-Type `@phase-controller` in the Cursor composer to start or resume an
-oh-my-cursor workflow.
+Type `@auto-execute` in the Cursor composer to kick off the default
+first-run loop. It walks the recommended path through the other default
+skills — `@deep-interview` (only when the request is vague), `@plan`,
+`@iterate-loop`, and `@verify` — so a first run lands on a working,
+evidence-backed change without reaching for advanced surfaces.
 
 ### Installation
 

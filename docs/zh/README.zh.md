@@ -1,4 +1,4 @@
-<!-- source-sha256: README.md 94065077690f81e4ee9b68c82929be445cd827f19c01b6e79ae7158f75fa9660 -->
+<!-- source-sha256: README.md f28e527262801f979760905655132ad881ce5d88653908431f7d88b6f5345184 -->
 # oh-my-cursor
 
 <div align="center">
@@ -9,7 +9,7 @@
 
 ## 快速入门
 
-在 Cursor composer 中输入 `@phase-controller` 以启动或恢复 oh-my-cursor 工作流。
+在 Cursor composer 中输入 `@auto-execute` 以启动默认的首次运行循环（first-run loop）。它会沿着推荐路径串联其余默认技能—— `@deep-interview`（仅在请求模糊时）、`@plan`、`@iterate-loop` 和 `@verify` ——使首次运行无需触及高级（advanced）功能即可得到一个可工作、有证据支撑的更改。
 
 ### 安装
 

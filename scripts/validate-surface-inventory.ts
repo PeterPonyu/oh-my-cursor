@@ -107,6 +107,66 @@ async function actualMcpToolNames(): Promise<string[]> {
   return sorted(mod.TOOLS.map((tool: any) => tool?.name).filter((name: unknown): name is string => typeof name === 'string'));
 }
 
+/**
+ * Extract the body of the "Quick start" section from a README, stopping at the
+ * next heading of the same or higher level. Returns '' if no section is found.
+ */
+function extractQuickStartSection(text: string, headings: string[]): string {
+  const lines = text.split(/\r?\n/);
+  let start = -1;
+  for (let i = 0; i < lines.length; i++) {
+    const heading = lines[i].replace(/^#{1,6}\s+/, '').trim();
+    if (lines[i].startsWith('## ') && headings.includes(heading)) {
+      start = i + 1;
+      break;
+    }
+  }
+  if (start === -1) return '';
+  const body: string[] = [];
+  for (let i = start; i < lines.length; i++) {
+    // Stop at the next top-level (##) heading so we only read the Quick start lead-in.
+    if (lines[i].startsWith('## ')) break;
+    body.push(lines[i]);
+  }
+  return body.join('\n');
+}
+
+/**
+ * Validate that every `@skill` invocation advertised in a README's Quick start
+ * section is classified `default` with `first_run: true` in the inventory.
+ * Fails loudly when a README points first-run users at a non-default or
+ * non-first-run surface, which would make the first-run contract false-green.
+ */
+function validateReadmeFirstRunInvocations(
+  label: string,
+  relativePath: string,
+  headings: string[],
+  surfaceByName: Map<string, Surface>,
+): void {
+  const text = fs.readFileSync(path.join(ROOT, relativePath), 'utf-8');
+  const section = extractQuickStartSection(text, headings);
+  if (!section) {
+    fail(`${label}: could not locate a Quick start section (looked for headings: ${headings.join(', ')})`);
+  }
+  const invocations = sorted(new Set((section.match(/@[a-z][a-z0-9-]*/gi) ?? []).map((token: string) => token.slice(1))));
+  if (invocations.length === 0) {
+    fail(`${label}: Quick start advertises no @skill first-run invocation; expected at least one default first_run surface`);
+  }
+  for (const name of invocations) {
+    const surface = surfaceByName.get(name);
+    if (!surface) {
+      fail(`${label}: Quick start invokes @${name}, which is not present in the surface inventory`);
+    }
+    if (surface.classification !== 'default' || surface.first_run !== true) {
+      fail(
+        `${label}: Quick start invokes @${name}, but it is classified '${surface.classification}' ` +
+        `with first_run=${surface.first_run}; first-run invocations must be 'default' + first_run:true`,
+      );
+    }
+  }
+  log(`${label} first-run invocations are all default + first_run:true (@${invocations.join(', @')})`);
+}
+
 function validateReadmeCounts(counts: Record<Kind, number>): void {
   const readme = fs.readFileSync(path.join(ROOT, 'README.md'), 'utf-8');
   const checks: [string, RegExp][] = [
@@ -190,6 +250,11 @@ async function main(): Promise<void> {
 
   const counts = validateEntries(inventory.surfaces, actual);
   validateReadmeCounts(counts);
+
+  const surfaceByName = new Map<string, Surface>(inventory.surfaces.map((entry) => [entry.name, entry]));
+  validateReadmeFirstRunInvocations('README.md', 'README.md', ['Quick start'], surfaceByName);
+  validateReadmeFirstRunInvocations('docs/zh/README.zh.md', 'docs/zh/README.zh.md', ['快速入门', 'Quick start'], surfaceByName);
+
   console.log('SURFACE_INVENTORY_OK');
 }
 
