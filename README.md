@@ -11,8 +11,11 @@ every claim anchored to a checked-in artifact.
 
 ## Quick start
 
-Type `@phase-controller` in the Cursor composer to start or resume an
-oh-my-cursor workflow.
+Type `@auto-execute` in the Cursor composer to kick off the default
+first-run loop. It walks the recommended path through the other default
+skills — `@deep-interview` (only when the request is vague), `@plan`,
+`@iterate-loop`, and `@verify` — so a first run lands on a working,
+evidence-backed change without reaching for advanced surfaces.
 
 ### Installation
 
@@ -47,7 +50,7 @@ For a copy-pasteable workflow-state walkthrough, see [`docs/recipes/workflow-sta
 | **Memory templates** | `docs/templates/` | Notepad, project memory, wiki, and ADR templates shipped with the plugin |
 | **Memory layer** | `docs/memory-layer.md` | Skill-owned notepad, project memory, decisions, and wiki (separate from workflow-state) |
 | **State contract** | `.cursor/state/` + `src/oh_my_cursor/workflow_state/` | File-backed workflow-state contract, compatibility shims, and packaged API/CLI/lock implementation |
-| **MCP bridge** (opt-in) | `mcp/cursor-state-bridge/` | Workflow-state writes plus optional memory tools via JSON-RPC |
+| **MCP bridge** (11 tools, opt-in) | `mcp/cursor-state-bridge/` | Six workflow-state tools plus five optional memory tools via JSON-RPC |
 
 ## Docs
 
@@ -64,6 +67,7 @@ For a copy-pasteable workflow-state walkthrough, see [`docs/recipes/workflow-sta
 | Acceptance criteria | [`docs/PRD.yaml`](./docs/PRD.yaml) |
 | Change history | [`CHANGELOG.md`](./CHANGELOG.md) |
 | Confirmed surfaces | [`docs/confirmed-surfaces.md`](./docs/confirmed-surfaces.md) |
+| Surface inventory | [`docs/surface-inventory.json`](./docs/surface-inventory.json) |
 | Official references | [`docs/references.md`](./docs/references.md) |
 
 Older dev notes (refinement priorities, plugin-boundary review, fallback
