@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "host": "cursor",
   "package": "oh-my-cursor",
   "sourceOfTruth": {
@@ -10,89 +10,537 @@
     "mcpTools": "mcp/cursor-state-bridge/server.ts#TOOLS",
     "readme": "README.md"
   },
-  "surfaces": {
-    "skills": {
-      "ownership": "repo-owned",
-      "count": 20,
-      "names": [
-        "auto-execute",
-        "debug",
-        "decisions",
-        "deep-interview",
-        "doctor",
-        "iterate-loop",
-        "local-plugin-check",
-        "mcp-setup",
-        "notepad",
-        "parallel-batch",
-        "phase-controller",
-        "plan",
-        "remember",
-        "review",
-        "rules-authoring",
-        "security-review",
-        "team-controller",
-        "trace",
-        "verify",
-        "wiki"
-      ]
+  "surfaces": [
+    {
+      "name": "auto-execute",
+      "kind": "skill",
+      "classification": "default",
+      "path": "skills/auto-execute/SKILL.md",
+      "first_run": true,
+      "rationale": "Part of the first-run Cursor loop and counted against the default user-invocable skill ceiling.",
+      "validator": "node --experimental-strip-types scripts/validate-surface-inventory.ts"
     },
-    "agents": {
-      "ownership": "repo-owned",
-      "count": 14,
-      "names": [
-        "architect",
-        "code-reviewer",
-        "critic",
-        "debugger",
-        "explore",
-        "implementer",
-        "orchestrator",
-        "planner",
-        "qa-tester",
-        "researcher",
-        "security-reviewer",
-        "test-engineer",
-        "tracer",
-        "verifier"
-      ]
+    {
+      "name": "debug",
+      "kind": "skill",
+      "classification": "advanced",
+      "path": "skills/debug/SKILL.md",
+      "first_run": false,
+      "rationale": "Useful Cursor workflow support, but not part of the first-run default surface.",
+      "validator": "node --experimental-strip-types scripts/validate-surface-inventory.ts"
     },
-    "hooks": {
-      "ownership": "repo-owned",
-      "count": 14,
-      "events": [
-        "afterFileEdit",
-        "afterShellExecution",
-        "beforeReadFile",
-        "beforeShellExecution",
-        "beforeSubmitPrompt",
-        "postToolUse",
-        "postToolUseFailure",
-        "preCompact",
-        "preToolUse",
-        "sessionEnd",
-        "sessionStart",
-        "stop",
-        "subagentStart",
-        "subagentStop"
-      ]
+    {
+      "name": "decisions",
+      "kind": "skill",
+      "classification": "internal",
+      "path": "skills/decisions/SKILL.md",
+      "first_run": false,
+      "rationale": "Supporting knowledge surface that the repo keeps available without marketing it as a default user workflow.",
+      "validator": "node --experimental-strip-types scripts/validate-surface-inventory.ts"
     },
-    "mcpTools": {
-      "ownership": "repo-owned-opt-in",
-      "count": 11,
-      "names": [
-        "memory_notepad_append_working",
-        "memory_notepad_read",
-        "memory_project_memory_read",
-        "memory_project_memory_set_directive",
-        "memory_wiki_log_append",
-        "state_history_append",
-        "state_init",
-        "state_read",
-        "state_record_failure",
-        "state_set_phase",
-        "state_update_acceptance_criterion"
-      ]
+    {
+      "name": "deep-interview",
+      "kind": "skill",
+      "classification": "default",
+      "path": "skills/deep-interview/SKILL.md",
+      "first_run": true,
+      "rationale": "Part of the first-run Cursor loop and counted against the default user-invocable skill ceiling.",
+      "validator": "node --experimental-strip-types scripts/validate-surface-inventory.ts"
+    },
+    {
+      "name": "doctor",
+      "kind": "skill",
+      "classification": "advanced",
+      "path": "skills/doctor/SKILL.md",
+      "first_run": false,
+      "rationale": "Useful Cursor workflow support, but not part of the first-run default surface.",
+      "validator": "node --experimental-strip-types scripts/validate-surface-inventory.ts"
+    },
+    {
+      "name": "iterate-loop",
+      "kind": "skill",
+      "classification": "default",
+      "path": "skills/iterate-loop/SKILL.md",
+      "first_run": true,
+      "rationale": "Part of the first-run Cursor loop and counted against the default user-invocable skill ceiling.",
+      "validator": "node --experimental-strip-types scripts/validate-surface-inventory.ts"
+    },
+    {
+      "name": "local-plugin-check",
+      "kind": "skill",
+      "classification": "advanced",
+      "path": "skills/local-plugin-check/SKILL.md",
+      "first_run": false,
+      "rationale": "Useful Cursor workflow support, but not part of the first-run default surface.",
+      "validator": "node --experimental-strip-types scripts/validate-surface-inventory.ts"
+    },
+    {
+      "name": "mcp-setup",
+      "kind": "skill",
+      "classification": "advanced",
+      "path": "skills/mcp-setup/SKILL.md",
+      "first_run": false,
+      "rationale": "Useful Cursor workflow support, but not part of the first-run default surface.",
+      "validator": "node --experimental-strip-types scripts/validate-surface-inventory.ts"
+    },
+    {
+      "name": "notepad",
+      "kind": "skill",
+      "classification": "internal",
+      "path": "skills/notepad/SKILL.md",
+      "first_run": false,
+      "rationale": "Supporting knowledge surface that the repo keeps available without marketing it as a default user workflow.",
+      "validator": "node --experimental-strip-types scripts/validate-surface-inventory.ts"
+    },
+    {
+      "name": "parallel-batch",
+      "kind": "skill",
+      "classification": "advanced",
+      "path": "skills/parallel-batch/SKILL.md",
+      "first_run": false,
+      "rationale": "Useful Cursor workflow support, but not part of the first-run default surface.",
+      "validator": "node --experimental-strip-types scripts/validate-surface-inventory.ts"
+    },
+    {
+      "name": "phase-controller",
+      "kind": "skill",
+      "classification": "advanced",
+      "path": "skills/phase-controller/SKILL.md",
+      "first_run": false,
+      "rationale": "Useful Cursor workflow support, but not part of the first-run default surface.",
+      "validator": "node --experimental-strip-types scripts/validate-surface-inventory.ts"
+    },
+    {
+      "name": "plan",
+      "kind": "skill",
+      "classification": "default",
+      "path": "skills/plan/SKILL.md",
+      "first_run": true,
+      "rationale": "Part of the first-run Cursor loop and counted against the default user-invocable skill ceiling.",
+      "validator": "node --experimental-strip-types scripts/validate-surface-inventory.ts"
+    },
+    {
+      "name": "remember",
+      "kind": "skill",
+      "classification": "internal",
+      "path": "skills/remember/SKILL.md",
+      "first_run": false,
+      "rationale": "Supporting knowledge surface that the repo keeps available without marketing it as a default user workflow.",
+      "validator": "node --experimental-strip-types scripts/validate-surface-inventory.ts"
+    },
+    {
+      "name": "review",
+      "kind": "skill",
+      "classification": "advanced",
+      "path": "skills/review/SKILL.md",
+      "first_run": false,
+      "rationale": "Useful Cursor workflow support, but not part of the first-run default surface.",
+      "validator": "node --experimental-strip-types scripts/validate-surface-inventory.ts"
+    },
+    {
+      "name": "rules-authoring",
+      "kind": "skill",
+      "classification": "advanced",
+      "path": "skills/rules-authoring/SKILL.md",
+      "first_run": false,
+      "rationale": "Useful Cursor workflow support, but not part of the first-run default surface.",
+      "validator": "node --experimental-strip-types scripts/validate-surface-inventory.ts"
+    },
+    {
+      "name": "security-review",
+      "kind": "skill",
+      "classification": "advanced",
+      "path": "skills/security-review/SKILL.md",
+      "first_run": false,
+      "rationale": "Useful Cursor workflow support, but not part of the first-run default surface.",
+      "validator": "node --experimental-strip-types scripts/validate-surface-inventory.ts"
+    },
+    {
+      "name": "team-controller",
+      "kind": "skill",
+      "classification": "internal",
+      "path": "skills/team-controller/SKILL.md",
+      "first_run": false,
+      "rationale": "Supporting knowledge surface that the repo keeps available without marketing it as a default user workflow.",
+      "validator": "node --experimental-strip-types scripts/validate-surface-inventory.ts"
+    },
+    {
+      "name": "trace",
+      "kind": "skill",
+      "classification": "advanced",
+      "path": "skills/trace/SKILL.md",
+      "first_run": false,
+      "rationale": "Useful Cursor workflow support, but not part of the first-run default surface.",
+      "validator": "node --experimental-strip-types scripts/validate-surface-inventory.ts"
+    },
+    {
+      "name": "verify",
+      "kind": "skill",
+      "classification": "default",
+      "path": "skills/verify/SKILL.md",
+      "first_run": true,
+      "rationale": "Part of the first-run Cursor loop and counted against the default user-invocable skill ceiling.",
+      "validator": "node --experimental-strip-types scripts/validate-surface-inventory.ts"
+    },
+    {
+      "name": "wiki",
+      "kind": "skill",
+      "classification": "internal",
+      "path": "skills/wiki/SKILL.md",
+      "first_run": false,
+      "rationale": "Supporting knowledge surface that the repo keeps available without marketing it as a default user workflow.",
+      "validator": "node --experimental-strip-types scripts/validate-surface-inventory.ts"
+    },
+    {
+      "name": "architect",
+      "kind": "agent",
+      "classification": "advanced",
+      "path": "agents/architect.md",
+      "first_run": false,
+      "rationale": "Supported orchestration role for deeper or specialized runs, not part of the default lane.",
+      "validator": "node --experimental-strip-types scripts/validate-surface-inventory.ts"
+    },
+    {
+      "name": "code-reviewer",
+      "kind": "agent",
+      "classification": "advanced",
+      "path": "agents/code-reviewer.md",
+      "first_run": false,
+      "rationale": "Supported orchestration role for deeper or specialized runs, not part of the default lane.",
+      "validator": "node --experimental-strip-types scripts/validate-surface-inventory.ts"
+    },
+    {
+      "name": "critic",
+      "kind": "agent",
+      "classification": "default",
+      "path": "agents/critic.md",
+      "first_run": true,
+      "rationale": "Core first-run orchestration role counted against the default agent ceiling.",
+      "validator": "node --experimental-strip-types scripts/validate-surface-inventory.ts"
+    },
+    {
+      "name": "debugger",
+      "kind": "agent",
+      "classification": "advanced",
+      "path": "agents/debugger.md",
+      "first_run": false,
+      "rationale": "Supported orchestration role for deeper or specialized runs, not part of the default lane.",
+      "validator": "node --experimental-strip-types scripts/validate-surface-inventory.ts"
+    },
+    {
+      "name": "explore",
+      "kind": "agent",
+      "classification": "advanced",
+      "path": "agents/explore.md",
+      "first_run": false,
+      "rationale": "Supported orchestration role for deeper or specialized runs, not part of the default lane.",
+      "validator": "node --experimental-strip-types scripts/validate-surface-inventory.ts"
+    },
+    {
+      "name": "implementer",
+      "kind": "agent",
+      "classification": "default",
+      "path": "agents/implementer.md",
+      "first_run": true,
+      "rationale": "Core first-run orchestration role counted against the default agent ceiling.",
+      "validator": "node --experimental-strip-types scripts/validate-surface-inventory.ts"
+    },
+    {
+      "name": "orchestrator",
+      "kind": "agent",
+      "classification": "default",
+      "path": "agents/orchestrator.md",
+      "first_run": true,
+      "rationale": "Core first-run orchestration role counted against the default agent ceiling.",
+      "validator": "node --experimental-strip-types scripts/validate-surface-inventory.ts"
+    },
+    {
+      "name": "planner",
+      "kind": "agent",
+      "classification": "default",
+      "path": "agents/planner.md",
+      "first_run": true,
+      "rationale": "Core first-run orchestration role counted against the default agent ceiling.",
+      "validator": "node --experimental-strip-types scripts/validate-surface-inventory.ts"
+    },
+    {
+      "name": "qa-tester",
+      "kind": "agent",
+      "classification": "default",
+      "path": "agents/qa-tester.md",
+      "first_run": true,
+      "rationale": "Core first-run orchestration role counted against the default agent ceiling.",
+      "validator": "node --experimental-strip-types scripts/validate-surface-inventory.ts"
+    },
+    {
+      "name": "researcher",
+      "kind": "agent",
+      "classification": "advanced",
+      "path": "agents/researcher.md",
+      "first_run": false,
+      "rationale": "Supported orchestration role for deeper or specialized runs, not part of the default lane.",
+      "validator": "node --experimental-strip-types scripts/validate-surface-inventory.ts"
+    },
+    {
+      "name": "security-reviewer",
+      "kind": "agent",
+      "classification": "advanced",
+      "path": "agents/security-reviewer.md",
+      "first_run": false,
+      "rationale": "Supported orchestration role for deeper or specialized runs, not part of the default lane.",
+      "validator": "node --experimental-strip-types scripts/validate-surface-inventory.ts"
+    },
+    {
+      "name": "test-engineer",
+      "kind": "agent",
+      "classification": "advanced",
+      "path": "agents/test-engineer.md",
+      "first_run": false,
+      "rationale": "Supported orchestration role for deeper or specialized runs, not part of the default lane.",
+      "validator": "node --experimental-strip-types scripts/validate-surface-inventory.ts"
+    },
+    {
+      "name": "tracer",
+      "kind": "agent",
+      "classification": "advanced",
+      "path": "agents/tracer.md",
+      "first_run": false,
+      "rationale": "Supported orchestration role for deeper or specialized runs, not part of the default lane.",
+      "validator": "node --experimental-strip-types scripts/validate-surface-inventory.ts"
+    },
+    {
+      "name": "verifier",
+      "kind": "agent",
+      "classification": "default",
+      "path": "agents/verifier.md",
+      "first_run": true,
+      "rationale": "Core first-run orchestration role counted against the default agent ceiling.",
+      "validator": "node --experimental-strip-types scripts/validate-surface-inventory.ts"
+    },
+    {
+      "name": "afterFileEdit",
+      "kind": "hook",
+      "classification": "internal",
+      "path": "hooks/hooks.json#afterFileEdit",
+      "first_run": false,
+      "rationale": "Repo-owned hook/event surface documented for backbone validation; not part of the default user-invocable surface.",
+      "validator": "node --experimental-strip-types scripts/validate-surface-inventory.ts"
+    },
+    {
+      "name": "afterShellExecution",
+      "kind": "hook",
+      "classification": "internal",
+      "path": "hooks/hooks.json#afterShellExecution",
+      "first_run": false,
+      "rationale": "Repo-owned hook/event surface documented for backbone validation; not part of the default user-invocable surface.",
+      "validator": "node --experimental-strip-types scripts/validate-surface-inventory.ts"
+    },
+    {
+      "name": "beforeReadFile",
+      "kind": "hook",
+      "classification": "internal",
+      "path": "hooks/hooks.json#beforeReadFile",
+      "first_run": false,
+      "rationale": "Repo-owned hook/event surface documented for backbone validation; not part of the default user-invocable surface.",
+      "validator": "node --experimental-strip-types scripts/validate-surface-inventory.ts"
+    },
+    {
+      "name": "beforeShellExecution",
+      "kind": "hook",
+      "classification": "internal",
+      "path": "hooks/hooks.json#beforeShellExecution",
+      "first_run": false,
+      "rationale": "Repo-owned hook/event surface documented for backbone validation; not part of the default user-invocable surface.",
+      "validator": "node --experimental-strip-types scripts/validate-surface-inventory.ts"
+    },
+    {
+      "name": "beforeSubmitPrompt",
+      "kind": "hook",
+      "classification": "internal",
+      "path": "hooks/hooks.json#beforeSubmitPrompt",
+      "first_run": false,
+      "rationale": "Repo-owned hook/event surface documented for backbone validation; not part of the default user-invocable surface.",
+      "validator": "node --experimental-strip-types scripts/validate-surface-inventory.ts"
+    },
+    {
+      "name": "postToolUse",
+      "kind": "hook",
+      "classification": "internal",
+      "path": "hooks/hooks.json#postToolUse",
+      "first_run": false,
+      "rationale": "Repo-owned hook/event surface documented for backbone validation; not part of the default user-invocable surface.",
+      "validator": "node --experimental-strip-types scripts/validate-surface-inventory.ts"
+    },
+    {
+      "name": "postToolUseFailure",
+      "kind": "hook",
+      "classification": "internal",
+      "path": "hooks/hooks.json#postToolUseFailure",
+      "first_run": false,
+      "rationale": "Repo-owned hook/event surface documented for backbone validation; not part of the default user-invocable surface.",
+      "validator": "node --experimental-strip-types scripts/validate-surface-inventory.ts"
+    },
+    {
+      "name": "preCompact",
+      "kind": "hook",
+      "classification": "internal",
+      "path": "hooks/hooks.json#preCompact",
+      "first_run": false,
+      "rationale": "Repo-owned hook/event surface documented for backbone validation; not part of the default user-invocable surface.",
+      "validator": "node --experimental-strip-types scripts/validate-surface-inventory.ts"
+    },
+    {
+      "name": "preToolUse",
+      "kind": "hook",
+      "classification": "internal",
+      "path": "hooks/hooks.json#preToolUse",
+      "first_run": false,
+      "rationale": "Repo-owned hook/event surface documented for backbone validation; not part of the default user-invocable surface.",
+      "validator": "node --experimental-strip-types scripts/validate-surface-inventory.ts"
+    },
+    {
+      "name": "sessionEnd",
+      "kind": "hook",
+      "classification": "internal",
+      "path": "hooks/hooks.json#sessionEnd",
+      "first_run": false,
+      "rationale": "Repo-owned hook/event surface documented for backbone validation; not part of the default user-invocable surface.",
+      "validator": "node --experimental-strip-types scripts/validate-surface-inventory.ts"
+    },
+    {
+      "name": "sessionStart",
+      "kind": "hook",
+      "classification": "internal",
+      "path": "hooks/hooks.json#sessionStart",
+      "first_run": false,
+      "rationale": "Repo-owned hook/event surface documented for backbone validation; not part of the default user-invocable surface.",
+      "validator": "node --experimental-strip-types scripts/validate-surface-inventory.ts"
+    },
+    {
+      "name": "stop",
+      "kind": "hook",
+      "classification": "internal",
+      "path": "hooks/hooks.json#stop",
+      "first_run": false,
+      "rationale": "Repo-owned hook/event surface documented for backbone validation; not part of the default user-invocable surface.",
+      "validator": "node --experimental-strip-types scripts/validate-surface-inventory.ts"
+    },
+    {
+      "name": "subagentStart",
+      "kind": "hook",
+      "classification": "internal",
+      "path": "hooks/hooks.json#subagentStart",
+      "first_run": false,
+      "rationale": "Repo-owned hook/event surface documented for backbone validation; not part of the default user-invocable surface.",
+      "validator": "node --experimental-strip-types scripts/validate-surface-inventory.ts"
+    },
+    {
+      "name": "subagentStop",
+      "kind": "hook",
+      "classification": "internal",
+      "path": "hooks/hooks.json#subagentStop",
+      "first_run": false,
+      "rationale": "Repo-owned hook/event surface documented for backbone validation; not part of the default user-invocable surface.",
+      "validator": "node --experimental-strip-types scripts/validate-surface-inventory.ts"
+    },
+    {
+      "name": "memory_notepad_append_working",
+      "kind": "mcp_tool",
+      "classification": "internal",
+      "path": "mcp/cursor-state-bridge/server.ts#TOOLS.memory_notepad_append_working",
+      "first_run": false,
+      "rationale": "Opt-in MCP tool owned by the repo; validated but not part of the default user-invocable surface.",
+      "validator": "node --experimental-strip-types scripts/validate-surface-inventory.ts"
+    },
+    {
+      "name": "memory_notepad_read",
+      "kind": "mcp_tool",
+      "classification": "internal",
+      "path": "mcp/cursor-state-bridge/server.ts#TOOLS.memory_notepad_read",
+      "first_run": false,
+      "rationale": "Opt-in MCP tool owned by the repo; validated but not part of the default user-invocable surface.",
+      "validator": "node --experimental-strip-types scripts/validate-surface-inventory.ts"
+    },
+    {
+      "name": "memory_project_memory_read",
+      "kind": "mcp_tool",
+      "classification": "internal",
+      "path": "mcp/cursor-state-bridge/server.ts#TOOLS.memory_project_memory_read",
+      "first_run": false,
+      "rationale": "Opt-in MCP tool owned by the repo; validated but not part of the default user-invocable surface.",
+      "validator": "node --experimental-strip-types scripts/validate-surface-inventory.ts"
+    },
+    {
+      "name": "memory_project_memory_set_directive",
+      "kind": "mcp_tool",
+      "classification": "internal",
+      "path": "mcp/cursor-state-bridge/server.ts#TOOLS.memory_project_memory_set_directive",
+      "first_run": false,
+      "rationale": "Opt-in MCP tool owned by the repo; validated but not part of the default user-invocable surface.",
+      "validator": "node --experimental-strip-types scripts/validate-surface-inventory.ts"
+    },
+    {
+      "name": "memory_wiki_log_append",
+      "kind": "mcp_tool",
+      "classification": "internal",
+      "path": "mcp/cursor-state-bridge/server.ts#TOOLS.memory_wiki_log_append",
+      "first_run": false,
+      "rationale": "Opt-in MCP tool owned by the repo; validated but not part of the default user-invocable surface.",
+      "validator": "node --experimental-strip-types scripts/validate-surface-inventory.ts"
+    },
+    {
+      "name": "state_history_append",
+      "kind": "mcp_tool",
+      "classification": "internal",
+      "path": "mcp/cursor-state-bridge/server.ts#TOOLS.state_history_append",
+      "first_run": false,
+      "rationale": "Opt-in MCP tool owned by the repo; validated but not part of the default user-invocable surface.",
+      "validator": "node --experimental-strip-types scripts/validate-surface-inventory.ts"
+    },
+    {
+      "name": "state_init",
+      "kind": "mcp_tool",
+      "classification": "internal",
+      "path": "mcp/cursor-state-bridge/server.ts#TOOLS.state_init",
+      "first_run": false,
+      "rationale": "Opt-in MCP tool owned by the repo; validated but not part of the default user-invocable surface.",
+      "validator": "node --experimental-strip-types scripts/validate-surface-inventory.ts"
+    },
+    {
+      "name": "state_read",
+      "kind": "mcp_tool",
+      "classification": "internal",
+      "path": "mcp/cursor-state-bridge/server.ts#TOOLS.state_read",
+      "first_run": false,
+      "rationale": "Opt-in MCP tool owned by the repo; validated but not part of the default user-invocable surface.",
+      "validator": "node --experimental-strip-types scripts/validate-surface-inventory.ts"
+    },
+    {
+      "name": "state_record_failure",
+      "kind": "mcp_tool",
+      "classification": "internal",
+      "path": "mcp/cursor-state-bridge/server.ts#TOOLS.state_record_failure",
+      "first_run": false,
+      "rationale": "Opt-in MCP tool owned by the repo; validated but not part of the default user-invocable surface.",
+      "validator": "node --experimental-strip-types scripts/validate-surface-inventory.ts"
+    },
+    {
+      "name": "state_set_phase",
+      "kind": "mcp_tool",
+      "classification": "internal",
+      "path": "mcp/cursor-state-bridge/server.ts#TOOLS.state_set_phase",
+      "first_run": false,
+      "rationale": "Opt-in MCP tool owned by the repo; validated but not part of the default user-invocable surface.",
+      "validator": "node --experimental-strip-types scripts/validate-surface-inventory.ts"
+    },
+    {
+      "name": "state_update_acceptance_criterion",
+      "kind": "mcp_tool",
+      "classification": "internal",
+      "path": "mcp/cursor-state-bridge/server.ts#TOOLS.state_update_acceptance_criterion",
+      "first_run": false,
+      "rationale": "Opt-in MCP tool owned by the repo; validated but not part of the default user-invocable surface.",
+      "validator": "node --experimental-strip-types scripts/validate-surface-inventory.ts"
     }
-  }
+  ]
 }
