@@ -10,7 +10,7 @@ const STATE_DIR = path.join(ROOT, '.cursor', 'state');
 const BRIDGE_DIR = path.join(ROOT, 'mcp', 'cursor-state-bridge');
 const SRC_DIR = path.join(ROOT, 'src');
 
-const STATE_PATH_RE = /\.cursor\/state\/workflow-state(?:\.[A-Za-z]+)?\.json/;
+const STATE_PATH_RE = /\.cursor\/state\/workflow-state[^/]*/;
 const WRITE_METHODS = /\b(?:writeFileSync|writeFile|appendFileSync|appendFile|createWriteStream|openSync|open)\b/;
 
 function fail(message: string): never {
