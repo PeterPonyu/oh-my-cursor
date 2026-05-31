@@ -61,3 +61,6 @@ scripts/validate-surface-visibility.ts::    'scripts/workflow-state.ts',
 scripts/verify-backbone.ts::  '.cursor/state/workflow-state.ts',
 skills/phase-controller/SKILL.md::- **checked-in-artifact**: Proof: `.cursor/state/workflow-state.schema.json`, `agents/orchestrator.md`, `hooks/hooks.json` (state-watcher, stop-gate hooks), `scripts/validate-workflow-state.ts`.
 skills/phase-controller/SKILL.md::   validator `node --experimental-strip-types scripts/validate-workflow-state.ts <path>`; the
+skills/iterate-loop/SKILL.md::- **checked-in-artifact**: YES — Proof: `skills/iterate-loop/SKILL.md`, `.cursor/state/workflow-state.schema.json`, `scripts/validate-workflow-state.ts`.
+skills/iterate-loop/SKILL.md::`compact-reminder.ts`, `state-watcher.ts`), and `scripts/validate-workflow-state.ts`
+skills/iterate-loop/SKILL.md::`state_read` / `scripts/validate-workflow-state.ts` and report the structured
