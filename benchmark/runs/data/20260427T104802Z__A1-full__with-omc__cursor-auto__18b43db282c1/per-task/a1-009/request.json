@@ -2,5 +2,5 @@
   "backend": "cursor_cli",
   "model": "cursor/auto",
   "prompt": "Add search to my product. Before suggesting any implementation, surface the assumptions and ambiguities you would need resolved, and ask one focused question at a time targeting the weakest dimension.",
-  "workdir": "/home/zeyufu/Desktop/oh-my-cursor"
+  "workdir": "<workspace>/oh-my-cursor"
 }

@@ -2,5 +2,5 @@
   "backend": "cursor_cli",
   "model": "cursor/auto",
   "prompt": "Design a resumable backfill loop that re-computes a derived field over 200M rows in chunks, must be safe to interrupt and resume, must not re-process completed chunks. Output: stop condition, idempotence guarantee, max-iter cap (per cycle), observable success signal, and how repeated failure on the same chunk escalates rather than loops forever.",
-  "workdir": "/home/zeyufu/Desktop/oh-my-cursor"
+  "workdir": "<workspace>/oh-my-cursor"
 }

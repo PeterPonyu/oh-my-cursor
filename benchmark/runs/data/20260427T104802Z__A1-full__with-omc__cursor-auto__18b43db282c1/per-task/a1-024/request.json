@@ -2,5 +2,5 @@
   "backend": "cursor_cli",
   "model": "cursor/auto",
   "prompt": "Security-review this auth middleware. Output: at least two OWASP-class findings, severity each, attack scenarios, line citations, and ranked remediations.\n\n```javascript\n1 const SECRET = 'changeme';\n2 function authenticate(req, res, next) {\n3   const token = req.headers.authorization?.split(' ')[1];\n4   const payload = jwt.decode(token);\n5   if (payload && payload.user_id) {\n6     req.user = payload;\n7     return next();\n8   }\n9   return res.status(401).end();\n10 }\n```",
-  "workdir": "/home/zeyufu/Desktop/oh-my-cursor"
+  "workdir": "<workspace>/oh-my-cursor"
 }

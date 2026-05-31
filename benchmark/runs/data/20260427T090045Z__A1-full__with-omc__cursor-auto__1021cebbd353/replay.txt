@@ -42,7 +42,7 @@
 [2026-04-27T09:05:15.611147Z] task_end task=a1-010  status=ok
 [2026-04-27T09:05:15.611243Z] task_start task=a1-011  prompt_chars=195
 [2026-04-27T09:05:15.611307Z] request task=a1-011  keys=['backend', 'model', 'prompt', 'workdir']
-[2026-04-27T09:08:15.644594Z] error task=a1-011  error=cursor-agent timed out after 180.0s (workdir=/home/zeyufu/Desktop/oh-my-cursor)
+[2026-04-27T09:08:15.644594Z] error task=a1-011  error=cursor-agent timed out after 180.0s (workdir=<workspace>/oh-my-cursor)
 [2026-04-27T09:08:15.644678Z] task_end task=a1-011  status=error
 [2026-04-27T09:08:15.644848Z] task_start task=a1-012  prompt_chars=274
 [2026-04-27T09:08:15.644937Z] request task=a1-012  keys=['backend', 'model', 'prompt', 'workdir']

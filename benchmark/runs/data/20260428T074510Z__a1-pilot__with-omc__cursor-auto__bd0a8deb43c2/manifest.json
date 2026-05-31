@@ -19,5 +19,5 @@
     "cost_usd": 0.020075,
     "wallclock_seconds": 21.528
   },
-  "run_dir": "/home/zeyufu/Desktop/oh-my-cursor/benchmark/runs/data/20260428T074510Z__a1-pilot__with-omc__cursor-auto__bd0a8deb43c2"
+  "run_dir": "<workspace>/oh-my-cursor/benchmark/runs/data/20260428T074510Z__a1-pilot__with-omc__cursor-auto__bd0a8deb43c2"
 }

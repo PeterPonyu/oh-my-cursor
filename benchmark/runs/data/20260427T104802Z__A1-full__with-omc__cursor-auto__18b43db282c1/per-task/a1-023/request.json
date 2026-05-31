@@ -2,5 +2,5 @@
   "backend": "cursor_cli",
   "model": "cursor/auto",
   "prompt": "Security-review this code. OWASP class, severity, attack scenario, line, remediation.\n\n```python\n1 import pickle\n2 def load_session(blob):\n3     return pickle.loads(blob)\n```",
-  "workdir": "/home/zeyufu/Desktop/oh-my-cursor"
+  "workdir": "<workspace>/oh-my-cursor"
 }

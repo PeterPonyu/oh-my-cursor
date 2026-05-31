@@ -8,9 +8,9 @@ Primary symptom fit: commands can appear/disappear if the active shell sometimes
 
 | # | Check | Pass Criterion | Status | Evidence / Notes |
 |---|---|---|---|---|
-| 1 | Binary on `PATH` + which copy | `codex` resolves to one intended binary in all shells | **WARN** | Found installed binary symlink at `/home/zeyufu/.nvm/versions/node/v24.12.0/bin/codex` -> `@openai/codex/bin/codex.js`; could not run `which`/`command -v` directly due command-exec restrictions in this session, so cross-shell PATH consistency is not fully proven. |
+| 1 | Binary on `PATH` + which copy | `codex` resolves to one intended binary in all shells | **WARN** | Found installed binary symlink at `~/.nvm/versions/node/v24.12.0/bin/codex` -> `@openai/codex/bin/codex.js`; could not run `which`/`command -v` directly due command-exec restrictions in this session, so cross-shell PATH consistency is not fully proven. |
 | 2 | Version check | CLI + OMX versions detectable and coherent | **OK** | Installed package versions present: `@openai/codex` = `0.124.0`, `oh-my-codex` = `0.14.4` (from package manifests). |
-| 3 | Config dir presence + ownership | `~/.codex` exists, owned by active user, readable | **OK** | `/home/zeyufu/.codex` exists, owner `zeyufu:zeyufu`, mode `drwxrwxr-x`; `config.toml` exists with secure mode `600`. |
+| 3 | Config dir presence + ownership | `~/.codex` exists, owned by active user, readable | **OK** | `~/.codex` exists, owner `zeyufu:zeyufu`, mode `drwxrwxr-x`; `config.toml` exists with secure mode `600`. |
 | 4 | Config file schema match | Core keys/tables parse and referenced files exist | **WARN** | `config.toml` contains expected OMX/Codex surfaces (`features.codex_hooks`, plugin blocks, MCP servers). Referenced script paths exist. Full schema parse/CLI validation not executed in this session. |
 | 5 | Plugin / skill registration | Declared plugins and skill roots are present and non-legacy-conflicting | **OK** | Plugins declared in config and cache present under `~/.codex/plugins/cache/openai-curated/...`; canonical skills root `~/.codex/skills` populated; no legacy `~/.agents/skills` found. |
 | 6 | Hook directory state | No stale legacy hook scripts; active hook paths valid | **OK** | No `~/.codex/hooks` directory found (so no legacy `.sh` hooks there); active notify hook points to Node script under OMX install and file exists. |
