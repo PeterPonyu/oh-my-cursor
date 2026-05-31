@@ -91,7 +91,7 @@ const EXPECTED_SKILL_MCP_TOOLS: Record<string, Set<string>> = {
   decisions: new Set(),
   'deep-interview': new Set(),
   doctor: new Set(),
-  'iterate-loop': new Set(['state_record_failure', 'state_update_acceptance_criterion', 'state_history_append']),
+  'iterate-loop': new Set(['state_read', 'state_record_failure', 'state_update_acceptance_criterion', 'state_history_append']),
   'local-plugin-check': new Set(),
   'mcp-setup': MCP_TOOL_NAMES,
   notepad: new Set(['memory_notepad_read', 'memory_notepad_append_working']),

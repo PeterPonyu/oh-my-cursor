@@ -1,4 +1,4 @@
-<!-- source-sha256: README.md f28e527262801f979760905655132ad881ce5d88653908431f7d88b6f5345184 -->
+<!-- source-sha256: README.md dd7dc80f8e48c6f139c076931f66eea648a15c46e3c04869b7f557768a9c9911 -->
 # oh-my-cursor
 
 <div align="center">
@@ -9,7 +9,9 @@
 
 ## 快速入门
 
-在 Cursor composer 中输入 `@auto-execute` 以启动默认的首次运行循环（first-run loop）。它会沿着推荐路径串联其余默认技能—— `@deep-interview`（仅在请求模糊时）、`@plan`、`@iterate-loop` 和 `@verify` ——使首次运行无需触及高级（advanced）功能即可得到一个可工作、有证据支撑的更改。
+只有一个编排根（orchestration root）：`phase-controller` 状态机。它针对单一的 workflow-state 契约（`.cursor/state/workflow-state.json`）启动或恢复任何非平凡任务。
+
+若需无人值守运行，请在 Cursor composer 中输入 `@auto-execute`。它是该根之上的自主**预设（preset）**：它将 `phase-controller` 状态机驱动至完成，并沿着推荐路径串联其余默认技能—— `@deep-interview`（仅在请求模糊时）、`@plan`、`@iterate-loop` 和 `@verify` ——使首次运行得到一个可工作、有证据支撑的更改。当你希望手动控制每一次阶段转换（或在重启后恢复）时，可直接通过 `phase-controller` 进入。
 
 ### 安装
 

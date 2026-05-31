@@ -17,7 +17,7 @@
       "classification": "default",
       "path": "skills/auto-execute/SKILL.md",
       "first_run": true,
-      "rationale": "Part of the first-run Cursor loop and counted against the default user-invocable skill ceiling.",
+      "rationale": "First-run autonomous preset that drives the phase-controller orchestration root to completion; counted against the default user-invocable skill ceiling.",
       "validator": "node --experimental-strip-types scripts/validate-surface-inventory.ts"
     },
     {
@@ -107,7 +107,7 @@
       "classification": "advanced",
       "path": "skills/phase-controller/SKILL.md",
       "first_run": false,
-      "rationale": "Useful Cursor workflow support, but not part of the first-run default surface.",
+      "rationale": "The single orchestration root and state-machine router over the workflow-state contract; surfaced for manual/resume control while the auto-execute preset is the first-run autonomous entry.",
       "validator": "node --experimental-strip-types scripts/validate-surface-inventory.ts"
     },
     {

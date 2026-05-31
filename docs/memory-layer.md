@@ -17,12 +17,12 @@ contract lives in the matching SKILL.md.
 | Decisions | `./docs/decisions/YYYYMMDD-<slug>.md` | `skills/decisions/SKILL.md` | `docs/templates/decision.md` | `scripts/validate-decisions-format.ts` | per workspace, append-only |
 | Wiki | `./docs/wiki/` (`index.md`, `log.md`, pages) | `skills/wiki/SKILL.md` | `docs/templates/wiki-index.md`, `wiki-page.md`, `wiki-log.md` | `scripts/validate-wiki-structure.ts` | per workspace, append-only log |
 
-## Memory vs workflow-state vs PRD
+## Memory vs workflow-state
 
 | Question | Use this |
 |----------|----------|
 | What phase is this task in? Which acceptance criteria are passing? | **workflow-state** (`.cursor/state/workflow-state.json`) |
-| What stories are still open in this run? | **PRD** (`./prd.json`) when running `iterate-loop` or `auto-execute` |
+| What acceptance criteria are still open in this run? | **workflow-state** `acceptance_criteria` (status `pending`/`failed`) — the single contract for `phase-controller`, `auto-execute`, and `iterate-loop` |
 | What should the agent remember for the rest of *this* chat? | **notepad / Priority Context** |
 | What should the agent remember across chats but only as a hint? | **notepad / Working Memory** |
 | What is a permanent invariant the user wants every agent to respect? | **notepad / MANUAL** |

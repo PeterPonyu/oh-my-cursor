@@ -1,23 +1,32 @@
 ---
 name: phase-controller
-description: "[OMCS] Orchestration-first entry point for oh-my-cursor workflows. Invoke with @phase-controller in the Cursor composer to start or resume a workflow. Detects the current phase from the checked-in workflow-state file, routes the next step to the right role and skill, and keeps acceptance criteria aligned with the repo contract."
+description: "[OMCS] The single orchestration root for oh-my-cursor workflows. Invoke with @phase-controller in the Cursor composer to start or resume ANY non-trivial task. Detects the current phase from the single checked-in workflow-state contract, routes the next step to the right role and skill, and keeps acceptance criteria aligned with the repo contract."
 ---
 
 # Phase controller
 
-This is the orchestration-first skill for `oh-my-cursor`. It treats the
-workflow as an explicit state machine that is **file-backed**,
-**human-visible**, and **bounded**. There is no background daemon, hidden
-queue, or automatic retry; each phase advance is an explicit action on a
-schema-bounded JSON document.
+This is **the single orchestration root** for `oh-my-cursor`. Every
+non-trivial workflow starts or resumes here. It treats the workflow as an
+explicit state machine that is **file-backed**, **human-visible**, and
+**bounded**, against one canonical contract: `.cursor/state/workflow-state.json`.
+There is no background daemon, hidden queue, or automatic retry; each phase
+advance is an explicit action on a schema-bounded JSON document.
+
+The `auto-execute` skill is the **autonomous preset** over this controller:
+it calls into this same state machine and runs it to completion without
+pausing between phases. `iterate-loop` is the **execute/verify/review loop
+primitive** this controller invokes during the `execute` phase. All three
+share the single `.cursor/state/workflow-state.json` contract; there is no
+parallel state file.
 
 ## When to use
 
-Use this skill at the start of any non-trivial task and before stopping a
-session. It complements existing skills (`plan`, `iterate-loop`, `review`,
-`debug`, `trace`) by deciding **which one to invoke next**. `debug` is the
-diagnosis-first lane; `trace` is its causal-investigation peer for harder
-"why did this happen?" questions.
+Use this skill to **start or resume any non-trivial task**, and before
+stopping a session. It is the entry point that decides which other skill
+(`plan`, `iterate-loop`, `review`, `debug`, `trace`) to invoke next. For
+hands-off autonomous runs, use the `auto-execute` preset, which drives this
+controller. `debug` is the diagnosis-first lane; `trace` is its
+causal-investigation peer for harder "why did this happen?" questions.
 
 For Cursor CLI runs, this skill is the right re-entry point after
 `cursor-agent --resume <chat-id>` or `cursor-agent --continue`. The parent CLI
@@ -55,8 +64,8 @@ justifies pinning them.
      to `plan`.
    - `plan` → invoke the `planner` agent or the `plan` skill, invoke `architect` for broad or high-risk changes, skim `docs/decisions/` index when present, finalize the
      acceptance-criteria list, then advance to `execute`.
-   - `execute` → use the appropriate implementation skill (`auto-execute`,
-     `iterate-loop`, etc.). Mark each acceptance criterion as `passed` only when
+   - `execute` → use the appropriate implementation skill (`iterate-loop`,
+     etc.). Mark each acceptance criterion as `passed` only when
      evidence is captured.
    - `verify` → invoke `qa-tester` when runtime proof is needed, then the `verifier` agent. The verifier checks evidence and does not run broad exploratory work.
    - `review` → invoke `critic` and `code-reviewer` **always**; additionally
@@ -95,7 +104,7 @@ Statuses per phase: `pending | in_progress | passed | failed | blocked`.
 ## Orchestration role
 
 - **Lifecycle phase(s)**: All phases
-- **Invoked by**: User at session start, or by `auto-execute`, `iterate-loop` when resuming
+- **Invoked by**: User at session start (the single orchestration root), or by the `auto-execute` preset that drives this controller autonomously
 - **Invokes**: Routes to agents (orchestrator, architect, researcher, planner, implementer, qa-tester, verifier, critic, debugger, tracer) and skills (plan, iterate-loop, review, debug, trace, etc.)
 - **State contract**: Reads `.cursor/state/workflow-state.json` (or per-task archive at `docs/plans/<task-id>/workflow-state.json`); agent-callable writes go through the `cursor-state-bridge` MCP tools when installed.
 - **Failure handling**: Records failures via `state_record_failure` MCP tool when available; otherwise reports the failure route without directly editing workflow-state.

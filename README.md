@@ -11,11 +11,18 @@ every claim anchored to a checked-in artifact.
 
 ## Quick start
 
-Type `@auto-execute` in the Cursor composer to kick off the default
-first-run loop. It walks the recommended path through the other default
+There is one orchestration root: the `phase-controller` state machine, which
+starts or resumes any non-trivial task against the single workflow-state
+contract (`.cursor/state/workflow-state.json`).
+
+For a hands-off run, type `@auto-execute` in the Cursor composer. It is the
+autonomous **preset** over that root: it drives the `phase-controller` state
+machine to completion, walking the recommended path through the other default
 skills — `@deep-interview` (only when the request is vague), `@plan`,
 `@iterate-loop`, and `@verify` — so a first run lands on a working,
-evidence-backed change without reaching for advanced surfaces.
+evidence-backed change. When you want manual control over each phase
+transition (or to resume after a restart), enter through `phase-controller`
+directly.
 
 ### Installation
 
