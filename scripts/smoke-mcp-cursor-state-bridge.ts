@@ -56,8 +56,8 @@ async function runFull() {
     const r2 = await sendRecv(proc, TOOLS_LIST);
     if (!r2.result) fail(`tools/list failed: ${JSON.stringify(r2)}`);
     const tools = r2.result.tools || [];
-    if (tools.length !== 6) {
-      fail(`expected 6 tools, got ${tools.length}: ${JSON.stringify(tools.map((t: any) => t.name))}`);
+    if (tools.length !== 11) {
+      fail(`expected 11 tools, got ${tools.length}: ${JSON.stringify(tools.map((t: any) => t.name))}`);
     }
     console.log(`tools=${tools.length}`);
   } finally {
