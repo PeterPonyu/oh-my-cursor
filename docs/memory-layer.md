@@ -12,10 +12,10 @@ contract lives in the matching SKILL.md.
 
 | Surface | Default consumer path | Owner skill | Template | Validator | Lifetime |
 |---------|------------------------|-------------|----------|-----------|----------|
-| Notepad | `./notepad.md` | `skills/notepad/SKILL.md` | `docs/templates/notepad.md` | `scripts/validate-notepad-format.py` | per workspace |
-| Project memory | `./project-memory.json` | `skills/remember/SKILL.md` (router) | `docs/templates/project-memory.json` | `scripts/validate-project-memory.py` | per workspace |
-| Decisions | `./docs/decisions/YYYYMMDD-<slug>.md` | `skills/decisions/SKILL.md` | `docs/templates/decision.md` | `scripts/validate-decisions-format.py` | per workspace, append-only |
-| Wiki | `./docs/wiki/` (`index.md`, `log.md`, pages) | `skills/wiki/SKILL.md` | `docs/templates/wiki-index.md`, `wiki-page.md`, `wiki-log.md` | `scripts/validate-wiki-structure.py` | per workspace, append-only log |
+| Notepad | `./notepad.md` | `skills/notepad/SKILL.md` | `docs/templates/notepad.md` | `scripts/validate-notepad-format.ts` | per workspace |
+| Project memory | `./project-memory.json` | `skills/remember/SKILL.md` (router) | `docs/templates/project-memory.json` | `scripts/validate-project-memory.ts` | per workspace |
+| Decisions | `./docs/decisions/YYYYMMDD-<slug>.md` | `skills/decisions/SKILL.md` | `docs/templates/decision.md` | `scripts/validate-decisions-format.ts` | per workspace, append-only |
+| Wiki | `./docs/wiki/` (`index.md`, `log.md`, pages) | `skills/wiki/SKILL.md` | `docs/templates/wiki-index.md`, `wiki-page.md`, `wiki-log.md` | `scripts/validate-wiki-structure.ts` | per workspace, append-only log |
 
 ## Memory vs workflow-state vs PRD
 
@@ -48,7 +48,7 @@ surface and put the body in the larger one (e.g. notepad MANUAL line
 
 ### Project memory
 
-- The schema is documented in `scripts/validate-project-memory.py`. Stable
+- The schema is documented in `scripts/validate-project-memory.ts`. Stable
   keys: `version`, `task`, `techStack`, `build`, `conventions`,
   `structure`, `userOwned`, `hotPaths`.
 - `userOwned.customNotes` and `userOwned.directives` are protected:
@@ -81,7 +81,7 @@ surface and put the body in the larger one (e.g. notepad MANUAL line
 | Agent (any role) | All four surfaces through normal file tools | When the matching skill is invoked |
 | `skills/remember/SKILL.md` | All four — to decide where a new finding goes | On explicit invocation |
 | `skills/phase-controller/SKILL.md` | Notepad Priority Context (recommended) on `intake`; decisions index on `plan` | Per phase routing |
-| `hooks/compact-reminder.py` | Notepad MANUAL (read-only) — to remind the user that durables exist | On `preCompact` |
+| `hooks/compact-reminder.ts` | Notepad MANUAL (read-only) — to remind the user that durables exist | On `preCompact` |
 | MCP bridge (optional) | Notepad, project memory, wiki log (when `--with-mcp` is installed) | On explicit tool call |
 
 Hooks **never** write. Validators are read-only by default. Agents write
