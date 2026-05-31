@@ -1,7 +1,7 @@
 # Plan v2 — Narrow stdio MCP server `cursor-state-bridge` for `.cursor/state/workflow-state.json`
 
 Status: ralplan consensus, deliberate mode, iteration 2 (post-Critic ITERATE).
-Workspace: `/home/zeyufu/Desktop/oh-my-cursor`.
+Workspace: `<workspace>/oh-my-cursor`.
 Architecture (locked): Option A — single narrow stdio MCP server `cursor-state-bridge` under `mcp/cursor-state-bridge/`, six state-IO tools, sole agent-callable writer of `.cursor/state/workflow-state.json`. CLI surface stays as a thin shim around a shared library API (R6 + B12).
 
 ---

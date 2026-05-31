@@ -2,5 +2,5 @@
   "backend": "cursor_cli",
   "model": "cursor/auto",
   "prompt": "A developer reports `docker build` succeeds but `docker run` immediately exits with code 0 and no logs. Run a doctor-style diagnosis: ordered checks (image entrypoint, CMD, layer history, container logs flag, foreground process), pass criterion per check, smallest fix per failure mode. No destructive auto-fix. State which checks are read-only and which would change state.",
-  "workdir": "/home/zeyufu/Desktop/oh-my-cursor"
+  "workdir": "<workspace>/oh-my-cursor"
 }

@@ -19,5 +19,5 @@
     "cost_usd": 0.041462,
     "wallclock_seconds": 47.426
   },
-  "run_dir": "/home/zeyufu/Desktop/oh-my-cursor/benchmark/runs/data/20260427T073807Z__a1-pilot__vanilla__anthropic-claude-haiku-4-5-20251001__545bb6732701"
+  "run_dir": "<workspace>/oh-my-cursor/benchmark/runs/data/20260427T073807Z__a1-pilot__vanilla__anthropic-claude-haiku-4-5-20251001__545bb6732701"
 }

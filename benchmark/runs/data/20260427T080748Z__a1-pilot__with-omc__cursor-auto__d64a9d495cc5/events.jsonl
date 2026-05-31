@@ -1,13 +1,13 @@
 {"ts": "2026-04-27T08:07:48.094640Z", "event": "run_start", "run_id": "d64a9d495cc5", "benchmark": "a1-pilot", "arm": "with-omc", "model": "cursor/auto", "fallback_model": null, "budget_usd": 2.0, "started_at": "20260427T080748Z"}
-{"ts": "2026-04-27T08:07:48.094732Z", "event": "task_start", "task_id": "a1-pilot-001", "prompt_chars": 173, "metadata": {"skill": "plan", "arm_kind": "with-omc", "cwd": "/home/zeyufu/Desktop/oh-my-cursor"}}
+{"ts": "2026-04-27T08:07:48.094732Z", "event": "task_start", "task_id": "a1-pilot-001", "prompt_chars": 173, "metadata": {"skill": "plan", "arm_kind": "with-omc", "cwd": "<workspace>/oh-my-cursor"}}
 {"ts": "2026-04-27T08:07:48.094781Z", "event": "request", "task_id": "a1-pilot-001", "payload_keys": ["backend", "model", "prompt", "workdir"]}
 {"ts": "2026-04-27T08:08:10.058587Z", "event": "response", "task_id": "a1-pilot-001", "tokens": {"input": 2961, "output": 604, "cache_read": 9472, "cache_write": 0}, "cost_usd": 0.020785, "wallclock_ms": 21963, "stop_reason": null}
 {"ts": "2026-04-27T08:08:10.058616Z", "event": "task_end", "task_id": "a1-pilot-001", "status": "ok"}
-{"ts": "2026-04-27T08:08:10.058701Z", "event": "task_start", "task_id": "a1-pilot-002", "prompt_chars": 112, "metadata": {"skill": "review", "arm_kind": "with-omc", "cwd": "/home/zeyufu/Desktop/oh-my-cursor"}}
+{"ts": "2026-04-27T08:08:10.058701Z", "event": "task_start", "task_id": "a1-pilot-002", "prompt_chars": 112, "metadata": {"skill": "review", "arm_kind": "with-omc", "cwd": "<workspace>/oh-my-cursor"}}
 {"ts": "2026-04-27T08:08:10.058766Z", "event": "request", "task_id": "a1-pilot-002", "payload_keys": ["backend", "model", "prompt", "workdir"]}
 {"ts": "2026-04-27T08:08:22.574334Z", "event": "response", "task_id": "a1-pilot-002", "tokens": {"input": 3069, "output": 232, "cache_read": 10368, "cache_write": 0}, "cost_usd": 0.015797, "wallclock_ms": 12515, "stop_reason": null}
 {"ts": "2026-04-27T08:08:22.574359Z", "event": "task_end", "task_id": "a1-pilot-002", "status": "ok"}
-{"ts": "2026-04-27T08:08:22.574434Z", "event": "task_start", "task_id": "a1-pilot-003", "prompt_chars": 184, "metadata": {"skill": "debug", "arm_kind": "with-omc", "cwd": "/home/zeyufu/Desktop/oh-my-cursor"}}
+{"ts": "2026-04-27T08:08:22.574434Z", "event": "task_start", "task_id": "a1-pilot-003", "prompt_chars": 184, "metadata": {"skill": "debug", "arm_kind": "with-omc", "cwd": "<workspace>/oh-my-cursor"}}
 {"ts": "2026-04-27T08:08:22.574484Z", "event": "request", "task_id": "a1-pilot-003", "payload_keys": ["backend", "model", "prompt", "workdir"]}
 {"ts": "2026-04-27T08:08:36.097089Z", "event": "response", "task_id": "a1-pilot-003", "tokens": {"input": 136, "output": 279, "cache_read": 13312, "cache_write": 0}, "cost_usd": 0.008587, "wallclock_ms": 13522, "stop_reason": null}
 {"ts": "2026-04-27T08:08:36.097120Z", "event": "task_end", "task_id": "a1-pilot-003", "status": "ok"}
