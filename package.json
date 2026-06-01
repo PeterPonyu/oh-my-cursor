@@ -6,7 +6,10 @@
   "scripts": {
     "typecheck": "tsc --noEmit",
     "test": "node --experimental-strip-types --test tests/**/*.test.ts mcp/cursor-state-bridge/tests/*.test.ts",
-    "verify": "node --experimental-strip-types scripts/verify-backbone.ts"
+    "verify": "node --experimental-strip-types scripts/verify-backbone.ts",
+    "verify:fast": "./scripts/validate-fast-sanity.sh",
+    "verify:full": "./scripts/validate-full-local.sh",
+    "verify:e2e": "./scripts/validate-structural-e2e.sh"
   },
   "devDependencies": {
     "@types/node": "^25.9.1",
