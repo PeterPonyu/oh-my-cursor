@@ -117,8 +117,11 @@ When the bridge is installed via `node --experimental-strip-types scripts/instal
 | `memory_project_memory_set_directive` | Add an entry to `userOwned.directives` (idempotent) |
 | `memory_wiki_log_append` | Append a single entry to `docs/wiki/log.md` |
 
-All tools obey the same jail root as the workflow-state tools. They
-operate on plain JSON / markdown and do not interact with workflow-state.
+Memory tools use their own workspace allowlist (`notepad.md`,
+`project-memory.json`, and `docs/wiki/log.md`) with realpath containment under
+the active workspace root. They do **not** use the workflow-state jail roots,
+and they operate on plain JSON / markdown without interacting with
+workflow-state.
 
 ## References
 
