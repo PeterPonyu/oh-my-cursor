@@ -14,7 +14,7 @@ let pluginName = 'oh-my-cursor';
 let mode: 'copy' | 'symlink' = 'copy';
 let force = false;
 let withMcp = false;
-let action: 'install' | 'status' | 'uninstall' | 'watch' = 'install';
+let action: 'install' | 'status' | 'uninstall' | 'watch' | 'version' = 'install';
 
 const LEGACY_PLUGIN_NAMES = ['oh-my-copilot-workspace'];
 
@@ -39,9 +39,11 @@ Defaults:
   - plugin name: oh-my-cursor
 
 Actions:
-  --status      Show installed plugin info
-  --uninstall   Remove the plugin and any legacy aliases
-  --watch       Watch for changes and auto-re-copy
+  status, --status      Show installed plugin info
+  version, --version    Print the installed plugin manifest version only
+  uninstall, --uninstall
+                         Remove the plugin and any legacy aliases
+  watch, --watch        Watch for changes and auto-re-copy
 `);
 }
 
@@ -69,11 +71,15 @@ function parseArgs() {
       force = true;
     } else if (arg === '--with-mcp') {
       withMcp = true;
-    } else if (arg === '--status') {
+    } else if (arg === 'install') {
+      action = 'install';
+    } else if (arg === 'status' || arg === '--status') {
       action = 'status';
-    } else if (arg === '--uninstall') {
+    } else if (arg === 'version' || arg === '--version') {
+      action = 'version';
+    } else if (arg === 'uninstall' || arg === '--uninstall') {
       action = 'uninstall';
-    } else if (arg === '--watch') {
+    } else if (arg === 'watch' || arg === '--watch') {
       action = 'watch';
     } else if (arg === '-h' || arg === '--help') {
       usage();
@@ -349,6 +355,19 @@ function doStatus() {
   console.log(`  files:   ${fileCount}`);
 }
 
+function readInstalledVersion(): string {
+  const targetPath = path.join(targetRoot, pluginName);
+  const manifest = path.join(targetPath, '.cursor-plugin', 'plugin.json');
+  if (!fs.existsSync(manifest)) {
+    fail(`installed plugin manifest not found at ${manifest}`);
+  }
+  try {
+    return JSON.parse(fs.readFileSync(manifest, 'utf-8')).version || 'unknown';
+  } catch (err: any) {
+    fail(`failed to parse installed plugin manifest: ${err.message}`);
+  }
+}
+
 function doUninstall() {
   const targetPath = path.join(targetRoot, pluginName);
   if (!fs.existsSync(targetPath)) {
@@ -411,6 +430,11 @@ function main() {
   if (action === 'status') {
     validateSourceRoot(sourceRoot);
     doStatus();
+    process.exit(0);
+  }
+
+  if (action === 'version') {
+    console.log(readInstalledVersion());
     process.exit(0);
   }
 
