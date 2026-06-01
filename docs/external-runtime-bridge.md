@@ -44,7 +44,7 @@ remain user/upstream-owned; OMCS is the checked-in Cursor plugin surface.
 
 If an OMC installation stores assets only in a plugin cache such as
 `~/.claude/plugins/cache/omc/oh-my-claudecode/<version>/`, use
-`scripts/link-omc-cursor-compat-assets.ts --force` to materialize prefixed
+`node --experimental-strip-types scripts/link-omc-cursor-compat-assets.ts --force` to materialize prefixed
 copies into Cursor's documented Claude compatibility directories. The helper
 does not mutate the OMC cache; it creates `[OMC]` user skills under
 `~/.claude/skills/` and OMC-prefixed agents under `~/.claude/agents/` so Cursor

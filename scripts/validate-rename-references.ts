@@ -16,6 +16,7 @@ const CURRENT_SURFACE_ROOTS = [
   '.cursor/rules',
   '.cursor/state',
   'hooks/README.md',
+  'mcp/cursor-state-bridge/README.md',
   'skills',
   'agents',
 ];
