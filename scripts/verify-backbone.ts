@@ -266,6 +266,7 @@ function main() {
   runValidator('node --experimental-strip-types scripts/smoke-workflow-state-completion.ts');
   runValidator('node --experimental-strip-types scripts/validate-agent-model-policy.ts');
   runValidator('node --experimental-strip-types scripts/validate-agent-bridge-contract.ts');
+  runValidator('node --experimental-strip-types scripts/validate-memory-templates.ts');
   runValidator('node --experimental-strip-types scripts/validate-rename-references.ts');
   runValidator('node --experimental-strip-types scripts/validate-hook-readonly.ts');
   runValidator('node --experimental-strip-types scripts/validate-hook-readonly.ts --check-shared-lock');

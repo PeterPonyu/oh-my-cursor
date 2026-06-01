@@ -112,11 +112,11 @@ the on-disk file satisfies the cap and stays monotonic.
 The bridge writes one JSONL record per JSON-RPC call to
 `.omcs/cursor-state-bridge/trace.jsonl` (dedicated subdirectory —
 non-colliding with `.omcs/hook-trace.log`, which is owned by the hook
-trace helper at `hooks/_trace.py`). Each record carries `ts`,
+trace helper at `hooks/_trace.ts`). Each record carries `ts`,
 `tool`, `phase`, `result`, `duration_ms`, plus optional `task_id`,
 `error_class`, and `args_digest`. The schema lives at
 `fixtures/trace-schema.json` and is checked by
-`scripts/validate-mcp-trace.py`.
+`scripts/validate-mcp-trace.ts`.
 
 Rotation: 10 MiB FIFO eviction. Opt out by setting
 `OH_MY_CURSOR_MCP_TRACE=0` in the parent process environment.
