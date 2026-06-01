@@ -64,3 +64,5 @@ skills/phase-controller/SKILL.md::   validator `node --experimental-strip-types 
 skills/iterate-loop/SKILL.md::- **checked-in-artifact**: YES — Proof: `skills/iterate-loop/SKILL.md`, `.cursor/state/workflow-state.schema.json`, `scripts/validate-workflow-state.ts`.
 skills/iterate-loop/SKILL.md::`compact-reminder.ts`, `state-watcher.ts`), and `scripts/validate-workflow-state.ts`
 skills/iterate-loop/SKILL.md::`state_read` / `scripts/validate-workflow-state.ts` and report the structured
+scripts/validate-fast-sanity.sh::node --experimental-strip-types scripts/validate-workflow-state.ts
+scripts/validate-structural-e2e.sh::node --experimental-strip-types "$plugin_dir/.cursor/state/workflow-state.ts" \
