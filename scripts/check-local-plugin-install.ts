@@ -105,6 +105,17 @@ function main() {
     if (!symlinkStatus.includes(`installed: ${symlinkPluginPath}`) || !symlinkStatus.includes('mode:    symlink')) {
       fail(`positional status action did not report symlink install correctly:\n${symlinkStatus}`);
     }
+    const symlinkVersion = runNode('scripts/install-local-plugin.ts', [
+      '--version',
+      '--target-root', symlinkTarget,
+      '--name', pluginName,
+    ]).trim();
+    const manifestVersion = JSON.parse(
+      fs.readFileSync(path.join(sourceRoot, '.cursor-plugin', 'plugin.json'), 'utf-8'),
+    ).version;
+    if (symlinkVersion !== manifestVersion) {
+      fail(`flagged version action returned ${symlinkVersion}, expected ${manifestVersion}`);
+    }
 
     if (fs.existsSync(path.join(sourceRoot, 'mcp'))) {
       runNode('scripts/install-local-plugin.ts', [
@@ -135,17 +146,14 @@ function main() {
     runNode('scripts/install-local-plugin.ts', copyArgs);
 
     const copyPluginPath = path.join(copyTarget, pluginName);
-    const manifestVersion = JSON.parse(
-      fs.readFileSync(path.join(sourceRoot, '.cursor-plugin', 'plugin.json'), 'utf-8'),
-    ).version;
     const copyStatus = runNode('scripts/install-local-plugin.ts', [
-      '--status',
+      'status',
       '--root', sourceRoot,
       '--target-root', copyTarget,
       '--name', pluginName,
     ]);
     if (!copyStatus.includes(`version: ${manifestVersion}`) || !copyStatus.includes('mode:    copy')) {
-      fail(`flagged status action did not report copy install correctly:\n${copyStatus}`);
+      fail(`positional status action did not report copy install correctly:\n${copyStatus}`);
     }
     const copyVersion = runNode('scripts/install-local-plugin.ts', [
       'version',
