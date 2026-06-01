@@ -14,6 +14,12 @@ export function jailRoots(workspace: string): string[] {
 
 export function resolveJailed(workspace: string, target: string): string {
   const ws = path.resolve(workspace);
+  let wsReal: string;
+  try {
+    wsReal = fs.realpathSync(ws);
+  } catch {
+    wsReal = ws;
+  }
   let resolved: string;
   try {
     resolved = fs.realpathSync(target);
@@ -28,6 +34,11 @@ export function resolveJailed(workspace: string, target: string): string {
       realRoot = fs.realpathSync(root);
     } catch {
       realRoot = path.resolve(root);
+    }
+
+    const rootRelativeToWorkspace = path.relative(wsReal, realRoot);
+    if (rootRelativeToWorkspace.startsWith('..') || path.isAbsolute(rootRelativeToWorkspace)) {
+      continue;
     }
 
     const relative = path.relative(realRoot, resolved);
