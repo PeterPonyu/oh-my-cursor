@@ -129,7 +129,7 @@ nl -ba .omcs/hook-trace.live.log
 If a wired hook event fires during the run, the matching line appears in
 the log. Events Cursor does not invoke for a given session simply do not
 appear; their script-level correctness can still be verified with
-`OH_MY_CURSOR_HOOK_TRACE=1 ./scripts/smoke-cursor-workflow-artifacts.sh`.
+`OH_MY_CURSOR_HOOK_TRACE=1 node --experimental-strip-types scripts/smoke-cursor-workflow-artifacts.ts`.
 
 For the orchestration-first overview, see [`docs/orchestration.md`](../../docs/orchestration.md).
 The shared workflow-state contract lives under [`.cursor/state/`](../state/README.md).

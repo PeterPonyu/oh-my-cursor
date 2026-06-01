@@ -72,7 +72,7 @@ non-trivial.
 For a plugin-shipped rule:
 
 - Add the path to the `required` array in
-  `scripts/validate-plugin-structure.sh` if the rule is part of the
+  `scripts/validate-plugin-structure.ts` if the rule is part of the
   contract (most are; one-off scoped rules may be omitted from
   `required` but should still ship).
 - Confirm `scripts/install-local-plugin.ts` includes `/rules/***`
@@ -93,7 +93,7 @@ Run, in order:
 ```
 node --experimental-strip-types scripts/validate-agent-bridge-contract.ts
 node --experimental-strip-types scripts/validate-public-language.ts
-bash scripts/validate-plugin-structure.sh
+node --experimental-strip-types scripts/validate-plugin-structure.ts
 bash scripts/validate-rules-install-parity.sh   # for plugin-shipped rules
 ```
 
@@ -134,7 +134,7 @@ If any fail, fix and re-run. Never bypass.
 - **official-doc**: NO — repo-owned.
 - **checked-in-artifact**: YES — Proof: `skills/rules-authoring/SKILL.md`,
   `rules/rules-authoring.mdc`,
-  `scripts/validate-plugin-structure.sh`,
+  `scripts/validate-plugin-structure.ts`,
   `scripts/validate-rules-install-parity.sh`,
   `scripts/validate-agent-bridge-contract.ts`,
   `scripts/validate-public-language.ts`.

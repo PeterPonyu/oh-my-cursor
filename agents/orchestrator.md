@@ -65,7 +65,7 @@ Return a concise status block:
   "phase": "verify",
   "status": "in_progress",
   "current_role": "verifier",
-  "next_action": "run scripts/check-local-plugin-install.sh and update AC-002",
+  "next_action": "run scripts/check-local-plugin-install.ts and update AC-002",
   "pending_acceptance_criteria": ["AC-002"],
   "blocked": false
 }

@@ -6,7 +6,7 @@ import { fileURLToPath } from 'node:url';
 
 const currentFile = fileURLToPath(import.meta.url);
 const ROOT = path.resolve(path.dirname(currentFile), '..');
-const FIXTURE = path.join(ROOT, 'docs', 'plans', 'mcp-state-bridge-2026-05', 'expected-rename-references.txt');
+const FIXTURE = path.join(ROOT, 'scripts', 'fixtures', 'expected-rename-references.txt');
 
 const CURRENT_SURFACE_ROOTS = [
   'AGENTS.md',
@@ -65,6 +65,8 @@ const LEGACY_IMPLEMENTATION_NAMES = [
   '_tool_payload.py',
 ];
 
+const SCRIPT_REFERENCE_RE = /\bscripts\/[A-Za-z0-9_.-]+\.(?:ts|sh|json|md)\b/g;
+
 function fail(msg: string): never {
   console.error(`FAIL: ${msg}`);
   process.exit(1);
@@ -109,9 +111,10 @@ function collectCurrentSurfaceFiles(root: string): string[] {
 function checkCurrentSurfacesForLegacyImplementationNames() {
   const files = Array.from(new Set(CURRENT_SURFACE_ROOTS.flatMap(collectCurrentSurfaceFiles))).sort();
   const violations: string[] = [];
+  const missingScriptReferences: string[] = [];
   for (const filePath of files) {
     const rel = path.relative(ROOT, filePath).split(path.sep).join('/');
-    if (rel === 'CHANGELOG.md' || rel.startsWith('docs/plans/')) {
+    if (rel === 'CHANGELOG.md' || rel.startsWith('docs/plans/') || rel.startsWith('docs/archive/')) {
       continue;
     }
     const lines = fs.readFileSync(filePath, 'utf-8').split(/\r?\n/);
@@ -121,11 +124,22 @@ function checkCurrentSurfacesForLegacyImplementationNames() {
           violations.push(`${rel}:${index + 1}: stale implementation reference '${legacyName}': ${line.trim()}`);
         }
       }
+      for (const match of line.matchAll(SCRIPT_REFERENCE_RE)) {
+        const scriptRef = match[0];
+        if (!fs.existsSync(path.join(ROOT, scriptRef))) {
+          missingScriptReferences.push(`${rel}:${index + 1}: missing script reference '${scriptRef}': ${line.trim()}`);
+        }
+      }
     });
   }
   if (violations.length > 0) {
     console.error('FAIL: CURRENT_SURFACE_STALE_IMPLEMENTATION_REFERENCES');
     violations.forEach(v => console.error(v));
+    process.exit(1);
+  }
+  if (missingScriptReferences.length > 0) {
+    console.error('FAIL: CURRENT_SURFACE_MISSING_SCRIPT_REFERENCES');
+    missingScriptReferences.forEach(v => console.error(v));
     process.exit(1);
   }
 }

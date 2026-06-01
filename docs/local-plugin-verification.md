@@ -240,7 +240,7 @@ find ~/.cursor/plugins/local/oh-my-cursor -name "__pycache__" -o -name "*.pyc" |
 ```
 
 A non-zero count means the installed payload contains dev artifacts. Rebuild
-with `build-dist.sh` and reinstall from `dist/oh-my-cursor` to recover.
+with `build-dist.ts` and reinstall from `dist/oh-my-cursor` to recover.
 
 ---
 

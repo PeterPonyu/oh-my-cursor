@@ -98,7 +98,7 @@ through normal file tools or, optionally, through the bridge.
    its rule body.
 7. Update `scripts/install-local-plugin.ts` to include the new template
    in the rsync payload.
-8. Update `scripts/validate-plugin-structure.sh` to require the new
+8. Update `scripts/validate-plugin-structure.ts` to require the new
    template + validator.
 9. Update `AGENTS.md`, `README.md`, `docs/confirmed-surfaces.md`, and
    `CHANGELOG.md` in the same change.

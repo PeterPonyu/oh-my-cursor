@@ -62,7 +62,7 @@ These are the safest gaps to close next because they have clear Cursor analogs:
 6. **OMC compatibility materialization** — keep
    `scripts/link-omc-cursor-compat-assets.ts` aligned with Cursor's documented
    `~/.claude/skills/` and `~/.claude/agents/` lookup paths. Proof:
-   `scripts/e2e-qa-session-assets.sh` with `CHECK_USER_COMPAT_ASSETS=1`.
+   `scripts/e2e-qa-session-assets.ts` with `CHECK_USER_COMPAT_ASSETS=1`.
 
 ## Explicit Non-Goals
 

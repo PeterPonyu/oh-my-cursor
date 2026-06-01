@@ -80,7 +80,7 @@ Worker-to-lead communication is structured:
   "task_id": "T-001",
   "verdict": "complete",
   "changed_files": ["path/to/file.md"],
-  "evidence": "scripts/validate-plugin-structure.sh: PASS",
+  "evidence": "scripts/validate-plugin-structure.ts: PASS",
   "notes": "No additional issues found"
 }
 ```
