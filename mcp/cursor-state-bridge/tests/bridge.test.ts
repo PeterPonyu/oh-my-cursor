@@ -127,6 +127,60 @@ test('state_io: state_init then state_read returns the initialised state', () =>
   }
 });
 
+test('state_io: state_read rejects workspace override outside configured workspace', () => {
+  const tmpDir = makeTmp();
+  const outsideDir = makeTmp();
+  try {
+    const outsideStateDir = path.join(outsideDir, '.cursor', 'state');
+    fs.mkdirSync(outsideStateDir, { recursive: true });
+    fs.writeFileSync(
+      path.join(outsideStateDir, 'workflow-state.json'),
+      JSON.stringify({ task_id: 'outside-secret' }),
+      'utf-8'
+    );
+
+    assert.throws(
+      () => stateIo.state_read(tmpDir, { workspace: outsideDir }),
+      (err: any) => err instanceof JailError
+    );
+  } finally {
+    fs.rmSync(tmpDir, { recursive: true, force: true });
+    fs.rmSync(outsideDir, { recursive: true, force: true });
+  }
+});
+
+test('state_io: state_read rejects traversal in workspace override before normalization', () => {
+  const tmpDir = makeTmp();
+  try {
+    assert.throws(
+      () => stateIo.state_read(tmpDir, { workspace: 'safe/../safe' }),
+      (err: any) => err instanceof JailError
+    );
+  } finally {
+    fs.rmSync(tmpDir, { recursive: true, force: true });
+  }
+});
+
+test('state_io: state_read allows workspace override inside configured workspace', () => {
+  const tmpDir = makeTmp();
+  try {
+    const subWorkspace = path.join(tmpDir, 'nested');
+    const stateDir = path.join(subWorkspace, '.cursor', 'state');
+    fs.mkdirSync(stateDir, { recursive: true });
+    fs.writeFileSync(
+      path.join(stateDir, 'workflow-state.json'),
+      JSON.stringify({ task_id: 'inside-subworkspace' }),
+      'utf-8'
+    );
+
+    const result = stateIo.state_read(tmpDir, { workspace: subWorkspace });
+    const parsed = JSON.parse(result.content[0].text);
+    assert.strictEqual(parsed.task_id, 'inside-subworkspace');
+  } finally {
+    fs.rmSync(tmpDir, { recursive: true, force: true });
+  }
+});
+
 // memory_io.ts — memory_notepad_append_working happy path + bad path throws
 
 const NOTEPAD_CONTENT =

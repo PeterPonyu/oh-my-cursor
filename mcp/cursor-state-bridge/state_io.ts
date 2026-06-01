@@ -1,7 +1,44 @@
 import * as fs from 'node:fs';
 import * as path from 'node:path';
 import { resolveJailed } from './jail.ts';
+import { JailError } from './jail.ts';
 import * as api from '../../src/oh_my_cursor/workflow_state/api.ts';
+
+function failEscape(message: string): JailError {
+  return new JailError(message);
+}
+
+function containsTraversalSegment(input: string): boolean {
+  return input.split(/[\\/]+/).includes('..');
+}
+
+function activeWorkspace(workspace: string, params: any): string {
+  const workspaceReal = fs.realpathSync(path.resolve(workspace));
+  const workspaceOverride = params.workspace;
+  if (workspaceOverride === undefined || workspaceOverride === null || workspaceOverride === '') {
+    return workspaceReal;
+  }
+  if (typeof workspaceOverride !== 'string') {
+    throw new Error('state_read: workspace must be a string when provided');
+  }
+  if (containsTraversalSegment(workspaceOverride)) {
+    throw failEscape(`state workspace override contains traversal: ${workspaceOverride}`);
+  }
+  const requested = path.isAbsolute(workspaceOverride)
+    ? path.resolve(workspaceOverride)
+    : path.resolve(workspaceReal, workspaceOverride);
+  let requestedReal: string;
+  try {
+    requestedReal = fs.realpathSync(requested);
+  } catch {
+    requestedReal = requested;
+  }
+  const relativeToWorkspace = path.relative(workspaceReal, requestedReal);
+  if (relativeToWorkspace.startsWith('..') || path.isAbsolute(relativeToWorkspace)) {
+    throw failEscape(`state workspace override escapes configured workspace: ${workspaceOverride}`);
+  }
+  return requestedReal;
+}
 
 function resolveStatePath(workspace: string, taskId: string | null | undefined): string {
   const ws = path.resolve(workspace);
@@ -37,9 +74,7 @@ function getHistoryCap(params: any): number {
 }
 
 export function state_read(workspace: string, params: any): any {
-  const wsOverride = params.workspace;
-  const activeWorkspace = wsOverride ? path.resolve(wsOverride) : workspace;
-  const target = resolveStatePath(activeWorkspace, params.task_id);
+  const target = resolveStatePath(activeWorkspace(workspace, params), params.task_id);
   if (!fs.existsSync(target)) {
     return mcpText('no state');
   }
