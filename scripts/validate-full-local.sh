@@ -48,7 +48,7 @@ npm test
 npm run verify
 node --experimental-strip-types scripts/check-local-plugin-install.ts --root "$ROOT" --with-mcp
 node --experimental-strip-types scripts/validate-state-contract.ts
-node --experimental-strip-types scripts/validate-mcp-trace.ts
+node --experimental-strip-types scripts/validate-mcp-trace.ts --self-test
 node --experimental-strip-types scripts/validate-prd-ac-mapping.ts
 node --experimental-strip-types scripts/test-unified-config.ts
 node --experimental-strip-types scripts/test-autopilot-gates.ts
@@ -59,8 +59,14 @@ if [[ "$RUN_MCP_SMOKE" == "1" ]]; then
   RUN_MCP_BRIDGE_SMOKE=1 node --experimental-strip-types scripts/smoke-mcp-cursor-state-bridge.ts --from-example
   RUN_MCP_BRIDGE_SMOKE=1 node --experimental-strip-types scripts/smoke-mcp-cursor-state-bridge.ts --auth
   OH_MY_CURSOR_MCP_TOKEN=structural-token RUN_MCP_BRIDGE_SMOKE=1 node --experimental-strip-types scripts/smoke-mcp-cursor-state-bridge.ts --auth-enforced
+  node --experimental-strip-types scripts/validate-mcp-trace.ts
 else
   log "MCP bridge smoke skipped by flag"
+  if [[ -f "$ROOT/.omcs/cursor-state-bridge/trace.jsonl" ]]; then
+    node --experimental-strip-types scripts/validate-mcp-trace.ts
+  else
+    log "MCP trace validation skipped because no trace file exists"
+  fi
 fi
 
 log "full local validation complete"
