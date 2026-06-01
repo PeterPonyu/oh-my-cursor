@@ -67,6 +67,28 @@ test('jail: path inside docs/plans is allowed', () => {
   }
 });
 
+test('jail: symlinked allowed root escaping workspace throws JailError', () => {
+  const tmpDir = makeTmp();
+  const outsideDir = makeTmp();
+  try {
+    const cursorDir = path.join(tmpDir, '.cursor');
+    const outsideStateDir = path.join(outsideDir, 'state');
+    fs.mkdirSync(cursorDir, { recursive: true });
+    fs.mkdirSync(outsideStateDir, { recursive: true });
+    fs.symlinkSync(outsideStateDir, path.join(cursorDir, 'state'), 'dir');
+    const target = path.join(cursorDir, 'state', 'workflow-state.json');
+    fs.writeFileSync(path.join(outsideStateDir, 'workflow-state.json'), '{}');
+
+    assert.throws(
+      () => resolveJailed(tmpDir, target),
+      (err: any) => err instanceof JailError
+    );
+  } finally {
+    fs.rmSync(tmpDir, { recursive: true, force: true });
+    fs.rmSync(outsideDir, { recursive: true, force: true });
+  }
+});
+
 // auth.ts
 
 test('auth: no env var set — authenticate always returns true', () => {
@@ -178,6 +200,58 @@ test('state_io: state_read allows workspace override inside configured workspace
     assert.strictEqual(parsed.task_id, 'inside-subworkspace');
   } finally {
     fs.rmSync(tmpDir, { recursive: true, force: true });
+  }
+});
+
+test('state_io: state_read rejects inside override with symlinked state root outside workspace', () => {
+  const tmpDir = makeTmp();
+  const outsideDir = makeTmp();
+  try {
+    const subWorkspace = path.join(tmpDir, 'nested');
+    const cursorDir = path.join(subWorkspace, '.cursor');
+    const outsideStateDir = path.join(outsideDir, 'state');
+    fs.mkdirSync(cursorDir, { recursive: true });
+    fs.mkdirSync(outsideStateDir, { recursive: true });
+    fs.writeFileSync(
+      path.join(outsideStateDir, 'workflow-state.json'),
+      JSON.stringify({ task_id: 'symlink-outside' }),
+      'utf-8'
+    );
+    fs.symlinkSync(outsideStateDir, path.join(cursorDir, 'state'), 'dir');
+
+    assert.throws(
+      () => stateIo.state_read(tmpDir, { workspace: subWorkspace }),
+      (err: any) => err instanceof JailError
+    );
+  } finally {
+    fs.rmSync(tmpDir, { recursive: true, force: true });
+    fs.rmSync(outsideDir, { recursive: true, force: true });
+  }
+});
+
+test('state_io: state_read rejects task state when docs/plans root is symlinked outside workspace', () => {
+  const tmpDir = makeTmp();
+  const outsideDir = makeTmp();
+  try {
+    const docsDir = path.join(tmpDir, 'docs');
+    const outsidePlansDir = path.join(outsideDir, 'plans');
+    const taskDir = path.join(outsidePlansDir, 'task-escape');
+    fs.mkdirSync(docsDir, { recursive: true });
+    fs.mkdirSync(taskDir, { recursive: true });
+    fs.writeFileSync(
+      path.join(taskDir, 'workflow-state.json'),
+      JSON.stringify({ task_id: 'task-escape' }),
+      'utf-8'
+    );
+    fs.symlinkSync(outsidePlansDir, path.join(docsDir, 'plans'), 'dir');
+
+    assert.throws(
+      () => stateIo.state_read(tmpDir, { task_id: 'task-escape' }),
+      (err: any) => err instanceof JailError
+    );
+  } finally {
+    fs.rmSync(tmpDir, { recursive: true, force: true });
+    fs.rmSync(outsideDir, { recursive: true, force: true });
   }
 });
 
