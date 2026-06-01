@@ -96,6 +96,15 @@ function main() {
     if (!fs.existsSync(path.join(symlinkPluginPath, '.cursor-plugin', 'plugin.json'))) {
       fail('symlink mode plugin missing manifest');
     }
+    const symlinkStatus = runNode('scripts/install-local-plugin.ts', [
+      'status',
+      '--root', sourceRoot,
+      '--target-root', symlinkTarget,
+      '--name', pluginName,
+    ]);
+    if (!symlinkStatus.includes(`installed: ${symlinkPluginPath}`) || !symlinkStatus.includes('mode:    symlink')) {
+      fail(`positional status action did not report symlink install correctly:\n${symlinkStatus}`);
+    }
 
     if (fs.existsSync(path.join(sourceRoot, 'mcp'))) {
       runNode('scripts/install-local-plugin.ts', [
@@ -126,6 +135,26 @@ function main() {
     runNode('scripts/install-local-plugin.ts', copyArgs);
 
     const copyPluginPath = path.join(copyTarget, pluginName);
+    const manifestVersion = JSON.parse(
+      fs.readFileSync(path.join(sourceRoot, '.cursor-plugin', 'plugin.json'), 'utf-8'),
+    ).version;
+    const copyStatus = runNode('scripts/install-local-plugin.ts', [
+      '--status',
+      '--root', sourceRoot,
+      '--target-root', copyTarget,
+      '--name', pluginName,
+    ]);
+    if (!copyStatus.includes(`version: ${manifestVersion}`) || !copyStatus.includes('mode:    copy')) {
+      fail(`flagged status action did not report copy install correctly:\n${copyStatus}`);
+    }
+    const copyVersion = runNode('scripts/install-local-plugin.ts', [
+      'version',
+      '--target-root', copyTarget,
+      '--name', pluginName,
+    ]).trim();
+    if (copyVersion !== manifestVersion) {
+      fail(`version action returned ${copyVersion}, expected ${manifestVersion}`);
+    }
     if (fs.existsSync(path.join(copyTarget, 'oh-my-copilot-workspace'))) {
       fail('copy mode did not remove legacy oh-my-copilot-workspace alias');
     }
