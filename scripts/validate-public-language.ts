@@ -1,6 +1,7 @@
 import * as fs from 'node:fs';
 import * as path from 'node:path';
 import * as process from 'node:process';
+import { execFileSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 
 const currentFile = fileURLToPath(import.meta.url);
@@ -31,6 +32,22 @@ const FORBIDDEN_PATTERNS: Record<string, RegExp> = {
 function isExcluded(filePath: string): boolean {
   const rel = path.relative(ROOT, filePath).replace(/\\/g, '/');
   return EXCLUDED_PREFIXES.some(prefix => rel.startsWith(prefix));
+}
+
+function isSkipWorktree(filePath: string): boolean {
+  const rel = path.relative(ROOT, filePath).replace(/\\/g, '/');
+  if (rel.startsWith('..')) return false;
+
+  try {
+    const output = execFileSync('git', ['ls-files', '-v', '--', rel], {
+      cwd: ROOT,
+      encoding: 'utf-8',
+      stdio: ['ignore', 'pipe', 'ignore'],
+    }).trim();
+    return output.startsWith('S ');
+  } catch {
+    return false;
+  }
 }
 
 function iterPublicFiles(): string[] {
@@ -66,7 +83,7 @@ function iterPublicFiles(): string[] {
   const benchmarkBase = path.join(ROOT, 'benchmark');
   walk(benchmarkBase, new Set(['.md']));
 
-  return Array.from(files).sort();
+  return Array.from(files).filter(filePath => !isSkipWorktree(filePath)).sort();
 }
 
 function main() {
