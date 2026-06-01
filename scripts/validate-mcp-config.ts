@@ -73,7 +73,8 @@ function checkExample(examplePath: string): boolean {
 function checkUserConfig(): boolean {
   if (!fs.existsSync(USER_MCP_CONFIG) || !fs.statSync(USER_MCP_CONFIG).isFile()) {
     console.log(
-      `WARN: ${path.relative(ROOT, USER_MCP_CONFIG)} not present. Cursor will not auto-load the bridge ` +
+      `INFO: ${path.relative(ROOT, USER_MCP_CONFIG)} not present; this is expected for the default install. ` +
+      `Cursor will not auto-load the optional bridge ` +
       `until you copy ${path.relative(ROOT, DEFAULT_MCP_EXAMPLE)} -> ${path.relative(ROOT, USER_MCP_CONFIG)}.`
     );
     return true;
