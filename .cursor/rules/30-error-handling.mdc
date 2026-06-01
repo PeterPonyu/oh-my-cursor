@@ -18,7 +18,7 @@ globs:
 ## Error logging
 
 - Never leave an empty `catch` block. If an exception is caught, it must be logged with context (phase, tool name, stack trace) before the tool proceeds.
-- Every `try/except` must include at least a log statement and a decision: re-raise, return a fallback, or exit gracefully.
+- Every caught exception path must include at least a log statement and a decision: re-raise, return a fallback, or exit gracefully.
 - Shell-based hooks and scripts must check exit codes after every non-trivial command. Unchecked exit codes mask failures.
 
 ## Shell guard

@@ -17,7 +17,7 @@ description: "[OMCS] Validate the repo-root Cursor plugin structure, then follow
 ### Proof Class
 - **official-doc**: NO — Cursor does not document a plugin validation primitive; this is repo-owned.
 - **checked-in-artifact**: YES — Proof: `skills/local-plugin-check/SKILL.md`, `.cursor-plugin/plugin.json`, validators.
-- **runtime-smoke**: YES — Runs `validate-plugin-structure.sh` and other validators; smoke test for plugin integrity.
+- **runtime-smoke**: YES — Runs `validate-plugin-structure.ts` and other validators; smoke test for plugin integrity.
 
 ### Claim Summary
 This skill validates the repo-root Cursor plugin structure and follows the local plugin verification walkthrough. It proves the checked-in plugin artifact is intact and well-formed. No MCP or hooks required; this is a read-only validation workflow.
@@ -58,15 +58,15 @@ No hooks dependencies. This skill runs entirely within the Cursor chat.
 1. Validate the checked-in plugin artifact:
 
 ```bash
-./scripts/validate-plugin-structure.sh
+node --experimental-strip-types scripts/validate-plugin-structure.ts
 ```
 
 2. Validate the broader repo contract:
 
 ```bash
-./scripts/verify-backbone.sh
-./scripts/validate-surface-visibility.sh
-./scripts/validate-state-contract.sh
+node --experimental-strip-types scripts/verify-backbone.ts
+node --experimental-strip-types scripts/validate-surface-visibility.ts
+node --experimental-strip-types scripts/validate-state-contract.ts
 ```
 
 3. Follow the manual local-load walkthrough:

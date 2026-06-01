@@ -49,7 +49,7 @@ Run every time a rule is added or edited:
 
 | Validator | What it checks |
 |-----------|-----------------|
-| `scripts/validate-plugin-structure.sh` | New plugin-shipped rule must be listed in the `required` array if it is part of the contract |
+| `scripts/validate-plugin-structure.ts` | New plugin-shipped rule must be listed in the `required` array if it is part of the contract |
 | `scripts/validate-rules-install-parity.sh` | Every `rules/*.mdc` shipped in the repo is also present in the install payload (when `install-local-plugin.ts` is run) |
 | `scripts/validate-agent-bridge-contract.ts` | Rules must not invoke the workflow-state writer CLI or reference archived doc paths |
 | `scripts/validate-public-language.ts` | Rules must not contain validator-forbidden legacy package names |

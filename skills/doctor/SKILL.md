@@ -16,7 +16,7 @@ description: "[OMCS] Diagnose Cursor + oh-my-cursor installation health and repo
 
 ### Proof Class
 - **official-doc**: NO — Cursor does not document a diagnostic primitive; this is repo-owned.
-- **checked-in-artifact**: YES — Proof: `skills/doctor/SKILL.md`, validators (`verify-backbone.sh`, `validate-surface-visibility.sh`, etc.), skill catalogue check.
+- **checked-in-artifact**: YES — Proof: `skills/doctor/SKILL.md`, validators (`verify-backbone.ts`, `validate-surface-visibility.sh`, etc.), skill catalogue check.
 - **runtime-smoke**: YES — Runs validators and checks actual filesystem state; smoke test for repo health.
 
 ### Claim Summary
@@ -82,10 +82,10 @@ ls .cursor-plugin/plugin.json
 ### 3. Validators
 
 ```bash
-./scripts/verify-backbone.sh
-./scripts/validate-surface-visibility.sh
-./scripts/validate-state-contract.sh
-./scripts/validate-plugin-structure.sh
+node --experimental-strip-types scripts/verify-backbone.ts
+node --experimental-strip-types scripts/validate-surface-visibility.ts
+node --experimental-strip-types scripts/validate-state-contract.ts
+node --experimental-strip-types scripts/validate-plugin-structure.ts
 ```
 
 - Run each. Surface the exit code in the report.
@@ -167,7 +167,7 @@ Read `.cursor/rules/*.mdc` and confirm each file:
 ### 8. Optional local install
 
 ```bash
-./scripts/check-local-plugin-install.sh
+node --experimental-strip-types scripts/check-local-plugin-install.ts
 ```
 
 If present, run it. This is a CI-safe bounded check; report its exit code.

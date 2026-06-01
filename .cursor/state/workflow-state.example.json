@@ -4,13 +4,13 @@
   "phase": "verify",
   "status": "in_progress",
   "current_role": "verifier",
-  "next_action": "run scripts/check-local-plugin-install.sh and scripts/smoke-cursor-workflow-artifacts.sh, then mark AC-002 passed",
+  "next_action": "run scripts/check-local-plugin-install.ts and scripts/smoke-cursor-workflow-artifacts.ts, then mark AC-002 passed",
   "acceptance_criteria": [
     {
       "id": "AC-001",
       "criterion": "local plugin install copies only the minimal runtime payload",
       "status": "passed",
-      "evidence": "scripts/check-local-plugin-install.sh"
+      "evidence": "scripts/check-local-plugin-install.ts"
     },
     {
       "id": "AC-002",

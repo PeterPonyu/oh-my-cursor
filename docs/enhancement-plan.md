@@ -93,7 +93,7 @@ oh-my-cursor 在**治理、文档完整性和 Hook 覆盖**方面表现卓越：
 | 1.1 | 修复 `docs/PRD.yaml` 过时路径 + agent 数量错误 | `.cursor/hooks.json` → `hooks/hooks.json`，12 → 14 |
 | 1.2 | 完善 CI：增加 MCP bridge 测试、markdown lint、链接检查 | 修改 `.github/workflows/python-ci.yml` path filter |
 | 1.3 | 扩展 pytest：agent/skill frontmatter 验证、state schema 行为测试 | 新增 `tests/agents/`、`tests/state/` 测试目录 |
-| 1.4 | 安装 smoke test | 干净 Cursor 工作区验证：`scripts/smoke-install.sh` |
+| 1.4 | 安装 smoke test | 干净 Cursor 工作区验证：`scripts/install-local-plugin.ts` |
 | 1.5 | 修正 docs 中 hook 数量（14 不是 15） | 涉及 AGENTS.md、README.md |
 
 **P1（高优先级）：**
