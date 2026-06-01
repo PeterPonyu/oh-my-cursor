@@ -96,12 +96,18 @@ with `--symlink` since symlinks already reflect changes live).
 ### Status and uninstall
 
 ```bash
-node --experimental-strip-types scripts/install-local-plugin.ts --status     # show version, mode, staleness
+node --experimental-strip-types scripts/install-local-plugin.ts status       # show version, mode, staleness
+node --experimental-strip-types scripts/install-local-plugin.ts version      # print installed manifest version only
+node --experimental-strip-types scripts/install-local-plugin.ts --status     # same as status
+node --experimental-strip-types scripts/install-local-plugin.ts --version    # same as version
 node --experimental-strip-types scripts/install-local-plugin.ts --uninstall  # remove plugin and legacy aliases
 ```
 
-`--status` reports the installed version, whether it is a symlink or copy, the
-file count, and whether the installed version is stale relative to the repo.
+`status`/`--status` reports the installed version, whether it is a symlink or
+copy, the file count, and whether the installed version is stale relative to
+the repo. `version`/`--version` prints only the installed plugin manifest
+version from `.cursor-plugin/plugin.json`; `package.json` is private tooling
+metadata and is not the installed OMCS release version.
 `--uninstall` removes the plugin directory and any legacy `oh-my-copilot-workspace`
 (legacy alias, retained for backward-compatible cleanup only) alias.
 
@@ -145,14 +151,16 @@ up the new files.
 ### Quick verification after reinstall
 
 ```bash
-node --experimental-strip-types scripts/install-local-plugin.ts --status
+node --experimental-strip-types scripts/install-local-plugin.ts status
+node --experimental-strip-types scripts/install-local-plugin.ts version
 node --experimental-strip-types scripts/check-local-plugin-install.ts
 ```
 
-`--status` reports the installed version, install mode, file count, and whether
-the payload is stale relative to the repo. `check-local-plugin-install.ts` runs
-a CI-safe end-to-end check in temporary directories without touching the live
-install.
+`status` reports the installed version, install mode, file count, and whether
+the payload is stale relative to the repo. `version` prints only the installed
+manifest version for scripts and support/debug answers. `check-local-plugin-install.ts`
+runs a CI-safe end-to-end check in temporary directories without touching the
+live install.
 
 ### Live-iteration shortcut (symlink mode)
 
