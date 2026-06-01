@@ -2,11 +2,11 @@
 
 Status: Canonical mapping of oh-my-cursor hooks to Cursor IDE native events.
 
-This page answers: which hooks run on Cursor's native hook API, which run as python scripts, and which are not supported yet?
+This page answers: which hooks run on Cursor's native hook API, which run as TypeScript scripts, and which are not supported yet?
 
 ## Install surface
 
-This repo ships `hooks/hooks.json` which wires fourteen Cursor hook events to stdlib-only Python scripts under `hooks/`. The install script copies `hooks/hooks.json` and `hooks/` into `~/.cursor/plugins/local/oh-my-cursor/`.
+This repo ships `hooks/hooks.json` which wires fourteen Cursor hook events to TypeScript scripts under `hooks/` that use Node built-ins. The install script copies `hooks/hooks.json` and `hooks/` into `~/.cursor/plugins/local/oh-my-cursor/`.
 
 Cursor reads `hooks/hooks.json` at session start. All hook scripts are fail-open: they observe, log, and warn, but do not block the session unless a tightly bounded severe pattern is detected.
 

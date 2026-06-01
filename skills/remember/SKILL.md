@@ -141,7 +141,7 @@ Without the bridge, the agent edits files directly with normal file tools.
 
 ## Hooks Dependencies
 
-None. This skill never reads or writes from a hook. `compact-reminder.py`
+None. This skill never reads or writes from a hook. `compact-reminder.ts`
 may mention this skill in its reminder message, but the actual routing is
 always an explicit agent invocation.
 

@@ -99,7 +99,7 @@ node --experimental-strip-types scripts/validate-memory-templates.ts
 node --experimental-strip-types scripts/validate-notepad-format.ts docs/templates/notepad.md
 node --experimental-strip-types scripts/validate-project-memory.ts docs/templates/project-memory.json
 bash scripts/validate-rules-install-parity.sh
-python3 -m pytest tests/memory -q
+npm test
 ```
 
 Report each command as OK / FAIL / SKIPPED. These are repo-owned proof for

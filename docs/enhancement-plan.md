@@ -77,8 +77,8 @@ oh-my-cursor 在**治理、文档完整性和 Hook 覆盖**方面表现卓越：
 
 | # | 任务 | 说明 |
 |---|------|------|
-| 0.1 | 评估 Python-only 上限 | 当前 docs+hooks 架构能否支撑有界自主？如果不能，需要什么？ |
-| 0.2 | 运行时层决策 | Python runtime？引入 TypeScript hybrid？不需复制 OMC 的 src/ 树 |
+| 0.1 | 评估 legacy Python-only 上限 | 当前 docs+hooks 架构能否支撑有界自主？如果不能，需要什么？ |
+| 0.2 | 运行时层决策 | legacy Python runtime？引入 TypeScript hybrid？不需复制 OMC 的 src/ 树 |
 | 0.3 | 确定产品边界 | 核心竞争力是什么？与其他 OMC 变体的差异化定位？ |
 | 0.4 | 产出架构决策文档 | 记录在 docs/architecture-decision.md |
 
@@ -100,7 +100,7 @@ oh-my-cursor 在**治理、文档完整性和 Hook 覆盖**方面表现卓越：
 
 | # | 任务 | 说明 |
 |---|------|------|
-| 1.6 | 将 agent 注册改为数据驱动 | 扫描 `agents/*.md` frontmatter，消除 `_active_role.py` / `tool-guard.py` / `subagent-bootstrap.py` 中的硬编码 |
+| 1.6 | 将 agent 注册改为数据驱动 | 扫描 `agents/*.md` frontmatter，消除 `_active_role.ts` / `tool-guard.ts` / `subagent-bootstrap.ts` 中的硬编码 |
 | 1.7 | 澄清 role map | 14 agent 去重、明确边界，避免 implementer/executor 重叠 |
 | 1.8 | 增加 agents/: analyst, writer, document-specialist | 3 个最高杠杆角色，prompt-only |
 | 1.9 | 增加 skills/: cancel, omc-reference | 安全 + 可发现性 |
@@ -133,7 +133,7 @@ oh-my-cursor 在**治理、文档完整性和 Hook 覆盖**方面表现卓越：
 | # | 任务 | 说明 |
 |---|------|------|
 | 1.19 | 跨平台锁支持 | 替代 `fcntl`-only 方案，Windows 兼容 |
-| 1.20 | 结构化日志/可观察性 | 升级 `_trace.py` 为默认按需启用 |
+| 1.20 | 结构化日志/可观察性 | 升级 `_trace.ts` 为默认按需启用 |
 
 ### Phase 2 — 生命周期工作流对标 + Cursor 原生展示（2-3 周）
 
@@ -142,7 +142,7 @@ oh-my-cursor 在**治理、文档完整性和 Hook 覆盖**方面表现卓越：
 | # | 任务 | 说明 |
 |---|------|------|
 | 2.1 | 增加 skills/: deepinit, external-context, ai-slop-cleaner, ultraqa | 选择性对标 OMC 经验证的流程 |
-| 2.2 | 增加 skill 关键词自动检测 | 扩展 `prompt-router.py`，自动加载匹配 skill |
+| 2.2 | 增加 skill 关键词自动检测 | 扩展 `prompt-router.ts`，自动加载匹配 skill |
 | 2.3 | 构建 **Context Recipe Library** | `docs/cursor-workflows/*.md` — @Files/@Git/@Docs 配方模板 |
 | 2.4 | 构建 **Rule Doctor 静态审计** | 验证 `.cursor/rules/` 与 docs 的 claim 一致性 |
 | 2.5 | 构建 **Context Lens Cards** | 按领域生成的 context 建议卡片（hooks/agents/rules/MCP） |

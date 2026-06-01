@@ -201,7 +201,7 @@ const CLEAN_FIXTURE = {
   conventions: { indent: '4 spaces', filenameCase: 'snake_case', moduleLayout: '' },
   structure: { src: 'src/', tests: 'tests/', docs: 'docs/' },
   userOwned: { customNotes: ['note one'], directives: ['never push to main'] },
-  hotPaths: ['scripts/validate-workflow-state.py'],
+  hotPaths: ['scripts/validate-workflow-state.ts'],
 };
 
 function tryValidateExpectingFailure(filePath: string, label: string): boolean {

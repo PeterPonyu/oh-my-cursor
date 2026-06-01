@@ -30,7 +30,7 @@ features:
       - emit an observational summary on sessionEnd
       - surface skill, agent, and phase routing hints plus active workflow-state summaries before each submitted prompt
       - keep direct edits to workflow-state.json bounded by asking for confirmation on preToolUse when non-shell editing tools target it
-      - validate edited workflow-state.json documents against the schema on postToolUse using only the Python standard library
+      - validate edited workflow-state.json documents against the schema on postToolUse using Node built-ins
       - route tool failures to the debugger role and recommend recording failure metadata via the writer on postToolUseFailure
       - link subagent runs to checked-in role prompts on subagentStart and emit observational summaries on subagentStop without requesting auto follow-ups
       - warn on risky shell patterns and ask for confirmation before commands that would corrupt repo-owned state files or the local plugin install path on beforeShellExecution
@@ -119,7 +119,7 @@ mcp_acceptance_criteria:
   AC-502: { phase: 5, status: planned, summary: "CLI shim and bridge share lock; --check-shared-lock asserts import direction" }
   AC-503: { phase: 5, status: planned, summary: "validate-hook-readonly chained into verify-backbone" }
   AC-504: { phase: 5, status: planned, summary: "--self-test detects synthetic offender inside tempfile.TemporaryDirectory" }
-  AC-505: { phase: 5, status: planned, summary: "_trace.py writes to .omcs/ are allowlisted" }
+  AC-505: { phase: 5, status: planned, summary: "_trace.ts writes to .omcs/ are allowlisted" }
   AC-601: { phase: 6, status: planned, summary: "bridge trace at .omcs/cursor-state-bridge/trace.jsonl, schema-conformant" }
   AC-602: { phase: 6, status: planned, summary: "trace rotation 10 MiB FIFO eviction" }
   AC-603: { phase: 6, status: planned, summary: "docs/mcp-auth.md contains defense-in-depth-only framing" }

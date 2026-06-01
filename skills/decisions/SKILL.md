@@ -8,7 +8,7 @@ description: "[OMCS] Architecture / decision-record lifecycle skill — one ADR 
 The decisions surface is a directory of architecture / decision-record
 files (ADRs) at `./docs/decisions/`, one file per decision, named
 `YYYYMMDD-<slug>.md`. The format is enforced by
-`scripts/validate-decisions-format.py`; the template is at
+`scripts/validate-decisions-format.ts`; the template is at
 `docs/templates/decision.md`.
 
 ADRs are **append-only**. Once an ADR is `accepted`, you do not edit its
@@ -101,8 +101,8 @@ else fails the validator.
 - **official-doc**: NO — repo-owned.
 - **checked-in-artifact**: YES — Proof: `skills/decisions/SKILL.md`,
   `docs/templates/decision.md`,
-  `scripts/validate-decisions-format.py`,
-  `tests/memory/test_validate_decisions_format.py`.
+  `scripts/validate-decisions-format.ts`,
+  `tests/memory/test_validate_decisions_format.test.ts`.
 - **runtime-smoke**: NO — Plain markdown, no runtime tooling required.
 
 ### Claim Summary
@@ -124,6 +124,6 @@ None.
 
 - **Lifecycle phase(s)**: `plan`, `review`
 - **Invoked by**: `remember` (router), user, `critic` follow-up
-- **Invokes**: `scripts/validate-decisions-format.py` after each write
+- **Invokes**: `scripts/validate-decisions-format.ts` after each write
 - **State contract**: One file per decision; never touches workflow-state
 - **Failure handling**: Validator failure ⇒ revert and surface the error

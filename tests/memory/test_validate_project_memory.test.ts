@@ -22,7 +22,7 @@ const CLEAN = {
   conventions: { indent: '4 spaces', filenameCase: 'snake_case', moduleLayout: '' },
   structure: { src: 'src/', tests: 'tests/', docs: 'docs/' },
   userOwned: { customNotes: ['note one'], directives: ['never push to main'] },
-  hotPaths: ['scripts/validate-workflow-state.py'],
+  hotPaths: ['scripts/validate-workflow-state.ts'],
 };
 
 function runScript(...args: string[]): { status: number | null; stdout: string; stderr: string } {

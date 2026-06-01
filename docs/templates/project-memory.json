@@ -1,5 +1,5 @@
 {
-  "$comment": "Template project memory for oh-my-cursor. Copy to ./project-memory.json in your workspace and edit. scripts/validate-project-memory.py validates the schema. The MARKER fields named *_marker are not data; they document which keys are user-owned and must not be overwritten by automated rescans.",
+  "$comment": "Template project memory for oh-my-cursor. Copy to ./project-memory.json in your workspace and edit. scripts/validate-project-memory.ts validates the schema. The MARKER fields named *_marker are not data; they document which keys are user-owned and must not be overwritten by automated rescans.",
   "version": 1,
   "task": "",
   "techStack": {

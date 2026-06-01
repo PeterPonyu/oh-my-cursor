@@ -98,5 +98,5 @@ scope for the Cursor port's hook layer.
 - **All writes go through one of two paths**: the packaged library API in `src/oh_my_cursor/workflow_state/` via the
   CLI compatibility shim or the `cursor-state-bridge` MCP tools
   (agent-callable). Both share the same canonical `file_lock` callable. Direct edits to
-  `workflow-state.json` are intercepted by `tool-guard.py` and require user
+  `workflow-state.json` are intercepted by `tool-guard.ts` and require user
   confirmation.

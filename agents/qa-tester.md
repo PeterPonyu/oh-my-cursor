@@ -35,7 +35,7 @@ Return a compact QA report:
   "verdict": "passed | incomplete | blocked",
   "commands_run": [
     {
-      "command": "python3 scripts/validate-cursor-workflow-artifacts.py",
+      "command": "node --experimental-strip-types scripts/validate-cursor-workflow-artifacts.ts",
       "result": "passed",
       "evidence": "AGENTS_ARTIFACTS_OK"
     }

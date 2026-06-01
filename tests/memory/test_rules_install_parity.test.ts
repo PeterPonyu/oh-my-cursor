@@ -1,4 +1,4 @@
-// node:test port of test_rules_install_parity.py.
+// node:test port of test_rules_install_parity.test.ts.
 //
 // Smoke-wraps scripts/validate-rules-install-parity.sh so the parity
 // check runs alongside the rest of the memory test suite.

@@ -64,7 +64,7 @@ No hooks dependencies. This skill runs entirely within the Cursor chat and spawn
    - If not, this skill **downgrades to sequential mode** and runs each task
      in order in the current chat. Tell the user about the downgrade
      plainly; do not pretend parallelism happened.
-   - Resolve the parent CLI model with `scripts/resolve-cursor-model.py` or an
+   - Resolve the parent CLI model with `scripts/resolve-cursor-model.ts` or an
      explicit `CURSOR_SMOKE_MODEL=<model-id>` override. Do not rewrite
      checked-in `agents/*.md` from `model: auto` without benchmark evidence.
    - If the local plugin is the intended surface, pass it with
@@ -81,7 +81,7 @@ depends on the installed CLI version, so consult `cursor-agent --help`
 first. A typical pattern (verify against your CLI):
 
 ```bash
-MODEL="$(python3 scripts/resolve-cursor-model.py)"
+MODEL="$(node --experimental-strip-types scripts/resolve-cursor-model.ts)"
 # verify flags against `cursor-agent --help`
 cursor-agent --print --trust \
   --workspace "$PWD" \
@@ -146,7 +146,7 @@ skill in a follow-up turn.
   Cursor's background-agent product feature as repo-owned. It uses the
   `cursor-agent` CLI as a documented host primitive, nothing more.
 - It may choose a concrete model at the **parent CLI process** level through
-  `scripts/resolve-cursor-model.py` or `CURSOR_SMOKE_MODEL`; that is separate
+  `scripts/resolve-cursor-model.ts` or `CURSOR_SMOKE_MODEL`; that is separate
   from checked-in agent frontmatter, which remains `model: auto`.
 - It does not promise that parallel-spawned agents share state. Each one is
   independent; pass the task description in the prompt rather than relying

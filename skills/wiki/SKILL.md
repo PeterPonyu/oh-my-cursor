@@ -17,7 +17,7 @@ it is not a chatbot.
 
 The templates live at `docs/templates/wiki-index.md`, `wiki-page.md`,
 and `wiki-log.md`. Format is enforced by
-`scripts/validate-wiki-structure.py`.
+`scripts/validate-wiki-structure.ts`.
 
 ## When to use
 
@@ -117,8 +117,8 @@ If the bridge is installed with `--with-mcp`:
 - **official-doc**: NO — repo-owned.
 - **checked-in-artifact**: YES — Proof: `skills/wiki/SKILL.md`,
   `docs/templates/wiki-index.md`, `wiki-page.md`, `wiki-log.md`,
-  `scripts/validate-wiki-structure.py`,
-  `tests/memory/test_validate_wiki_structure.py`.
+  `scripts/validate-wiki-structure.ts`,
+  `tests/memory/test_validate_wiki_structure.test.ts`.
 - **runtime-smoke**: YES (optional) — with `--with-mcp`.
 
 ### Claim Summary
@@ -142,7 +142,7 @@ None.
 - **Lifecycle phase(s)**: any (most useful at the end of `verify` /
   `review` when a finding is durable)
 - **Invoked by**: `remember` (router), user
-- **Invokes**: `scripts/validate-wiki-structure.py` after each write
+- **Invokes**: `scripts/validate-wiki-structure.ts` after each write
 - **State contract**: Operates on `./docs/wiki/`; never touches
   workflow-state
 - **Failure handling**: Validator failure ⇒ revert and surface the error

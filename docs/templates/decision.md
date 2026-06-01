@@ -12,7 +12,7 @@ tags: []
 
 > Copy this template to `docs/decisions/YYYYMMDD-<slug>.md`. The filename
 > must match the `id` field and follow ISO 8601 date-first naming so that
-> `ls docs/decisions/` orders chronologically. `scripts/validate-decisions-format.py`
+> `ls docs/decisions/` orders chronologically. `scripts/validate-decisions-format.ts`
 > reads the frontmatter and enforces the `status` enum.
 
 ## Context
