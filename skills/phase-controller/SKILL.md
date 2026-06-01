@@ -30,7 +30,7 @@ causal-investigation peer for harder "why did this happen?" questions.
 
 For Cursor CLI runs, this skill is the right re-entry point after
 `cursor-agent --resume <chat-id>` or `cursor-agent --continue`. The parent CLI
-session should resolve its model with `scripts/resolve-cursor-model.py` or an
+session should resolve its model with `scripts/resolve-cursor-model.ts` or an
 explicit `CURSOR_SMOKE_MODEL` override instead of hardcoding a model ID. The
 checked-in role agents still use `model: auto` unless benchmark evidence
 justifies pinning them.

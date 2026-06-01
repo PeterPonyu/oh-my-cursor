@@ -30,12 +30,12 @@ Cursor sub-agent with a defined role, tool allowlist, and lifecycle:
 
 Two hooks in `hooks/hooks.json` manage sub-agent sessions:
 
-- **`subagentStart`** → `hooks/subagent-bootstrap.py` — fires when a
+- **`subagentStart`** → `hooks/subagent-bootstrap.ts` — fires when a
   sub-agent session opens. Checks the `subagent_type` against checked-in
   agent names and adds a short `user_message` pointing at the matching
   `agents/<role>.md` prompt.
 
-- **`subagentStop`** → `hooks/subagent-summary.py` — fires when a
+- **`subagentStop`** → `hooks/subagent-summary.ts` — fires when a
   sub-agent session ends. Emits an observational JSON summary of the
   recorded run. Never returns `followup_message`, so it does not consume
   the auto-follow-up loop budget.

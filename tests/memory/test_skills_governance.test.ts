@@ -1,4 +1,4 @@
-// node:test port of test_skills_governance.py.
+// node:test port of test_skills_governance.test.ts.
 //
 // Asserts that every new memory/rules-authoring skill carries the
 // standard governance, MCP, hooks, and orchestration blocks the repo

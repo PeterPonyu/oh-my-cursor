@@ -123,7 +123,7 @@ async function runCheckSharedLock(): Promise<number> {
     fail(`.cursor/state/ modules import from mcp/: ${forbidden.join(', ')}; the dependency direction must be package/bridge/hooks -> workflow-state, never reverse`);
   }
 
-  const duplicatePy = path.join(BRIDGE_DIR, '_locking.py');
+  const duplicatePy = path.join(BRIDGE_DIR, '_locking.ts');
   const duplicateTs = path.join(BRIDGE_DIR, '_locking.ts');
   if (fs.existsSync(duplicatePy) || fs.existsSync(duplicateTs)) {
     fail(`bridge ships a duplicate locking helper; the lock primitive must live only at src/oh_my_cursor/workflow_state/locking.ts`);

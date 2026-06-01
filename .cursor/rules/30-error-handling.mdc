@@ -1,8 +1,8 @@
 ---
 description: Error handling policy for hooks, scripts, and tool guards
 globs:
-  - hooks/**/*.py
-  - scripts/**/*.py
+  - hooks/**/*.ts
+  - scripts/**/*.ts
   - scripts/**/*.sh
 ---
 
@@ -13,7 +13,7 @@ globs:
 - All hooks are **fail-open**: they observe, validate, and report, but must never crash or prevent the Cursor agent from proceeding.
 - A hook that encounters an internal error must log the error, emit it as diagnostic output, and then exit gracefully (exit code 0) so the tool or session continues.
 - Hooks are read-only observers. They may not write workflow-state directly. State writes go through the opt-in MCP bridge (`cursor-state-bridge`) or developer-approved direct file updates — never from hook scripts.
-- The `stop-gate.py` hook is the single exception: it may block session stop when the workflow-state shows an incomplete phase, but it still must not crash.
+- The `stop-gate.ts` hook is the single exception: it may block session stop when the workflow-state shows an incomplete phase, but it still must not crash.
 
 ## Error logging
 
@@ -23,10 +23,10 @@ globs:
 
 ## Shell guard
 
-- `shell-guard.py`: before allowing shell execution, validate the command against blocked patterns (destructive operations, force pushes, etc.). If validation itself fails, log the failure and allow the command — never block on guard errors.
-- `shell-debrief.py`: after shell execution, inspect exit codes and stderr. Report anomalies as `additional_context` but do not modify files or block subsequent operations.
+- `shell-guard.ts`: before allowing shell execution, validate the command against blocked patterns (destructive operations, force pushes, etc.). If validation itself fails, log the failure and allow the command — never block on guard errors.
+- `shell-debrief.ts`: after shell execution, inspect exit codes and stderr. Report anomalies as `additional_context` but do not modify files or block subsequent operations.
 
 ## Failure routing
 
-- `failure-router.py` reads the current workflow phase from state and routes to the appropriate debugging agent (`debugger` or `tracer`). If state is unreadable or missing, log the condition and exit cleanly — do not crash.
+- `failure-router.ts` reads the current workflow phase from state and routes to the appropriate debugging agent (`debugger` or `tracer`). If state is unreadable or missing, log the condition and exit cleanly — do not crash.
 - Failed tool invocations are diagnosed, not retried automatically. Automatic retry is explicitly out of scope for hooks.

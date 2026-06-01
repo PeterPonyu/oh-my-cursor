@@ -1,38 +1,38 @@
-.cursor/state/README.md::5. The `scripts/validate-workflow-state.ts` validator lets you check any state
 .cursor/state/README.md::   compatibility shim `.cursor/state/workflow-state.ts`. Avoid
-.cursor/state/README.md::  Direct calls such as `node --experimental-strip-types .cursor/state/workflow-state.ts init ...`
 .cursor/state/README.md::   tools, the repository wrapper `scripts/workflow-state.ts`, or the installed
+.cursor/state/README.md::  Direct calls such as `node --experimental-strip-types .cursor/state/workflow-state.ts init ...`
 .cursor/state/README.md::- `workflow-state.ts` — compatibility shim that re-exports the packaged
-docs/audits/team-mode-workflow-policy-audit-2026-05.md::- Both the canonical `.cursor/state/workflow-state.json` and the per-task `docs/plans/audit-team-mode-workflow-policy-202605/workflow-state.json` are valid per `scripts/validate-workflow-state.ts` and follow the schema (phase=research, status=in_progress, role=orchestrator, history monotonic).
+.cursor/state/README.md::5. The `scripts/validate-workflow-state.ts` validator lets you check any state
+docs/PRD.yaml::      - validate state documents locally with scripts/validate-workflow-state.ts
+docs/PRD.yaml::  - scripts/validate-workflow-state.ts prints WORKFLOW_STATE_OK for a valid state document.
+docs/PRD.yaml::  - scripts/workflow-state.ts and the installed compatibility shim can initialize and update a local workflow-state JSON file.
 docs/audits/team-mode-workflow-policy-audit-2026-05.md::  - Developer terminal fallback: `scripts/workflow-state.ts` (`.cursor/state/workflow-state.ts` compatibility shim) (see
-docs/audits/team-mode-workflow-policy-audit-2026-05.md::- **Local validator**: `scripts/validate-workflow-state.ts`
 docs/audits/team-mode-workflow-policy-audit-2026-05.md::  - The validator enforces enums + shape (`scripts/validate-workflow-state.ts`).
+docs/audits/team-mode-workflow-policy-audit-2026-05.md::- **Local validator**: `scripts/validate-workflow-state.ts`
+docs/audits/team-mode-workflow-policy-audit-2026-05.md::- Both the canonical `.cursor/state/workflow-state.json` and the per-task `docs/plans/audit-team-mode-workflow-policy-202605/workflow-state.json` are valid per `scripts/validate-workflow-state.ts` and follow the schema (phase=research, status=in_progress, role=orchestrator, history monotonic).
 docs/guidance-schema.md::- Developer CLI writes: `scripts/workflow-state.ts` (installed compatibility shim: `.cursor/state/workflow-state.ts`)
 docs/mcp-bridge.md::`.cursor/state/workflow-state.ts` stays only as a compatibility shim. The
 docs/multi-state-compat.md::- The `validate-workflow-state.ts` script checks field shape and enum membership against the schema, but does **not** enforce phase-transition rules
-docs/orchestration.md::- acceptance update: `node --experimental-strip-types scripts/workflow-state.ts ac ... --id AC-001 --status passed --evidence scripts/check-local-plugin-install.ts`
-docs/orchestration.md::also use the CLI wrapper at `scripts/workflow-state.ts`. Both paths
-docs/orchestration.md::- failure record: `node --experimental-strip-types scripts/workflow-state.ts fail ... --type fixable --message "..."`
-docs/orchestration.md::node --experimental-strip-types scripts/validate-workflow-state.ts
 docs/orchestration.md::   `node --experimental-strip-types scripts/validate-workflow-state.ts <path>`.
 docs/orchestration.md::   `node --experimental-strip-types scripts/workflow-state.ts init docs/plans/<task-id>/workflow-state.json --task-id <task-id>` in the repo. Validate with
+docs/orchestration.md::- acceptance update: `node --experimental-strip-types scripts/workflow-state.ts ac ... --id AC-001 --status passed --evidence scripts/check-local-plugin-install.ts`
+docs/orchestration.md::- failure record: `node --experimental-strip-types scripts/workflow-state.ts fail ... --type fixable --message "..."`
 docs/orchestration.md::- phase advance: `node --experimental-strip-types scripts/workflow-state.ts set ... --phase verify --status in_progress`
-docs/orchestration.md::| State writer (developer-only fallback) | `scripts/workflow-state.ts` (`.cursor/state/workflow-state.ts` compatibility shim in installed payloads) | CLI wrapper over the packaged workflow-state API for developer terminals. Calls the same `init_state` / `set_state` / ... library functions as the bridge so concurrent CLI and bridge writes serialise on the same lock. Not invoked from agent prompts or skills. |
 docs/orchestration.md::- task start: `node --experimental-strip-types scripts/workflow-state.ts init ...`
+docs/orchestration.md::also use the CLI wrapper at `scripts/workflow-state.ts`. Both paths
+docs/orchestration.md::node --experimental-strip-types scripts/validate-workflow-state.ts
+docs/orchestration.md::| State writer (developer-only fallback) | `scripts/workflow-state.ts` (`.cursor/state/workflow-state.ts` compatibility shim in installed payloads) | CLI wrapper over the packaged workflow-state API for developer terminals. Calls the same `init_state` / `set_state` / ... library functions as the bridge so concurrent CLI and bridge writes serialise on the same lock. Not invoked from agent prompts or skills. |
 docs/orchestration.md::| Validators | `scripts/validate-workflow-state.ts`, `scripts/validate-cursor-workflow-artifacts.ts`, `scripts/smoke-cursor-workflow-artifacts.ts`, `scripts/validate-plugin-structure.ts`, `scripts/check-local-plugin-install.ts`, `scripts/install-local-plugin.ts` | Make the orchestration locally provable and keep the install minimal. |
 docs/plans/audit-team-mode-workflow-policy-202605/README-team-launch.md::node --experimental-strip-types scripts/validate-workflow-state.ts docs/plans/audit-team-mode-workflow-policy-202605/workflow-state.json
-docs/PRD.yaml::  - scripts/validate-workflow-state.ts prints WORKFLOW_STATE_OK for a valid state document.
-docs/PRD.yaml::  - scripts/workflow-state.ts and the installed compatibility shim can initialize and update a local workflow-state JSON file.
-docs/PRD.yaml::      - validate state documents locally with scripts/validate-workflow-state.ts
-docs/state-contract.md::automatically. The validator at `scripts/validate-workflow-state.ts` keeps the
 docs/state-contract.md::  `scripts/validate-workflow-state.ts`)
+docs/state-contract.md::automatically. The validator at `scripts/validate-workflow-state.ts` keeps the
 docs/state-contract.md::verification: `node --experimental-strip-types scripts/validate-workflow-state.ts
 hooks/compact-reminder.ts::      '(or `node --experimental-strip-types scripts/workflow-state.ts init ...` from the repo root) before the ' +
 hooks/failure-router.ts::    `Record the failure with cursor-state-bridge tools or \`node --experimental-strip-types scripts/workflow-state.ts\` using one of: ${[...FAILURE_TYPES].sort().join(', ')}.`,
 hooks/shell-guard.ts::      '. Use `node --experimental-strip-types scripts/workflow-state.ts` for state edits and scripts/install-local-plugin.ts for the local plugin path.'
 hooks/state-watcher.ts::      '. Use node --experimental-strip-types scripts/validate-workflow-state.ts for the full validator output.'
-hooks/tool-guard.ts::      'Prefer the cursor-state-bridge tools or `node --experimental-strip-types scripts/workflow-state.ts` ' +
 hooks/tool-guard.ts::      '(the installed `.cursor/state/workflow-state.ts` path is a compatibility shim) so phase, ' +
+hooks/tool-guard.ts::      'Prefer the cursor-state-bridge tools or `node --experimental-strip-types scripts/workflow-state.ts` ' +
 mcp/cursor-state-bridge/README.md::(`api.ts`, `cli.ts`, `locking.ts`). The legacy `.cursor/state/workflow-state.ts`
 mcp/cursor-state-bridge/README.md::`scripts/validate-workflow-state.ts --check-history-cap N` flag asserts
 scripts/check-local-plugin-install.ts::      '.cursor/state/workflow-state.ts',
@@ -46,23 +46,26 @@ scripts/smoke-workflow-state-completion.ts::    runNode('scripts/workflow-state.
 scripts/smoke-workflow-state-completion.ts::    runNode('scripts/workflow-state.ts', [
 scripts/smoke-workflow-state-completion.ts::    runNode('scripts/workflow-state.ts', [
 scripts/smoke-workflow-state-completion.ts::    runNode('scripts/workflow-state.ts', [
-scripts/validate-agent-bridge-contract.ts::on-disk state with \`node --experimental-strip-types scripts/validate-workflow-state.ts <path>\`.
 scripts/validate-agent-bridge-contract.ts::Run \`node --experimental-strip-types .cursor/state/workflow-state.ts init ...\` to start.
-scripts/validate-hook-readonly.ts::  const workflowShimPath = path.join(STATE_DIR, 'workflow-state.ts');
+scripts/validate-agent-bridge-contract.ts::on-disk state with \`node --experimental-strip-types scripts/validate-workflow-state.ts <path>\`.
+scripts/validate-fast-sanity.sh::node --experimental-strip-types scripts/validate-workflow-state.ts
 scripts/validate-hook-readonly.ts::      fail('.cursor/state/workflow-state.ts does not re-export canonical fileLock');
 scripts/validate-hook-readonly.ts::      fail('.cursor/state/workflow-state.ts does not re-export canonical initState');
+scripts/validate-hook-readonly.ts::  const workflowShimPath = path.join(STATE_DIR, 'workflow-state.ts');
+scripts/validate-mcp-server-structure.ts::  if (stateIoText.includes('importlib') || stateIoText.includes('workflow-state.ts')) {
 scripts/validate-plugin-structure.ts::    '.cursor/state/workflow-state.ts',
-scripts/validate-plugin-structure.ts::    execSync('node --experimental-strip-types scripts/validate-workflow-state.ts', { cwd: ROOT, stdio: 'ignore' });
 scripts/validate-plugin-structure.ts::    'scripts/validate-workflow-state.ts',
 scripts/validate-plugin-structure.ts::    'scripts/workflow-state.ts',
+scripts/validate-plugin-structure.ts::    execSync('node --experimental-strip-types scripts/validate-workflow-state.ts', { cwd: ROOT, stdio: 'ignore' });
+scripts/validate-project-memory.ts::  hotPaths: ['scripts/validate-workflow-state.ts'],
+scripts/validate-structural-e2e.sh::node --experimental-strip-types "$plugin_dir/.cursor/state/workflow-state.ts" \
 scripts/validate-surface-visibility.ts::    '.cursor/state/workflow-state.ts',
 scripts/validate-surface-visibility.ts::    'scripts/validate-workflow-state.ts',
 scripts/validate-surface-visibility.ts::    'scripts/workflow-state.ts',
 scripts/verify-backbone.ts::  '.cursor/state/workflow-state.ts',
-skills/phase-controller/SKILL.md::- **checked-in-artifact**: Proof: `.cursor/state/workflow-state.schema.json`, `agents/orchestrator.md`, `hooks/hooks.json` (state-watcher, stop-gate hooks), `scripts/validate-workflow-state.ts`.
-skills/phase-controller/SKILL.md::   validator `node --experimental-strip-types scripts/validate-workflow-state.ts <path>`; the
 skills/iterate-loop/SKILL.md::- **checked-in-artifact**: YES — Proof: `skills/iterate-loop/SKILL.md`, `.cursor/state/workflow-state.schema.json`, `scripts/validate-workflow-state.ts`.
 skills/iterate-loop/SKILL.md::`compact-reminder.ts`, `state-watcher.ts`), and `scripts/validate-workflow-state.ts`
 skills/iterate-loop/SKILL.md::`state_read` / `scripts/validate-workflow-state.ts` and report the structured
-scripts/validate-fast-sanity.sh::node --experimental-strip-types scripts/validate-workflow-state.ts
-scripts/validate-structural-e2e.sh::node --experimental-strip-types "$plugin_dir/.cursor/state/workflow-state.ts" \
+skills/phase-controller/SKILL.md::   validator `node --experimental-strip-types scripts/validate-workflow-state.ts <path>`; the
+skills/phase-controller/SKILL.md::- **checked-in-artifact**: Proof: `.cursor/state/workflow-state.schema.json`, `agents/orchestrator.md`, `hooks/hooks.json` (state-watcher, stop-gate hooks), `scripts/validate-workflow-state.ts`.
+tests/memory/test_validate_project_memory.test.ts::  hotPaths: ['scripts/validate-workflow-state.ts'],

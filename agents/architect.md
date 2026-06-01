@@ -40,7 +40,7 @@ Return a concise architecture verdict:
   "risks": [
     {
       "severity": "blocking | high | medium | low",
-      "surface": "hooks/stop-gate.py",
+      "surface": "hooks/stop-gate.ts",
       "rationale": "why the orchestration contract may break",
       "required_change": "smallest design or proof change needed"
     }

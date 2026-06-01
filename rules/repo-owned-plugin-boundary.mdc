@@ -21,8 +21,8 @@ alwaysApply: false
 - Treat `skills/phase-controller/SKILL.md` and `agents/orchestrator.md`
 	as the orchestration entry points. Other skills and agents are workers in
 	that lifecycle.
-- Keep shipped hooks bounded to short lifecycle helpers. `claim-guard.py` and
-	`stop-gate.py` may read local workflow state; they must not become hidden
+- Keep shipped hooks bounded to short lifecycle helpers. `claim-guard.ts` and
+	`stop-gate.ts` may read local workflow state; they must not become hidden
 	daemons.
 - Keep shipped agents bounded to checked-in prompts and validators. Do not
 	imply background-worker provisioning unless matching Cursor product support,

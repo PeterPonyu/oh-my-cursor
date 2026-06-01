@@ -16,7 +16,7 @@ together with the user's global oh-my-claudecode (OMC) harness. They are
 - `workflow-state.json` — current task's phase, acceptance criteria, history,
   failure metadata. Schema in `workflow-state.schema.json`.
 - `active-role.json` — single-active-subagent record consulted by
-  `tool-guard.py` to enforce per-role tool allowlists declared in
+  `tool-guard.ts` to enforce per-role tool allowlists declared in
   `agents/*.md` frontmatter.
 - `workflow-state.example.json` — reference document; not live state.
 
@@ -43,9 +43,9 @@ port to its internal layout would create a moving target.
   - the packaged library API in `src/oh_my_cursor/workflow_state/` through the CLI shim, or
   - the `cursor-state-bridge` MCP tools (agent-callable, lock-shared).
   Both paths import the same `file_lock` callable identity via the
-  module-cache trick in `mcp/cursor-state-bridge/state_io.py`.
+  module-cache trick in `mcp/cursor-state-bridge/state_io.ts`.
 - Direct edits to `workflow-state.json` from any tool that is not one of
-  these two writers are intercepted by `tool-guard.py` and require user
+  these two writers are intercepted by `tool-guard.ts` and require user
   confirmation.
 
 ## See also

@@ -1,7 +1,7 @@
 # Project notepad (template)
 
 > Copy this file to your workspace as `notepad.md` (or `docs/notepad.md`)
-> and remove this template header. `scripts/validate-notepad-format.py`
+> and remove this template header. `scripts/validate-notepad-format.ts`
 > reads the runtime file you point it at; this template is what the
 > validator uses for its `--self-test` golden.
 

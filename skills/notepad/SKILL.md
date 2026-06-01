@@ -18,7 +18,7 @@ It has three sections, each with a distinct lifecycle:
 | `## MANUAL` | Append only; never auto-prune | None | User-owned (agents may read) |
 
 The template lives at `docs/templates/notepad.md`. Format is enforced by
-`scripts/validate-notepad-format.py`.
+`scripts/validate-notepad-format.ts`.
 
 ## When to use
 
@@ -121,8 +121,8 @@ These are convenience; the file-tool path remains the contract.
 - **official-doc**: NO — repo-owned.
 - **checked-in-artifact**: YES — Proof: `skills/notepad/SKILL.md`,
   `docs/templates/notepad.md`,
-  `scripts/validate-notepad-format.py`,
-  `tests/memory/test_validate_notepad_format.py`.
+  `scripts/validate-notepad-format.ts`,
+  `tests/memory/test_validate_notepad_format.test.ts`.
 - **runtime-smoke**: YES (optional) — When `cursor-state-bridge` is
   installed with memory tools.
 
@@ -130,7 +130,7 @@ These are convenience; the file-tool path remains the contract.
 
 `notepad` is the lifecycle skill for `./notepad.md`. It enforces three
 sections with distinct lifecycles and an explicit 500-char cap on
-Priority Context. The format is validated by a stdlib-only Python script;
+Priority Context. The format is validated by a TypeScript validator that uses Node built-ins;
 edits are made through normal file tools or through the optional MCP
 memory tools.
 
@@ -143,7 +143,7 @@ memory tools.
 
 ## Hooks Dependencies
 
-None — the notepad is never written from a hook. `compact-reminder.py`
+None — the notepad is never written from a hook. `compact-reminder.ts`
 may mention the MANUAL section in its reminder text (read-only), but
 never edits.
 
@@ -151,7 +151,7 @@ never edits.
 
 - **Lifecycle phase(s)**: any
 - **Invoked by**: `remember` (router), user
-- **Invokes**: `scripts/validate-notepad-format.py` after each write
+- **Invokes**: `scripts/validate-notepad-format.ts` after each write
 - **State contract**: Operates on a single markdown file with three
   marker-bounded sections; never touches workflow-state
 - **Failure handling**: Validator failure ⇒ revert the edit, surface the

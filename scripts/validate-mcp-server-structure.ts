@@ -262,7 +262,7 @@ async function main() {
   if (!stateIoText.includes('src/oh_my_cursor/workflow_state')) {
     fail("state_io.ts must import the packaged workflow-state API");
   }
-  if (stateIoText.includes('importlib') || stateIoText.includes('workflow-state.py')) {
+  if (stateIoText.includes('importlib') || stateIoText.includes('workflow-state.ts')) {
     fail("state_io.ts must not reference python workspace modules");
   }
   log("state_io.ts: imports packaged workflow-state API, not workspace Python");

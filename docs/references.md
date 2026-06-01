@@ -46,7 +46,7 @@ See `docs/plans/rules-and-memory-2026-05-20/AUDIT.md`.
 | Pattern | Source | OMCS adaptation |
 | --- | --- | --- |
 | Three-tier notepad (Priority / Working / MANUAL) | Sibling notepad implementations | `docs/templates/notepad.md`, `skills/notepad`, `<!-- OMCS:NOTEPAD:* -->` markers |
-| Project memory JSON with protected `userOwned` | Sibling project-memory implementations | `docs/templates/project-memory.json`, `validate-project-memory.py` |
+| Project memory JSON with protected `userOwned` | Sibling project-memory implementations | `docs/templates/project-memory.json`, `validate-project-memory.ts` |
 | Markdown wiki + append-only log | Sibling wiki implementations | `docs/templates/wiki-*.md`, `skills/wiki` |
 | Explicit remember router (no `<remember>` hook parsing) | oh-my-claudecode `skills/remember`, `<remember>` tags in orchestrator hook | `skills/remember` — skill-invoked only |
 | Rules authoring + install parity | Sibling multi-root rules and marker-bounded merge patterns | `skills/rules-authoring`, `validate-rules-install-parity.sh` |

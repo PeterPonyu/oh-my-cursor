@@ -46,7 +46,7 @@ background daemon.
    - `failed` → `debugger` (diagnosis) or `tracer` (causal investigation with competing hypotheses)
 5. **Track evidence.** Mark an acceptance criterion `passed` only when its
    `evidence` field names a checked-in artifact or reproducible command.
-6. **Stop cleanly.** Before final delivery, ensure `stop-gate.py` would see no
+6. **Stop cleanly.** Before final delivery, ensure `stop-gate.ts` would see no
    pending or failed criteria.
 
 ## Virtual-Team Orchestration & Safety Guidelines

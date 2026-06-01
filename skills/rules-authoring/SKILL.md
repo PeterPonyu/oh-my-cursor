@@ -136,8 +136,8 @@ If any fail, fix and re-run. Never bypass.
   `rules/rules-authoring.mdc`,
   `scripts/validate-plugin-structure.sh`,
   `scripts/validate-rules-install-parity.sh`,
-  `scripts/validate-agent-bridge-contract.py`,
-  `scripts/validate-public-language.py`.
+  `scripts/validate-agent-bridge-contract.ts`,
+  `scripts/validate-public-language.ts`.
 - **runtime-smoke**: NO — All checks are repo-local static validators.
 
 ### Claim Summary

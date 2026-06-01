@@ -25,10 +25,10 @@ written by hooks. None of them are part of workflow-state.
 
 | Surface | Default path (consumer workspace) | Owner skill | Validator | Lifetime |
 |---------|-----------------------------------|-------------|-----------|----------|
-| Notepad | `./notepad.md` | `skills/notepad/SKILL.md` | `scripts/validate-notepad-format.py` | Per workspace; three sections (Priority / Working / MANUAL) with explicit char caps |
-| Project memory | `./project-memory.json` | `skills/remember/SKILL.md` (router) | `scripts/validate-project-memory.py` | Per workspace; structured JSON with marker-protected user keys |
-| Decisions | `./docs/decisions/YYYYMMDD-<slug>.md` | `skills/decisions/SKILL.md` | `scripts/validate-decisions-format.py` | Per workspace; append-only ADRs |
-| Wiki | `./docs/wiki/` (with `index.md`, `log.md`, topic pages) | `skills/wiki/SKILL.md` | `scripts/validate-wiki-structure.py` | Per workspace; checked-in markdown with append-only audit log |
+| Notepad | `./notepad.md` | `skills/notepad/SKILL.md` | `scripts/validate-notepad-format.ts` | Per workspace; three sections (Priority / Working / MANUAL) with explicit char caps |
+| Project memory | `./project-memory.json` | `skills/remember/SKILL.md` (router) | `scripts/validate-project-memory.ts` | Per workspace; structured JSON with marker-protected user keys |
+| Decisions | `./docs/decisions/YYYYMMDD-<slug>.md` | `skills/decisions/SKILL.md` | `scripts/validate-decisions-format.ts` | Per workspace; append-only ADRs |
+| Wiki | `./docs/wiki/` (with `index.md`, `log.md`, topic pages) | `skills/wiki/SKILL.md` | `scripts/validate-wiki-structure.ts` | Per workspace; checked-in markdown with append-only audit log |
 
 ## Where each one differs from workflow-state
 
@@ -43,10 +43,10 @@ written by hooks. None of them are part of workflow-state.
 
 ## Hard rules
 
-1. **Hooks never write memory.** `claim-guard.py`, `stop-gate.py`,
-   `state-watcher.py`, `compact-reminder.py`, and any future hook may read
+1. **Hooks never write memory.** `claim-guard.ts`, `stop-gate.ts`,
+   `state-watcher.ts`, `compact-reminder.ts`, and any future hook may read
    memory paths but must not mutate them. This is the same rule the repo
-   applies to workflow-state and is enforced by `validate-hook-readonly.py`.
+   applies to workflow-state and is enforced by `validate-hook-readonly.ts`.
 2. **The agent decides routing through `skills/remember/SKILL.md`.**
    Do not "auto-promote" findings to a memory surface without invoking the
    `remember` skill or making the routing decision explicit in the chat.

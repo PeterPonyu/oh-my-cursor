@@ -1,7 +1,7 @@
 # Wiki index
 
 > Copy to `docs/wiki/index.md`. Every wiki page should be linkable from
-> here. `scripts/validate-wiki-structure.py` checks that this file exists
+> here. `scripts/validate-wiki-structure.ts` checks that this file exists
 > and that every `.md` page (other than `index.md` and `log.md`) is
 > referenced from this index.
 
@@ -26,4 +26,4 @@
 2. Add a line to the Pages list above.
 3. Append a short entry to `docs/wiki/log.md` (use the template at
    `docs/templates/wiki-log.md`).
-4. Run `python3 scripts/validate-wiki-structure.py`.
+4. Run `node --experimental-strip-types scripts/validate-wiki-structure.ts`.
