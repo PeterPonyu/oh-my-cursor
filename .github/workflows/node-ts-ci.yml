@@ -70,6 +70,12 @@ jobs:
       - name: Run Backbone Verification Suite
         run: node --experimental-strip-types scripts/verify-backbone.ts
 
+      - name: Validate Surface Inventory (drift guard)
+        run: node --experimental-strip-types scripts/validate-surface-inventory.ts
+
+      - name: Validate Workflow State (schema gate)
+        run: node --experimental-strip-types scripts/validate-workflow-state.ts .cursor/state/workflow-state.example.json
+
       - name: Validate Rename References (drift guard)
         run: node --experimental-strip-types scripts/validate-rename-references.ts
 
