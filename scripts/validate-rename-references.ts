@@ -66,6 +66,7 @@ const LEGACY_IMPLEMENTATION_NAMES = [
 ];
 
 const SCRIPT_REFERENCE_RE = /\bscripts\/[A-Za-z0-9_.-]+\.(?:ts|sh|json|md)\b/g;
+const BARE_SCRIPT_REFERENCE_RE = /\b(?:validate|verify|smoke|check|install|build|e2e|link|resolve|run|refine|consensus|workflow-state|count_md)[A-Za-z0-9_.-]*\.(?:ts|sh)\b/g;
 
 function fail(msg: string): never {
   console.error(`FAIL: ${msg}`);
@@ -128,6 +129,13 @@ function checkCurrentSurfacesForLegacyImplementationNames() {
         const scriptRef = match[0];
         if (!fs.existsSync(path.join(ROOT, scriptRef))) {
           missingScriptReferences.push(`${rel}:${index + 1}: missing script reference '${scriptRef}': ${line.trim()}`);
+        }
+      }
+      for (const match of line.matchAll(BARE_SCRIPT_REFERENCE_RE)) {
+        const scriptName = match[0];
+        const scriptRef = `scripts/${scriptName}`;
+        if (!fs.existsSync(path.join(ROOT, scriptRef))) {
+          missingScriptReferences.push(`${rel}:${index + 1}: missing bare script reference '${scriptName}' (expected ${scriptRef}): ${line.trim()}`);
         }
       }
     });

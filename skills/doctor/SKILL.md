@@ -16,7 +16,7 @@ description: "[OMCS] Diagnose Cursor + oh-my-cursor installation health and repo
 
 ### Proof Class
 - **official-doc**: NO — Cursor does not document a diagnostic primitive; this is repo-owned.
-- **checked-in-artifact**: YES — Proof: `skills/doctor/SKILL.md`, validators (`verify-backbone.ts`, `validate-surface-visibility.sh`, etc.), skill catalogue check.
+- **checked-in-artifact**: YES — Proof: `skills/doctor/SKILL.md`, validators (`verify-backbone.ts`, `validate-surface-visibility.ts`, etc.), skill catalogue check.
 - **runtime-smoke**: YES — Runs validators and checks actual filesystem state; smoke test for repo health.
 
 ### Claim Summary
