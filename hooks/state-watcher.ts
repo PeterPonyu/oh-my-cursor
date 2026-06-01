@@ -74,6 +74,24 @@ function resolveBridgeCall(toolName: string, payload: any): [string, string] {
   return [inner, DEFAULT_STATE_PATH];
 }
 
+/**
+ * Resolve the JSON-schema node for `acceptance_criteria` array items, tolerating
+ * either an array `items` (tuple form) or a single object `items` (list form).
+ */
+function acceptanceItemSchema(schema: any): any {
+  const acSpec = schema?.properties?.acceptance_criteria;
+  if (!acSpec || typeof acSpec !== 'object') return null;
+  const items = acSpec.items;
+  if (Array.isArray(items)) return items[0] && typeof items[0] === 'object' ? items[0] : null;
+  return items && typeof items === 'object' ? items : null;
+}
+
+/**
+ * Validate `document` against `schema`, deriving every constraint (enum values,
+ * required fields, numeric ranges) from the schema itself so the hook stays in
+ * sync as .cursor/state/workflow-state.schema.json evolves. Falls back to the
+ * previous hardcoded constraints only when the schema does not supply them.
+ */
 function validateAgainstSchema(document: any, schema: any): string[] {
   const errors: string[] = [];
   if (!document || typeof document !== 'object' || Array.isArray(document)) {
@@ -102,14 +120,21 @@ function validateAgainstSchema(document: any, schema: any): string[] {
   }
   const criteria = document.acceptance_criteria;
   if (Array.isArray(criteria)) {
-    const acStatuses = new Set(['pending', 'passed', 'failed', 'skipped']);
+    const itemSchema = acceptanceItemSchema(schema);
+    const itemRequired: string[] = Array.isArray(itemSchema?.required)
+      ? itemSchema.required.filter((k: unknown): k is string => typeof k === 'string')
+      : ['id', 'criterion', 'status'];
+    const statusEnum: unknown[] = Array.isArray(itemSchema?.properties?.status?.enum)
+      ? itemSchema.properties.status.enum
+      : ['pending', 'passed', 'failed', 'skipped'];
+    const acStatuses = new Set(statusEnum.map(String));
     for (let index = 0; index < criteria.length; index++) {
       const item = criteria[index];
       if (!item || typeof item !== 'object' || Array.isArray(item)) {
         errors.push(`acceptance_criteria[${index}] must be an object`);
         continue;
       }
-      for (const key of ['id', 'criterion', 'status']) {
+      for (const key of itemRequired) {
         if (!(key in item)) {
           errors.push(`acceptance_criteria[${index}] missing required field: ${key}`);
         }
@@ -122,9 +147,12 @@ function validateAgainstSchema(document: any, schema: any): string[] {
   }
   const failure = document.failure;
   if (failure && typeof failure === 'object' && !Array.isArray(failure)) {
+    const retrySpec = schema?.properties?.failure?.properties?.retry_count;
+    const min = typeof retrySpec?.minimum === 'number' ? retrySpec.minimum : 0;
+    const max = typeof retrySpec?.maximum === 'number' ? retrySpec.maximum : 3;
     const retry = failure.retry_count;
-    if (typeof retry === 'number' && (retry < 0 || retry > 3)) {
-      errors.push('failure.retry_count must be between 0 and 3');
+    if (typeof retry === 'number' && (retry < min || retry > max)) {
+      errors.push(`failure.retry_count must be between ${min} and ${max}`);
     }
   }
   return errors;
