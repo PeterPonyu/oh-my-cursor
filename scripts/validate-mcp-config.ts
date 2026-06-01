@@ -24,23 +24,36 @@ function loadJson(filePath: string): any {
   }
 }
 
-function checkManifest(): string {
+type ManifestMcpConfig = {
+  target: string;
+  source: string;
+};
+
+function checkManifest(): ManifestMcpConfig {
   const manifest = loadJson(PLUGIN_MANIFEST);
   if (manifest === null) {
     console.error(`FAIL: plugin manifest missing at ${path.relative(ROOT, PLUGIN_MANIFEST)}`);
     process.exit(2);
   }
-  const mcpField = manifest.mcp;
+  const mcpField = typeof manifest.mcpServers === 'string' && manifest.mcpServers
+    ? manifest.mcpServers
+    : manifest.mcp;
+  const source = typeof manifest.mcpServers === 'string' && manifest.mcpServers
+    ? 'mcpServers'
+    : 'mcp';
   if (typeof mcpField !== 'string' || !mcpField) {
-    console.log(`WARN: plugin.json has no \`mcp\` field; defaulting to ${path.relative(ROOT, DEFAULT_MCP_EXAMPLE)}`);
-    return DEFAULT_MCP_EXAMPLE;
+    console.log(
+      `WARN: plugin.json has no \`mcpServers\` or legacy \`mcp\` field; ` +
+      `defaulting to ${path.relative(ROOT, DEFAULT_MCP_EXAMPLE)}`
+    );
+    return { target: DEFAULT_MCP_EXAMPLE, source: 'default' };
   }
   const target = path.resolve(ROOT, mcpField);
   if (!fs.existsSync(target) || !fs.statSync(target).isFile()) {
-    console.error(`FAIL: plugin.json \`mcp\` points to missing file ${mcpField}`);
+    console.error(`FAIL: plugin.json \`${source}\` points to missing file ${mcpField}`);
     process.exit(2);
   }
-  return target;
+  return { target, source };
 }
 
 function checkExample(examplePath: string): boolean {
@@ -90,11 +103,19 @@ function checkUserConfig(): boolean {
 }
 
 function main() {
-  const examplePath = checkManifest();
+  const manifestConfig = checkManifest();
+  const examplePath = manifestConfig.target;
   if (!checkExample(examplePath)) {
     process.exit(1);
   }
-  console.log(`OK: plugin manifest declares MCP at ${path.relative(ROOT, examplePath)} with \`${REQUIRED_SERVER}\`.`);
+  if (manifestConfig.source === 'default') {
+    console.log(`OK: fallback MCP example at ${path.relative(ROOT, examplePath)} declares \`${REQUIRED_SERVER}\`.`);
+  } else {
+    console.log(
+      `OK: plugin manifest \`${manifestConfig.source}\` points to ` +
+      `${path.relative(ROOT, examplePath)} with \`${REQUIRED_SERVER}\`.`
+    );
+  }
   if (!checkUserConfig()) {
     process.exit(1);
   }
