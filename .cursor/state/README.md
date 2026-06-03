@@ -68,21 +68,33 @@ should not be relied upon between runs:
 - Long-lived orchestration, retry queues, or multi-session resume are
   Cursor host-product capabilities and stay out of scope here.
 
-## `.cursor/state/` vs `.omc/state/` — what this repo owns
+## `.cursor/state/` vs `.omcs/` vs `.omc/state/` — what this repo owns
 
-Two state directories may coexist in a workspace. Only one is owned by this
-repo.
+Up to three runtime directories may coexist in a workspace. Only the first two
+belong to this repo; only `.cursor/state/` is a contracted, schema-backed
+surface.
 
 | Path | Owner | Schema | Hook reads | Hook writes |
 | --- | --- | --- | --- | --- |
 | `.cursor/state/workflow-state.json` | this repo (`oh-my-cursor`) | `workflow-state.schema.json` | yes (14 hooks) | no — only the workflow-state package/CLI and the bridge write |
 | `.cursor/state/active-role.json` | this repo (Stage 4) | single-role record | `tool-guard.ts` | `subagent-bootstrap.ts` writes; `subagent-summary.ts` clears |
+| `.omcs/` | this repo (`oh-my-cursor`) | none — transient scratch | no | `_trace.ts` / MCP bridge trace; autopilot cancel token |
 | `.omc/state/*` | the user's global oh-my-claudecode harness | none in this repo | no | no |
+
+`.omcs/` (note the trailing **s**) is **this port's own** workspace-private
+runtime scratch directory. It holds the MCP bridge trace
+(`.omcs/cursor-state-bridge/trace.jsonl`), the hook trace
+(`.omcs/hook-trace.log`), and the autopilot cancel token (`.omcs/cancel`). It is
+gitignored and **never** a checked-in `repo-owned` surface; see
+[`docs/state-contract.md`](../../docs/state-contract.md) "Local scratch-state
+policy". Do not confuse it with `.omc/` below — the names differ by one
+character but the ownership is opposite.
 
 `.omc/state/*` (e.g. `mission-state.json`, `subagent-tracking.json`,
 `hud-stdin-cache.json`) is written by the user's globally installed
-`oh-my-claudecode` harness from `~/.claude/CLAUDE.md`. **This repo does not
-read, write, or contract about it.** Treat it as opaque scratch.
+`oh-my-claudecode` harness from `~/.claude/CLAUDE.md`. It is a **foreign**
+harness, out of scope for this repo, and (like `.omcs/`) gitignored. **This repo
+does not read, write, or contract about it.** Treat it as opaque scratch.
 
 **Decision rule for contributors**: when adding cross-system state, extend
 `.cursor/state/`, never `.omc/state/`. The OMC harness is upstream and out of

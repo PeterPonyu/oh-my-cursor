@@ -117,6 +117,13 @@ function childTarget(root: string, name: string): string {
   return target;
 }
 
+// Provenance prefix, intentional: materialized copies keep the source `[OMC]`
+// tag (NOT this port's `[OMCS]`) because they are foreign oh-my-claudecode
+// assets surfaced unchanged — labeling them `[OMCS]` would falsely claim them as
+// Cursor-port-owned content. Likewise the write target is `~/.claude/skills` and
+// `~/.claude/agents` (not `.cursor/`-scoped) on purpose: those are Cursor's
+// officially-documented Claude-compatibility discovery dirs, so this is
+// cross-tool interop, not brand leakage. The OMC plugin cache is never mutated.
 function copySkill(source: string, targetRoot: string, force: boolean): string {
   const skillMdPath = path.join(source, 'SKILL.md');
   const text = fs.readFileSync(skillMdPath, 'utf-8');

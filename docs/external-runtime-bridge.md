@@ -51,6 +51,13 @@ does not mutate the OMC cache; it creates `[OMC]` user skills under
 CLI can discover them through the same host-product mechanism used for
 Codex-side assets under `~/.codex/`.
 
+The `[OMC]` prefix and the `~/.claude/` target are deliberate. The prefix marks
+**provenance** — these are foreign oh-my-claudecode assets surfaced verbatim, so
+they intentionally keep the source `[OMC]` tag rather than this port's `[OMCS]`,
+which would falsely claim them as Cursor-port-owned. Writing into `~/.claude/`
+(not a `.cursor/`-scoped path) is intentional cross-tool interop: those are
+Cursor's officially-documented Claude-compatibility discovery directories.
+
 ## Ownership and Proof Classes
 
 | Bridge surface | Ownership class here | Strongest proof here | Rule |

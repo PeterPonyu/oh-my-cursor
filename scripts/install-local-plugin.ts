@@ -16,6 +16,14 @@ let force = false;
 let withMcp = false;
 let action: 'install' | 'status' | 'uninstall' | 'watch' | 'version' = 'install';
 
+// DEPRECATED / SUNSET: this list removes a foreign-brand local-plugin alias left
+// over from the pre-rename era (the repo was briefly named
+// `oh-my-copilot-workspace`). The cleanup is a one-way migration: it only deletes
+// the stale alias dir from the user's plugin target root, it is never written.
+// Sunset: drop this list and `cleanupLegacyAliases()` after 2026-12-31 (or the
+// first release >= v1.0.0), by which point existing installs will have migrated.
+// Tracked so the `oh-my-copilot` identifier does not linger in this Cursor port
+// indefinitely.
 const LEGACY_PLUGIN_NAMES = ['oh-my-copilot-workspace'];
 
 function log(msg: string): void {

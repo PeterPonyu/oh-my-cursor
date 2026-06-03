@@ -33,9 +33,9 @@ plugin directory without claiming more automation than the repo actually owns.
    `docs/`, and `scripts/`.
    When installing the default `oh-my-cursor` plugin, the helper also removes
    the old `oh-my-copilot-workspace` (legacy alias, retained for
-   backward-compatible cleanup only) local alias from the same target root so
-   Cursor's plugin list does not keep showing the stale workspace companion
-   after a reload.
+   backward-compatible cleanup only — **scheduled for removal after 2026-12-31**)
+   local alias from the same target root so Cursor's plugin list does not keep
+   showing the stale workspace companion after a reload.
 2. Confirm the plugin root contains:
    - `.cursor-plugin/plugin.json`
    - the shipped plugin rules

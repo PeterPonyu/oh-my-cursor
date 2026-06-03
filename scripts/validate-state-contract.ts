@@ -37,12 +37,23 @@ function main() {
     fail('.gitignore missing');
   }
   const gitignore = fs.readFileSync(gitignorePath, 'utf-8');
-  for (const required of ['.cursor/mcp.json', '.cursor/memories/', '.omc/', '.cursor-worktree/']) {
+  // `.omcs/` is this port's own runtime scratch dir (MCP bridge trace, hook
+  // trace, autopilot cancel token). It is workspace-private and must never be
+  // committed, so the contract requires it to be ignored. This is distinct from
+  // `.omc/`, which is the user's foreign oh-my-claudecode harness scratch (also
+  // ignored, but out of scope for this repo). See docs/state-contract.md.
+  for (const required of [
+    '.cursor/mcp.json',
+    '.cursor/memories/',
+    '.omcs/',
+    '.omc/',
+    '.cursor-worktree/',
+  ]) {
     if (!gitignore.includes(required)) {
       fail(`.gitignore missing ${required}`);
     }
   }
-  log('.gitignore blocks speculative Cursor state files');
+  log('.gitignore blocks speculative Cursor state files and runtime scratch dirs');
 
   if (!fs.existsSync(cursorCfg)) {
     console.log(`bounded: no user-level Cursor CLI config found at ${cursorCfg}; auth/model runtime proof remains environment-gated`);
