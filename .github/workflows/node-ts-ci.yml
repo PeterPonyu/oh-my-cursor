@@ -93,3 +93,30 @@ jobs:
 
       - name: Run MCP Bridge Unit Tests
         run: node --experimental-strip-types --test mcp/cursor-state-bridge/tests/*.test.ts
+
+  e2e-real:
+    name: real journey e2e (consumes model quota)
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v6
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: '22'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Structural (no secrets)
+        run: npm run e2e:structural
+
+      - name: Verify cursor-agent available
+        run: command -v cursor-agent || { echo "cursor-agent not installed on runner — install step TBD by maintainer"; exit 1; }
+
+      - name: Real journey
+        env:
+          CURSOR_API_KEY: ${{ secrets.CURSOR_API_KEY }}
+        run: npm run e2e:real
