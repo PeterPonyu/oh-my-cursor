@@ -41,12 +41,12 @@ fail() {
 }
 
 # write_result <tier> [journey] [passed_override]
-# Emits canonical result JSON to $EVIDENCE_DIR/result-<tier>.json
+# Emits canonical result JSON to $EVIDENCE_DIR/e2e-result.json (last run wins).
 write_result() {
   local tier="$1"
   local journey="${2:-}"
   local passed="${3:-true}"
-  local result_file="$EVIDENCE_DIR/result-${tier}.json"
+  local result_file="$EVIDENCE_DIR/e2e-result.json"
 
   # Default journey from contract
   if [[ -z "$journey" ]]; then
@@ -125,12 +125,40 @@ run_real_journey() {
 
   # Temporary isolated HOME + workspace (git-tracked files only)
   tmp_real="$(mktemp -d "${TMPDIR:-/tmp}/omcs-real-e2e.XXXXXX")"
-  # Do NOT trap cleanup here — preserve for post-mortem on failure; parent EXIT trap handles tmp_headless only
+  real_journey_ok=0
+
+  # Cleanup runs whether the function returns normally or fail() exits the
+  # script (fail uses `exit`, so RETURN alone would not fire on failure —
+  # register EXIT too). On FAILURE, best-effort copy the temp dir's evidence
+  # into a postmortem dir under $EVIDENCE_DIR; then ALWAYS remove $tmp_real
+  # (no leak, success or failure). The guard + rm -rf make it idempotent.
+  #
+  # NOTE: this EXIT trap supersedes the headless tier's `rm -rf $tmp_headless`
+  # EXIT trap, so this cleanup also removes $tmp_headless to avoid leaking it.
+  cleanup_real_journey() {
+    if [[ -n "${tmp_real:-}" && -d "${tmp_real}" && "${real_journey_ok}" != "1" ]]; then
+      local postmortem="$EVIDENCE_DIR/real-postmortem-$TIMESTAMP"
+      mkdir -p "$postmortem" 2>/dev/null || true
+      # Capture the workflow-state evidence if present; else the whole tree.
+      if [[ -f "$tmp_real/workspace/.cursor/state/workflow-state.json" ]]; then
+        cp -a "$tmp_real/workspace/.cursor/state/." "$postmortem/" 2>/dev/null || true
+      else
+        cp -a "$tmp_real/." "$postmortem/" 2>/dev/null || true
+      fi
+      log "real journey failed — best-effort postmortem copied to $postmortem"
+    fi
+    [[ -n "${tmp_real:-}" ]] && rm -rf "$tmp_real"
+    [[ -n "${tmp_headless:-}" ]] && rm -rf "$tmp_headless"
+    return 0
+  }
+  trap cleanup_real_journey RETURN EXIT
+
   ws="$tmp_real/workspace"
   mkdir -p "$ws"
 
   log "copying repo (tracked files) into isolated workspace: $ws"
-  cd "$ROOT" && git ls-files -z | tar --null -T - -cf - | tar -xf - -C "$ws"
+  # Run the cd+ls-files in a subshell so the harness cwd is not mutated.
+  (cd "$ROOT" && git ls-files -z | tar --null -T - -cf -) | tar -xf - -C "$ws"
 
   log "installing plugin (with MCP) into workspace plugin root"
   local ws_plugin_root="$tmp_real/cursor-plugins"
@@ -164,7 +192,7 @@ run_real_journey() {
   local state_file="$ws/.cursor/state/workflow-state.json"
   [[ -f "$state_file" ]] || fail "workflow-state.json not found after real journey at: $state_file"
 
-  # Parse phases seen: require intake, plan, verify, review
+  # Parse phases seen: require the full six-phase lifecycle.
   local phases_seen
   phases_seen="$(node -e "
     const d = JSON.parse(require('fs').readFileSync(process.argv[1], 'utf8'));
@@ -175,13 +203,14 @@ run_real_journey() {
 
   log "phases seen in workflow-state: $phases_seen"
 
-  for required_phase in intake plan verify review; do
+  for required_phase in intake research plan execute verify review; do
     echo "$phases_seen" | tr ',' '\n' | grep -qx "$required_phase" \
       || fail "real journey: required phase '${required_phase}' not present in workflow-state history (seen: $phases_seen)"
   done
 
   write_result "real" "intake->research->plan->execute->verify->review" "true"
   log "[OMCS] e2e passed (tier=real)"
+  real_journey_ok=1
 }
 
 if [[ "$OMCS_E2E_REAL" == "1" ]]; then
