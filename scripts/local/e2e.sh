@@ -174,23 +174,70 @@ run_real_journey() {
   local plugin_dir="$ws_plugin_root/oh-my-cursor"
   [[ -d "$plugin_dir" ]] || fail "plugin dir missing for real journey"
 
-  # Invoke cursor-agent headless with the full lifecycle prompt
+  # ---- Register the cursor-state-bridge MCP for the headless run ----------
+  # cursor-agent discovers MCP servers from <workspace>/.cursor/mcp.json (or
+  # ~/.cursor/mcp.json) — NOT from the repo-root mcp.json. The bridge entry
+  # and its workflow_state library are git-tracked, so both were copied into
+  # $ws above; point the config at the bridge inside $ws using absolute paths
+  # (headless cursor-agent does not expand the ${workspaceFolder} token).
+  local bridge_entry="$ws/mcp/cursor-state-bridge/index.ts"
+  [[ -f "$bridge_entry" ]] || fail "state-bridge entry missing in workspace: $bridge_entry"
+  mkdir -p "$ws/.cursor"
+  cat > "$ws/.cursor/mcp.json" <<EOF
+{
+  "mcpServers": {
+    "cursor-state-bridge": {
+      "command": "node",
+      "args": ["--experimental-strip-types", "${bridge_entry}", "--workspace", "${ws}"]
+    }
+  }
+}
+EOF
+  log "wrote workspace MCP config: $ws/.cursor/mcp.json"
+
+  # Approve the bridge and confirm it is 'ready' BEFORE spending model quota.
+  ( cd "$ws" && cursor-agent mcp enable cursor-state-bridge ) 2>&1 | tee -a "$LOG" || true
+  log "MCP servers visible to cursor-agent in workspace:"
+  ( cd "$ws" && cursor-agent mcp list ) 2>&1 | tee -a "$LOG" || true
+  ( cd "$ws" && cursor-agent mcp list 2>/dev/null ) | grep -q "cursor-state-bridge: ready" \
+    || fail "cursor-state-bridge MCP not 'ready' before real journey (check $ws/.cursor/mcp.json)"
+  log "cursor-state-bridge MCP registered and ready"
+
+  # Invoke cursor-agent headless with the full lifecycle prompt.
   # Requires CURSOR_API_KEY in environment.
-  log "invoking cursor-agent headless for full lifecycle journey"
-  cursor-agent -p \
+  # NOTE: agent (executing) mode — NOT ask/plan — so MCP tool calls actually
+  # run. --force auto-approves tool calls; --approve-mcps auto-approves the
+  # MCP server. The prompt restricts the agent to MCP state tools only (no
+  # file edits / no shell) and pins task_id so the state file path is
+  # deterministic.
+  log "invoking cursor-agent headless for full lifecycle journey (agent mode, MCP state tools)"
+  ( cd "$ws" && cursor-agent -p \
     --output-format text \
     --model auto \
-    --mode ask \
+    --force \
     --trust \
     --workspace "$ws" \
-    --plugin-dir "$ws_plugin_root/oh-my-cursor" \
+    --plugin-dir "$plugin_dir" \
     --approve-mcps \
-    '@auto-execute Drive the full lifecycle (intake -> research -> plan -> execute -> verify -> review) for this trivial task: add a /healthz endpoint that returns 200 OK. Do NOT edit files or run shell commands; use the workflow-state MCP tools to record each phase transition. End when you reach the review phase.' \
+    'You have the cursor-state-bridge MCP tools available (state_init, state_set_phase, state_history_append, etc.). Drive the full software lifecycle for this trivial task: add a /healthz endpoint that returns 200 OK. Do NOT edit any files and do NOT run any shell commands — use ONLY the workflow-state MCP tools, and pass task_id "healthz" on every call. Do exactly this: call state_init with task_id="healthz" and phase="intake"; then call state_set_phase with task_id="healthz" once for each remaining phase in order: research, then plan, then execute, then verify, then review. Stop immediately after recording the review phase.' ) \
     2>&1 | tee -a "$LOG" || fail "cursor-agent real journey invocation failed"
 
-  # Assert workflow-state evidence
-  local state_file="$ws/.cursor/state/workflow-state.json"
-  [[ -f "$state_file" ]] || fail "workflow-state.json not found after real journey at: $state_file"
+  # ---- Locate the workflow-state evidence ---------------------------------
+  # The bridge writes per-task state to docs/plans/<task_id>/workflow-state.json
+  # whenever a task_id is supplied. The prompt pins task_id="healthz", so the
+  # journey's own state file is deterministic — target it directly. (A bare
+  # find under docs/plans would also match pre-existing tracked plans copied
+  # into $ws, which carry their own unrelated phase history.) Fall back to the
+  # unscoped .cursor/state path only if the per-task file is absent.
+  local state_file=""
+  if [[ -f "$ws/docs/plans/healthz/workflow-state.json" ]]; then
+    state_file="$ws/docs/plans/healthz/workflow-state.json"
+  elif [[ -f "$ws/.cursor/state/workflow-state.json" ]]; then
+    state_file="$ws/.cursor/state/workflow-state.json"
+  fi
+  [[ -n "$state_file" && -f "$state_file" ]] \
+    || fail "workflow-state.json not found after real journey (searched $ws/docs/plans/healthz and $ws/.cursor/state)"
+  log "workflow-state file: $state_file"
 
   # Parse phases seen: require the full six-phase lifecycle.
   local phases_seen
