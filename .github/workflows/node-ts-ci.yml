@@ -1,5 +1,8 @@
 name: Node & TypeScript CI
 
+permissions:
+  contents: read
+
 on:
   workflow_dispatch:
   push:
@@ -101,6 +104,8 @@ jobs:
     steps:
       - name: Check out repository
         uses: actions/checkout@v6
+        with:
+          persist-credentials: false
 
       - name: Set up Node.js
         uses: actions/setup-node@v6
