@@ -3,7 +3,7 @@
 > **TypeScript migration note:** entries before the TypeScript migration may mention former `.py` or `.sh` implementation paths. Current repo-owned executable entrypoints are TypeScript files run with `node --experimental-strip-types`; use current docs and checked-in `.ts` paths for present-tense guidance.
 
 
-## 2026-05-20
+## [0.5.0] - 2026-05-20
 
 ### feat(memory): rules + memory layer migrated from sibling-plugin patterns
 
