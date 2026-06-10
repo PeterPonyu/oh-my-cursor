@@ -35,7 +35,10 @@ export function trace(record: Record<string, any>): void {
       ...record,
     };
     fs.appendFileSync(target, JSON.stringify(full) + '\n', 'utf-8');
-  } catch {
-    // Fail-silent
+  } catch (err: any) {
+    // Fail-silent by default; emit a warning when OMCS_TRACE_DEBUG=1 for observability
+    if (process.env.OMCS_TRACE_DEBUG === '1') {
+      process.stderr.write(`[omcs:trace] warn: failed to write trace log: ${err?.message ?? err}\n`);
+    }
   }
 }

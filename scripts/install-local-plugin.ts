@@ -319,14 +319,18 @@ function doStatus() {
   let installedVersion = 'unknown';
   try {
     installedVersion = JSON.parse(fs.readFileSync(manifest, 'utf-8')).version || 'unknown';
-  } catch {}
+  } catch (err: any) {
+    process.stderr.write(`warn: could not read installed plugin version from ${manifest}: ${err?.message ?? err}\n`);
+  }
 
   const repoManifest = path.join(sourceRoot, '.cursor-plugin', 'plugin.json');
   let repoVersion = 'unknown';
   if (fs.existsSync(repoManifest)) {
     try {
       repoVersion = JSON.parse(fs.readFileSync(repoManifest, 'utf-8')).version || 'unknown';
-    } catch {}
+    } catch (err: any) {
+      process.stderr.write(`warn: could not read repo plugin version from ${repoManifest}: ${err?.message ?? err}\n`);
+    }
   }
 
   let installedMode = 'copy';
@@ -335,7 +339,9 @@ function doStatus() {
     if (stat.isSymbolicLink()) {
       installedMode = `symlink (${fs.readlinkSync(targetPath)})`;
     }
-  } catch {}
+  } catch (err: any) {
+    process.stderr.write(`warn: could not determine install mode for ${targetPath}: ${err?.message ?? err}\n`);
+  }
 
   const getFileCount = (dir: string): number => {
     let count = 0;
