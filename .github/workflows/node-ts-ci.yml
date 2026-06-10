@@ -143,10 +143,29 @@ jobs:
       - name: Structural (no secrets)
         run: npm run e2e:structural
 
+      # Skip-clean gate: without the CURSOR_API_KEY secret the real tier
+      # cannot run; skip honestly (log notice, no pass marker) instead of
+      # hard-failing every push. The cursor-agent install remains TBD pending
+      # a pinnable installer — see docs/known-issues/cursor-agent-installer-pinning.md;
+      # its check only fires when the secret IS set, which is the honest signal.
+      - name: Gate on credential (skip cleanly when absent)
+        id: gate
+        env:
+          CURSOR_API_KEY: ${{ secrets.CURSOR_API_KEY }}
+        run: |
+          if [ -z "$CURSOR_API_KEY" ]; then
+            echo "run=0" >> "$GITHUB_OUTPUT"
+            echo "::notice::CURSOR_API_KEY secret absent — real journey e2e SKIPPED cleanly (no pass marker emitted)."
+          else
+            echo "run=1" >> "$GITHUB_OUTPUT"
+          fi
+
       - name: Verify cursor-agent available
-        run: command -v cursor-agent || { echo "cursor-agent not installed on runner — install step TBD by maintainer"; exit 1; }
+        if: steps.gate.outputs.run == '1'
+        run: command -v cursor-agent || { echo "cursor-agent not installed on runner — install step TBD by maintainer (docs/known-issues/cursor-agent-installer-pinning.md)"; exit 1; }
 
       - name: Real journey
+        if: steps.gate.outputs.run == '1'
         env:
           CURSOR_API_KEY: ${{ secrets.CURSOR_API_KEY }}
         run: npm run e2e:real

@@ -1,4 +1,4 @@
-<!-- source-sha256: README.md dd7dc80f8e48c6f139c076931f66eea648a15c46e3c04869b7f557768a9c9911 -->
+<!-- source-sha256: README.md 15bc810b211c7a13bd65327d2b9cdcf1c8598834346a48833f01745093ff5ae8 -->
 # oh-my-cursor
 
 <div align="center">
@@ -38,7 +38,7 @@ node --experimental-strip-types scripts/install-local-plugin.ts --symlink
 
 | 组件 | 位置 | 用途 |
 |-----------|----------|---------|
-| **Hooks 钩子** (14 个事件) | `hooks/hooks.json` + `hooks/` | 编排了每一个官方的 Cursor 钩子事件: `sessionStart`, `sessionEnd`, `beforeSubmitPrompt`, `preToolUse`, `postToolUse`, `postToolUseFailure`, `subagentStart`, `subagentStop`, `beforeShellExecution`, `afterShellExecution`, `beforeReadFile`, `afterFileEdit`, `preCompact`, 和 `stop`。所有脚本仅限标准库（stdlib-only）、fail-open（失败放行），且对工作流状态为只读 |
+| **Hooks 钩子** (14 个事件) | `hooks/hooks.json` + `hooks/` | 接入 14 个核心代理生命周期钩子事件: `sessionStart`, `sessionEnd`, `beforeSubmitPrompt`, `preToolUse`, `postToolUse`, `postToolUseFailure`, `subagentStart`, `subagentStop`, `beforeShellExecution`, `afterShellExecution`, `beforeReadFile`, `afterFileEdit`, `preCompact`, 和 `stop`。所有脚本仅限标准库（stdlib-only）、fail-open（失败放行），且对工作流状态为只读。可移植性说明：Cursor 还文档化了本插件未接入的其他事件（如 `beforeMCPExecution`/`afterMCPExecution`、`afterAgentResponse`、tab 以及 `workspaceOpen` 钩子）；上述 14 个是本插件所依赖的代理生命周期子集 |
 | **Agents 智能体** (14 个角色) | `agents/` | 完整的智能体角色注册表 — `orchestrator`, `architect`, `researcher`, `planner`, `implementer`, `qa-tester`, `verifier`, `critic`, `code-reviewer`, `debugger`, `tracer`, `security-reviewer`, `explore`, `test-engineer`。所有检入智能体均默认使用 `model: auto`，除非基准测试结果证明必须锁定特定模型 |
 | **Skills 技能** (20 个技能) | `skills/` | 编排: `phase-controller`, `plan`, `iterate-loop`, `auto-execute`, `review`, `security-review`, `debug`, `trace`, `verify`, `deep-interview`, `doctor`, `local-plugin-check`, `mcp-setup`, `parallel-batch`, `team-controller`。记忆层: `remember`, `notepad`, `wiki`, `decisions`, `rules-authoring` |
 | **Rules 规则** | `.cursor/rules/` + `rules/` | Cursor 工作区指南以及插件边界兼容性策略 |
