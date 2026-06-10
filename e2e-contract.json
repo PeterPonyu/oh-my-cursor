@@ -1,0 +1,10 @@
+{
+  "brand": "OMCS",
+  "host": "cursor-agent",
+  "hostClass": "host-plugin",
+  "evidenceDir": ".omcs/evidence",
+  "journey": "intake -> research -> plan -> execute -> verify -> review (real model)",
+  "markerPrefix": "OMCS",
+  "requiresSecret": true,
+  "npmScripts": ["e2e:structural", "e2e:headless", "e2e:real", "verify"]
+}

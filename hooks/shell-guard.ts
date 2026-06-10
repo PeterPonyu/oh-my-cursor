@@ -75,7 +75,7 @@ function main(): number {
       status: 'pass',
       fail_open: true,
       permission: 'allow',
-      user_facing_message: 'Shell-guard input was not JSON; skipped.',
+      user_facing_message: 'Shell-guard input was not JSON; skipped. [fail_open: malformed input, shell-guard bypassed]',
     }));
     return 0;
   }
