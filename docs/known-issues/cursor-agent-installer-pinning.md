@@ -1,107 +1,48 @@
-# Known Issue: cursor-agent installer not version-pinnable
+# Known Issue: cursor-agent installer pinning in CI
 
 **Affected file:** `.github/workflows/node-ts-ci.yml` (headless e2e lane)  
 **First noted:** commit `2c20a6c` (2026-06-09)  
-**Status:** open — no upstream arg-pin mechanism available yet
+**Status:** mitigated in CI — the headless lane downloads a fixed artifact and verifies SHA-256 before extraction.
 
 ---
 
-## What the workflow does today
+## What the workflow does now
 
-The headless e2e lane installs `cursor-agent` via the official installer
-script:
+The headless e2e lane no longer executes the mutable installer script from
+`https://cursor.com/install`. Instead, it downloads a versioned Linux x64
+artifact directly from `downloads.cursor.com`, verifies the pinned SHA-256, and
+then extracts it into the same `~/.local/share/cursor-agent/versions/<version>`
+layout used by the official installer.
 
-```bash
-curl -fsSL https://cursor.com/install | bash
+Current CI pin:
+
+```yaml
+CURSOR_AGENT_VERSION: "2026.06.12-01-15-52-7244546"
+CURSOR_AGENT_SHA256: "453411639b4e49090eb2eec8032f5832b3f78a0486ba6e177bd8c0019c5e0c60"
 ```
 
-This always fetches and executes the *latest* version of the installer from
-`cursor.com` at runtime.
+This removes the live `curl | bash` execution path from CI and makes upgrades an
+explicit workflow diff.
 
 ---
 
-## Supply-chain risk
+## Remaining supply-chain considerations
 
-| Risk | Detail |
+| Risk | Current control |
 |---|---|
-| No version pin | Any new release of `cursor-agent` is silently picked up by every subsequent CI run. |
-| Remote code execution | `curl … | bash` runs arbitrary code downloaded at job time from a third-party host. |
-| No checksum verification | The installer is not pinned by hash, so a compromised CDN or MITM could deliver a different binary. |
-| Reproducibility gap | Two runs minutes apart may install different versions, making failures hard to reproduce and bisect. |
-
-The original commit (`2c20a6c`) acknowledged this in its message
-("cursor-agent installer not arg-pinnable; pin tracked as a follow-up
-issue") but no tracking issue was ever opened.
+| Silent upstream upgrades | The workflow pins `CURSOR_AGENT_VERSION`; CI keeps using that artifact until the pin changes. |
+| Artifact tampering or CDN drift | `sha256sum -c -` verifies the downloaded tarball before extraction. |
+| Mutable installer script execution | CI does not execute `https://cursor.com/install`; it downloads the package artifact directly. |
+| Intentional upgrades | Maintainers must update both the version and checksum in one PR, then rerun headless e2e. |
 
 ---
 
-## Why it cannot be arg-pinned today
+## How to update the pin
 
-The `cursor.com/install` script does not expose a version selector argument
-(e.g. `--version <tag>`) or a versioned URL scheme (`cursor.com/install/v1.2.3`).
-Until the upstream installer supports it, the only version-pinning
-options are vendor-side workarounds (see below).
+1. Inspect the official installer script and identify the new `downloads.cursor.com/lab/<version>/linux/x64/agent-cli-package.tar.gz` artifact.
+2. Download the artifact locally and compute `sha256sum`.
+3. Update `CURSOR_AGENT_VERSION` and `CURSOR_AGENT_SHA256` together in `.github/workflows/node-ts-ci.yml`.
+4. Run the headless e2e lane or `npm run e2e:headless` in an environment where the pinned binary is on `PATH`.
 
----
-
-## Candidate mitigations
-
-### 1. Vendor a checksum assertion (short-term, low friction)
-
-After installation, assert the installed binary hash matches a known-good
-value:
-
-```bash
-EXPECTED_SHA256="<sha256-of-known-good-cursor-agent>"
-ACTUAL_SHA256=$(sha256sum "$(command -v cursor-agent)" | awk '{print $1}')
-if [ "$ACTUAL_SHA256" != "$EXPECTED_SHA256" ]; then
-  echo "cursor-agent checksum mismatch — refusing to proceed" >&2
-  exit 1
-fi
-```
-
-**Downside:** the expected hash must be updated manually whenever a new
-version is intentionally adopted.
-
-### 2. Version probe + assert after install (short-term, readable)
-
-Query the installed binary for its self-reported version and assert it
-matches the version the team last validated against:
-
-```bash
-EXPECTED_VERSION="0.x.y"
-ACTUAL_VERSION=$(cursor-agent --version 2>/dev/null || echo "unknown")
-if [ "$ACTUAL_VERSION" != "$EXPECTED_VERSION" ]; then
-  echo "cursor-agent version mismatch: expected $EXPECTED_VERSION, got $ACTUAL_VERSION" >&2
-  exit 1
-fi
-```
-
-**Downside:** relies on `cursor-agent --version` being stable; fails open
-if the binary has no version flag.
-
-### 3. Cache the binary in the repo or a private artifact store (medium-term)
-
-Commit or upload a known-good `cursor-agent` binary + hash, download it in
-CI from the controlled store instead of hitting `cursor.com/install`.
-
-**Downside:** binary checked into git is discouraged; artifact store adds
-operational overhead.
-
-### 4. Wait for upstream versioned installer URL (long-term)
-
-Track the upstream Cursor release notes or installer repo for a versioned
-install path (e.g. `cursor.com/install/v<version>`) and migrate to it once
-available.
-
----
-
-## Recommended next step
-
-Open a tracking GitHub issue titled:
-> "ci: pin cursor-agent installer to a specific version"
-
-Reference this document and block it on upstream support for a versioned
-installer URL. Until resolved, apply **mitigation 2** (version probe +
-assert) as a minimum safety net so unexpected upgrades cause a visible CI
-failure rather than a silent behaviour change.
+Do not reintroduce `curl -fsSL https://cursor.com/install | bash` in CI; doing
+so would restore mutable remote-code execution on every workflow run.
