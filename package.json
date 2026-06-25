@@ -16,7 +16,7 @@
     "e2e:real": "OMCS_E2E_REAL=1 bash scripts/local/e2e.sh"
   },
   "devDependencies": {
-    "@types/node": "^25.9.3",
+    "@types/node": "^26.0.1",
     "typescript": "^6.0.3"
   }
 }
